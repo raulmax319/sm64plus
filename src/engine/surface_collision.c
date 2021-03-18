@@ -8,6 +8,8 @@
 #include "surface_collision.h"
 #include "surface_load.h"
 
+#include "game/settings.h"
+
 /**************************************************
  *                      WALLS                     *
  **************************************************/
@@ -403,6 +405,7 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
     f32 oo;
     f32 height;
     struct Surface *floor = NULL;
+    f32 peak = -11000.0f;
 
     // Iterate through the list of floors until there are no more floors.
     while (surfaceNode != NULL) {
@@ -461,10 +464,15 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
         *pheight = height;
         floor = surf;
         break;
+
+        // floor cucking fix, shoutouts to kaze and whoever josh is
+        if (gCollisionFixes && peak < height) {
+            peak = height;
+            *pheight = height;
+            floor = surf;
+        }
     }
 
-    //! (Surface Cucking) Since only the first floor is returned and not the highest,
-    //  higher floors can be "cucked" by lower floors.
     return floor;
 }
 

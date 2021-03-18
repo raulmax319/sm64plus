@@ -15,6 +15,8 @@
 #include "gfx_window_manager_api.h"
 #include "gfx_screen_config.h"
 
+#include "./game/game_init.h"
+
 #define GFX_API_NAME "GLX - OpenGL"
 
 #ifdef VERSION_EU

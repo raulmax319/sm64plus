@@ -7,6 +7,8 @@
 #include <ctype.h>
 
 #include "configfile.h"
+#include "../game/settings.h"
+#include "../game/main.h"
 
 #define ARRAY_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
 
@@ -26,28 +28,78 @@ struct ConfigOption {
     };
 };
 
-/*
- *Config options and default values
- */
-bool configFullscreen            = false;
-// Keyboard mappings (scancode values)
-unsigned int configKeyA          = 0x26;
-unsigned int configKeyB          = 0x33;
-unsigned int configKeyStart      = 0x39;
-unsigned int configKeyR          = 0x36;
-unsigned int configKeyZ          = 0x25;
-unsigned int configKeyCUp        = 0x148;
-unsigned int configKeyCDown      = 0x150;
-unsigned int configKeyCLeft      = 0x14B;
-unsigned int configKeyCRight     = 0x14D;
-unsigned int configKeyStickUp    = 0x11;
-unsigned int configKeyStickDown  = 0x1F;
-unsigned int configKeyStickLeft  = 0x1E;
-unsigned int configKeyStickRight = 0x20;
-
-
 static const struct ConfigOption options[] = {
+    {.name = "improved_controls",.type = CONFIG_TYPE_BOOL, .boolValue = &gBetterControls},
+    {.name = "dpad_controls",    .type = CONFIG_TYPE_BOOL, .boolValue = &gDpadInput},
+    {.name = "full_air_control",       .type = CONFIG_TYPE_BOOL, .boolValue = &gAirTurn},
+    {.name = "disable_blj",    .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBLJ},
+    {.name = "disable_fall_damage",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableFallDamage},
+    {.name = "analog_stick_deadzone",.type = CONFIG_TYPE_UINT, .uintValue = &gControllerDeadzone},
+
+    {.name = "fix_collision_errors",.type = CONFIG_TYPE_BOOL, .boolValue = &gCollisionFixes},
+    {.name = "remove_annoying_warps",.type = CONFIG_TYPE_BOOL, .boolValue = &gRemoveAnnoyingWarps},
+    {.name = "disable_all_boo_messages_except_the_first",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBooDialogue},
+    {.name = "skip_cutscenes",     .type = CONFIG_TYPE_BOOL, .boolValue = &gSkipCutscenes},
+    {.name = "allow_leaving_the_level_at_any_time", .type = CONFIG_TYPE_BOOL, .boolValue = &gLeaveAnyTime},
+    {.name = "make_secrets_visible",.type = CONFIG_TYPE_BOOL, .boolValue = &gVisibleSecrets},
+    {.name = "allow_the_cannons_to_rotate_more",.type = CONFIG_TYPE_BOOL, .boolValue = &gFlexibleCannons},
+    {.name = "stay_in_level_after_getting_a_star",   .type = CONFIG_TYPE_UINT, .uintValue = &gDontKick},
+
+    {.name = "wall_sliding",.type = CONFIG_TYPE_BOOL, .boolValue = &gModernWallJump},
+    {.name = "sunshine_dive_hop",  .type = CONFIG_TYPE_BOOL, .boolValue = &gSunshineDive},
+    {.name = "odyssey_ground_pound_dive",  .type = CONFIG_TYPE_BOOL, .boolValue = &gOdysseyDive},
+    {.name = "flashback_ground_pound",  .type = CONFIG_TYPE_BOOL, .boolValue = &gFlashbackPound},
+
     {.name = "fullscreen",     .type = CONFIG_TYPE_BOOL, .boolValue = &configFullscreen},
+    {.name = "custom_fullscreen_resolution",.type = CONFIG_TYPE_BOOL, .boolValue = &gCustomFullscreenResolution},
+    {.name = "fullscreen_width",.type = CONFIG_TYPE_UINT, .uintValue = &gFullscreenWidth},
+    {.name = "fullscreen_height",.type = CONFIG_TYPE_UINT, .uintValue = &gFullscreenHeight},
+    {.name = "fullscreen_refresh_rate",.type = CONFIG_TYPE_UINT, .uintValue = &gFullscreenRefreshRate},
+    {.name = "window_width",   .type = CONFIG_TYPE_UINT, .uintValue = &gWindowWidth},
+    {.name = "window_height",  .type = CONFIG_TYPE_UINT, .uintValue = &gWindowHeight},
+    {.name = "custom_internal_resolution",.type = CONFIG_TYPE_BOOL, .boolValue = &gCustomInternalResolution},
+    {.name = "internal_resolution_width",.type = CONFIG_TYPE_UINT, .uintValue = &gInternalResolutionWidth},
+    {.name = "internal_resolution_height",.type = CONFIG_TYPE_UINT, .uintValue = &gInternalResolutionHeight},
+    {.name = "force_4by3",     .type = CONFIG_TYPE_BOOL, .boolValue = &gDrawPillarbox},
+
+    {.name = "disable_draw_distance",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableDrawDistance},
+    {.name = "disable_low_poly_mario",.type = CONFIG_TYPE_BOOL, .boolValue = &gNoLowPoly},
+    {.name = "noise_type",     .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType},
+    {.name = "disable_fog",    .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableFog},
+    {.name = "force_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly},
+    {.name = "nearest_neighbor_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor},
+    {.name = "fx_mode",        .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode},
+
+    {.name = "improved_camera",  .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedCamera},
+    {.name = "center_camera_button",.type = CONFIG_TYPE_BOOL, .boolValue = &gCenterCam},
+    {.name = "invert_camera_controls",.type = CONFIG_TYPE_BOOL, .boolValue = &gInvertedCamera},
+    {.name = "analog_camera_speed",   .type = CONFIG_TYPE_UINT, .uintValue = &gCameraSpeed},
+    {.name = "additional_camera_distance",.type = CONFIG_TYPE_UINT, .uintValue = &gAdditionalCameraDistance},
+    {.name = "additional_fov", .type = CONFIG_TYPE_UINT, .uintValue = &gAdditionalFOV},
+
+    {.name = "hud_style",       .type = CONFIG_TYPE_UINT, .uintValue = &gNewHud},
+    {.name = "4by3_hud",     .type = CONFIG_TYPE_BOOL, .boolValue = &gCenterHud},
+    {.name = "hud_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gHUDFiltering},
+    {.name = "hud_upscaling",  .type = CONFIG_TYPE_UINT, .uintValue = &gHUDUpscaling},
+    {.name = "always_show_the_health_meter", .type = CONFIG_TYPE_BOOL, .boolValue = &gAlwaysShowHealth},
+    {.name = "hide_hud",       .type = CONFIG_TYPE_BOOL, .boolValue = &gHideHud},
+
+    {.name = "enable_the_trapdoor_sound", .type = CONFIG_TYPE_BOOL, .boolValue = &gTrapdoorSound},
+
+    {.name = "infinite_lives_mode",  .type = CONFIG_TYPE_BOOL, .boolValue = &gLifeMode},
+    {.name = "hard_mode",      .type = CONFIG_TYPE_BOOL, .boolValue = &gHardSave},
+    {.name = "permadeath_mode",      .type = CONFIG_TYPE_BOOL, .boolValue = &gHardcoreSave},
+    {.name = "green_demon_mode",.type = CONFIG_TYPE_BOOL, .boolValue = &gGreenDemon},
+    {.name = "encore_mode",    .type = CONFIG_TYPE_BOOL, .boolValue = &gEncoreMode},
+
+    {.name = "level_select",   .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugLevelSelect},
+    {.name = "show_debug_profiler",.type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler},
+    {.name = "show_debug_display",.type = CONFIG_TYPE_BOOL, .boolValue = &gShowDebugText},
+    {.name = "debug_movement_mode",.type = CONFIG_TYPE_BOOL, .boolValue = &gDebugMovementMode},
+
+    {.name = "show_100_coin_star",.type = CONFIG_TYPE_BOOL, .boolValue = &gShow100CoinStar},
+    {.name = "texture_upscaling",.type = CONFIG_TYPE_UINT, .uintValue = &gTextureUpscaling},
+
     {.name = "key_a",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyA},
     {.name = "key_b",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyB},
     {.name = "key_start",      .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStart},
@@ -60,7 +112,7 @@ static const struct ConfigOption options[] = {
     {.name = "key_stickup",    .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickUp},
     {.name = "key_stickdown",  .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickDown},
     {.name = "key_stickleft",  .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickLeft},
-    {.name = "key_stickright", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickRight},
+    {.name = "key_stickright", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickRight}
 };
 
 // Reads an entire line from a file (excluding the newline character) and returns an allocated string

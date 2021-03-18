@@ -5,7 +5,17 @@ void bhv_1up_interact(void) {
 
     if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
         play_sound(SOUND_GENERAL_COLLECT_1UP, gDefaultSoundArgs);
-        gMarioState->numLives++;
+        if (gGreenDemon != 0) {
+            gMarioState->health = 0;
+        }
+        else if (gLifeMode || save_file_get_flags() & SAVE_FLAG_HARDCORE_MODE) {
+            gMarioState->healCounter += 31.75;
+            if (gMarioState->healCounter > 31.75)
+                gMarioState->healCounter = 31.75;
+        }
+        else {
+            gMarioState->numLives++;
+        }
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }

@@ -8,6 +8,7 @@
  * If spawned by a lakitu, its parent will be the lakitu.
  * Processing order is lakitu -> cloud -> its cloud parts.
  */
+#include "../settings.h"
 
 /**
  * The relative heights of each cloud part.
@@ -47,7 +48,7 @@ static void cloud_act_spawn_parts(void) {
  * Wait for mario to approach, then unhide and enter the spawn parts action.
  */
 static void cloud_act_fwoosh_hidden(void) {
-    if (o->oDistanceToMario < 2000.0f) {
+    if (o->oDistanceToMario < 2000.0f && !gDisableDrawDistance) {
         cur_obj_unhide();
         o->oAction = CLOUD_ACT_SPAWN_PARTS;
     }
@@ -58,7 +59,7 @@ static void cloud_act_fwoosh_hidden(void) {
  * long enough, blow wind at him.
  */
 static void cloud_fwoosh_update(void) {
-    if (o->oDistanceToMario > 2500.0f) {
+    if (o->oDistanceToMario > 2500.0f && !gDisableDrawDistance) {
         o->oAction = CLOUD_ACT_UNLOAD;
     } else {
         if (o->oCloudBlowing) {

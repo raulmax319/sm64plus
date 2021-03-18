@@ -17,6 +17,9 @@
 #include "sound_init.h"
 #include "surface_terrains.h"
 #include "thread6.h"
+#include "game_init.h"
+
+#include "settings.h"
 
 s32 check_common_idle_cancels(struct MarioState *m) {
     mario_drop_held_object(m);
@@ -1046,16 +1049,45 @@ s32 act_twirl_land(struct MarioState *m) {
 
 s32 act_ground_pound_land(struct MarioState *m) {
     m->actionState = 1;
-    if (m->input & INPUT_UNKNOWN_10) {
-        return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
+    
+    if (gFlashbackPound) {
+        if (m->input & INPUT_OFF_FLOOR) {
+            return set_mario_action(m, ACT_FREEFALL, 0);
+        }
+        else if (m->input & INPUT_ABOVE_SLIDE) {
+            return set_mario_action(m, ACT_BUTT_SLIDE, 0);
+        }
+        if (m->input & INPUT_Z_DOWN) {
+            if (gPlayer1Controller->stickX != 0 || gPlayer1Controller->stickY != 0) {
+                m->vel[1] = 2.0f;
+                mario_set_forward_vel(m, 56.0f);
+                m->faceAngle[1] = m->intendedYaw;
+                return set_mario_action(m, ACT_SLIDE_KICK, 0);
+            }
+            else {
+                return set_mario_action(m, ACT_CROUCHING, 0);
+            }
+        }
+        else {
+            set_mario_action(m, ACT_BACKWARD_ROLLOUT, 0);
+            m->actionState = 1;
+            m->vel[1] = 40.0f;
+            mario_set_forward_vel(m, 0.0f);
+            return TRUE;
+        }
     }
+    else {
+        if (m->input & INPUT_UNKNOWN_10) {
+            return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
+        }
 
-    if (m->input & INPUT_OFF_FLOOR) {
-        return set_mario_action(m, ACT_FREEFALL, 0);
-    }
+        if (m->input & INPUT_OFF_FLOOR) {
+            return set_mario_action(m, ACT_FREEFALL, 0);
+        }
 
-    if (m->input & INPUT_ABOVE_SLIDE) {
-        return set_mario_action(m, ACT_BUTT_SLIDE, 0);
+        if (m->input & INPUT_ABOVE_SLIDE) {
+            return set_mario_action(m, ACT_BUTT_SLIDE, 0);
+        }
     }
 
     landing_step(m, MARIO_ANIM_GROUND_POUND_LANDING, ACT_BUTT_SLIDE_STOP);

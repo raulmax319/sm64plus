@@ -27,7 +27,7 @@
 
 #include "controller/controller_keyboard.h"
 
-#include "configfile.h"
+#include "game/settings.h"
 
 #define CONFIG_FILE "sm64config.txt"
 

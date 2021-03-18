@@ -460,16 +460,21 @@ static void boo_act_4(void) {
     // If there are no remaining "minion" boos, show the dialog of the Big Boo
     if (cur_obj_nearest_object_with_behavior(bhvGhostHuntBoo) == NULL) {
         dialogID = DIALOG_108;
+        gBooDialogueWasSaid = 0;
     } else {
         dialogID = DIALOG_107;
     }
 
-    if (cur_obj_update_dialog(2, 2, dialogID, 0)) {
-        create_sound_spawner(SOUND_OBJ_DYING_ENEMY1);
-        obj_mark_for_deletion(o);
+    if (!gBooDialogueWasSaid) {
+        if (cur_obj_update_dialog(2, 2, dialogID, 0)) {
+            create_sound_spawner(SOUND_OBJ_DYING_ENEMY1);
+            obj_mark_for_deletion(o);
 
-        if (dialogID == DIALOG_108) { // If the Big Boo should spawn, play the jingle
-            play_puzzle_jingle();
+            if (dialogID == DIALOG_108) { // If the Big Boo should spawn, play the jingle
+                play_puzzle_jingle();
+            }
+            else if (gDisableBooDialogue)
+                gBooDialogueWasSaid = 1;
         }
     }
 }
@@ -524,7 +529,12 @@ static void big_boo_act_0(void) {
 
         o->oBooTargetOpacity = 0xFF;
         o->oBooBaseScale = 3.0f;
-        o->oHealth = 3;
+        if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+            o->oHealth = 5;
+        }
+        else {
+            o->oHealth = 3;
+        }
 
         cur_obj_scale(3.0f);
         cur_obj_become_tangible();
@@ -540,12 +550,23 @@ static void big_boo_act_1(void) {
     s16 sp22;
     f32 sp1C;
 
-    if (o->oHealth == 3) {
-        sp22 = 0x180; sp1C = 0.5f;
-    } else if (o->oHealth == 2) {
-        sp22 = 0x240; sp1C = 0.6f;
-    } else {
-        sp22 = 0x300; sp1C = 0.8f;
+    if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+        if (o->oHealth == 3) {
+            sp22 = 0x300; sp1C = 0.8f;
+        } else if (o->oHealth == 2) {
+            sp22 = 0x360; sp1C = 1.0f;
+        } else {
+            sp22 = 0x420; sp1C = 1.2f;
+        }
+    }
+    else {
+        if (o->oHealth == 3) {
+            sp22 = 0x180; sp1C = 0.5f;
+        } else if (o->oHealth == 2) {
+            sp22 = 0x240; sp1C = 0.6f;
+        } else {
+            sp22 = 0x300; sp1C = 0.8f;
+        }
     }
 
     boo_chase_mario(-100.0f, sp22, sp1C);

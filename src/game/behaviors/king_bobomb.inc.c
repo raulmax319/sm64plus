@@ -1,4 +1,5 @@
 // king_bobomb.c.inc
+#include "../settings.h"
 
 // Copy of geo_update_projectile_pos_from_parent
 Gfx *geo_update_held_mario_pos(s32 run, UNUSED struct GraphNode *node, Mat4 mtx) {
@@ -30,7 +31,12 @@ void king_bobomb_act_0(void) {
         gSecondCameraFocus = o;
         cur_obj_init_animation_with_sound(5);
         cur_obj_set_pos_to_home();
-        o->oHealth = 3;
+        if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+            o->oHealth = 5;
+        }
+        else {
+            o->oHealth = 3;
+        }
         if (cur_obj_can_mario_activate_textbox_2(500.0f, 100.0f)) {
             o->oSubAction++;
             func_8031FFB4(SEQ_PLAYER_LEVEL, 60, 40);
@@ -66,8 +72,14 @@ void king_bobomb_act_2(void) {
         } else
             cur_obj_init_animation_with_sound(11);
         if (o->oKingBobombUnk108 == 0) {
-            o->oForwardVel = 3.0f;
-            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x100);
+            if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                o->oForwardVel = 10.0f;
+                cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
+            }
+            else {
+                o->oForwardVel = 3.0f;
+                cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x100);
+            }
         } else {
             o->oForwardVel = 0.0f;
             o->oKingBobombUnk108--;
@@ -295,10 +307,12 @@ void king_bobomb_move(void) {
         cur_obj_move_using_fvel_and_gravity();
     cur_obj_call_action_function(sKingBobombActions);
     exec_anim_sound_state(sKingBobombSoundStates);
-    if (o->oDistanceToMario < 5000.0f)
-        cur_obj_enable_rendering();
-    else
-        cur_obj_disable_rendering();
+    if (!gDisableDrawDistance) {
+        if (o->oDistanceToMario < 5000.0f)
+            cur_obj_enable_rendering();
+        else
+            cur_obj_disable_rendering();
+    }
 }
 
 void bhv_king_bobomb_loop(void) {

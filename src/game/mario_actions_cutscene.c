@@ -29,6 +29,8 @@
 #include "sound_init.h"
 #include "thread6.h"
 
+#include "settings.h"
+
 // TODO: put this elsewhere
 enum SaveOption { SAVE_OPT_SAVE_AND_CONTINUE = 1, SAVE_OPT_SAVE_AND_QUIT, SAVE_OPT_CONTINUE_DONT_SAVE };
 
@@ -618,15 +620,29 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 if ((m->actionArg & 1) == 0) {
                     level_trigger_warp(m, WARP_OP_STAR_EXIT);
                 } else {
-                    enable_time_stop();
-                    create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_013 : DIALOG_014);
-                    m->actionState = 1;
+                    if (gDontKick == 2) {
+                        save_file_do_save(gCurrSaveFileNum - 1);
+                        m->actionState = 2;
+                    }
+                    else {
+                        enable_time_stop();
+                        if (gDontKick) {
+                            create_dialog_box_with_response(DIALOG_170);
+                        }
+                        else {
+                            create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_013 : DIALOG_014);
+                        }
+                        m->actionState = 1;
+                    }
                 }
                 break;
         }
     } else if (m->actionState == 1 && gDialogResponse) {
         if (gDialogResponse == 1) {
             save_file_do_save(gCurrSaveFileNum - 1);
+        }
+        else if (gDontKick && gLastCompletedStarNum < 7) {
+            level_trigger_warp(m, WARP_OP_STAR_EXIT);
         }
         m->actionState = 2;
     } else if (m->actionState == 2 && is_anim_at_end(m)) {
@@ -966,7 +982,7 @@ s32 act_warp_door_spawn(struct MarioState *m) {
             m->usedObj->oInteractStatus = 0x00080000;
         }
     } else if (m->usedObj->oAction == 0) {
-        if (gShouldNotPlayCastleMusic == TRUE && gCurrLevelNum == LEVEL_CASTLE) {
+        if (!gSkipCutscenes && gShouldNotPlayCastleMusic == TRUE && gCurrLevelNum == LEVEL_CASTLE) {
             set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_021);
         } else {
             set_mario_action(m, ACT_IDLE, 0);
@@ -1173,7 +1189,12 @@ s32 act_death_exit(struct MarioState *m) {
 #ifdef VERSION_SH
         queue_rumble_data(5, 80);
 #endif
-        m->numLives--;
+        if (gLifeMode) {
+            m->numLives++;
+        }
+        else if (m->numLives > 0) {
+            m->numLives--;
+        }
         // restore 7.75 units of health
         m->healCounter = 31;
     }
@@ -1189,7 +1210,12 @@ s32 act_unused_death_exit(struct MarioState *m) {
 #else
         play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
 #endif
-        m->numLives--;
+        if (gLifeMode) {
+            m->numLives++;
+        }
+        else if (m->numLives > 0) {
+            m->numLives--;
+        }
         // restore 7.75 units of health
         m->healCounter = 31;
     }
@@ -1208,7 +1234,12 @@ s32 act_falling_death_exit(struct MarioState *m) {
 #ifdef VERSION_SH
         queue_rumble_data(5, 80);
 #endif
-        m->numLives--;
+        if (gLifeMode) {
+            m->numLives++;
+        }
+        else if (m->numLives > 0) {
+            m->numLives--;
+        }
         // restore 7.75 units of health
         m->healCounter = 31;
     }
@@ -1255,7 +1286,12 @@ s32 act_special_death_exit(struct MarioState *m) {
 #ifdef VERSION_SH
         queue_rumble_data(5, 80);
 #endif
-        m->numLives--;
+        if (gLifeMode) {
+            m->numLives++;
+        }
+        else if (m->numLives > 0) {
+            m->numLives--;
+        }
         m->healCounter = 31;
     }
     // show Mario
@@ -2524,7 +2560,7 @@ static s32 act_end_peach_cutscene(struct MarioState *m) {
     return FALSE;
 }
 
-#ifdef VERSION_EU
+/*#ifdef VERSION_EU
     #define TIMER_CREDITS_SHOW      51
     #define TIMER_CREDITS_PROGRESS  80
     #define TIMER_CREDITS_WARP     160
@@ -2532,6 +2568,16 @@ static s32 act_end_peach_cutscene(struct MarioState *m) {
     #define TIMER_CREDITS_SHOW      61
     #define TIMER_CREDITS_PROGRESS  90
     #define TIMER_CREDITS_WARP     200
+#endif*/
+
+#ifdef VERSION_EU
+    #define TIMER_CREDITS_SHOW      64
+    #define TIMER_CREDITS_PROGRESS  93
+    #define TIMER_CREDITS_WARP     173
+#else
+    #define TIMER_CREDITS_SHOW      74
+    #define TIMER_CREDITS_PROGRESS 103
+    #define TIMER_CREDITS_WARP     213
 #endif
 
 static s32 act_credits_cutscene(struct MarioState *m) {

@@ -21,6 +21,8 @@
 #include "sm64.h"
 #include "text_strings.h"
 
+#include "game/settings.h"
+
 #include "eu_translation.h"
 #ifdef VERSION_EU
 #undef LANGUAGE_FUNCTION
@@ -176,6 +178,16 @@ static unsigned char textMarioA[] = { TEXT_FILE_MARIO_A };
 static unsigned char textMarioB[] = { TEXT_FILE_MARIO_B };
 static unsigned char textMarioC[] = { TEXT_FILE_MARIO_C };
 static unsigned char textMarioD[] = { TEXT_FILE_MARIO_D };
+
+static unsigned char textHardA[] = { TEXT_FILE_HARD_A };
+static unsigned char textHardB[] = { TEXT_FILE_HARD_B };
+static unsigned char textHardC[] = { TEXT_FILE_HARD_C };
+static unsigned char textHardD[] = { TEXT_FILE_HARD_D };
+
+static unsigned char textHardcoreA[] = { TEXT_FILE_HARDCORE_A };
+static unsigned char textHardcoreB[] = { TEXT_FILE_HARDCORE_B };
+static unsigned char textHardcoreC[] = { TEXT_FILE_HARDCORE_C };
+static unsigned char textHardcoreD[] = { TEXT_FILE_HARDCORE_D };
 
 #ifndef VERSION_EU
 static unsigned char textNew[] = { TEXT_NEW };
@@ -1794,10 +1806,45 @@ void print_main_menu_strings(void) {
     // Print file names
     gSPDisplayList(gDisplayListHead++, dl_menu_ia8_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
-    print_menu_generic_string(MARIOTEXT_X1, 65, textMarioA);
-    print_menu_generic_string(MARIOTEXT_X2, 65, textMarioB);
-    print_menu_generic_string(MARIOTEXT_X1, 105, textMarioC);
-    print_menu_generic_string(MARIOTEXT_X2, 105, textMarioD);
+    if (is_save_hardcore(0)) {
+        print_menu_generic_string(MARIOTEXT_X1, 65, textHardcoreA);
+    }
+    else if (is_save_hard(0)) {
+        print_menu_generic_string(MARIOTEXT_X1, 65, textHardA);
+    }
+    else {
+        print_menu_generic_string(MARIOTEXT_X1, 65, textMarioA);
+    }
+
+    if (is_save_hardcore(1)) {
+        print_menu_generic_string(MARIOTEXT_X2, 65, textHardcoreB);
+    }
+    else if (is_save_hard(1)) {
+        print_menu_generic_string(MARIOTEXT_X2, 65, textHardB);
+    }
+    else {
+        print_menu_generic_string(MARIOTEXT_X2, 65, textMarioB);
+    }
+
+    if (is_save_hardcore(2)) {
+        print_menu_generic_string(MARIOTEXT_X1, 105, textHardcoreC);
+    }
+    else if (is_save_hard(2)) {
+        print_menu_generic_string(MARIOTEXT_X1, 105, textHardC);
+    }
+    else {
+        print_menu_generic_string(MARIOTEXT_X1, 105, textMarioC);
+    }
+
+    if (is_save_hardcore(3)) {
+        print_menu_generic_string(MARIOTEXT_X2, 105, textHardcoreD);
+    }
+    else if (is_save_hard(3)) {
+        print_menu_generic_string(MARIOTEXT_X2, 105, textHardD);
+    }
+    else {
+        print_menu_generic_string(MARIOTEXT_X2, 105, textMarioD);
+    }
     gSPDisplayList(gDisplayListHead++, dl_menu_ia8_text_end);
 }
 

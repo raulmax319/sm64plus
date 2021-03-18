@@ -14,6 +14,9 @@
 #include "game/mario.h"
 #include "game/object_list_processor.h"
 #include "surface_load.h"
+#include "game/game_init.h"
+
+#include "game/settings.h"
 
 s32 unused8038BE90;
 
@@ -787,7 +790,7 @@ void load_object_collision_model(void) {
         }
     }
 
-    if (marioDist < gCurrentObject->oDrawingDistance) {
+    if (marioDist < gCurrentObject->oDrawingDistance || gDisableDrawDistance) {
         gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     } else {
         gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;

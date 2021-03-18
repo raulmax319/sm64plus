@@ -9,6 +9,10 @@
 #include "interaction.h"
 #include "mario_step.h"
 
+#include "object_list_processor.h"
+
+#include "settings.h"
+
 static s16 sMovingSandSpeeds[] = { 12, 8, 4, 0 };
 
 struct Surface gWaterSurfacePseudoFloor = {
@@ -402,7 +406,12 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
     lowerWall = resolve_and_return_wall_collisions(nextPos, 30.0f, 50.0f);
 
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-    ceilHeight = vec3f_find_ceil(nextPos, floorHeight, &ceil);
+    if (gCollisionFixes) {
+        ceilHeight = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
+    }
+    else {
+        ceilHeight = vec3f_find_ceil(nextPos, floorHeight, &ceil);
+    }
 
     waterLevel = find_water_level(nextPos[0], nextPos[2]);
 
@@ -429,18 +438,20 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
 
     //! This check uses f32, but findFloor uses short (overflow jumps)
     if (nextPos[1] <= floorHeight) {
-        if (ceilHeight - floorHeight > 160.0f) {
-            m->pos[0] = nextPos[0];
-            m->pos[2] = nextPos[2];
-            m->floor = floor;
-            m->floorHeight = floorHeight;
-        }
+        if (!gCollisionFixes || gMarioObject->platform == NULL | (m->vel[1]<=0)) {
+            if (ceilHeight - floorHeight > 160.0f) {
+                m->pos[0] = nextPos[0];
+                m->pos[2] = nextPos[2];
+                m->floor = floor;
+                m->floorHeight = floorHeight;
+            }
 
-        //! When ceilHeight - floorHeight <= 160, the step result says that
-        // Mario landed, but his movement is cancelled and his referenced floor
-        // isn't updated (pedro spots)
-        m->pos[1] = floorHeight;
-        return AIR_STEP_LANDED;
+            //! When ceilHeight - floorHeight <= 160, the step result says that
+            // Mario landed, but his movement is cancelled and his referenced floor
+            // isn't updated (pedro spots)
+            m->pos[1] = floorHeight;
+            return AIR_STEP_LANDED;
+        }
     }
 
     if (nextPos[1] + 160.0f > ceilHeight) {

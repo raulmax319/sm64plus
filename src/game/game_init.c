@@ -21,6 +21,8 @@
 #include "thread6.h"
 #include <prevent_bss_reordering.h>
 
+#include "settings.h"
+
 // FIXME: I'm not sure all of these variables belong in this file, but I don't
 // know of a good way to split them
 struct Controller gControllers[3];
@@ -45,6 +47,10 @@ struct MarioAnimation D_80339D10;
 struct MarioAnimation gDemo;
 UNUSED u8 filler80339D30[0x90];
 
+s8 gCanMirror = 0;
+s8 gReimportTextures = 0;
+s8 gBooDialogueWasSaid = 0;
+
 int unused8032C690 = 0;
 u32 gGlobalTimer = 0;
 
@@ -58,6 +64,26 @@ struct Controller *gPlayer3Controller = &gControllers[2];
 struct DemoInput *gCurrDemoInput = NULL; // demo input sequence
 u16 gDemoInputListID = 0;
 struct DemoInput gRecordedDemoInput = { 0 }; // possibly removed in EU. TODO: Check
+
+s8 get_mirror() {
+    if (gEncoreMode == 0) {
+        return 0;
+    }
+
+    if (gCurrCourseNum == COURSE_CAKE_END) {
+        return 0;
+    }
+
+    return gCanMirror;
+}
+
+s16 get_palette() {
+    if (!gEncoreMode || !gCanMirror) {
+        return 0;
+    }
+
+    return gCurrCourseNum+1;
+}
 
 /**
  * Initializes the Reality Display Processor (RDP).
@@ -76,7 +102,12 @@ void my_rdp_init(void) {
     gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
     gDPSetTextureDetail(gDisplayListHead++, G_TD_CLAMP);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
-    gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
+    if (gNearestNeighbor) {
+        gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    }
+    else {
+        gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
+    }
     gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
 
     gDPSetCombineKey(gDisplayListHead++, G_CK_NONE);
@@ -378,6 +409,8 @@ void adjust_analog_stick(struct Controller *controller) {
     // reset the controller's x and y floats.
     controller->stickX = 0;
     controller->stickY = 0;
+    controller->stick2X = 0;
+    controller->stick2Y = 0;
 
     // modulate the rawStickX and rawStickY to be the new f32 values by adding/subtracting 6.
     if (controller->rawStickX <= -8) {
@@ -396,9 +429,28 @@ void adjust_analog_stick(struct Controller *controller) {
         controller->stickY = controller->rawStickY - 6;
     }
 
+    if (controller->rawStick2X <= -8) {
+        controller->stick2X = controller->rawStick2X + 6;
+    }
+
+    if (controller->rawStick2X >= 8) {
+        controller->stick2X = controller->rawStick2X - 6;
+    }
+
+    if (controller->rawStick2Y <= -8) {
+        controller->stick2Y = controller->rawStick2Y + 6;
+    }
+
+    if (controller->rawStick2Y >= 8) {
+        controller->stick2Y = controller->rawStick2Y - 6;
+    }
+
     // calculate f32 magnitude from the center by vector length.
     controller->stickMag =
         sqrtf(controller->stickX * controller->stickX + controller->stickY * controller->stickY);
+    controller->stick2Mag =
+        sqrtf(controller->stick2X * controller->stick2X + controller->stick2Y * controller->stick2Y);
+
 
     // magnitude cannot exceed 64.0f: if it does, modify the values appropriately to
     // flatten the values down to the allowed maximum value.
@@ -406,6 +458,11 @@ void adjust_analog_stick(struct Controller *controller) {
         controller->stickX *= 64 / controller->stickMag;
         controller->stickY *= 64 / controller->stickMag;
         controller->stickMag = 64;
+    }
+    if (controller->stick2Mag > 64) {
+        controller->stick2X *= 64 / controller->stick2Mag;
+        controller->stick2Y *= 64 / controller->stick2Mag;
+        controller->stick2Mag = 64;
     }
 }
 
@@ -495,8 +552,23 @@ void read_controller_inputs(void) {
         // if we're receiving inputs, update the controller struct
         // with the new button info.
         if (controller->controllerData != NULL) {
+
             controller->rawStickX = controller->controllerData->stick_x;
             controller->rawStickY = controller->controllerData->stick_y;
+
+            if (gDpadInput) {
+                controller->rawStickX += (((controller->buttonDown & R_JPAD) > 0) - ((controller->buttonDown & L_JPAD) > 0))*80;
+                controller->rawStickY += (((controller->buttonDown & U_JPAD) > 0) - ((controller->buttonDown & D_JPAD) > 0))*80;
+            }
+
+            controller->rawStick2X = controller->controllerData->stick2_x;
+            controller->rawStick2Y = controller->controllerData->stick2_y;
+
+            if (get_mirror()) {
+                controller->rawStickX *= -1;
+                controller->rawStick2X *= -1;
+            }
+
             controller->buttonPressed = controller->controllerData->button
                                         & (controller->controllerData->button ^ controller->buttonDown);
             // 0.5x A presses are a good meme
@@ -506,10 +578,14 @@ void read_controller_inputs(void) {
         {
             controller->rawStickX = 0;
             controller->rawStickY = 0;
+            controller->rawStick2X = 0;
+            controller->rawStick2Y = 0;
             controller->buttonPressed = 0;
             controller->buttonDown = 0;
             controller->stickX = 0;
             controller->stickY = 0;
+            controller->stick2X = 0;
+            controller->stick2Y = 0;
             controller->stickMag = 0;
         }
     }

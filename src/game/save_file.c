@@ -481,6 +481,13 @@ u32 save_file_get_flags(void) {
     return gSaveBuffer.files[gCurrSaveFileNum - 1][0].flags;
 }
 
+s8 is_save_hard(s16 slot) {
+    return ((gSaveBuffer.files[slot][0].flags & SAVE_FLAG_HARD_MODE) != 0);
+}
+s8 is_save_hardcore(s16 slot) {
+    return ((gSaveBuffer.files[slot][0].flags & SAVE_FLAG_HARDCORE_MODE) != 0);
+}
+
 /**
  * Return the bitset of obtained stars in the specified course.
  * If course is -1, return the bitset of obtained castle secret stars.

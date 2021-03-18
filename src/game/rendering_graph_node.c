@@ -11,6 +11,8 @@
 #include "shadow.h"
 #include "sm64.h"
 
+#include "settings.h"
+
 /**
  * This file contains the code that processes the scene graph for rendering.
  * The scene graph is responsible for drawing everything except the HUD / text boxes.
@@ -271,6 +273,14 @@ static void geo_process_level_of_detail(struct GraphNodeLevelOfDetail *node) {
     // shorts for the integer parts followed by 16 shorts for the fraction parts
     s16 *mtx = (s16 *) gMatStackFixed[gMatStackIndex];
     s16 distanceFromCam = -mtx[14]; // z-component of the translation column
+
+    // You know what they say, if it works, it works.
+    if (gNoLowPoly) {
+        distanceFromCam = 0;
+    }
+    if (gForceLowPoly) {
+        distanceFromCam = 10000;
+    }
 
     if (node->minDistance <= distanceFromCam && distanceFromCam < node->maxDistance) {
         if (node->node.children != 0) {

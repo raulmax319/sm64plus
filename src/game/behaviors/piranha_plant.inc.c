@@ -3,6 +3,7 @@
  * This controls Piranha Plants, which alternate between sleeping, attacking,
  * and dying, primarily depending on Mario's proximity and interaction state.
  */
+#include "../settings.h"
 
 /**
  * Reset the Piranha Plant back to a sleeping animation, no matter what state
@@ -330,7 +331,7 @@ void bhv_piranha_plant_loop(void) {
     cur_obj_call_action_function(TablePiranhaPlantActions);
 
     // In WF, hide all Piranha Plants once high enough up.
-    if (gCurrLevelNum == LEVEL_WF) {
+    if (gCurrLevelNum == LEVEL_WF && !gDisableDrawDistance) {
         if (gMarioObject->oPosY > 3400.0f)
             cur_obj_hide();
         else

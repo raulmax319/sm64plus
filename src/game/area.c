@@ -22,6 +22,8 @@
 #include "save_file.h"
 #include "level_table.h"
 
+#include "settings.h"
+
 struct SpawnInfo gPlayerSpawnInfos[1];
 struct GraphNode *D_8033A160[0x100];
 struct Area gAreaData[8];
@@ -238,6 +240,8 @@ void load_area(s32 index) {
 
         load_obj_warp_nodes();
         geo_call_global_function_nodes(&gCurrentArea->unk04->node, GEO_CONTEXT_AREA_LOAD);
+
+        gCanMirror = 0;
     }
 }
 
@@ -255,6 +259,10 @@ void unload_area(void) {
 void load_mario_area(void) {
     func_80320890();
     load_area(gMarioSpawnInfo->areaIndex);
+
+    gCanMirror = 1;
+    if (gEncoreMode)
+        gReimportTextures = 1;
 
     if (gCurrentArea->index == gMarioSpawnInfo->areaIndex) {
         gCurrentArea->flags |= 0x01;
@@ -369,7 +377,9 @@ void render_game(void) {
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, BORDER_HEIGHT, SCREEN_WIDTH,
                       SCREEN_HEIGHT - BORDER_HEIGHT);
-        render_hud();
+        if (!gHideHud) {
+            render_hud();
+        }
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         render_text_labels();

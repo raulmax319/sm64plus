@@ -1,4 +1,5 @@
 // water_bomb_cannon.inc.c
+#include "../settings.h"
 
 void bhv_bubble_cannon_barrel_loop(void) {
     struct Object *val04;
@@ -38,7 +39,7 @@ void bhv_bubble_cannon_barrel_loop(void) {
 }
 
 void water_bomb_cannon_act_0(void) {
-    if (o->oDistanceToMario < 2000.0f) {
+    if (o->oDistanceToMario < 2000.0f || gDisableDrawDistance) {
         spawn_object(o, MODEL_CANNON_BARREL, bhvCannonBarrelBubbles);
         cur_obj_unhide();
 
@@ -48,7 +49,7 @@ void water_bomb_cannon_act_0(void) {
 }
 
 void water_bomb_cannon_act_1(void) {
-    if (o->oDistanceToMario > 2500.0f) {
+    if (o->oDistanceToMario > 2500.0f && !gDisableDrawDistance) {
         o->oAction = 2;
     } else if (o->oBehParams2ndByte == 0) {
         if (o->oWaterCannonUnkF4 != 0) {

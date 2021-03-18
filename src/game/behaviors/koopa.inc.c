@@ -614,15 +614,27 @@ static void koopa_the_quick_act_race(void) {
                 case KOOPA_THE_QUICK_SUB_ACT_RUN:
                     koopa_the_quick_animate_footsteps();
 
-                    if (o->parentObj->oKoopaRaceEndpointRaceStatus != 0 && o->oDistanceToMario > 1500.0f
+                    if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                        if (o->parentObj->oKoopaRaceEndpointRaceStatus != 0 && o->oDistanceToMario > 1500.0f
                         && (o->oPathedPrevWaypointFlags & WAYPOINT_MASK_00FF) < 28) {
-                        // Move faster if mario has already finished the race or
-                        // cheated by shooting from cannon
-                        o->oKoopaAgility = 8.0f;
-                    } else if (o->oKoopaTheQuickRaceIndex != KOOPA_THE_QUICK_BOB_INDEX) {
-                        o->oKoopaAgility = 6.0f;
-                    } else {
-                        o->oKoopaAgility = 4.0f;
+                            // Move faster if mario has already finished the race or
+                            // cheated by shooting from cannon
+                            o->oKoopaAgility = 12.0f;
+                        } else {
+                            o->oKoopaAgility = 8.0f;
+                        }
+                    }
+                    else {
+                        if (o->parentObj->oKoopaRaceEndpointRaceStatus != 0 && o->oDistanceToMario > 1500.0f
+                        && (o->oPathedPrevWaypointFlags & WAYPOINT_MASK_00FF) < 28) {
+                            // Move faster if mario has already finished the race or
+                            // cheated by shooting from cannon
+                            o->oKoopaAgility = 8.0f;
+                        } else if (o->oKoopaTheQuickRaceIndex != KOOPA_THE_QUICK_BOB_INDEX) {
+                            o->oKoopaAgility = 6.0f;
+                        } else {
+                            o->oKoopaAgility = 4.0f;
+                        }
                     }
 
                     obj_forward_vel_approach(o->oKoopaAgility * 6.0f * downhillSteepness,

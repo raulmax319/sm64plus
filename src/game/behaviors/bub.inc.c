@@ -3,12 +3,13 @@
 // NOTE: These first set of functions spawn a school of bub depending on objF4's
 // value. The later action functions seem to check Y distance to Mario and proceed
 // to do nothing, which indicates this behavior set is incomplete.
+#include "../settings.h"
 
 // TODO: Rename these. These have nothing to do with birds.
 void bub_spawner_act_0(void) {
     s32 i;
     s32 sp18 = o->oBirdChirpChirpUnkF4;
-    if (o->oDistanceToMario < 1500.0f) {
+    if (o->oDistanceToMario < 1500.0f && !gDisableDrawDistance) {
         for (i = 0; i < sp18; i++)
             spawn_object(o, MODEL_BUB, bhvBub);
         o->oAction = 1;

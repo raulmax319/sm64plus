@@ -1006,6 +1006,7 @@ struct SoundState D_8032F5B8[] = { { 0, 0, 0, NO_SOUND },
                                    { 1, 0, -1, SOUND_OBJ2_BOWSER_ROAR } };
 s8 D_8032F690[4] = { 0, 0, 1, 0 };
 s8 D_8032F694[4] = { 1, 1, 3, 0 };
+s8 D_8032F694_hard[4] = { 3, 4, 5, 0 };
 extern u8 bowser_3_seg7_collision_07004B94[];
 extern u8 bowser_3_seg7_collision_07004C18[];
 extern u8 bowser_3_seg7_collision_07004C9C[];
@@ -1150,7 +1151,12 @@ void bhv_bowser_init(void) {
         level = 0;
     o->oBehParams2ndByte = level;
     o->oBowserUnk1B2 = D_8032F690[level];
-    o->oHealth = D_8032F694[level];
+    if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+        o->oHealth = D_8032F694_hard[level];
+    }
+    else {
+        o->oHealth = D_8032F694[level];
+    }
     cur_obj_start_cam_event(o, CAM_EVENT_BOWSER_INIT);
     o->oAction = 5;
     o->oBowserUnk1AE = 0;

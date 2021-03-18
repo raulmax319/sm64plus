@@ -7,7 +7,7 @@
 #include "controller_emscripten_keyboard.h"
 #endif
 
-#include "../configfile.h"
+#include "game/settings.h"
 
 static int keyboard_buttons_down;
 

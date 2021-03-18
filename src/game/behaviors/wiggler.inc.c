@@ -316,8 +316,16 @@ static void wiggler_act_jumped_on(void) {
 
                     if (o->oHealth == 2) {
                         cur_obj_play_sound_2(SOUND_OBJ_WIGGLER_JUMP);
-                        o->oForwardVel = 10.0f;
+                        if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                            o->oForwardVel = 40.0f;
+                        }
+                        else {
+                            o->oForwardVel = 10.0f;
+                        }
                         o->oVelY = 70.0f;
+                    }
+                    else if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                        o->oForwardVel = 30.0f;
                     }
                 }
             }

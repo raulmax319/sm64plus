@@ -13,6 +13,8 @@
 #include "behavior_data.h"
 #include "thread6.h"
 
+#include "settings.h"
+
 struct LandingAction {
     s16 numFrames;
     s16 unk02;
@@ -461,8 +463,12 @@ void update_walking_speed(struct MarioState *m) {
         m->forwardVel = 48.0f;
     }
 
-    m->faceAngle[1] =
-        m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
+    if (gBetterControls) {
+        m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x1000, 0x1000);
+    }
+    else {
+        m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
+    }
     apply_slope_accel(m);
 }
 
@@ -806,8 +812,20 @@ s32 act_walking(struct MarioState *m) {
         return begin_braking_action(m);
     }
 
-    if (analog_stick_held_back(m) && m->forwardVel >= 16.0f) {
-        return set_mario_action(m, ACT_TURNING_AROUND, 0);
+    if (gBetterControls) {
+        if (analog_stick_held_back(m)) {
+            if (m->forwardVel >= 12.0f){
+                return set_mario_action(m, ACT_TURNING_AROUND, 0);
+            } else if ((m->forwardVel) < 10.0f && (m->forwardVel > 0.0f)){
+                m->faceAngle[1] = m->intendedYaw;
+                return set_mario_action(m, ACT_TURNING_AROUND, 0);
+            }
+        }
+    }
+    else {
+        if (analog_stick_held_back(m) && m->forwardVel >= 16.0f) {
+            return set_mario_action(m, ACT_TURNING_AROUND, 0);
+        }
     }
 
     if (m->input & INPUT_Z_PRESSED) {
@@ -1047,8 +1065,15 @@ s32 act_braking(struct MarioState *m) {
         return check_common_action_exits(m);
     }
 
-    if (apply_slope_decel(m, 2.0f)) {
-        return set_mario_action(m, ACT_BRAKING_STOP, 0);
+    if (gBetterControls) {
+        if (apply_slope_decel(m, 2.5f)) {
+            return set_mario_action(m, ACT_BRAKING_STOP, 0);
+        }
+    }
+    else {
+        if (apply_slope_decel(m, 2.0f)) {
+            return set_mario_action(m, ACT_BRAKING_STOP, 0);
+        }
     }
 
     if (m->input & INPUT_B_PRESSED) {
@@ -1328,8 +1353,12 @@ s32 act_burning_ground(struct MarioState *m) {
     m->forwardVel = approach_f32(m->forwardVel, 32.0f, 4.0f, 1.0f);
 
     if (m->input & INPUT_NONZERO_ANALOG) {
-        m->faceAngle[1] =
-            m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x600, 0x600);
+        if (gBetterControls) {
+            m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
+        }
+        else {
+            m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x600, 0x600);
+        }
     }
 
     apply_slope_accel(m);
@@ -1565,8 +1594,15 @@ s32 act_dive_slide(struct MarioState *m) {
 #ifdef VERSION_SH
         queue_rumble_data(5, 80);
 #endif
-        return set_mario_action(m, m->forwardVel > 0.0f ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT,
-                                0);
+        if (gSunshineDive && m->input & INPUT_B_PRESSED) {
+            mario_set_forward_vel(m, 20.0f);
+            m->vel[1] = 21.0f;
+            return set_mario_action(m, ACT_DIVE, 0);
+        }
+        else {
+            return set_mario_action(m, m->forwardVel > 0.0f ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT,
+                                    0);
+        }
     }
 
     play_mario_landing_sound_once(m, SOUND_ACTION_TERRAIN_BODY_HIT_GROUND);
@@ -1855,6 +1891,11 @@ s32 act_long_jump_land(struct MarioState *m) {
         m->forwardVel = 0.0f;
     }
 #endif
+
+    // Sorry daddy...
+    if (gDisableBLJ && m->forwardVel < 0.0f) {
+        m->forwardVel = 0.0f;
+    }
 
     if (!(m->input & INPUT_Z_DOWN)) {
         m->input &= ~INPUT_A_PRESSED;

@@ -14,6 +14,8 @@
 #include "graph_node.h"
 #include "surface_collision.h"
 
+#include "game/settings.h"
+
 // Macros for retrieving arguments from behavior scripts.
 #define BHV_CMD_GET_1ST_U8(index)  (u8)((gCurBhvCommand[index] >> 24) & 0xFF) // unused
 #define BHV_CMD_GET_2ND_U8(index)  (u8)((gCurBhvCommand[index] >> 16) & 0xFF)
@@ -988,15 +990,24 @@ void cur_obj_update(void) {
         cur_obj_enable_rendering_if_mario_in_room();
     } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && gCurrentObject->collisionData == NULL) {
         if (!(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)) {
-            // If the object has a render distance, check if it should be shown.
-            if (distanceFromMario > gCurrentObject->oDrawingDistance) {
-                // Out of render distance, hide the object.
-                gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-                gCurrentObject->activeFlags |= ACTIVE_FLAG_FAR_AWAY;
-            } else if (gCurrentObject->oHeldState == HELD_FREE) {
-                // In render distance (and not being held), show the object.
-                gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
-                gCurrentObject->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
+            if (gDisableDrawDistance) {
+				if (distanceFromMario <= gCurrentObject->oDrawingDistance && gCurrentObject->oHeldState == HELD_FREE)
+				{
+					gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+					gCurrentObject->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
+				}
+            }
+            else {
+                // If the object has a render distance, check if it should be shown.
+                if (distanceFromMario > gCurrentObject->oDrawingDistance) {
+                    // Out of render distance, hide the object.
+                    gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
+                    gCurrentObject->activeFlags |= ACTIVE_FLAG_FAR_AWAY;
+                } else if (gCurrentObject->oHeldState == HELD_FREE) {
+                    // In render distance (and not being held), show the object.
+                    gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+                    gCurrentObject->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
+                }
             }
         }
     }

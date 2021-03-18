@@ -1,4 +1,5 @@
 // heave_ho.c.inc
+#include "../settings.h"
 
 s16 D_8032F460[][2] = { { 30, 0 }, { 42, 1 }, { 52, 0 },  { 64, 1 },  { 74, 0 },
                         { 86, 1 }, { 96, 0 }, { 108, 1 }, { 118, 0 }, { -1, 0 }, };
@@ -73,7 +74,7 @@ void heave_ho_act_3(void) {
 
 void heave_ho_act_0(void) {
     cur_obj_set_pos_to_home();
-    if (find_water_level(o->oPosX, o->oPosZ) < o->oPosY && o->oDistanceToMario < 4000.0f) {
+    if (find_water_level(o->oPosX, o->oPosZ) < o->oPosY && o->oDistanceToMario < 4000.0f || gDisableDrawDistance) {
         cur_obj_become_tangible();
         cur_obj_unhide();
         o->oAction = 1;

@@ -39,6 +39,8 @@
 
 #include "gfx_screen_config.h"
 
+#include "./game/settings.h"
+
 #define DEBUG_D3D 0
 
 using namespace Microsoft::WRL; // For ComPtr
@@ -302,8 +304,14 @@ static void gfx_direct3d12_upload_texture(const uint8_t *rgba32_buf, int width, 
     D3D12_RESOURCE_DESC texture_desc = {};
     texture_desc.MipLevels = 1;
     texture_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    texture_desc.Width = width;
-    texture_desc.Height = height;
+    if (gFXMode) {
+        texture_desc.Width = 1;
+        texture_desc.Height = 1;
+    }
+    else {
+        texture_desc.Width = width;
+        texture_desc.Height = height;
+    }
     texture_desc.Flags = D3D12_RESOURCE_FLAG_NONE;
     texture_desc.DepthOrArraySize = 1;
     texture_desc.SampleDesc.Count = 1;
@@ -609,8 +617,14 @@ static void gfx_direct3d12_start_frame(void) {
         d3d.noise_cb_data.noise_frame = 0;
     }
     float aspect_ratio = (float) d3d.current_width / (float) d3d.current_height;
-    d3d.noise_cb_data.noise_scale_x = 120 * aspect_ratio; // 120 = N64 height resolution (240) / 2
-    d3d.noise_cb_data.noise_scale_y = 120;
+    if (gNoiseType) {
+        d3d.noise_cb_data.noise_scale_x = d3d.current_width;
+        d3d.noise_cb_data.noise_scale_y = d3d.current_height;
+    }
+    else {
+        d3d.noise_cb_data.noise_scale_x = 120 * aspect_ratio; // 120 = N64 height resolution (240) / 2
+        d3d.noise_cb_data.noise_scale_y = 120;
+    }
     memcpy(d3d.mapped_noise_cb_address, &d3d.noise_cb_data, sizeof(struct NoiseCB));
     
     d3d.vbuf_pos = 0;
@@ -671,7 +685,13 @@ static void gfx_direct3d12_on_resize(void) {
     if (d3d.render_targets[0].Get() != nullptr) {
         d3d.render_targets[0].Reset();
         d3d.render_targets[1].Reset();
-        ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT));
+        if (gCustomInternalResolution) {
+            ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, gInternalResolutionWidth, gInternalResolutionHeight, DXGI_FORMAT_UNKNOWN, DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT));
+        }
+        else {
+            ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT));
+        }
+        
         d3d.frame_index = d3d.swap_chain->GetCurrentBackBufferIndex();
         create_render_target_views();
         create_depth_buffer();

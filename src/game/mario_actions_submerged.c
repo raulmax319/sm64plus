@@ -17,6 +17,8 @@
 #include "level_table.h"
 #include "thread6.h"
 
+#include "settings.h"
+
 #define MIN_SWIM_STRENGTH 160
 #define MIN_SWIM_SPEED 16.0f
 
@@ -59,9 +61,19 @@ static f32 get_buoyancy(struct MarioState *m) {
             buoyancy = -18.0f;
         }
     } else if (swimming_near_surface(m)) {
-        buoyancy = 1.25f;
+        if (gBetterControls) {
+            buoyancy = 2.0f;
+        }
+        else {
+            buoyancy = 1.25f;
+        }
     } else if (!(m->action & ACT_FLAG_MOVING)) {
-        buoyancy = -2.0f;
+        if (gBetterControls) {
+            buoyancy = -0.5f;
+        }
+        else {
+            buoyancy = -2.0f;
+        }
     }
 
     return buoyancy;
@@ -493,7 +505,12 @@ static s32 check_water_jump(struct MarioState *m) {
         if (probe >= m->waterLevel - 80 && m->faceAngle[0] >= 0 && m->controller->stickY < -60.0f) {
             vec3s_set(m->angleVel, 0, 0, 0);
 
-            m->vel[1] = 62.0f;
+            if (gBetterControls) {
+                m->vel[1] = 64.0f;
+            }
+            else {
+                m->vel[1] = 62.0f;
+            }
 
             if (m->heldObj == NULL) {
                 return set_mario_action(m, ACT_WATER_JUMP, 0);
@@ -528,11 +545,21 @@ static s32 act_breaststroke(struct MarioState *m) {
     }
 
     if (m->actionTimer < 6) {
-        m->forwardVel += 0.5f;
+        if (gBetterControls) {
+            m->forwardVel += 1.0f;
+        }
+        else {
+            m->forwardVel += 0.5f;
+        }
     }
 
     if (m->actionTimer >= 9) {
-        m->forwardVel += 1.5f;
+        if (gBetterControls) {
+            m->forwardVel += 3.0f;
+        }
+        else {
+            m->forwardVel += 1.5f;
+        }
     }
 
     if (m->actionTimer >= 2) {

@@ -55,6 +55,7 @@ static void controller_sdl_read(OSContPad *pad) {
     if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) pad->button |= R_TRIG;
     if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_A)) pad->button |= A_BUTTON;
     if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_X)) pad->button |= B_BUTTON;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_RIGHTSTICK)) pad->button |= L_TRIG;
 
     int16_t leftx = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_LEFTX);
     int16_t lefty = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_LEFTY);
@@ -78,8 +79,19 @@ static void controller_sdl_read(OSContPad *pad) {
     }
 #endif
 
-    if (rightx < -0x4000) pad->button |= L_CBUTTONS;
-    if (rightx > 0x4000) pad->button |= R_CBUTTONS;
+    if (gImprovedCamera) {
+        uint32_t magnitude_sq2 = (uint32_t)(rightx * rightx) + (uint32_t)(righty * righty);
+        if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
+            pad->stick2_x = rightx / 0x100;
+            //int stick_y = -righty / 0x100;
+            //pad->stick2_y = stick_y == 128 ? 127 : stick_y;
+        }
+    }
+    else {
+        if (rightx < -0x4000) pad->button |= L_CBUTTONS;
+        if (rightx > 0x4000) pad->button |= R_CBUTTONS;
+    }
+    
     if (righty < -0x4000) pad->button |= U_CBUTTONS;
     if (righty > 0x4000) pad->button |= D_CBUTTONS;
 

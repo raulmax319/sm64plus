@@ -54,6 +54,10 @@ void bhv_hidden_star_trigger_loop(void) {
 
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
+        
+    if (gVisibleSecrets) {
+        spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
+    }
 }
 
 void bhv_bowser_course_red_coin_star_loop(void) {

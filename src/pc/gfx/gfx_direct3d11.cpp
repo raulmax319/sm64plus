@@ -27,6 +27,8 @@
 
 #include "gfx_screen_config.h"
 
+#include "./game/settings.h"
+
 #define THREE_POINT_FILTERING 0
 #define DEBUG_D3D 0
 
@@ -143,8 +145,14 @@ static void create_render_target_views(bool is_resize) {
         // Resize swap chain buffers
 
         ThrowIfFailed(d3d.swap_chain->GetDesc1(&desc1));
-        ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, desc1.Flags),
-                      gfx_dxgi_get_h_wnd(), "Failed to resize IDXGISwapChain buffers.");
+        if (gCustomInternalResolution) {
+            ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, gInternalResolutionWidth, gInternalResolutionHeight, DXGI_FORMAT_UNKNOWN, desc1.Flags),
+                    gfx_dxgi_get_h_wnd(), "Failed to resize IDXGISwapChain buffers.");
+        }
+        else {
+            ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, desc1.Flags),
+                    gfx_dxgi_get_h_wnd(), "Failed to resize IDXGISwapChain buffers.");
+        }
     }
 
     // Get new size
@@ -246,6 +254,20 @@ static void gfx_d3d11_init(void) {
 
     // Create the swap chain
     d3d.swap_chain = gfx_dxgi_create_swap_chain(d3d.device.Get());
+
+    // Enable MSAA
+    // I fucking TRIED but couldn't get it working I'm STUPID if anyone reading this that knows what they are doing let me know lol
+    /*
+    DXGI_SWAP_CHAIN_DESC1 swap_chain_desc;
+    ThrowIfFailed(d3d.swap_chain->GetDesc1(&swap_chain_desc));
+
+    u_int num_levels = 0;
+    HRESULT hr = d3d.device->CheckMultisampleQualityLevels(swap_chain_desc.Format, D3D10_MAX_MULTISAMPLE_SAMPLE_COUNT, &num_levels);
+    if (hr == S_OK) {
+        swap_chain_desc.SampleDesc.Count = D3D10_MAX_MULTISAMPLE_SAMPLE_COUNT;
+        swap_chain_desc.SampleDesc.Quality = num_levels-1;
+    }
+    */
 
     // Create D3D Debug device if in debug mode
 
@@ -441,8 +463,14 @@ static void gfx_d3d11_upload_texture(const uint8_t *rgba32_buf, int width, int h
     D3D11_TEXTURE2D_DESC texture_desc;
     ZeroMemory(&texture_desc, sizeof(D3D11_TEXTURE2D_DESC));
 
-    texture_desc.Width = width;
-    texture_desc.Height = height;
+    if (gFXMode) {
+        texture_desc.Width = 1;
+        texture_desc.Height = 1;
+    }
+    else {
+        texture_desc.Width = width;
+        texture_desc.Height = height;
+    }
     texture_desc.Usage = D3D11_USAGE_IMMUTABLE;
     texture_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
     texture_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -682,8 +710,14 @@ static void gfx_d3d11_start_frame(void) {
         d3d.per_frame_cb_data.noise_frame = 0;
     }
     float aspect_ratio = (float) d3d.current_width / (float) d3d.current_height;
-    d3d.per_frame_cb_data.noise_scale_x = 120 * aspect_ratio; // 120 = N64 height resolution (240) / 2
-    d3d.per_frame_cb_data.noise_scale_y = 120;
+    if (gNoiseType) {
+        d3d.per_frame_cb_data.noise_scale_x = d3d.current_width;
+        d3d.per_frame_cb_data.noise_scale_y = d3d.current_height;
+    }
+    else {
+        d3d.per_frame_cb_data.noise_scale_x = 120 * aspect_ratio; // 120 = N64 height resolution (240) / 2
+        d3d.per_frame_cb_data.noise_scale_y = 120;
+    }
 
     D3D11_MAPPED_SUBRESOURCE ms;
     ZeroMemory(&ms, sizeof(D3D11_MAPPED_SUBRESOURCE));

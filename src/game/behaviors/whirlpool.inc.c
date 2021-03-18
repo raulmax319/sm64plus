@@ -1,4 +1,5 @@
 // whirlpool.c.inc
+#include "../settings.h"
 
 static struct ObjectHitbox sWhirlpoolHitbox = {
     /* interactType:      */ INTERACT_WHIRLPOOL,
@@ -35,7 +36,7 @@ void whirpool_orient_graph(void) {
 }
 
 void bhv_whirlpool_loop(void) {
-    if (o->oDistanceToMario < 5000.0f) {
+    if (o->oDistanceToMario < 5000.0f && !gDisableDrawDistance) {
         o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
 
         // not sure if actually an array

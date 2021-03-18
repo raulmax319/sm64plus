@@ -30,6 +30,11 @@ struct Controller
   /*0x12*/ u16 buttonPressed;
   /*0x14*/ OSContStatus *statusData;
   /*0x18*/ OSContPad *controllerData;
+  /*0x00*/ s16 rawStick2X;       //
+  /*0x02*/ s16 rawStick2Y;       //
+  /*0x04*/ float stick2X;        // [-64, 64] positive is right
+  /*0x08*/ float stick2Y;        // [-64, 64] positive is up
+  /*0x0C*/ float stick2Mag;      // distance from center [0, 64]
 #ifdef VERSION_SH
   /*0x1C*/ int port;
 #endif

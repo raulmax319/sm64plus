@@ -23,6 +23,8 @@
 #include "text_strings.h"
 #include "types.h"
 
+#include "settings.h"
+
 u16 gDialogColorFadeTimer;
 s8 gLastDialogLineNum;
 s32 gDialogVariable;
@@ -2251,7 +2253,12 @@ void render_pause_my_score_coins(void) {
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
     if (courseIndex < COURSE_STAGES_COUNT && save_file_get_course_star_count(gCurrSaveFileNum - 1, courseIndex) != 0) {
-        print_generic_string(MYSCORE_X, 121, textMyScore);
+        if (get_mirror()) {
+            print_generic_string(280-MYSCORE_X, 121, textMyScore);
+        }
+        else {
+            print_generic_string(MYSCORE_X, 121, textMyScore);
+        }
     }
 
     courseName = segmented_to_virtual(courseNameTbl[courseIndex]);
@@ -2628,7 +2635,7 @@ s16 render_pause_courses_and_castle(void) {
             render_pause_my_score_coins();
             render_pause_red_coins();
 
-            if (gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT) {
+            if (gLeaveAnyTime || gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT) {
                 render_pause_course_options(99, 93, &gDialogLineNum, 15);
             }
 
@@ -2767,7 +2774,9 @@ void print_hud_course_complete_coins(s16 x, s16 y) {
 
             if (gCourseCompleteCoins == 50 || gCourseCompleteCoins == 100 || gCourseCompleteCoins == 150) {
                 play_sound(SOUND_GENERAL_COLLECT_1UP, gDefaultSoundArgs);
-                gMarioState[0].numLives++;
+                if (!gLifeMode) {
+                    gMarioState[0].numLives++;
+                }
             }
         }
 

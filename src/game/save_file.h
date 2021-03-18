@@ -104,6 +104,8 @@ extern s8 gLevelToCourseNumTable[];
 #define SAVE_FLAG_CAP_ON_UKIKI           /* 0x040000 */ (1 << 18)
 #define SAVE_FLAG_CAP_ON_MR_BLIZZARD     /* 0x080000 */ (1 << 19)
 #define SAVE_FLAG_UNLOCKED_50_STAR_DOOR  /* 0x100000 */ (1 << 20)
+#define SAVE_FLAG_HARD_MODE              /* 0x200000 */ (1 << 21)
+#define SAVE_FLAG_HARDCORE_MODE          /* 0x800000 */ (1 << 23)
 
 // Variable for setting a warp checkpoint.
 
@@ -134,6 +136,8 @@ s32 save_file_get_total_star_count(s32 fileIndex, s32 minCourse, s32 maxCourse);
 void save_file_set_flags(u32 flags);
 void save_file_clear_flags(u32 flags);
 u32 save_file_get_flags(void);
+s8 is_save_hard(s16 slot);
+s8 is_save_hardcore(s16 slot);
 u32 save_file_get_star_flags(s32 fileIndex, s32 courseIndex);
 void save_file_set_star_flags(s32 fileIndex, s32 courseIndex, u32 starFlags);
 s32 save_file_get_course_coin_score(s32 fileIndex, s32 courseIndex);

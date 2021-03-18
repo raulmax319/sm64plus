@@ -1,4 +1,5 @@
 // whomp.c.inc
+#include "../settings.h"
 
 void whomp_play_sfx_from_pound_animation(void) {
     UNUSED s32 sp2C = o->header.gfx.unk38.animFrame;
@@ -26,7 +27,12 @@ void whomp_act_0(void) {
                 func_8031FFB4(SEQ_PLAYER_LEVEL, 60, 40);
             } else {
                 cur_obj_set_pos_to_home();
-                o->oHealth = 3;
+                if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                    o->oHealth = 5;
+                }
+                else {
+                    o->oHealth = 3;
+                }
             }
         } else if (cur_obj_update_dialog_with_cutscene(2, 1, CUTSCENE_DIALOG, DIALOG_114))
             o->oAction = 2;
@@ -85,7 +91,12 @@ void whomp_act_2(void) {
         sp1E = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
         if (sp1E < 0x2000) {
             if (o->oDistanceToMario < 1500.0f) {
-                o->oForwardVel = 9.0f;
+                if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                    o->oForwardVel = 27.0f;
+                }
+                else {
+                    o->oForwardVel = 9.0f;
+                }
                 cur_obj_init_animation_with_accel_and_sound(0, 3.0f);
             }
             if (o->oDistanceToMario < 300.0f)
@@ -101,7 +112,12 @@ void whomp_act_2(void) {
 
 void whomp_act_3(void) {
     o->oForwardVel = 0.0f;
-    cur_obj_init_animation_with_accel_and_sound(1, 1.0f);
+    if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+        cur_obj_init_animation_with_accel_and_sound(1, 3.0f);
+    }
+    else {
+        cur_obj_init_animation_with_accel_and_sound(1, 1.0f);
+    }
     if (cur_obj_check_if_near_animation_end())
         o->oAction = 4;
 }
@@ -111,7 +127,12 @@ void whomp_act_4(void) {
         o->oVelY = 40.0f;
     if (o->oTimer < 8) {
     } else {
-        o->oAngleVelPitch += 0x100;
+        if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+            o->oAngleVelPitch += 0x200;
+        }
+        else {
+            o->oAngleVelPitch += 0x100;
+        }
         o->oFaceAnglePitch += o->oAngleVelPitch;
         if (o->oFaceAnglePitch > 0x4000) {
             o->oAngleVelPitch = 0;
@@ -245,11 +266,13 @@ void bhv_whomp_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sWhompActions);
     cur_obj_move_standard(-20);
-    if (o->oAction != 9) {
-        if (o->oBehParams2ndByte != 0)
-            cur_obj_hide_if_mario_far_away_y(2000.0f);
-        else
-            cur_obj_hide_if_mario_far_away_y(1000.0f);
-        load_object_collision_model();
+    if (!gDisableDrawDistance) {
+        if (o->oAction != 9) {
+            if (o->oBehParams2ndByte != 0)
+                cur_obj_hide_if_mario_far_away_y(2000.0f);
+            else
+                cur_obj_hide_if_mario_far_away_y(1000.0f);
+        }
     }
+    load_object_collision_model();
 }

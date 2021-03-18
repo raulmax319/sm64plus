@@ -7,10 +7,22 @@ struct RacingPenguinData {
 static struct RacingPenguinData sRacingPenguinData[] = {
     { DIALOG_055, 200.0f, 200.0f },
     { DIALOG_164, 350.0f, 250.0f },
+    { DIALOG_171, 0.0f, 0.0f },
+    { DIALOG_172, 0.0f, 0.0f },
 };
 
 void bhv_racing_penguin_init(void) {
-    if (gMarioState->numStars == 120) {
+    if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+        if (gMarioState->numStars == 120) {
+            cur_obj_scale(0.25f);
+            o->oBehParams2ndByte = 3;
+        }
+        else {
+            cur_obj_scale(0.5f);
+            o->oBehParams2ndByte = 2;
+        }
+    }
+    else if (gMarioState->numStars == 120) {
         cur_obj_scale(8.0f);
         o->header.gfx.scale[1] = 5.0f;
         o->oBehParams2ndByte = 1;
@@ -67,7 +79,12 @@ static void racing_penguin_act_race(void) {
         o->oAction = RACING_PENGUIN_ACT_FINISH_RACE;
     } else {
         targetSpeed = o->oPosY - gMarioObject->oPosY;
-        minSpeed = 70.0f;
+        if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+            minSpeed = 90.0f;
+        }
+        else {
+            minSpeed = 70.0f;
+        }
 
         cur_obj_play_sound_1(SOUND_AIR_ROUGH_SLIDE);
 

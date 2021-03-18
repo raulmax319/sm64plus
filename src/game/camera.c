@@ -29,6 +29,8 @@
 #include "engine/graph_node.h"
 #include "level_table.h"
 
+#include "settings.h"
+
 #define CBUTTON_MASK (U_CBUTTONS | D_CBUTTONS | L_CBUTTONS | R_CBUTTONS)
 
 /**
@@ -483,6 +485,10 @@ CameraTransition sModeTransitions[] = {
 extern u8 sDanceCutsceneIndexTable[][4];
 extern u8 sZoomOutAreaMasks[];
 
+//Define the analog camera speed
+#define ANALOG_AMOUNT 12 * (1 - gInvertedCamera * 2)
+#define LROTATE_SPEED 0x400
+
 /**
  * Starts a camera shake triggered by an interaction
  */
@@ -906,7 +912,7 @@ s32 update_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     UNUSED f32 unused2;
     UNUSED f32 unused3;
     f32 yOff = 125.f;
-    f32 baseDist = 1000.f;
+    f32 baseDist = 1000.f+gAdditionalCameraDistance;
 
     sAreaYaw = camYaw - sModeOffsetYaw;
     calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
@@ -930,7 +936,7 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     UNUSED f32 unused2;
     UNUSED f32 unused3;
     f32 yOff = 125.f;
-    f32 baseDist = 1000.f;
+    f32 baseDist = 1000.f+gAdditionalCameraDistance;
 
     sAreaYaw = camYaw;
     calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
@@ -959,6 +965,7 @@ void radial_camera_move(struct Camera *c) {
     f32 areaDistX = sMarioCamState->pos[0] - c->areaCenX;
     f32 areaDistZ = sMarioCamState->pos[2] - c->areaCenZ;
     UNUSED s32 filler;
+    s16 lCamRotation = DEGREES(180);
 
     // How much the camera's yaw changed
     s16 yawOffset = calculate_yaw(sMarioCamState->pos, c->pos) - atan2s(areaDistZ, areaDistX);
@@ -1032,7 +1039,7 @@ void radial_camera_move(struct Camera *c) {
             sModeOffsetYaw = avoidYaw;
             gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_LEFT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
         }
-
+        
         // If it's the first time rotating, just rotate to +-60 degrees
         if (!(s2ndRotateFlags & CAM_MOVE_ROTATE_RIGHT) && (gCameraMovementFlags & CAM_MOVE_ROTATE_RIGHT)
             && camera_approach_s16_symmetric_bool(&sModeOffsetYaw, maxAreaYaw, rotateSpeed) == 0) {
@@ -1054,6 +1061,30 @@ void radial_camera_move(struct Camera *c) {
             gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_LEFT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
             s2ndRotateFlags &= ~CAM_MOVE_ROTATE_LEFT;
         }
+
+        // Analog camera code
+        if (gPlayer1Controller->stick2X != 0) {
+            if (gPlayer1Controller->stick2X > 0) {
+                gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
+            }
+            else {
+                gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_LEFT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
+            }
+            sModeOffsetYaw -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
+        }
+
+        if (gCenterCam) {
+            if (c->mode == CAMERA_MODE_OUTWARD_RADIAL) {
+                lCamRotation = 0;
+            }
+            if (gPlayer1Controller->buttonPressed & L_TRIG) {
+                sModeOffsetYaw = sMarioCamState->faceAngle[1]+lCamRotation-sAreaYaw;
+                play_sound_rbutton_changed();
+            }
+            if (gPlayer1Controller->buttonDown & L_TRIG) {
+                camera_approach_s16_symmetric_bool(&sModeOffsetYaw, sMarioCamState->faceAngle[1]+lCamRotation-sAreaYaw, LROTATE_SPEED);
+            }
+        }
     }
     if (!(gCameraMovementFlags & CAM_MOVE_ROTATE)) {
         // If not rotating, rotate away from walls obscuring Mario from view
@@ -1070,13 +1101,14 @@ void radial_camera_move(struct Camera *c) {
             }
         }
     }
-
-    // Bound sModeOffsetYaw within (-120, 120) degrees
-    if (sModeOffsetYaw > 0x5554) {
-        sModeOffsetYaw = 0x5554;
-    }
-    if (sModeOffsetYaw < -0x5554) {
-        sModeOffsetYaw = -0x5554;
+    if (!gImprovedCamera) {
+        // Bound sModeOffsetYaw within (-120, 120) degrees
+        if (sModeOffsetYaw > 0x5554) {
+            sModeOffsetYaw = 0x5554;
+        }
+        if (sModeOffsetYaw < -0x5554) {
+            sModeOffsetYaw = -0x5554;
+        }
     }
 }
 
@@ -1184,6 +1216,27 @@ void mode_8_directions_camera(struct Camera *c) {
         play_sound_cbutton_side();
     }
 
+    // Analog camera code
+    if (gPlayer1Controller->stick2X != 0) {
+        if (gPlayer1Controller->stick2X > 0) {
+            gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
+        }
+        else {
+            gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_LEFT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
+        }
+        s8DirModeYawOffset -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
+    }
+
+    if (gCenterCam) {
+        if (gPlayer1Controller->buttonPressed & L_TRIG) {
+            s8DirModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
+            play_sound_rbutton_changed();
+        }
+        if (gPlayer1Controller->buttonDown & L_TRIG) {
+            camera_approach_s16_symmetric_bool(&s8DirModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), LROTATE_SPEED);
+        }
+    }
+
     lakitu_zoom(400.f, 0x900);
     c->nextYaw = update_8_directions_camera(c, c->focus, pos);
     c->pos[0] = pos[0];
@@ -1201,7 +1254,7 @@ s32 update_outward_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     f32 zDistFocToMario = sMarioCamState->pos[2] - c->areaCenZ;
     s16 camYaw = atan2s(zDistFocToMario, xDistFocToMario) + sModeOffsetYaw + DEGREES(180);
     s16 pitch = look_down_slopes(camYaw);
-    f32 baseDist = 1000.f;
+    f32 baseDist = 1000.f+gAdditionalCameraDistance;
     // A base offset of 125.f is ~= Mario's eye height
     f32 yOff = 125.f;
     f32 posY;
@@ -2092,6 +2145,8 @@ s16 update_default_camera(struct Camera *c) {
     handle_c_button_movement(c);
     vec3f_get_dist_and_angle(sMarioCamState->pos, c->pos, &dist, &pitch, &yaw);
 
+    gCameraZoomDist += gAdditionalCameraDistance;
+
     // If C-Down is active, determine what distance the camera should be from Mario
     if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
         //! In Mario mode, the camera is zoomed out further than in Lakitu mode (1400 vs 1200)
@@ -2372,6 +2427,17 @@ s16 update_default_camera(struct Camera *c) {
     if (gCurrLevelArea == AREA_WDW_TOWN) {
         yaw = clamp_positions_and_find_yaw(c->pos, c->focus, 2254.f, -3789.f, 3790.f, -2253.f);
     }
+
+    if (gCenterCam) {
+        if (gPlayer1Controller->buttonPressed & L_TRIG) {
+            if (yaw != sMarioCamState->faceAngle[1] + DEGREES(180)) {
+                yaw = sMarioCamState->faceAngle[1] + DEGREES(180);
+                focus_on_mario(c->focus, c->pos, 0.0f, 0.0f, dist, pitch, yaw);
+            }
+            play_sound_rbutton_changed();
+        }
+    }
+
     return yaw;
 }
 
@@ -5024,6 +5090,17 @@ void handle_c_button_movement(struct Camera *c) {
                 sCSideButtonYaw = cSideYaw;
             }
         }
+
+        // Analog camera code
+        if (gPlayer1Controller->stick2X != 0) {
+            if (gPlayer1Controller->stick2X > 0) {
+                gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
+            }
+            else {
+                gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_LEFT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
+            }
+            sCSideButtonYaw = ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
+        }
     }
 }
 
@@ -7055,8 +7132,8 @@ void player2_rotate_cam(struct Camera *c, s16 minPitch, s16 maxPitch, s16 minYaw
     s16 pitch, yaw, pitchCap;
 
     // Change the camera rotation to match the 2nd player's stick
-    approach_s16_asymptotic_bool(&sCreditsPlayer2Yaw, -(s16)(gPlayer2Controller->stickX * 250.f), 4);
-    approach_s16_asymptotic_bool(&sCreditsPlayer2Pitch, -(s16)(gPlayer2Controller->stickY * 265.f), 4);
+    approach_s16_asymptotic_bool(&sCreditsPlayer2Yaw, -(s16)(gPlayer1Controller->stick2X * 250.f), 4);
+    approach_s16_asymptotic_bool(&sCreditsPlayer2Pitch, -(s16)(gPlayer1Controller->stick2Y * 265.f), 4);
     vec3f_get_dist_and_angle(c->pos, c->focus, &distCamToFocus, &pitch, &yaw);
 
     pitchCap = 0x3800 - pitch; if (pitchCap < 0) {
@@ -11443,7 +11520,7 @@ Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context) 
         }
     }
 
-    perspective->fov = sFOVState.fov;
+    perspective->fov = sFOVState.fov + gAdditionalFOV;
     shake_camera_fov(perspective);
     return NULL;
 }

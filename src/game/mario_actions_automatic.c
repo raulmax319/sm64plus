@@ -17,6 +17,8 @@
 #include "level_table.h"
 #include "thread6.h"
 
+#include "settings.h"
+
 #define POLE_NONE 0
 #define POLE_TOUCHED_FLOOR 1
 #define POLE_FELL_OFF 2
@@ -711,8 +713,14 @@ s32 act_in_cannon(struct MarioState *m) {
             break;
 
         case 2:
-            m->faceAngle[0] -= (s16)(m->controller->stickY * 10.0f);
-            marioObj->oMarioCannonInputYaw -= (s16)(m->controller->stickX * 10.0f);
+            if (gBetterControls) {
+                m->faceAngle[0] -= (s16)(m->controller->stickY * 6.0f);
+                marioObj->oMarioCannonInputYaw -= (s16)(m->controller->stickX * 6.0f);
+            }
+            else {
+                m->faceAngle[0] -= (s16)(m->controller->stickY * 10.0f);
+                marioObj->oMarioCannonInputYaw -= (s16)(m->controller->stickX * 10.0f);
+            }
 
             if (m->faceAngle[0] > 0x38E3) {
                 m->faceAngle[0] = 0x38E3;
@@ -721,11 +729,21 @@ s32 act_in_cannon(struct MarioState *m) {
                 m->faceAngle[0] = 0;
             }
 
-            if (marioObj->oMarioCannonInputYaw > 0x4000) {
-                marioObj->oMarioCannonInputYaw = 0x4000;
+            if (gFlexibleCannons) {
+                if (marioObj->oMarioCannonInputYaw > 0x8000) {
+                    marioObj->oMarioCannonInputYaw = 0x8000;
+                }
+                if (marioObj->oMarioCannonInputYaw < -0x8000) {
+                    marioObj->oMarioCannonInputYaw = -0x8000;
+                }
             }
-            if (marioObj->oMarioCannonInputYaw < -0x4000) {
-                marioObj->oMarioCannonInputYaw = -0x4000;
+            else {
+                if (marioObj->oMarioCannonInputYaw > 0x4000) {
+                    marioObj->oMarioCannonInputYaw = 0x4000;
+                }
+                if (marioObj->oMarioCannonInputYaw < -0x4000) {
+                    marioObj->oMarioCannonInputYaw = -0x4000;
+                }
             }
 
             m->faceAngle[1] = marioObj->oMarioCannonObjectYaw + marioObj->oMarioCannonInputYaw;

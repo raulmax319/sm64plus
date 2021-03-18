@@ -31,6 +31,8 @@
 #include "spawn_object.h"
 #include "spawn_sound.h"
 
+#include "settings.h"
+
 /**
  * @file obj_behaviors.c
  * This file contains a portion of the obj behaviors and many helper functions for those
@@ -529,7 +531,7 @@ void set_object_visibility(struct Object *obj, s32 dist) {
     f32 objY = obj->oPosY;
     f32 objZ = obj->oPosZ;
 
-    if (is_point_within_radius_of_mario(objX, objY, objZ, dist) == TRUE) {
+    if (gDisableDrawDistance || is_point_within_radius_of_mario(objX, objY, objZ, dist) == TRUE) {
         obj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     } else {
         obj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;

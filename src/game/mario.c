@@ -34,6 +34,8 @@
 #include "sound_init.h"
 #include "thread6.h"
 
+#include "settings.h"
+
 u32 unused80339F10;
 s8 filler80339F1C[20];
 
@@ -810,7 +812,12 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
         case ACT_WATER_JUMP:
         case ACT_HOLD_WATER_JUMP:
             if (actionArg == 0) {
-                set_mario_y_vel_based_on_fspeed(m, 42.0f, 0.0f);
+                if (gBetterControls) {
+                    set_mario_y_vel_based_on_fspeed(m, 48.0f, 0.0f);
+                }
+                else {
+                    set_mario_y_vel_based_on_fspeed(m, 42.0f, 0.0f);
+                }
             }
             break;
 
@@ -831,6 +838,19 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             break;
 
         case ACT_WALL_KICK_AIR:
+        set_mario_y_vel_based_on_fspeed(m, 62.0f, 0.0f);
+            if (gBetterControls) {
+                if (m->forwardVel < 28.0f) {
+                    m->forwardVel = 28.0f;
+                }
+            }
+            else {
+                if (m->forwardVel < 24.0f) {
+                    m->forwardVel = 24.0f;
+                }
+            }
+            m->wallKickTimer = 0;
+            break;
         case ACT_TOP_OF_POLE_JUMP:
             set_mario_y_vel_based_on_fspeed(m, 62.0f, 0.0f);
             if (m->forwardVel < 24.0f) {
@@ -878,14 +898,27 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             break;
 
         case ACT_SLIDE_KICK:
-            m->vel[1] = 12.0f;
-            if (m->forwardVel < 32.0f) {
-                m->forwardVel = 32.0f;
+            if (gBetterControls) {
+                m->vel[1] = 14.0f;
+                if (m->forwardVel < 36.0f) {
+                    m->forwardVel = 36.0f;
+                }
+            }
+            else {
+                m->vel[1] = 12.0f;
+                if (m->forwardVel < 32.0f) {
+                    m->forwardVel = 32.0f;
+                }
             }
             break;
 
         case ACT_JUMP_KICK:
             m->vel[1] = 20.0f;
+            break;
+
+        case ACT_WALL_SLIDE:
+            m->vel[1] = 4.0f;
+            mario_set_forward_vel(m, 8.0f);
             break;
     }
 
@@ -1473,7 +1506,9 @@ void update_mario_health(struct MarioState *m) {
                     // when in snow terrains lose 3 health.
                     // If using the debug level select, do not lose any HP to water.
                     if ((m->pos[1] >= (m->waterLevel - 140)) && !terrainIsSnow) {
-                        m->health += 0x1A;
+                        if (!save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                            m->health += 0x1A;
+                        }
                     } else if (gDebugLevelSelect == 0) {
                         m->health -= (terrainIsSnow ? 3 : 1);
                     }
@@ -1808,7 +1843,7 @@ void init_mario(void) {
 
     if (save_file_get_flags()
         & (SAVE_FLAG_CAP_ON_GROUND | SAVE_FLAG_CAP_ON_KLEPTO | SAVE_FLAG_CAP_ON_UKIKI
-           | SAVE_FLAG_CAP_ON_MR_BLIZZARD)) {
+           | SAVE_FLAG_CAP_ON_MR_BLIZZARD | SAVE_FLAG_HARD_MODE)) {
         gMarioState->flags = 0;
     } else {
         gMarioState->flags = (MARIO_CAP_ON_HEAD | MARIO_NORMAL_CAP);
@@ -1892,7 +1927,12 @@ void init_mario_from_save_file(void) {
         save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
     gMarioState->numKeys = 0;
 
-    gMarioState->numLives = 4;
+    if (gLifeMode) {
+        gMarioState->numLives = 0;
+    }
+    else {
+        gMarioState->numLives = 4;
+    }
     gMarioState->health = 0x880;
 
     gMarioState->prevNumStarsForDialog = gMarioState->numStars;

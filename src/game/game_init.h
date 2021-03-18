@@ -59,6 +59,10 @@ extern struct MarioAnimation gDemo;
 extern u8 gMarioAnims[];
 extern u8 gDemoInputs[];
 
+extern s8 gCanMirror;
+extern s8 gReimportTextures;
+extern s8 gBooDialogueWasSaid;
+
 extern u16 frameBufferIndex;
 extern u32 gGlobalTimer;
 

@@ -20,18 +20,21 @@
 #include "gfx_window_manager_api.h"
 #include "gfx_screen_config.h"
 
+#include "game/settings.h"
+
 #define GFX_API_NAME "SDL2 - OpenGL"
 
 static SDL_Window *wnd;
 static int inverted_scancode_table[512];
 static int vsync_enabled = 0;
-static unsigned int window_width = DESIRED_SCREEN_WIDTH;
-static unsigned int window_height = DESIRED_SCREEN_HEIGHT;
+
 static bool fullscreen_state;
 static void (*on_fullscreen_changed_callback)(bool is_now_fullscreen);
 static bool (*on_key_down_callback)(int scancode);
 static bool (*on_key_up_callback)(int scancode);
 static void (*on_all_keys_up_callback)(void);
+
+static Uint32 last_time;
 
 const SDL_Scancode windows_scancode_table[] =
 { 
@@ -85,6 +88,9 @@ const SDL_Scancode scancode_rmapping_nonextended[][2] = {
 };
 
 static void set_fullscreen(bool on, bool call_callback) {
+    unsigned int window_width;
+    unsigned int window_height;
+
     if (fullscreen_state == on) {
         return;
     }
@@ -92,15 +98,39 @@ static void set_fullscreen(bool on, bool call_callback) {
 
     if (on) {
         SDL_DisplayMode mode;
-        SDL_GetDesktopDisplayMode(0, &mode);
+        if (gCustomFullscreenResolution) {
+            mode.format = SDL_PIXELFORMAT_ARGB8888;
+            mode.w = gFullscreenWidth;
+            mode.h = gFullscreenHeight;
+            mode.refresh_rate = gFullscreenRefreshRate;
+            mode.driverdata = 0;
+            SDL_SetWindowDisplayMode(wnd, &mode);
+        }
+        else {
+            SDL_GetDesktopDisplayMode(0, &mode);
+        }
         window_width = mode.w;
         window_height = mode.h;
+
+        SDL_ShowCursor(false);
     } else {
+        if (gCustomFullscreenResolution) {
+            SDL_DisplayMode mode;
+            SDL_GetDesktopDisplayMode(0, &mode);
+            SDL_SetWindowDisplayMode(wnd, &mode);
+        }
         window_width = DESIRED_SCREEN_WIDTH;
         window_height = DESIRED_SCREEN_HEIGHT;
+
+        SDL_ShowCursor(true);
     }
     SDL_SetWindowSize(wnd, window_width, window_height);
-    SDL_SetWindowFullscreen(wnd, on ? SDL_WINDOW_FULLSCREEN : 0);
+    if (gCustomFullscreenResolution) {
+        SDL_SetWindowFullscreen(wnd, on ? SDL_WINDOW_FULLSCREEN : 0);
+    }
+    else {
+        SDL_SetWindowFullscreen(wnd, on ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+    }
 
     if (on_fullscreen_changed_callback != NULL && call_callback) {
         on_fullscreen_changed_callback(on);
@@ -160,10 +190,10 @@ static void gfx_sdl_init(const char *game_name, bool start_in_fullscreen) {
     //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
     char title[512];
-    int len = sprintf(title, "%s (%s)", game_name, GFX_API_NAME);
+    sprintf(title, "%s (%s)", game_name, GFX_API_NAME);
 
     wnd = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            window_width, window_height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+            DESIRED_SCREEN_WIDTH, DESIRED_SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
     if (start_in_fullscreen) {
         set_fullscreen(true, false);
@@ -211,8 +241,10 @@ static void gfx_sdl_main_loop(void (*run_one_game_iter)(void)) {
 }
 
 static void gfx_sdl_get_dimensions(uint32_t *width, uint32_t *height) {
-    *width = window_width;
-    *height = window_height;
+    int w, h;
+    SDL_GetWindowSize(wnd, &w, &h);
+    *width = w;
+    *height = h;
 }
 
 static int translate_scancode(int scancode) {
@@ -239,27 +271,23 @@ static void gfx_sdl_onkeyup(int scancode) {
 
 static void gfx_sdl_handle_events(void) {
     SDL_Event event;
+    Uint8 *state = SDL_GetKeyboardState(NULL);
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
 #ifndef TARGET_WEB
             // Scancodes are broken in Emscripten SDL2: https://bugzilla.libsdl.org/show_bug.cgi?id=3259
             case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_F10) {
+                if (state[SDL_SCANCODE_RETURN] && state[SDL_SCANCODE_LALT]) {
                     set_fullscreen(!fullscreen_state, true);
                     break;
                 }
+                
                 gfx_sdl_onkeydown(event.key.keysym.scancode);
                 break;
             case SDL_KEYUP:
                 gfx_sdl_onkeyup(event.key.keysym.scancode);
                 break;
 #endif
-            case SDL_WINDOWEVENT:
-                if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-                    window_width = event.window.data1;
-                    window_height = event.window.data2;
-                }
-                break;
             case SDL_QUIT:
                 exit(0);
         }
@@ -267,18 +295,17 @@ static void gfx_sdl_handle_events(void) {
 }
 
 static bool gfx_sdl_start_frame(void) {
+    last_time = SDL_GetTicks();
     return true;
 }
 
 static void sync_framerate_with_timer(void) {
     // Number of milliseconds a frame should take (30 fps)
     const Uint32 FRAME_TIME = 1000 / 30;
-    static Uint32 last_time;
     Uint32 elapsed = SDL_GetTicks() - last_time;
 
     if (elapsed < FRAME_TIME)
         SDL_Delay(FRAME_TIME - elapsed);
-    last_time += FRAME_TIME;
 }
 
 static void gfx_sdl_swap_buffers_begin(void) {

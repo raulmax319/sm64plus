@@ -29,6 +29,8 @@
 #include "course_table.h"
 #include "thread6.h"
 
+#include "settings.h"
+
 #define PLAY_MODE_NORMAL 0
 #define PLAY_MODE_PAUSED 2
 #define PLAY_MODE_CHANGE_AREA 3
@@ -726,7 +728,11 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
 
             case WARP_OP_DEATH:
-                if (m->numLives == 0) {
+                if (save_file_get_flags() & SAVE_FLAG_HARDCORE_MODE) {
+                    sDelayedWarpOp = WARP_OP_GAME_OVER;
+                    save_file_erase(gCurrSaveFileNum - 1);
+                }
+                if (m->numLives == 0 && gLifeMode == 0) {
                     sDelayedWarpOp = WARP_OP_GAME_OVER;
                 }
                 sDelayedWarpTimer = 48;
@@ -738,9 +744,14 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
             case WARP_OP_WARP_FLOOR:
                 sSourceWarpNodeId = WARP_NODE_WARP_FLOOR;
                 if (area_get_warp_node(sSourceWarpNodeId) == NULL) {
-                    if (m->numLives == 0) {
+                    if (save_file_get_flags() & SAVE_FLAG_HARDCORE_MODE) {
                         sDelayedWarpOp = WARP_OP_GAME_OVER;
-                    } else {
+                        save_file_erase(gCurrSaveFileNum - 1);
+                    }
+                    else if (m->numLives == 0 && gLifeMode == 0) {
+                        sDelayedWarpOp = WARP_OP_GAME_OVER;
+                    }
+                    else {
                         sSourceWarpNodeId = WARP_NODE_DEATH;
                     }
                 }
@@ -865,8 +876,25 @@ void initiate_delayed_warp(void) {
                                   destWarpNode, 0);
                     break;
 
-                default:
+                case WARP_OP_STAR_EXIT:
                     warpNode = area_get_warp_node(sSourceWarpNodeId);
+
+                    initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
+                                  warpNode->node.destNode, sDelayedWarpArg);
+
+                    check_if_should_set_warp_checkpoint(&warpNode->node);
+                    if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) {
+                        level_set_transition(2, NULL);
+                    }
+                    break;
+
+                default:
+                    if (gRemoveAnnoyingWarps && (sDelayedWarpOp & WARP_OP_TRIGGERS_LEVEL_SELECT)) {
+                        warpNode = area_get_warp_node(WARP_NODE_DEATH);
+                    }
+                    else {
+                        warpNode = area_get_warp_node(sSourceWarpNodeId);
+                    }
 
                     initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
                                   warpNode->node.destNode, sDelayedWarpArg);
@@ -1193,6 +1221,23 @@ s32 init_level(void) {
                     } else {
                         set_mario_action(gMarioState, ACT_INTRO_CUTSCENE, 0);
                         val4 = 1;
+                        if (gPlayer1Controller->buttonDown & U_CBUTTONS && gPlayer1Controller->buttonDown & R_TRIG) {
+                            level_trigger_warp(gMarioState, WARP_OP_CREDITS_START);
+                        }
+                        else if (gSkipCutscenes) {
+                            set_mario_action(gMarioState, ACT_IDLE, 0);
+                        } else {
+                            set_mario_action(gMarioState, ACT_INTRO_CUTSCENE, 0);
+                            val4 = 1;
+                        }
+                    }
+                    if (gHardSave) {
+                        gMarioState->flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
+                        save_file_set_flags(SAVE_FLAG_HARD_MODE);
+                    }
+                    if (gHardcoreSave) {
+                        gMarioState->flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
+                        save_file_set_flags(SAVE_FLAG_HARDCORE_MODE);
                     }
                 }
             }
@@ -1317,4 +1362,11 @@ s32 lvl_set_current_level(UNUSED s16 arg0, s32 levelNum) {
 s32 lvl_play_the_end_screen_sound(UNUSED s16 arg0, UNUSED s32 arg1) {
     play_sound(SOUND_MENU_THANK_YOU_PLAYING_MY_GAME, gDefaultSoundArgs);
     return 1;
+}
+
+s32 credits_wait_for_reset() {
+    if (gPlayer1Controller->buttonPressed & START_BUTTON || gPlayer1Controller->buttonPressed & A_BUTTON) {
+        return 1;
+    }
+    return 0;
 }

@@ -14,6 +14,7 @@
 
 #include <shellscalingapi.h>
 
+#include "./game/settings.h"
 
 #ifndef _LANGUAGE_C
 #define _LANGUAGE_C
@@ -143,8 +144,42 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
         return;
     }
 
+    // Get the primary monitor
+    POINT zero = { 0, 0 };
+    HMONITOR h_monitor = MonitorFromPoint(zero, MONITOR_DEFAULTTOPRIMARY);
+
+    // Get info from that monitor
+    MONITORINFOEX monitor_info;
+    monitor_info.cbSize = sizeof(MONITORINFOEX);
+    GetMonitorInfo(h_monitor, &monitor_info);
+    RECT primary = monitor_info.rcMonitor;
+
     if (!enable) {
+
+        if (gCustomFullscreenResolution) {
+            ChangeDisplaySettings(NULL, CDS_RESET);
+        }
         RECT r = dxgi.last_window_rect;
+
+        // Prevent the window from going outside the primary display
+        if (r.left > primary.right) {
+            r.left -= primary.right;
+            r.right -= primary.right;
+        }
+        if (r.top > primary.bottom) {
+            r.top -= primary.bottom;
+            r.bottom -= primary.bottom;
+        }
+            
+        if (r.right < primary.left) {
+            r.left += primary.left;
+            r.right += primary.left;
+        }
+            
+        if (r.bottom < primary.top) {
+            r.top += primary.top;
+            r.bottom += primary.top;
+        } 
 
         // Set in window mode with the last saved position and size
         SetWindowLongPtr(dxgi.h_wnd, GWL_STYLE, WS_VISIBLE | WS_OVERLAPPEDWINDOW);
@@ -161,6 +196,25 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
 
         dxgi.is_full_screen = false;
     } else {
+
+        if (gCustomFullscreenResolution) {
+            
+            DEVMODE fullscreenSettings;
+
+            memset (&fullscreenSettings, 0, sizeof (fullscreenSettings));
+            fullscreenSettings.dmSize = sizeof (fullscreenSettings);   
+            fullscreenSettings.dmPelsWidth        = gFullscreenWidth;
+            fullscreenSettings.dmPelsHeight       = gFullscreenHeight;
+            fullscreenSettings.dmBitsPerPel       = 32;
+            fullscreenSettings.dmDisplayFrequency = gFullscreenRefreshRate;
+            fullscreenSettings.dmFields           = DM_PELSWIDTH |
+                                                    DM_PELSHEIGHT |
+                                                    DM_BITSPERPEL |
+                                                    DM_DISPLAYFREQUENCY;
+
+            ChangeDisplaySettings(&fullscreenSettings, CDS_FULLSCREEN);
+        }
+
         // Save if window is maximized or not
         WINDOWPLACEMENT window_placement;
         window_placement.length = sizeof(WINDOWPLACEMENT);
@@ -170,18 +224,9 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
         // Save window position and size if the window is not maximized
         GetWindowRect(dxgi.h_wnd, &dxgi.last_window_rect);
 
-        // Get in which monitor the window is
-        HMONITOR h_monitor = MonitorFromWindow(dxgi.h_wnd, MONITOR_DEFAULTTONEAREST);
-
-        // Get info from that monitor
-        MONITORINFOEX monitor_info;
-        monitor_info.cbSize = sizeof(MONITORINFOEX);
-        GetMonitorInfo(h_monitor, &monitor_info);
-        RECT r = monitor_info.rcMonitor;
-
-        // Set borderless full screen to that monitor
+        // Set borderless full screen to the primary monitor
         SetWindowLongPtr(dxgi.h_wnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
-        SetWindowPos(dxgi.h_wnd, HWND_TOP, r.left, r.top, r.right - r.left, r.bottom - r.top, SWP_FRAMECHANGED);
+        SetWindowPos(dxgi.h_wnd, HWND_TOP, primary.left, primary.top, primary.right - primary.left, primary.bottom - primary.top, SWP_FRAMECHANGED);
 
         ShowCursor(FALSE);
 
@@ -536,19 +581,26 @@ void gfx_dxgi_create_factory_and_device(bool debug, int d3d_version, bool (*crea
 }
 
 ComPtr<IDXGISwapChain1> gfx_dxgi_create_swap_chain(IUnknown *device) {
-    bool win8 = IsWindows8OrGreater(); // DXGI_SCALING_NONE is only supported on Win8 and beyond
+    bool win8 = IsWindows8OrGreater() && !gCustomInternalResolution; // DXGI_SCALING_NONE is only supported on Win8 and beyond
     bool dxgi_13 = dxgi.CreateDXGIFactory2 != nullptr; // DXGI 1.3 introduced waitable object
 
     DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
     swap_chain_desc.BufferCount = 2;
-    swap_chain_desc.Width = 0;
-    swap_chain_desc.Height = 0;
+    if (gCustomInternalResolution) {
+        swap_chain_desc.Width = gInternalResolutionWidth;
+        swap_chain_desc.Height = gInternalResolutionHeight;
+    }
+    else {
+        swap_chain_desc.Width = 0;
+        swap_chain_desc.Height = 0;
+    }
     swap_chain_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     swap_chain_desc.Scaling = win8 ? DXGI_SCALING_NONE : DXGI_SCALING_STRETCH;
     swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // Apparently this was backported to Win 7 Platform Update
     swap_chain_desc.Flags = dxgi_13 ? DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT : 0;
     swap_chain_desc.SampleDesc.Count = 1;
+    
 
     run_as_dpi_aware([&] () {
         // When setting size for the buffers, the values that DXGI puts into the desc (that can later be retrieved by GetDesc1)

@@ -6,8 +6,9 @@
 #include <ultra64.h>
 
 #include "controller_api.h"
+#include "game/settings.h"
 
-#define DEADZONE 4960
+#define DEADZONE gControllerDeadzone*10
 
 static void xinput_init(void) {
 }
@@ -25,9 +26,17 @@ static void xinput_read(OSContPad *pad) {
             if (gp->bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) pad->button |= R_TRIG;
             if (gp->wButtons & XINPUT_GAMEPAD_A) pad->button |= A_BUTTON;
             if (gp->wButtons & XINPUT_GAMEPAD_X) pad->button |= B_BUTTON;
-            if (gp->wButtons & XINPUT_GAMEPAD_DPAD_LEFT) pad->button |= L_TRIG;
-            if (gp->sThumbRX < -0x4000) pad->button |= L_CBUTTONS;
-            if (gp->sThumbRX > 0x4000) pad->button |= R_CBUTTONS;
+            if (gp->wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) pad->button |= L_TRIG;
+
+            if (gp->wButtons & XINPUT_GAMEPAD_DPAD_LEFT) pad->button |= L_JPAD;
+            if (gp->wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) pad->button |= R_JPAD;
+            if (gp->wButtons & XINPUT_GAMEPAD_DPAD_UP) pad->button |= U_JPAD;
+            if (gp->wButtons & XINPUT_GAMEPAD_DPAD_DOWN) pad->button |= D_JPAD;
+
+            if (!gImprovedCamera) {
+                if (gp->sThumbRX < -0x4000) pad->button |= L_CBUTTONS;
+                if (gp->sThumbRX > 0x4000) pad->button |= R_CBUTTONS;
+            }
             if (gp->sThumbRY < -0x4000) pad->button |= D_CBUTTONS;
             if (gp->sThumbRY > 0x4000) pad->button |= U_CBUTTONS;
 
@@ -35,6 +44,13 @@ static void xinput_read(OSContPad *pad) {
             if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
                 pad->stick_x = gp->sThumbLX / 0x100;
                 pad->stick_y = gp->sThumbLY / 0x100;
+            }
+            if (gImprovedCamera) {
+                uint32_t magnitude_sq2 = (uint32_t)(gp->sThumbRX * gp->sThumbRX) + (uint32_t)(gp->sThumbRY * gp->sThumbRY);
+                if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
+                    pad->stick2_x = gp->sThumbRX / 0x100;
+                   // pad->stick2_y = gp->sThumbRY / 0x100;
+                }
             }
             break;
         }

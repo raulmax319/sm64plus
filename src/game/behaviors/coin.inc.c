@@ -1,4 +1,5 @@
 // coin.c.inc
+#include "../settings.h"
 
 struct ObjectHitbox sYellowCoinHitbox = {
     /* interactType: */ INTERACT_COIN,
@@ -184,7 +185,7 @@ void bhv_coin_formation_loop(void) {
     s32 bitIndex;
     switch (o->oAction) {
         case 0:
-            if (o->oDistanceToMario < 2000.0f) {
+            if (o->oDistanceToMario < 2000.0f || gDisableDrawDistance) {
                 for (bitIndex = 0; bitIndex < 8; bitIndex++) {
                     if (!(o->oCoinUnkF4 & (1 << bitIndex)))
                         spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
@@ -193,7 +194,7 @@ void bhv_coin_formation_loop(void) {
             }
             break;
         case 1:
-            if (o->oDistanceToMario > 2100.0f)
+            if (o->oDistanceToMario > 2100.0f && !gDisableDrawDistance)
                 o->oAction++;
             break;
         case 2:

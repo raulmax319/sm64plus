@@ -2100,3 +2100,29 @@ Arrgghh!\n\
 Anyone entering this cave\n\
 without permission will\n\
 meet certain disaster."))
+
+DEFINE_DIALOG(DIALOG_170, 1, 5, 30, 200, _("\
+Wow! Another Power Star!\n\
+Do you want to keep\n\
+playing this level?\n\
+\n\
+//You Bet//Not Now"))
+
+DEFINE_DIALOG(DIALOG_171, 1, 4, 30, 200, _("\
+Hey-ey, Mario, buddy,\n\
+howzit goin'?\n\
+Ok, so, basically, I am\n\
+very smol.\n\
+How about a race?\n\
+Ready...\n\
+\n\
+//Go//// Don't Go"))
+
+DEFINE_DIALOG(DIALOG_172, 1, 4, 30, 200, _("\
+Mario! What's up, pal?\n\
+Ok, so, basically, I am\n\
+even smoller.\n\
+How about a race?\n\
+Ready...set...\n\
+\n\
+//Go//// Don't Go"))
