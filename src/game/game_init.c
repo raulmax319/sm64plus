@@ -27,8 +27,14 @@
 // know of a good way to split them
 struct Controller gControllers[3];
 struct SPTask *gGfxSPTask;
+#ifdef USE_SYSTEM_MALLOC
+struct AllocOnlyPool *gGfxAllocOnlyPool;
+Gfx *gDisplayListHeadInChunk;
+Gfx *gDisplayListEndInChunk;
+#else
 Gfx *gDisplayListHead;
 u8 *gGfxPoolEnd;
+#endif
 struct GfxPool *gGfxPool;
 OSContStatus gControllerStatuses[4];
 OSContPad gControllerPads[4];
@@ -51,7 +57,7 @@ s8 gCanMirror = 0;
 s8 gReimportTextures = 0;
 s8 gBooDialogueWasSaid = 0;
 
-int unused8032C690 = 0;
+s32 unused8032C690 = 0;
 u32 gGlobalTimer = 0;
 
 static u16 sCurrFBNum = 0;
@@ -252,7 +258,7 @@ void create_task_structure(void) {
     gGfxSPTask->msgqueue = &D_80339CB8;
     gGfxSPTask->msg = (OSMesg) 2;
     gGfxSPTask->task.t.type = M_GFXTASK;
-#if TARGET_N64
+#ifdef TARGET_N64
     gGfxSPTask->task.t.ucode_boot = rspF3DBootStart;
     gGfxSPTask->task.t.ucode_boot_size = ((u8 *) rspF3DBootEnd - (u8 *) rspF3DBootStart);
     gGfxSPTask->task.t.flags = 0;
@@ -311,7 +317,7 @@ void draw_reset_bars(void) {
         sp18 += D_8032C648++ * (SCREEN_WIDTH / 4);
 
         for (sp24 = 0; sp24 < ((SCREEN_HEIGHT / 16) + 1); sp24++) {
-            // Must be on one line to match -O2
+            // Loop must be one line to match on -O2
             for (sp20 = 0; sp20 < (SCREEN_WIDTH / 4); sp20++) *sp18++ = 0;
             sp18 += ((SCREEN_WIDTH / 4) * 14);
         }
@@ -322,6 +328,7 @@ void draw_reset_bars(void) {
     osRecvMesg(&gGameVblankQueue, &D_80339BEC, OS_MESG_BLOCK);
 }
 
+#ifdef TARGET_N64
 void rendering_init(void) {
     gGfxPool = &gGfxPools[0];
     set_segment_base_addr(1, gGfxPool->buffer);
@@ -336,13 +343,31 @@ void rendering_init(void) {
     frameBufferIndex++;
     gGlobalTimer++;
 }
+#endif
+
+#ifdef USE_SYSTEM_MALLOC
+Gfx **alloc_next_dl(void) {
+    u32 size = 1000;
+    Gfx *new_chunk = alloc_only_pool_alloc(gGfxAllocOnlyPool, size * sizeof(Gfx));
+    gSPBranchList(gDisplayListHeadInChunk++, new_chunk);
+    gDisplayListHeadInChunk = new_chunk;
+    gDisplayListEndInChunk = new_chunk + size;
+    return &gDisplayListHeadInChunk;
+}
+#endif
 
 void config_gfx_pool(void) {
     gGfxPool = &gGfxPools[gGlobalTimer % GFX_NUM_POOLS];
     set_segment_base_addr(1, gGfxPool->buffer);
     gGfxSPTask = &gGfxPool->spTask;
+#ifdef USE_SYSTEM_MALLOC
+    gDisplayListHeadInChunk = gGfxPool->buffer;
+    gDisplayListEndInChunk = gDisplayListHeadInChunk + 1;
+    alloc_only_pool_clear(gGfxAllocOnlyPool);
+#else
     gDisplayListHead = gGfxPool->buffer;
     gGfxPoolEnd = (u8 *) (gGfxPool->buffer + GFX_POOL_SIZE);
+#endif
 }
 
 /** Handles vsync. */
@@ -689,7 +714,7 @@ void thread5_game_loop(UNUSED void *arg) {
 #ifdef TARGET_N64
     rendering_init();
 
-    while (1) {
+    while (TRUE) {
 #else
     gGlobalTimer++;
 }
@@ -724,9 +749,11 @@ void game_loop_one_iteration(void) {
 
         // when debug info is enabled, print the "BUF %d" information.
         if (gShowDebugText) {
+#ifndef USE_SYSTEM_MALLOC
             // subtract the end of the gfx pool with the display list to obtain the
             // amount of free space remaining.
             print_text_fmt_int(180, 20, "BUF %d", gGfxPoolEnd - (u8 *) gDisplayListHead);
+#endif
         }
 #ifdef TARGET_N64
     }

@@ -116,7 +116,7 @@ struct GraphNodePerspective
  */
 struct DisplayListNode
 {
-    void *transform;
+    Mtx *transform;
     void *displayList;
     struct DisplayListNode *next;
 };
@@ -184,7 +184,7 @@ struct GraphNodeCamera
     } config;
     /*0x1C*/ Vec3f pos;
     /*0x28*/ Vec3f focus;
-    /*0x34*/ void *matrixPtr; // pointer to look-at matrix of this camera as a Mat4
+    /*0x34*/ Mat4 *matrixPtr; // pointer to look-at matrix of this camera as a Mat4
     /*0x38*/ s16 roll; // roll in look at matrix. Doesn't account for light direction unlike rollScreen.
     /*0x3A*/ s16 rollScreen; // rolls screen while keeping the light direction consistent
 };
@@ -420,7 +420,7 @@ void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Anim
 
 s32 retrieve_animation_index(s32 frame, u16 **attributes);
 
-s16 geo_update_animation_frame(struct GraphNodeObject_sub *obj, s32 *accelAssist);
+s16 geo_update_animation_frame(struct AnimInfo *obj, s32 *accelAssist);
 void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3f position);
 
 struct GraphNodeRoot *geo_find_root(struct GraphNode *graphNode);

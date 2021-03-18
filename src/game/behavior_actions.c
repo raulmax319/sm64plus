@@ -19,6 +19,7 @@
 #include "game_init.h"
 #include "ingame_menu.h"
 #include "interaction.h"
+#include "level_misc_macros.h"
 #include "level_table.h"
 #include "level_update.h"
 #include "levels/bob/header.h"
@@ -173,7 +174,7 @@ Gfx *geo_move_mario_part_from_parent(s32 run, UNUSED struct GraphNode *node, Mat
     if (run == TRUE) {
         sp1C = (struct Object *) gCurGraphNodeObject;
         if (sp1C == gMarioObject && sp1C->prevObj != NULL) {
-            create_transformation_from_matrices(sp20, mtx, gCurGraphNodeCamera->matrixPtr);
+            create_transformation_from_matrices(sp20, mtx, *gCurGraphNodeCamera->matrixPtr);
             obj_update_pos_from_parent_transformation(sp20, sp1C->prevObj);
             obj_set_gfx_pos_from_pos(sp1C->prevObj);
         }
@@ -243,7 +244,7 @@ void vec3f_copy_2(Vec3f dest, Vec3f src) {
 
 s32 set_obj_anim_with_accel_and_sound(s16 a0, s16 a1, s32 a2) {
     f32 sp1C;
-    if ((sp1C = o->header.gfx.unk38.animAccel / (f32) 0x10000) == 0)
+    if ((sp1C = o->header.gfx.animInfo.animAccel / (f32) 0x10000) == 0)
         sp1C = 1.0f;
     if (cur_obj_check_anim_frame_in_range(a0, sp1C) || cur_obj_check_anim_frame_in_range(a1, sp1C)) {
         cur_obj_play_sound_2(a2);

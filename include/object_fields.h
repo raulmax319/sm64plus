@@ -136,8 +136,6 @@
 #define /*0x1C4*/ oDeathSound                 OBJECT_FIELD_S32(0x4F)
 
 /* Pathed (see obj_follow_path) */
-// TODO: These two 0x0FC fields need merged, one is data and one is a C struct.
-#define /*0x0FC*/ oPathedWaypointsS16      OBJECT_FIELD_VPTR(0x1D)
 #define /*0x0FC*/ oPathedStartWaypoint     OBJECT_FIELD_WAYPOINT(0x1D)
 #define /*0x100*/ oPathedPrevWaypoint      OBJECT_FIELD_WAYPOINT(0x1E)
 #define /*0x104*/ oPathedPrevWaypointFlags OBJECT_FIELD_S32(0x1F)
@@ -506,9 +504,9 @@
 #define /*0x0F8*/ oBlueFlameUnkF8 OBJECT_FIELD_F32(0x1C)
 
 /* Small Piranha Flame */
-#define /*0x0F4*/ oSmallPiranhaFlameUnkF4  OBJECT_FIELD_F32(0x1B)
-#define /*0x0F8*/ oSmallPiranhaFlameUnkF8  OBJECT_FIELD_F32(0x1C)
-#define /*0x0FC*/ oSmallPiranhaFlameUnkFC  OBJECT_FIELD_S32(0x1D)
+#define /*0x0F4*/ oSmallPiranhaFlameStartSpeed  OBJECT_FIELD_F32(0x1B)
+#define /*0x0F8*/ oSmallPiranhaFlameEndSpeed  OBJECT_FIELD_F32(0x1C)
+#define /*0x0FC*/ oSmallPiranhaFlameModel  OBJECT_FIELD_S32(0x1D)
 #define /*0x100*/ oSmallPiranhaFlameUnk100 OBJECT_FIELD_S32(0x1E)
 #define /*0x104*/ oSmallPiranhaFlameUnk104 OBJECT_FIELD_F32(0x1F)
 
@@ -961,13 +959,13 @@
 #define /*0x10C*/ oTiltingPyramidMarioOnPlatform OBJECT_FIELD_S32(0x21)
 
 /* Toad Message */
-#define /*0x108*/ oToadMessageDialogId      OBJECT_FIELD_U32(0x20)
+#define /*0x108*/ oToadMessageDialogId       OBJECT_FIELD_U32(0x20)
 #define /*0x10C*/ oToadMessageRecentlyTalked OBJECT_FIELD_S32(0x21)
 #define /*0x110*/ oToadMessageState          OBJECT_FIELD_S32(0x22)
 
 /* Tox Box */
-#define /*0x1AC*/ oToxBoxUnk1AC OBJECT_FIELD_VPTR(0x49)
-#define /*0x1B0*/ oToxBoxUnk1B0 OBJECT_FIELD_S32(0x4A)
+#define /*0x1AC*/ oToxBoxMovementPattern OBJECT_FIELD_VPTR(0x49)
+#define /*0x1B0*/ oToxBoxMovementStep    OBJECT_FIELD_S32(0x4A)
 
 /* TTC Rotating Solid */
 #define /*0x0F4*/ oTTCRotatingSolidNumTurns      OBJECT_FIELD_S32(0x1B)
@@ -1052,7 +1050,7 @@
 #define /*0x1AC*/ oUkikiTextState      OBJECT_FIELD_S16(0x49, 0)
 #define /*0x1AE*/ oUkikiTextboxTimer   OBJECT_FIELD_S16(0x49, 1)
 #define /*0x1B0*/ oUkikiCageSpinTimer  OBJECT_FIELD_S16(0x4A, 0)
-#define /*0x1B2*/ oUkikiHasHat         OBJECT_FIELD_S16(0x4A, 1)
+#define /*0x1B2*/ oUkikiHasCap         OBJECT_FIELD_S16(0x4A, 1)
 
 /* Ukiki Cage*/
 #define /*0x088*/ oUkikiCageNextAction OBJECT_FIELD_S32(0x00)
@@ -1086,7 +1084,7 @@
 #define /*0x0F4*/ oCannonBarrelBubblesUnkF4 OBJECT_FIELD_F32(0x1B)
 
 /* Water Level Pillar */
-#define /*0x0F8*/ oWaterLevelPillarUnkF8 OBJECT_FIELD_S32(0x1C)
+#define /*0x0F8*/ oWaterLevelPillarDrained OBJECT_FIELD_S32(0x1C)
 
 /* Water Level Trigger */
 #define /*0x0F4*/ oWaterLevelTriggerUnkF4            OBJECT_FIELD_S32(0x1B)

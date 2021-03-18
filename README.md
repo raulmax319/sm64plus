@@ -19,8 +19,8 @@ A prior copy of the game is required to extract the assets.
 
 1. Install and update MSYS2, following the directions listed on https://www.msys2.org/.
 2. Launch MSYS2 MinGW and install required packages depending on your machine (do **NOT** launch "MSYS2 MSYS"):
-  a. 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc`
-  b. 32-bit (will also work on 64-bit machines): Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc`
+  * 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc`
+  * 32-bit (will also work on 64-bit machines): Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc`
   * Do **NOT** install `gcc`.
 3. Clone the repo: `git clone https://github.com/MorsGames/sm64-port.git` and enter it `cd sm64-port`.
 4. Place a *Super Mario 64* ROM called `baserom.<VERSION>.z64` into the project folder for asset extraction. For `VERSION` only `us` is properly supported.
