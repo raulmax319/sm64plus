@@ -73,6 +73,24 @@ s32 get_right(s32 value) {
     }
 }
 
+f32 get_power_meter_x() {
+    if (gNewHud == 2) {
+        if (get_mirror()) {
+            return SCREEN_WIDTH - get_right(46);
+        } else {
+            return get_right(46);
+        }
+    }
+    else if (gNewHud == 1) {
+        return SCREEN_WIDTH/2;
+    } else {
+        if (get_mirror()) {
+           return SCREEN_WIDTH - (f32) sPowerMeterHUD.x;
+        } else {
+            return sPowerMeterHUD.x;
+        }
+    }
+}
 
 static struct UnusedHUDStruct sUnusedHUDValues = { 0x00, 0x0A, 0x00 };
 
@@ -137,25 +155,7 @@ void render_dl_power_meter(s16 numHealthWedges) {
         return;
     }
 
-    if (gNewHud == 2) {
-        if (get_mirror()) {
-            guTranslate(mtx, SCREEN_WIDTH - get_right(46), (f32) sPowerMeterHUD.y, 0);
-        }
-        else {
-            guTranslate(mtx, get_right(46), (f32) sPowerMeterHUD.y, 0);
-        }
-    }
-    else if (gNewHud == 1) {
-        guTranslate(mtx, SCREEN_WIDTH/2, (f32) sPowerMeterHUD.y, 0);
-    }
-    else {
-        if (get_mirror()) {
-            guTranslate(mtx, SCREEN_WIDTH - (f32) sPowerMeterHUD.x, (f32) sPowerMeterHUD.y, 0);
-        }
-        else {
-            guTranslate(mtx, (f32) sPowerMeterHUD.x, (f32) sPowerMeterHUD.y, 0);
-        }
-    }
+    guTranslate(mtx, get_power_meter_x(), (f32) sPowerMeterHUD.y, 0);
 
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx++),
               G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);

@@ -121,8 +121,8 @@ index 69f40c9c..9118d885 100644
  #include "surface_load.h"
 +#include "game/game_init.h"
  
- /**************************************************
-  *                      WALLS                     *
+ #include "game/settings.h"
+
 @@ -393,26 +394,44 @@ f32 find_floor_height_and_data(f32 xPos, f32 yPos, f32 zPos, struct FloorGeometr
      return floorHeight;
  }
@@ -140,6 +140,7 @@ index 69f40c9c..9118d885 100644
      f32 oo;
      f32 height;
      struct Surface *floor = NULL;
+     f32 peak = -11000.0f;
 +    s32 interpolate;
  
      // Iterate through the list of floors until there are no more floors.
@@ -230,19 +231,11 @@ index 69f40c9c..9118d885 100644
 +        }
          floor = surf;
          break;
-     }
+
 diff --git a/src/engine/surface_load.c b/src/engine/surface_load.c
 index b447dc24..005cbd0f 100644
 --- a/src/engine/surface_load.c
 +++ b/src/engine/surface_load.c
-@@ -14,6 +14,7 @@
- #include "game/mario.h"
- #include "game/object_list_processor.h"
- #include "surface_load.h"
-+#include "game/game_init.h"
- 
- s32 unused8038BE90;
- 
 @@ -383,6 +384,11 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
  
      surface = alloc_surface();
@@ -611,7 +604,7 @@ diff --git a/src/game/hud.c b/src/game/hud.c
 index 8d4daa54..7ce2b222 100644
 --- a/src/game/hud.c
 +++ b/src/game/hud.c
-@@ -57,6 +57,20 @@ static struct UnusedHUDStruct sUnusedHUDValues = { 0x00, 0x0A, 0x00 };
+@@ -96,6 +96,20 @@ static struct UnusedHUDStruct sUnusedHUDValues = { 0x00, 0x0A, 0x00 };
  
  static struct CameraHUD sCameraHUD = { CAM_STATUS_NONE };
  
@@ -622,7 +615,7 @@ index 8d4daa54..7ce2b222 100644
 +void patch_interpolated_hud(void) {
 +    if (sPowerMeterDisplayListPos != NULL) {
 +        Mtx *mtx = alloc_display_list(sizeof(Mtx));
-+        guTranslate(mtx, (f32) sPowerMeterHUD.x, (f32) sPowerMeterHUD.y, 0);
++        guTranslate(mtx, get_power_meter_x(), (f32) sPowerMeterHUD.y, 0);
 +        gSPMatrix(sPowerMeterDisplayListPos, VIRTUAL_TO_PHYSICAL(mtx),
 +              G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
 +        sPowerMeterDisplayListPos = NULL;
@@ -632,25 +625,27 @@ index 8d4daa54..7ce2b222 100644
  /**
   * Renders a rgba16 16x16 glyph texture from a table list.
   */
-@@ -109,6 +123,7 @@ void render_power_meter_health_segment(s16 numHealthWedges) {
+@@ -148,13 +162,24 @@ void render_power_meter_health_segment(s16 numHealthWedges) {
   */
  void render_dl_power_meter(s16 numHealthWedges) {
      Mtx *mtx;
 +    f32 interpolatedY;
  
      mtx = alloc_display_list(sizeof(Mtx));
- 
-@@ -116,7 +131,15 @@ void render_dl_power_meter(s16 numHealthWedges) {
+
+     if (mtx == NULL) {
          return;
      }
  
--    guTranslate(mtx, (f32) sPowerMeterHUD.x, (f32) sPowerMeterHUD.y, 0);
 +    if (gGlobalTimer == sPowerMeterLastRenderTimestamp + 1) {
 +        interpolatedY = (sPowerMeterLastY + sPowerMeterHUD.y) / 2.0f;
 +    } else {
 +        interpolatedY = sPowerMeterHUD.y;
 +    }
-+    guTranslate(mtx, (f32) sPowerMeterHUD.x, interpolatedY, 0);
++
+-    guTranslate(mtx, get_power_meter_x(), (f32) sPowerMeterHUD.y, 0);
++    guTranslate(mtx, get_power_meter_x(), interpolatedY, 0);
++
 +    sPowerMeterLastY = sPowerMeterHUD.y;
 +    sPowerMeterLastRenderTimestamp = gGlobalTimer;
 +    sPowerMeterDisplayListPos = gDisplayListHead;
@@ -1927,9 +1922,9 @@ index 05f1a5ad..bb8ea052 100644
 -    const Uint32 FRAME_TIME = 1000 / 30;
 +    // Number of milliseconds a frame should take (60 fps)
 +    const Uint32 FRAME_TIME = 1000 / 60;
-     static Uint32 last_time;
      Uint32 elapsed = SDL_GetTicks() - last_time;
- 
+
+     if (elapsed < FRAME_TIME)
 diff --git a/src/pc/pc_main.c b/src/pc/pc_main.c
 index f4467a11..ccc048b7 100644
 --- a/src/pc/pc_main.c
