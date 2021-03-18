@@ -36,7 +36,7 @@ void whirpool_orient_graph(void) {
 }
 
 void bhv_whirlpool_loop(void) {
-    if (o->oDistanceToMario < 5000.0f && !gDisableDrawDistance) {
+    if (o->oDistanceToMario < 5000.0f * (gDrawDistanceMultiplier / 4.0f) && !gDisableDrawDistance) {
         o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
 
         // not sure if actually an array

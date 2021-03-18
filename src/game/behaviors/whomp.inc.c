@@ -269,9 +269,9 @@ void bhv_whomp_loop(void) {
     if (!gDisableDrawDistance) {
         if (o->oAction != 9) {
             if (o->oBehParams2ndByte != 0)
-                cur_obj_hide_if_mario_far_away_y(2000.0f);
+                cur_obj_hide_if_mario_far_away_y(2000.0f * (gDrawDistanceMultiplier / 4.0f));
             else
-                cur_obj_hide_if_mario_far_away_y(1000.0f);
+                cur_obj_hide_if_mario_far_away_y(1000.0f * (gDrawDistanceMultiplier / 4.0f));
         }
     }
     load_object_collision_model();

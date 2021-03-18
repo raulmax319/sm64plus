@@ -43,17 +43,14 @@ void fish_act_spawn(void) {
      * If the current level is Secret Aquarium, ignore this requirement.
      * Fish moves at random with a max-range of 700.0f.
      */
-    if(!gDisableDrawDistance)
-	{
-        if (o->oDistanceToMario < minDistToMario || gCurrLevelNum == LEVEL_SA) {
-            for (i = 0; i < schoolQuantity; i++) {
-                fishObject = spawn_object(o, model, bhvFish);
-                fishObject->oBehParams2ndByte = o->oBehParams2ndByte;
-                obj_init_animation_with_sound(fishObject, fishAnimation, 0);
-                obj_translate_xyz_random(fishObject, 700.0f);
-            }
-            o->oAction = FISH_ACT_ACTIVE;
+    if (o->oDistanceToMario < minDistToMario * (gDrawDistanceMultiplier / 4.0f) || gCurrLevelNum == LEVEL_SA || gDisableDrawDistance) {
+        for (i = 0; i < schoolQuantity; i++) {
+            fishObject = spawn_object(o, model, bhvFish);
+            fishObject->oBehParams2ndByte = o->oBehParams2ndByte;
+            obj_init_animation_with_sound(fishObject, fishAnimation, 0);
+            obj_translate_xyz_random(fishObject, 700.0f);
         }
+        o->oAction = FISH_ACT_ACTIVE;
     }
 }
 

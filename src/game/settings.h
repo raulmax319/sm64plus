@@ -33,8 +33,9 @@ extern int gInternalResolutionWidth;
 extern int gInternalResolutionHeight;
 extern s8 gDrawPillarbox;
 
-extern s8 gDisableDrawDistance;
+extern int gDrawDistanceMultiplier;
 extern s8 gNoLowPoly;
+extern s8 gDisableDrawDistance;
 extern int gNoiseType;
 extern s8 gDisableFog;
 extern s8 gForceLowPoly;

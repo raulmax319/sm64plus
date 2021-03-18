@@ -54,7 +54,7 @@ static void chain_chomp_act_uninitialized(void) {
     struct ChainSegment *segments;
     s32 i;
 
-    if (o->oDistanceToMario < 3000.0f || gDisableDrawDistance) {
+    if (o->oDistanceToMario < 3000.0f * (gDrawDistanceMultiplier / 4.0f) || gDisableDrawDistance) {
         segments = mem_pool_alloc(gObjectMemoryPool, 5 * sizeof(struct ChainSegment));
         if (segments != NULL) {
             // Each segment represents the offset of a chain part to the pivot.
@@ -360,7 +360,7 @@ static void chain_chomp_act_move(void) {
     f32 maxDistToPivot;
 
     // Unload chain if mario is far enough
-    if (o->oChainChompReleaseStatus == CHAIN_CHOMP_NOT_RELEASED && o->oDistanceToMario > 4000.0f && !gDisableDrawDistance) {
+    if (o->oChainChompReleaseStatus == CHAIN_CHOMP_NOT_RELEASED && o->oDistanceToMario > 4000.0f * (gDrawDistanceMultiplier / 4.0f) && !gDisableDrawDistance) {
         o->oAction = CHAIN_CHOMP_ACT_UNLOAD_CHAIN;
         o->oForwardVel = o->oVelY = 0.0f;
     } else {

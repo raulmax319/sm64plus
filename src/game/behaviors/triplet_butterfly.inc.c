@@ -56,7 +56,7 @@ static void triplet_butterfly_act_init(void) {
 }
 
 static void triplet_butterfly_act_wander(void) {
-    if (o->oDistanceToMario > 1500.0f && !gDisableDrawDistance) {
+    if (o->oDistanceToMario > 1500.0f * (gDrawDistanceMultiplier / 4.0f) && !gDisableDrawDistance) {
         obj_mark_for_deletion(o);
     } else {
         approach_f32_ptr(&o->oTripletButterflySpeed, 8.0f, 0.5f);
