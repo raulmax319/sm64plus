@@ -29,5 +29,5 @@ A prior copy of the game is required to extract the assets.
 
 ## Additional options
 
-* You can apply the 60FPS patch by using `tools/apply_patch.sh "enhancements/60fps.patch"`. If you get an error, try using `pacman -S patch` first. **Combining the draw distance settings and the 60FPS patch causes certain items to update only at 30FPS!** Originally it caused the whole game to flicker like crazy and crash, this is the best fix I could figure out. Help needed to fix this.
-* You can target OpenGL by using `make ENABLE_OPENGL=1`. **CURRENTLY NONFUNCTIONAL!** Help is also needed to fix this.
+* You can apply the 60FPS patch by using `tools/apply_patch.sh "enhancements/60fps.patch"`. If you get an error, try using `pacman -S patch` first.
+* You can target OpenGL by using `make ENABLE_OPENGL=1`. **CURRENTLY NONFUNCTIONAL!** Help is needed to fix this!
