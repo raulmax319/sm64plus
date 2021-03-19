@@ -82,9 +82,7 @@ static void controller_sdl_read(OSContPad *pad) {
     if (gImprovedCamera) {
         uint32_t magnitude_sq2 = (uint32_t)(rightx * rightx) + (uint32_t)(righty * righty);
         if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
-            pad->stick2_x = rightx / 0x100;
-            //int stick_y = -righty / 0x100;
-            //pad->stick2_y = stick_y == 128 ? 127 : stick_y;
+            pad->stick2_x = rightx / 409;
         }
     }
     else {

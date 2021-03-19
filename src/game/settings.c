@@ -33,9 +33,9 @@ int gInternalResolutionWidth = 3840;
 int gInternalResolutionHeight = 2160;
 s8 gDrawPillarbox = 0;
 
-int gDrawDistanceMultiplier = 8;
+s8 gDisableDrawDistance = 1;
 s8 gNoLowPoly = 1;
-s8 gDisableDrawDistance = 0;
+int gDrawDistanceMultiplier = 4;
 int gNoiseType = 0;
 s8 gDisableFog = 0;
 s8 gForceLowPoly = 0;

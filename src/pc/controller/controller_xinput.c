@@ -50,8 +50,7 @@ static void xinput_read(OSContPad *pad) {
             if (gImprovedCamera) {
                 uint32_t magnitude_sq2 = (uint32_t)(gp->sThumbRX * gp->sThumbRX) + (uint32_t)(gp->sThumbRY * gp->sThumbRY);
                 if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
-                    pad->stick2_x = gp->sThumbRX / 0x100;
-                   // pad->stick2_y = gp->sThumbRY / 0x100;
+                    pad->stick2_x = gp->sThumbRX / 409;
                 }
             }
             break;

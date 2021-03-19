@@ -439,7 +439,7 @@ PYTHON := python3
 # Platform-specific compiler and linker flags
 ifeq ($(TARGET_WINDOWS),1)
   PLATFORM_CFLAGS  := -DTARGET_WINDOWS
-  PLATFORM_LDFLAGS := -lm -lxinput9_1_0 -lole32 -no-pie -mwindows
+  PLATFORM_LDFLAGS := -lm -lxinput9_1_0 -lole32 -no-pie -mconsole
 endif
 ifeq ($(TARGET_LINUX),1)
   PLATFORM_CFLAGS  := -DTARGET_LINUX `pkg-config --cflags libusb-1.0`
