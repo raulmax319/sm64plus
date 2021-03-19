@@ -21,6 +21,7 @@ s8 gSunshineDive = 0;
 s8 gOdysseyDive = 0;
 s8 gFlashbackPound = 0;
 
+s8 g60FPS = 1;
 s8 configFullscreen = 1;
 int gCustomFullscreenResolution = 0;
 int gFullscreenWidth = 1920;
@@ -37,7 +38,6 @@ s8 gDisableDrawDistance = 1;
 s8 gNoLowPoly = 1;
 int gDrawDistanceMultiplier = 4;
 int gNoiseType = 0;
-s8 gDisableFog = 0;
 s8 gForceLowPoly = 0;
 s8 gNearestNeighbor = 0;
 s8 gFXMode = 0;

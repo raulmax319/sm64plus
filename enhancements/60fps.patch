@@ -1961,7 +1961,9 @@ index f4467a11..ccc048b7 100644
      gfx_end_frame();
 +    
 +    gfx_start_frame();
-+    patch_interpolations();
++    if (g60FPS) {
++        patch_interpolations();
++    }
 +    send_display_list(gGfxSPTask);
 +    gfx_end_frame();
  }

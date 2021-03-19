@@ -50,6 +50,7 @@ static const struct ConfigOption options[] = {
     {.name = "odyssey_ground_pound_dive",  .type = CONFIG_TYPE_BOOL, .boolValue = &gOdysseyDive},
     {.name = "flashback_ground_pound",  .type = CONFIG_TYPE_BOOL, .boolValue = &gFlashbackPound},
 
+    {.name = "60fps",.type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS},
     {.name = "fullscreen",     .type = CONFIG_TYPE_BOOL, .boolValue = &configFullscreen},
     {.name = "custom_fullscreen_resolution",.type = CONFIG_TYPE_BOOL, .boolValue = &gCustomFullscreenResolution},
     {.name = "fullscreen_width",.type = CONFIG_TYPE_UINT, .uintValue = &gFullscreenWidth},
@@ -66,7 +67,6 @@ static const struct ConfigOption options[] = {
     {.name = "disable_low_poly_mario",.type = CONFIG_TYPE_BOOL, .boolValue = &gNoLowPoly},
     {.name = "draw_distance_multiplier",.type = CONFIG_TYPE_UINT, .uintValue = &gDrawDistanceMultiplier},
     {.name = "noise_type",     .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType},
-    {.name = "disable_fog",    .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableFog},
     {.name = "force_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly},
     {.name = "nearest_neighbor_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor},
     {.name = "fx_mode",        .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode},
