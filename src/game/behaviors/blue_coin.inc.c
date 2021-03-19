@@ -13,7 +13,12 @@ void bhv_hidden_blue_coin_loop(void) {
     switch (o->oAction) {
         case HIDDEN_BLUE_COIN_ACT_INACTIVE:
             // Become invisible and intangible
-            cur_obj_disable_rendering();
+            if (gRespawnBlueCoinSwitch) {
+                cur_obj_hide();
+            }
+            else {
+                cur_obj_disable_rendering();
+            }
             cur_obj_become_intangible();
 
             // Set action to HIDDEN_BLUE_COIN_ACT_WAITING after the blue coin switch is found.
@@ -35,7 +40,12 @@ void bhv_hidden_blue_coin_loop(void) {
             break;
         case HIDDEN_BLUE_COIN_ACT_ACTIVE:
             // Become tangible
-            cur_obj_enable_rendering();
+            if (gRespawnBlueCoinSwitch) {
+                cur_obj_unhide();
+            }
+            else {
+                cur_obj_enable_rendering();
+            }
             cur_obj_become_tangible();
 
             // Delete the coin once collected
@@ -47,7 +57,12 @@ void bhv_hidden_blue_coin_loop(void) {
             // After 200 frames of waiting and 20 2-frame blinks (for 240 frames total),
             // delete the object.
             if (cur_obj_wait_then_blink(200, 20)) {
-                obj_mark_for_deletion(o);
+                if (gRespawnBlueCoinSwitch) {
+                    o->oAction = HIDDEN_BLUE_COIN_ACT_INACTIVE;
+                }
+                else {
+                    obj_mark_for_deletion(o);
+                }
             }
 
             break;
@@ -119,7 +134,14 @@ void bhv_blue_coin_switch_loop(void) {
             // Delete the switch (which stops the sound) after the last coin is collected,
             // or after the coins unload after the 240-frame timer expires.
             if (cur_obj_nearest_object_with_behavior(bhvHiddenBlueCoin) == NULL || o->oTimer > 240) {
-                obj_mark_for_deletion(o);
+                if (gRespawnBlueCoinSwitch && o->oTimer > 240) {
+                    cur_obj_unhide();
+                    o->oAction = BLUE_COIN_SWITCH_ACT_IDLE;
+                    o->oPosY = o->oPosY + 40.0f;
+                }
+                else {
+                    obj_mark_for_deletion(o);
+                }
             }
 
             break;

@@ -37,6 +37,7 @@ static const struct ConfigOption options[] = {
     {.name = "analog_stick_deadzone",.type = CONFIG_TYPE_UINT, .uintValue = &gControllerDeadzone},
 
     {.name = "fix_collision_errors",.type = CONFIG_TYPE_BOOL, .boolValue = &gCollisionFixes},
+    {.name = "make_blue_coin_switches_respawn",.type = CONFIG_TYPE_BOOL, .boolValue = &gRespawnBlueCoinSwitch},
     {.name = "remove_annoying_warps",.type = CONFIG_TYPE_BOOL, .boolValue = &gRemoveAnnoyingWarps},
     {.name = "disable_all_boo_messages_except_the_first",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBooDialogue},
     {.name = "skip_cutscenes",     .type = CONFIG_TYPE_BOOL, .boolValue = &gSkipCutscenes},
@@ -50,7 +51,7 @@ static const struct ConfigOption options[] = {
     {.name = "odyssey_ground_pound_dive",  .type = CONFIG_TYPE_BOOL, .boolValue = &gOdysseyDive},
     {.name = "flashback_ground_pound",  .type = CONFIG_TYPE_BOOL, .boolValue = &gFlashbackPound},
 
-    {.name = "60fps",.type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS},
+    {.name = "60_fps",.type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS},
     {.name = "fullscreen",     .type = CONFIG_TYPE_BOOL, .boolValue = &configFullscreen},
     {.name = "custom_fullscreen_resolution",.type = CONFIG_TYPE_BOOL, .boolValue = &gCustomFullscreenResolution},
     {.name = "fullscreen_width",.type = CONFIG_TYPE_UINT, .uintValue = &gFullscreenWidth},
@@ -69,7 +70,6 @@ static const struct ConfigOption options[] = {
     {.name = "noise_type",     .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType},
     {.name = "force_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly},
     {.name = "nearest_neighbor_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor},
-    {.name = "fx_mode",        .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode},
 
     {.name = "improved_camera",  .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedCamera},
     {.name = "center_camera_button",.type = CONFIG_TYPE_BOOL, .boolValue = &gCenterCam},
@@ -92,6 +92,7 @@ static const struct ConfigOption options[] = {
     {.name = "permadeath_mode",      .type = CONFIG_TYPE_BOOL, .boolValue = &gHardcoreSave},
     {.name = "green_demon_mode",.type = CONFIG_TYPE_BOOL, .boolValue = &gGreenDemon},
     {.name = "encore_mode",    .type = CONFIG_TYPE_BOOL, .boolValue = &gEncoreMode},
+    {.name = "fx_mode",        .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode},
 
     {.name = "level_select",   .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugLevelSelect},
     {.name = "show_debug_profiler",.type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler},

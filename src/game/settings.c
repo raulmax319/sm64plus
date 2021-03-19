@@ -8,6 +8,7 @@ s8 gDisableFallDamage = 0;
 int gControllerDeadzone = 500;
 
 s8 gCollisionFixes = 1;
+s8 gRespawnBlueCoinSwitch = 1;
 s8 gRemoveAnnoyingWarps = 1;
 s8 gDisableBooDialogue = 1;
 s8 gSkipCutscenes = 0;
@@ -40,7 +41,6 @@ int gDrawDistanceMultiplier = 4;
 int gNoiseType = 0;
 s8 gForceLowPoly = 0;
 s8 gNearestNeighbor = 0;
-s8 gFXMode = 0;
 
 s8 gImprovedCamera = 1;
 s8 gCenterCam = 1;
@@ -63,6 +63,7 @@ s8 gHardSave = 0;
 s8 gHardcoreSave = 0;
 s8 gGreenDemon = 0;
 s8 gEncoreMode = 0;
+s8 gFXMode = 0;
 
 s8 gDebugMovementMode = 0;
 

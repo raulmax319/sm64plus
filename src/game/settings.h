@@ -8,6 +8,7 @@ extern s8 gDisableFallDamage;
 extern int gControllerDeadzone;
 
 extern s8 gCollisionFixes;
+extern s8 gRespawnBlueCoinSwitch;
 extern s8 gRemoveAnnoyingWarps;
 extern s8 gDisableBooDialogue;
 extern s8 gSkipCutscenes;
@@ -40,7 +41,6 @@ extern int gDrawDistanceMultiplier;
 extern int gNoiseType;
 extern s8 gForceLowPoly;
 extern s8 gNearestNeighbor;
-extern s8 gFXMode;
 
 extern s8 gImprovedCamera;
 extern s8 gCenterCam;
@@ -63,6 +63,7 @@ extern s8 gHardSave;
 extern s8 gHardcoreSave;
 extern s8 gGreenDemon;
 extern s8 gEncoreMode;
+extern s8 gFXMode;
 
 extern s8 gDebugMovementMode;
 

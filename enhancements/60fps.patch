@@ -1955,7 +1955,7 @@ index f4467a11..ccc048b7 100644
  void produce_one_frame(void) {
      gfx_start_frame();
      game_loop_one_iteration();
-@@ -95,6 +114,11 @@ void produce_one_frame(void) {
+@@ -95,6 +114,13 @@ void produce_one_frame(void) {
      audio_api->play((u8 *)audio_buffer, 2 * num_audio_samples * 4);
      
      gfx_end_frame();
