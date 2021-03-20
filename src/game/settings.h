@@ -39,8 +39,6 @@ extern s8 gDisableDrawDistance;
 extern s8 gNoLowPoly;
 extern int gDrawDistanceMultiplier;
 extern int gNoiseType;
-extern s8 gForceLowPoly;
-extern s8 gNearestNeighbor;
 
 extern s8 gImprovedCamera;
 extern s8 gCenterCam;
@@ -63,7 +61,11 @@ extern s8 gHardSave;
 extern s8 gHardcoreSave;
 extern s8 gGreenDemon;
 extern s8 gEncoreMode;
+
 extern s8 gFXMode;
+extern s8 gDisableLighting;
+extern s8 gForceLowPoly;
+extern s8 gNearestNeighbor;
 
 extern s8 gDebugMovementMode;
 

@@ -68,8 +68,6 @@ static const struct ConfigOption options[] = {
     {.name = "disable_low_poly_mario",.type = CONFIG_TYPE_BOOL, .boolValue = &gNoLowPoly},
     {.name = "draw_distance_multiplier",.type = CONFIG_TYPE_UINT, .uintValue = &gDrawDistanceMultiplier},
     {.name = "noise_type",     .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType},
-    {.name = "force_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly},
-    {.name = "nearest_neighbor_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor},
 
     {.name = "improved_camera",  .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedCamera},
     {.name = "center_camera_button",.type = CONFIG_TYPE_BOOL, .boolValue = &gCenterCam},
@@ -92,7 +90,11 @@ static const struct ConfigOption options[] = {
     {.name = "permadeath_mode",      .type = CONFIG_TYPE_BOOL, .boolValue = &gHardcoreSave},
     {.name = "green_demon_mode",.type = CONFIG_TYPE_BOOL, .boolValue = &gGreenDemon},
     {.name = "encore_mode",    .type = CONFIG_TYPE_BOOL, .boolValue = &gEncoreMode},
+
     {.name = "fx_mode",        .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode},
+    {.name = "disable_lighting",        .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLighting},
+    {.name = "force_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly},
+    {.name = "nearest_neighbor_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor},
 
     {.name = "level_select",   .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugLevelSelect},
     {.name = "show_debug_profiler",.type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler},

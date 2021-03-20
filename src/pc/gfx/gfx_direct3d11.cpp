@@ -466,14 +466,8 @@ static void gfx_d3d11_upload_texture(const uint8_t *rgba32_buf, int width, int h
     D3D11_TEXTURE2D_DESC texture_desc;
     ZeroMemory(&texture_desc, sizeof(D3D11_TEXTURE2D_DESC));
 
-    if (gFXMode) {
-        texture_desc.Width = 1;
-        texture_desc.Height = 1;
-    }
-    else {
-        texture_desc.Width = width;
-        texture_desc.Height = height;
-    }
+    texture_desc.Width = width;
+    texture_desc.Height = height;
     texture_desc.Usage = D3D11_USAGE_IMMUTABLE;
     texture_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
     texture_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;

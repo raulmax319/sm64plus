@@ -39,8 +39,6 @@ s8 gDisableDrawDistance = 1;
 s8 gNoLowPoly = 1;
 int gDrawDistanceMultiplier = 4;
 int gNoiseType = 0;
-s8 gForceLowPoly = 0;
-s8 gNearestNeighbor = 0;
 
 s8 gImprovedCamera = 1;
 s8 gCenterCam = 1;
@@ -63,7 +61,11 @@ s8 gHardSave = 0;
 s8 gHardcoreSave = 0;
 s8 gGreenDemon = 0;
 s8 gEncoreMode = 0;
+
 s8 gFXMode = 0;
+s8 gDisableLighting = 0;
+s8 gForceLowPoly = 0;
+s8 gNearestNeighbor = 0;
 
 s8 gDebugMovementMode = 0;
 

@@ -304,14 +304,8 @@ static void gfx_direct3d12_upload_texture(const uint8_t *rgba32_buf, int width, 
     D3D12_RESOURCE_DESC texture_desc = {};
     texture_desc.MipLevels = 1;
     texture_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    if (gFXMode) {
-        texture_desc.Width = 1;
-        texture_desc.Height = 1;
-    }
-    else {
-        texture_desc.Width = width;
-        texture_desc.Height = height;
-    }
+    texture_desc.Width = width;
+    texture_desc.Height = height;
     texture_desc.Flags = D3D12_RESOURCE_FLAG_NONE;
     texture_desc.DepthOrArraySize = 1;
     texture_desc.SampleDesc.Count = 1;

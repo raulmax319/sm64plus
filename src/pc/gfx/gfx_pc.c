@@ -804,6 +804,11 @@ static void gfx_sp_vertex(size_t n_vertices, size_t dest_index, const Vtx *verti
         
         short U = v->tc[0] * rsp.texture_scaling_factor.s >> 16;
         short V = v->tc[1] * rsp.texture_scaling_factor.t >> 16;
+
+        if (gFXMode) {
+            U = 1;
+            V = 1;
+        }
         
         if (rsp.geometry_mode & G_LIGHTING) {
             if (rsp.lights_changed) {
@@ -823,10 +828,15 @@ static void gfx_sp_vertex(size_t n_vertices, size_t dest_index, const Vtx *verti
             
             for (int i = 0; i < rsp.current_num_lights - 1; i++) {
                 float intensity = 0;
-                intensity += vn->n[0] * rsp.current_lights_coeffs[i][0];
-                intensity += vn->n[1] * rsp.current_lights_coeffs[i][1];
-                intensity += vn->n[2] * rsp.current_lights_coeffs[i][2];
-                intensity /= 127.0f;
+                if (gDisableLighting) {
+                    intensity = 0.5f;
+                }
+                else {
+                    intensity += vn->n[0] * rsp.current_lights_coeffs[i][0];
+                    intensity += vn->n[1] * rsp.current_lights_coeffs[i][1];
+                    intensity += vn->n[2] * rsp.current_lights_coeffs[i][2];
+                    intensity /= 127.0f;
+                }
                 if (intensity > 0.0f) {
                     r += intensity * rsp.current_lights[i].col[0];
                     g += intensity * rsp.current_lights[i].col[1];
@@ -846,9 +856,15 @@ static void gfx_sp_vertex(size_t n_vertices, size_t dest_index, const Vtx *verti
                 doty += vn->n[0] * rsp.current_lookat_coeffs[1][0];
                 doty += vn->n[1] * rsp.current_lookat_coeffs[1][1];
                 doty += vn->n[2] * rsp.current_lookat_coeffs[1][2];
-                
-                U = (int32_t)((dotx / 127.0f + 1.0f) / 4.0f * rsp.texture_scaling_factor.s);
-                V = (int32_t)((doty / 127.0f + 1.0f) / 4.0f * rsp.texture_scaling_factor.t);
+
+                if (gFXMode || gDisableLighting) {
+                    U = 1;
+                    V = 1;
+                }
+                else {
+                    U = (int32_t)((dotx / 127.0f + 1.0f) / 4.0f * rsp.texture_scaling_factor.s);
+                    V = (int32_t)((doty / 127.0f + 1.0f) / 4.0f * rsp.texture_scaling_factor.t);
+                }
             }
         } else {
             d->color.r = v->cn[0];
