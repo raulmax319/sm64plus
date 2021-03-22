@@ -9,6 +9,9 @@
 #include "types.h"
 #include "prevent_bss_reordering.h"
 
+#include "gfx_dimensions.h"
+#include "game/settings.h"
+
 // frame counts for the zoom in, hold, and zoom out of title model
 #define INTRO_STEPS_ZOOM_IN 20
 #define INTRO_STEPS_HOLD_1 75
@@ -17,6 +20,9 @@
 // background types
 #define INTRO_BACKGROUND_SUPER_MARIO 0
 #define INTRO_BACKGROUND_GAME_OVER 1
+
+#define TILE_SIZE 80
+#define BACKGROUND_ROWS 3
 
 struct GraphNodeMore {
     /*0x00*/ struct GraphNode node;
@@ -161,8 +167,18 @@ Gfx *intro_backdrop_one_image(s32 index, s8 *backgroundTable) {
     mtx = alloc_display_list(sizeof(*mtx));
     displayList = alloc_display_list(36 * sizeof(*displayList));
     displayListIter = displayList;
-    vIntroBgTable = segmented_to_virtual(introBackgroundTextureType[backgroundTable[index]]);
-    guTranslate(mtx, introBackgroundOffsetX[index], introBackgroundOffsetY[index], 0.0f);
+
+    s32 tile_no = ((GFX_DIMENSIONS_ASPECT_RATIO*SCREEN_HEIGHT)+TILE_SIZE)/TILE_SIZE;
+	f32 offset = SCREEN_WIDTH/2 - GFX_DIMENSIONS_ASPECT_RATIO*SCREEN_HEIGHT/2;
+
+    if (gDrawPillarbox) {
+        vIntroBgTable = segmented_to_virtual(introBackgroundTextureType[backgroundTable[index]]);
+        guTranslate(mtx, introBackgroundOffsetX[index], introBackgroundOffsetY[index], 0.0f);
+    }
+    else {
+        vIntroBgTable = segmented_to_virtual(introBackgroundTextureType[backgroundTable[0]]);
+        guTranslate(mtx, ((index % tile_no)*TILE_SIZE) + offset, (index/tile_no)*TILE_SIZE, 0.0f);
+    }
     gSPMatrix(displayListIter++, mtx, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_PUSH);
     gSPDisplayList(displayListIter++, &title_screen_bg_dl_0A000118);
     for (i = 0; i < 4; ++i) {
@@ -182,18 +198,31 @@ Gfx *geo_intro_backdrop(s32 sp48, struct GraphNode *sp4c, UNUSED void *context) 
     Gfx *displayList;                // sp38
     Gfx *displayListIter;            // sp34
     s32 i;                           // sp30
+
+    s32 size;
+
     graphNode = (struct GraphNodeMore *) sp4c;
     index = graphNode->unk18 & 0xff; // TODO: word at offset 0x18 of struct GraphNode
     backgroundTable = introBackgroundTables[index];
     displayList = NULL;
     displayListIter = NULL;
+
+    s32 tile_no = ((GFX_DIMENSIONS_ASPECT_RATIO*SCREEN_HEIGHT)+TILE_SIZE)/TILE_SIZE;
+
     if (sp48 == 1) {
-        displayList = alloc_display_list(16 * sizeof(*displayList));
+        if (gDrawPillarbox) {
+            displayList = alloc_display_list(16 * sizeof(*displayList));
+            size = 12;
+        }
+        else {
+            displayList = alloc_display_list(((tile_no*3)+4) * sizeof(*displayList));
+            size = tile_no * BACKGROUND_ROWS;
+        }
         displayListIter = displayList;
         graphNode->node.flags = (graphNode->node.flags & 0xFF) | 0x100;
         gSPDisplayList(displayListIter++, &dl_proj_mtx_fullscreen);
         gSPDisplayList(displayListIter++, &title_screen_bg_dl_0A000100);
-        for (i = 0; i < 12; ++i) {
+        for (i = 0; i < size; ++i) {
             gSPDisplayList(displayListIter++, intro_backdrop_one_image(i, backgroundTable));
         }
         gSPDisplayList(displayListIter++, &title_screen_bg_dl_0A000190);
@@ -208,9 +237,15 @@ Gfx *geo_game_over_tile(s32 sp40, struct GraphNode *sp44, UNUSED void *context) 
     Gfx *displayListIter;        // sp34
     s32 j;                       // sp30
     s32 i;                       // sp2c
+
+    s32 size;
+
     graphNode = sp44;
     displayList = NULL;
     displayListIter = NULL;
+
+    s32 tile_no = ((GFX_DIMENSIONS_ASPECT_RATIO*SCREEN_HEIGHT)+TILE_SIZE)/TILE_SIZE;
+
     if (sp40 != 1) {
         gGameOverFrameCounter = 0;
         gGameOverTableIndex = -2;
@@ -218,7 +253,14 @@ Gfx *geo_game_over_tile(s32 sp40, struct GraphNode *sp44, UNUSED void *context) 
             gameOverBackgroundTable[i] = INTRO_BACKGROUND_GAME_OVER;
         }
     } else {
-        displayList = alloc_display_list(16 * sizeof(*displayList));
+        if (gDrawPillarbox) {
+            displayList = alloc_display_list(16 * sizeof(*displayList));
+            size = (s32) sizeof(gameOverBackgroundTable);
+        }
+        else {
+            displayList = alloc_display_list(((tile_no*3)+4) * sizeof(*displayList));
+            size = tile_no * BACKGROUND_ROWS;
+        }
         displayListIter = displayList;
         if (gGameOverTableIndex == -2) {
             if (gGameOverFrameCounter == 180) {
@@ -239,7 +281,7 @@ Gfx *geo_game_over_tile(s32 sp40, struct GraphNode *sp44, UNUSED void *context) 
         graphNode->flags = (graphNode->flags & 0xFF) | 0x100;
         gSPDisplayList(displayListIter++, &dl_proj_mtx_fullscreen);
         gSPDisplayList(displayListIter++, &title_screen_bg_dl_0A000100);
-        for (j = 0; j < (s32) sizeof(gameOverBackgroundTable); ++j) {
+        for (j = 0; j < size; ++j) {
             gSPDisplayList(displayListIter++, intro_backdrop_one_image(j, gameOverBackgroundTable));
         }
         gSPDisplayList(displayListIter++, &title_screen_bg_dl_0A000190);

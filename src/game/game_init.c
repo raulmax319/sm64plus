@@ -202,8 +202,10 @@ void clear_viewport(Vp *viewport, s32 color) {
     s16 vpLry = (viewport->vp.vtrans[1] + viewport->vp.vscale[1]) / 4 - 2;
 
 #ifdef WIDESCREEN
-    vpUlx = GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(vpUlx);
-    vpLrx = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(SCREEN_WIDTH - vpLrx);
+    if (!gDrawPillarbox) {
+        vpUlx = GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(vpUlx);
+        vpLrx = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(SCREEN_WIDTH - vpLrx);
+    }
 #endif
 
     gDPPipeSync(gDisplayListHead++);
@@ -347,7 +349,7 @@ void rendering_init(void) {
 
 #ifdef USE_SYSTEM_MALLOC
 Gfx **alloc_next_dl(void) {
-    u32 size = 1000;
+    u32 size = 10000;
     Gfx *new_chunk = alloc_only_pool_alloc(gGfxAllocOnlyPool, size * sizeof(Gfx));
     gSPBranchList(gDisplayListHeadInChunk++, new_chunk);
     gDisplayListHeadInChunk = new_chunk;

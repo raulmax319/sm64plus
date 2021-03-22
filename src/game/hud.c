@@ -557,13 +557,6 @@ void render_hud_camera_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
 }
 
-// The sides for the 4:3 mode
-void render_sides(void) {
-    gDPSetFillColor(gDisplayListHead++, GPACK_RGBA5551(0, 0, 0, 1));
-    gDPFillRectangle(gDisplayListHead++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), 0, 0, SCREEN_HEIGHT);
-    gDPFillRectangle(gDisplayListHead++, SCREEN_WIDTH, 0, GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0), SCREEN_HEIGHT);
-}
-
 /**
  * Render HUD strings using hudDisplayFlags with it's render functions,
  * excluding the cannon reticle which detects a camera preset for it.
@@ -624,10 +617,6 @@ void render_hud(void) {
 
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_TIMER) {
             render_hud_timer();
-        }
-
-        if (gDrawPillarbox) {
-            render_sides();
         }
     }
 }

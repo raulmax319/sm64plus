@@ -32,6 +32,9 @@ struct DemoInput
     u8 buttonMask;
 };
 
+extern s8 get_mirror();
+extern s16 get_palette();
+
 extern struct Controller gControllers[3];
 extern OSContStatus gControllerStatuses[4];
 extern OSContPad gControllerPads[4];

@@ -14,6 +14,8 @@
 #define BETTER_SKYBOX_POSITION_PRECISION
 #endif
 
+#include "game/settings.h"
+
 /**
  * @file skybox.c
  *
@@ -278,12 +280,14 @@ void *create_skybox_ortho_matrix(s8 player) {
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
 #ifdef WIDESCREEN
-    f32 half_width = (4.0f / 3.0f) / GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_WIDTH / 2;
-    f32 center = (sSkyBoxInfo[player].scaledX + SCREEN_WIDTH / 2);
-    if (half_width < SCREEN_WIDTH / 2) {
-        // A wider screen than 4:3
-        left = center - half_width;
-        right = center + half_width;
+    if (!gDrawPillarbox) {
+        f32 half_width = (4.0f / 3.0f) / GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_WIDTH / 2;
+        f32 center = (sSkyBoxInfo[player].scaledX + SCREEN_WIDTH / 2);
+        if (half_width < SCREEN_WIDTH / 2) {
+            // A wider screen than 4:3
+            left = center - half_width;
+            right = center + half_width;
+        }
     }
 #endif
 
