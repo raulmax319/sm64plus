@@ -24,6 +24,8 @@
 #include "skybox.h"
 #include "sound_init.h"
 
+#include "settings.h"
+
 #define TOAD_STAR_1_REQUIREMENT 12
 #define TOAD_STAR_2_REQUIREMENT 25
 #define TOAD_STAR_3_REQUIREMENT 35
@@ -109,7 +111,7 @@ static void toad_message_faded(void) {
 }
 
 static void toad_message_opaque(void) {
-    if (gCurrentObject->oDistanceToMario > 700.0f) {
+    if (!gDisableToadFading && gCurrentObject->oDistanceToMario > 700.0f) {
         gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADING;
     } else if (!gCurrentObject->oToadMessageRecentlyTalked) {
         gCurrentObject->oInteractionSubtype = INT_SUBTYPE_NPC;
@@ -125,7 +127,13 @@ static void toad_message_talking(void) {
     if (cur_obj_update_dialog_with_cutscene(3, 1, CUTSCENE_DIALOG, gCurrentObject->oToadMessageDialogId)
         != 0) {
         gCurrentObject->oToadMessageRecentlyTalked = TRUE;
-        gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADING;
+        if (gDisableToadFading) {
+            gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
+            gCurrentObject->oOpacity = 249;
+        }
+        else {
+            gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADING;
+        }
         switch (gCurrentObject->oToadMessageDialogId) {
             case TOAD_STAR_1_DIALOG:
                 gCurrentObject->oToadMessageDialogId = TOAD_STAR_1_DIALOG_AFTER;
@@ -207,8 +215,14 @@ void bhv_toad_message_init(void) {
     if (enoughStars) {
         gCurrentObject->oToadMessageDialogId = dialogId;
         gCurrentObject->oToadMessageRecentlyTalked = FALSE;
-        gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADED;
-        gCurrentObject->oOpacity = 81;
+        if (gDisableToadFading) {
+            gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPAQUE;
+            gCurrentObject->oOpacity = 255;
+        }
+        else {
+            gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADED;
+            gCurrentObject->oOpacity = 81;
+        }
     } else {
         obj_mark_for_deletion(gCurrentObject);
     }

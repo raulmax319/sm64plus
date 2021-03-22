@@ -90,7 +90,11 @@ const LevelScript level_main_menu_entry_2[] = {
     /*37*/ TRANSITION(/*transType*/ WARP_TRANSITION_FADE_INTO_COLOR, /*time*/ 16, /*color*/ 0xFF, 0xFF, 0xFF),
     /*39*/ SLEEP(/*frames*/ 16),
     /*40*/ CLEAR_LEVEL(),
+#ifdef TARGET_N64 
+    /*41*/ SLEEP_BEFORE_EXIT(/*frames*/ 1),
+#else
     /*41*/ SLEEP_BEFORE_EXIT(/*frames*/ 9), //MORS NOTE: This was changed from 1 to simulate the load times.
+#endif
     // L1:
     /*42*/ EXIT(),
 };

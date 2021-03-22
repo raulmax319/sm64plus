@@ -184,6 +184,11 @@ static unsigned char textHardB[] = { TEXT_FILE_HARD_B };
 static unsigned char textHardC[] = { TEXT_FILE_HARD_C };
 static unsigned char textHardD[] = { TEXT_FILE_HARD_D };
 
+static unsigned char textDaredevilA[] = { TEXT_FILE_DAREDEVIL_A };
+static unsigned char textDaredevilB[] = { TEXT_FILE_DAREDEVIL_B };
+static unsigned char textDaredevilC[] = { TEXT_FILE_DAREDEVIL_C };
+static unsigned char textDaredevilD[] = { TEXT_FILE_DAREDEVIL_D };
+
 static unsigned char textHardcoreA[] = { TEXT_FILE_HARDCORE_A };
 static unsigned char textHardcoreB[] = { TEXT_FILE_HARDCORE_B };
 static unsigned char textHardcoreC[] = { TEXT_FILE_HARDCORE_C };
@@ -1809,6 +1814,9 @@ void print_main_menu_strings(void) {
     if (is_save_hardcore(0)) {
         print_menu_generic_string(MARIOTEXT_X1, 65, textHardcoreA);
     }
+    else if (is_save_daredevil(0)) {
+        print_menu_generic_string(MARIOTEXT_X1, 65, textDaredevilA);
+    }
     else if (is_save_hard(0)) {
         print_menu_generic_string(MARIOTEXT_X1, 65, textHardA);
     }
@@ -1818,6 +1826,9 @@ void print_main_menu_strings(void) {
 
     if (is_save_hardcore(1)) {
         print_menu_generic_string(MARIOTEXT_X2, 65, textHardcoreB);
+    }
+    else if (is_save_daredevil(1)) {
+        print_menu_generic_string(MARIOTEXT_X1, 65, textDaredevilB);
     }
     else if (is_save_hard(1)) {
         print_menu_generic_string(MARIOTEXT_X2, 65, textHardB);
@@ -1829,6 +1840,9 @@ void print_main_menu_strings(void) {
     if (is_save_hardcore(2)) {
         print_menu_generic_string(MARIOTEXT_X1, 105, textHardcoreC);
     }
+    else if (is_save_daredevil(2)) {
+        print_menu_generic_string(MARIOTEXT_X1, 65, textDaredevilC);
+    }
     else if (is_save_hard(2)) {
         print_menu_generic_string(MARIOTEXT_X1, 105, textHardC);
     }
@@ -1838,6 +1852,9 @@ void print_main_menu_strings(void) {
 
     if (is_save_hardcore(3)) {
         print_menu_generic_string(MARIOTEXT_X2, 105, textHardcoreD);
+    }
+    else if (is_save_daredevil(3)) {
+        print_menu_generic_string(MARIOTEXT_X1, 65, textDaredevilD);
     }
     else if (is_save_hard(3)) {
         print_menu_generic_string(MARIOTEXT_X2, 105, textHardD);

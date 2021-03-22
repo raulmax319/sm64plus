@@ -1233,8 +1233,10 @@ s32 init_level(void) {
                         save_file_set_flags(SAVE_FLAG_HARD_MODE);
                     }
                     if (gHardcoreSave) {
-                        gMarioState->flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
                         save_file_set_flags(SAVE_FLAG_HARDCORE_MODE);
+                    }
+                    if (gDaredevilSave) {
+                        save_file_set_flags(SAVE_FLAG_DAREDEVIL_MODE);
                     }
                 }
             }

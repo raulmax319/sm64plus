@@ -461,6 +461,10 @@ void update_walking_speed(struct MarioState *m) {
         m->forwardVel = 48.0f;
     }
 
+    if ((gBackwardSpeedCap) && (m->forwardVel < -8.0f)) {
+        m->forwardVel = -8.0f;
+    }
+
     if (gBetterControls) {
         m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x1000, 0x1000);
     }

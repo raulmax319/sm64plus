@@ -111,6 +111,7 @@ extern s8 gLevelToCourseNumTable[];
 #define SAVE_FLAG_COLLECTED_MIPS_STAR_2  /* 0x10000000 */ (1 << 28)
 #define SAVE_FLAG_HARD_MODE              /* 0x20000000 */ (1 << 29)
 #define SAVE_FLAG_HARDCORE_MODE          /* 0x40000000 */ (1 << 30)
+#define SAVE_FLAG_DAREDEVIL_MODE         /* 0x80000000 */ (1 << 31)
 
 #define SAVE_FLAG_TO_STAR_FLAG(cmd) (((cmd) >> 24) & 0x7F)
 #define STAR_FLAG_TO_SAVE_FLAG(cmd) ((cmd) << 24)
@@ -146,6 +147,7 @@ void save_file_clear_flags(u32 flags);
 u32 save_file_get_flags(void);
 s8 is_save_hard(s16 slot);
 s8 is_save_hardcore(s16 slot);
+s8 is_save_daredevil(s16 slot);
 u32 save_file_get_star_flags(s32 fileIndex, s32 courseIndex);
 void save_file_set_star_flags(s32 fileIndex, s32 courseIndex, u32 starFlags);
 s32 save_file_get_course_coin_score(s32 fileIndex, s32 courseIndex);

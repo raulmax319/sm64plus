@@ -27,11 +27,10 @@ void water_ring_init(void) {
 
     o->oWaterRingMarioDistInFront = water_ring_calc_mario_dist();
 
-    // Adding this code will alter the ring's graphical orientation to align with the faulty
-    // collision orientation:
-    //
-    // o->oFaceAngleYaw = 0;
-    // o->oFaceAngleRoll *= -1;
+    if (gFixMantaRayRings) {
+        o->oFaceAngleYaw = 0;
+        o->oFaceAngleRoll *= -1;
+    }
 }
 
 void bhv_jet_stream_water_ring_init(void) {

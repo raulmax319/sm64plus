@@ -487,6 +487,9 @@ s8 is_save_hard(s16 slot) {
 s8 is_save_hardcore(s16 slot) {
     return ((gSaveBuffer.files[slot][0].flags & SAVE_FLAG_HARDCORE_MODE) != 0);
 }
+s8 is_save_daredevil(s16 slot) {
+    return ((gSaveBuffer.files[slot][0].flags & SAVE_FLAG_DAREDEVIL_MODE) != 0);
+}
 
 /**
  * Return the bitset of obtained stars in the specified course.

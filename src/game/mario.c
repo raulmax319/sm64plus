@@ -1504,7 +1504,7 @@ void update_mario_health(struct MarioState *m) {
                         if (!save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
                             m->health += 0x1A;
                         }
-                    } else if (!gDebugLevelSelect) {
+                    } else if (!save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE) {
                         m->health -= (terrainIsSnow ? 3 : 1);
                     }
                 }
@@ -1520,15 +1520,22 @@ void update_mario_health(struct MarioState *m) {
             m->hurtCounter--;
         }
 
-        if (m->health > 0x880) {
-            m->health = 0x880;
+        if (save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE) {
+            if (m->health > 0x180) {
+                m->health = 0x180;
+            }
+        }
+        else {
+            if (m->health > 0x880) {
+                m->health = 0x880;
+            }
         }
         if (m->health < 0x100) {
             m->health = 0xFF;
         }
 
         // Play a noise to alert the player when Mario is close to drowning.
-        if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300)) {
+        if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && (!save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE)) {
             play_sound(SOUND_MOVING_ALMOST_DROWNING, gDefaultSoundArgs);
 #ifdef VERSION_SH
             if (!gRumblePakTimer) {
@@ -1923,7 +1930,12 @@ void init_mario_from_save_file(void) {
     else {
         gMarioState->numLives = 4;
     }
-    gMarioState->health = 0x880;
+    if (save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE) {
+        gMarioState->health = 0x180;
+    }
+    else {
+        gMarioState->health = 0x880;
+    }
 
     gMarioState->prevNumStarsForDialog = gMarioState->numStars;
     gMarioState->unkB0 = 0xBD;

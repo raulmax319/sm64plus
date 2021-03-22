@@ -293,7 +293,6 @@ void render_hud_power_meter(void) {
     }
     else {
         sPowerMeterHUD.y = 200;
-        handle_power_meter_actions(shownHealthWedges);
     }
 
     render_dl_power_meter(shownHealthWedges);
@@ -611,7 +610,8 @@ void render_hud(void) {
         }
 
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_CAMERA_AND_POWER) {
-            render_hud_power_meter();
+            if (!(save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE))
+                render_hud_power_meter();
             render_hud_camera_status();
         }
 
