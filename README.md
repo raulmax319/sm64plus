@@ -1,9 +1,24 @@
 # Super Mario 64 Port Thingy
 
-Stuff from my earlier Super Mario 64 ABE ported to the PC port with a ton of new features. This README file is going to be replaced eventually with something more proper.
+Super Mario 64 Port Thingy is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that aims to add features that will fix the issues in the base game and enhance the gameplay, while keeping the vanilla feel of the game.
 
-This repo does not include all assets necessary for compiling the game.
-A prior copy of the game is required to extract the assets.
+These features include (but not limited to):
+- 60FPS support via interpolation.
+- More responsive controls.
+- Improved camera.
+- Additional moves for Mario.
+- Graphical improvements.
+- Game design tweaks.
+- Optional extra modes.
+- Bug fixes.
+
+To learn about all the options, visit the [Wiki](https://github.com/MorsGames/sm64-port/wiki).
+
+This repo does **not** include all the assets necessary for compiling the game. A prior copy of the game is required to extract the assets. Binaries of the game will **not** be distributed for this very reason.
+
+That being said, there is an official launcher that will help you build the game and configure its settings easily. You can download it from the releases section. It is for Windows only.
+
+You can also build the game manually if you prefer to, or if you're not on a Windows platform. To do that, follow the instructions in the [Wiki](https://github.com/MorsGames/sm64-port/wiki).
 
 ## Building native executables
 
@@ -31,3 +46,14 @@ A prior copy of the game is required to extract the assets.
 
 * You can apply the 60FPS patch by using `tools/apply_patch.sh "enhancements/60fps.patch"`. If you get an error, try using `pacman -S patch` first.
 * You can target OpenGL by using `make ENABLE_OPENGL=1`. **CURRENTLY NONFUNCTIONAL!** Help is needed to fix this!
+
+## Credits.
+- **Mors:** Most things.
+- **[sm64-port](https://github.com/sm64-port/sm64-port) Team:** The port that was used as a base for this project.
+- **[SM64 Decompilation](https://github.com/n64decomp/sm64) Team:** The original decompilation used for this project.
+- **Emil:** The original 60FPS patch.
+- **Kaze Emanuar:** Providing certain bug fixes.
+
+Parts of [sm64ex](https://github.com/sm64pc/sm64ex) were also used as reference for this project.
+
+Please let me know if I'm forgetting to credit you.
