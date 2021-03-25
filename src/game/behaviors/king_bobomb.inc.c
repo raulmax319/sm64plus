@@ -309,7 +309,7 @@ void king_bobomb_move(void) {
     cur_obj_call_action_function(sKingBobombActions);
     exec_anim_sound_state(sKingBobombSoundStates);
     if (!gDisableDrawDistance) {
-        if (o->oDistanceToMario < 5000.0f * (gDrawDistanceMultiplier / 4.0f))
+        if (o->oDistanceToMario < 5000.0f * gDrawDistanceMultiplier)
             cur_obj_enable_rendering();
         else
             cur_obj_disable_rendering();

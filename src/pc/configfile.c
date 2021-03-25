@@ -16,6 +16,7 @@ enum ConfigOptionType {
     CONFIG_TYPE_BOOL,
     CONFIG_TYPE_UINT,
     CONFIG_TYPE_FLOAT,
+    CONFIG_TYPE_SECTION
 };
 
 struct ConfigOption {
@@ -29,9 +30,8 @@ struct ConfigOption {
 };
 
 static const struct ConfigOption options[] = {
-    {.name = "settings_menu",.type = CONFIG_TYPE_BOOL, .boolValue = &gSettingsMenu},
-
-    {.name = "60_fps",.type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS},
+    {.name = "DISPLAY", .type = CONFIG_TYPE_SECTION},
+    {.name = "60fps",.type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS},
     {.name = "fullscreen",     .type = CONFIG_TYPE_BOOL, .boolValue = &configFullscreen},
     {.name = "custom_fullscreen_resolution",.type = CONFIG_TYPE_BOOL, .boolValue = &gCustomFullscreenResolution},
     {.name = "fullscreen_width",.type = CONFIG_TYPE_UINT, .uintValue = &gFullscreenWidth},
@@ -44,6 +44,7 @@ static const struct ConfigOption options[] = {
     {.name = "internal_resolution_height",.type = CONFIG_TYPE_UINT, .uintValue = &gInternalResolutionHeight},
     {.name = "force_4by3",     .type = CONFIG_TYPE_BOOL, .boolValue = &gDrawPillarbox},
 
+    {.name = "CONTROLS", .type = CONFIG_TYPE_SECTION},
     {.name = "improved_controls",.type = CONFIG_TYPE_BOOL, .boolValue = &gBetterControls},
     {.name = "backward_speed_cap",.type = CONFIG_TYPE_BOOL, .boolValue = &gBackwardSpeedCap},
     {.name = "dpad_controls",    .type = CONFIG_TYPE_BOOL, .boolValue = &gDpadInput},
@@ -52,15 +53,16 @@ static const struct ConfigOption options[] = {
     {.name = "disable_fall_damage",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableFallDamage},
     {.name = "analog_stick_deadzone",.type = CONFIG_TYPE_UINT, .uintValue = &gControllerDeadzone},
 
+    {.name = "TWEAKS", .type = CONFIG_TYPE_SECTION},
     {.name = "fix_collision_errors",.type = CONFIG_TYPE_BOOL, .boolValue = &gCollisionFixes},
     {.name = "fix_manta_ray_rings", .type = CONFIG_TYPE_BOOL, .boolValue = &gFixMantaRayRings},
     {.name = "make_blue_coin_switches_respawn", .type = CONFIG_TYPE_BOOL, .boolValue = &gRespawnBlueCoinSwitch},
     {.name = "remove_annoying_warps",.type = CONFIG_TYPE_BOOL, .boolValue = &gRemoveAnnoyingWarps},
-    {.name = "enable_the_pyramid_cutscene",.type = CONFIG_TYPE_BOOL, .boolValue = &gPyramidCutscene},
-    {.name = "disable_all_boo_messages_except_the_first",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBooDialogue},
-    {.name = "make_it_easier_to_talk_to_npcs", .type = CONFIG_TYPE_BOOL, .boolValue = &gTalkEasier},
+    {.name = "enable_the_unused_pyramid_cutscene",.type = CONFIG_TYPE_BOOL, .boolValue = &gPyramidCutscene},
+    {.name = "enable_the_unused_trapdoor_sound", .type = CONFIG_TYPE_BOOL, .boolValue = &gTrapdoorSound},
+    {.name = "disable_repeat_boo_messages",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBooDialogue},
+    {.name = "make_it_easier_to_talk_to_the_npcs", .type = CONFIG_TYPE_BOOL, .boolValue = &gTalkEasier},
     {.name = "disable_toads_fading_out", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableToadFading},
-    {.name = "enable_the_trapdoor_sound", .type = CONFIG_TYPE_BOOL, .boolValue = &gTrapdoorSound},
     {.name = "skip_cutscenes",     .type = CONFIG_TYPE_BOOL, .boolValue = &gSkipCutscenes},
     {.name = "allow_leaving_the_level_at_any_time", .type = CONFIG_TYPE_BOOL, .boolValue = &gLeaveAnyTime},
     {.name = "show_the_100_coin_star_in_star_select",.type = CONFIG_TYPE_BOOL, .boolValue = &gShow100CoinStar},
@@ -68,18 +70,21 @@ static const struct ConfigOption options[] = {
     {.name = "allow_the_cannons_to_rotate_more",.type = CONFIG_TYPE_BOOL, .boolValue = &gFlexibleCannons},
     {.name = "stay_in_level_after_getting_a_star",   .type = CONFIG_TYPE_UINT, .uintValue = &gDontKick},
 
+    {.name = "CAMERA", .type = CONFIG_TYPE_SECTION},
     {.name = "improved_camera",  .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedCamera},
     {.name = "center_camera_button",.type = CONFIG_TYPE_BOOL, .boolValue = &gCenterCam},
     {.name = "invert_camera_controls",.type = CONFIG_TYPE_BOOL, .boolValue = &gInvertedCamera},
-    {.name = "analog_camera_speed",   .type = CONFIG_TYPE_UINT, .uintValue = &gCameraSpeed},
-    {.name = "additional_camera_distance",.type = CONFIG_TYPE_UINT, .uintValue = &gAdditionalCameraDistance},
-    {.name = "additional_fov", .type = CONFIG_TYPE_UINT, .uintValue = &gAdditionalFOV},
+    {.name = "analog_camera_speed",   .type = CONFIG_TYPE_FLOAT, .floatValue = &gCameraSpeed},
+    {.name = "additional_camera_distance",.type = CONFIG_TYPE_FLOAT, .floatValue = &gAdditionalCameraDistance},
+    {.name = "additional_fov", .type = CONFIG_TYPE_FLOAT, .floatValue = &gAdditionalFOV},
 
+    {.name = "GRAPHICS", .type = CONFIG_TYPE_SECTION},
     {.name = "disable_draw_distance",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableDrawDistance},
     {.name = "disable_low_poly_mario",.type = CONFIG_TYPE_BOOL, .boolValue = &gNoLowPoly},
-    {.name = "draw_distance_multiplier",.type = CONFIG_TYPE_UINT, .uintValue = &gDrawDistanceMultiplier},
+    {.name = "draw_distance_multiplier",.type = CONFIG_TYPE_FLOAT, .floatValue = &gDrawDistanceMultiplier},
     {.name = "noise_type",     .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType},
 
+    {.name = "HUD", .type = CONFIG_TYPE_SECTION},
     {.name = "hud_style",       .type = CONFIG_TYPE_UINT, .uintValue = &gNewHud},
     {.name = "4by3_hud",     .type = CONFIG_TYPE_BOOL, .boolValue = &gCenterHud},
     {.name = "hud_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gHUDFiltering},
@@ -87,11 +92,13 @@ static const struct ConfigOption options[] = {
     {.name = "always_show_the_health_meter", .type = CONFIG_TYPE_BOOL, .boolValue = &gAlwaysShowHealth},
     {.name = "hide_hud",       .type = CONFIG_TYPE_BOOL, .boolValue = &gHideHud},
 
+    {.name = "EXTRA MOVES", .type = CONFIG_TYPE_SECTION},
     {.name = "wall_sliding",.type = CONFIG_TYPE_BOOL, .boolValue = &gModernWallJump},
     {.name = "sunshine_dive_hop",  .type = CONFIG_TYPE_BOOL, .boolValue = &gSunshineDive},
     {.name = "odyssey_ground_pound_dive",  .type = CONFIG_TYPE_BOOL, .boolValue = &gOdysseyDive},
     {.name = "flashback_ground_pound",  .type = CONFIG_TYPE_BOOL, .boolValue = &gFlashbackPound},
 
+    {.name = "BONUS MODES", .type = CONFIG_TYPE_SECTION},
     {.name = "infinite_lives_mode",  .type = CONFIG_TYPE_BOOL, .boolValue = &gLifeMode},
     {.name = "encore_mode",    .type = CONFIG_TYPE_BOOL, .boolValue = &gEncoreMode},
     {.name = "green_demon_mode",.type = CONFIG_TYPE_BOOL, .boolValue = &gGreenDemon},
@@ -99,11 +106,13 @@ static const struct ConfigOption options[] = {
     {.name = "daredevil_mode",      .type = CONFIG_TYPE_BOOL, .boolValue = &gDaredevilSave},
     {.name = "permadeath_mode",      .type = CONFIG_TYPE_BOOL, .boolValue = &gHardcoreSave},
 
+    {.name = "FOR FUN", .type = CONFIG_TYPE_SECTION},
     {.name = "fx_mode",        .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode},
     {.name = "disable_lighting",        .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLighting},
-    {.name = "force_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly},
+    {.name = "force_use_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly},
     {.name = "nearest_neighbor_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor},
 
+    {.name = "DEBUG", .type = CONFIG_TYPE_SECTION},
     {.name = "level_select",   .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugLevelSelect},
     {.name = "show_debug_display",.type = CONFIG_TYPE_BOOL, .boolValue = &gShowDebugText},
     {.name = "debug_movement_mode",.type = CONFIG_TYPE_BOOL, .boolValue = &gDebugMovementMode},
@@ -111,9 +120,11 @@ static const struct ConfigOption options[] = {
     {.name = "show_debug_profiler",.type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler},
     {.name = "texture_upscaling",.type = CONFIG_TYPE_UINT, .uintValue = &gTextureUpscaling},
 
+    {.name = "KEYBOARD MAPPING", .type = CONFIG_TYPE_SECTION},
     {.name = "key_a",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyA},
     {.name = "key_b",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyB},
     {.name = "key_start",      .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStart},
+    {.name = "key_l",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyL},
     {.name = "key_r",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyR},
     {.name = "key_z",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyZ},
     {.name = "key_cup",        .type = CONFIG_TYPE_UINT, .uintValue = &configKeyCUp},
@@ -161,9 +172,9 @@ static char *read_file_line(FILE *file) {
     return buffer;
 }
 
-// Returns the position of the first non-whitespace character
+// Returns the position of the first character we shouldn't ignore
 static char *skip_whitespace(char *str) {
-    while (isspace(*str))
+    while (isspace(*str) || *str == '=' || *str == '\"')
         str++;
     return str;
 }
@@ -174,7 +185,7 @@ static char *word_split(char *str) {
     assert(!isspace(*str));
 
     // Find either the next whitespace char or end of string
-    while (!isspace(*str) && *str != '\0')
+    while (!isspace(*str) && *str != '\0' && *str != '=' && *str != '\"')
         str++;
     if (*str == '\0') // End of string
         return str;
@@ -194,8 +205,12 @@ static unsigned int tokenize_string(char *str, int maxTokens, char **tokens) {
 
     str = skip_whitespace(str);
     while (str[0] != '\0' && count < maxTokens) {
-        tokens[count] = str;
-        str = word_split(str);
+        if ((str[count] == ';') || (str[count] == '#'))
+            break;
+        if (str[count] != '\"') {
+            tokens[count] = str;
+            str = word_split(str);
+        }
         count++;
     }
     return count;
@@ -224,6 +239,8 @@ void configfile_load(const char *filename) {
 
         while (isspace(*p))
             p++;
+        if ((*p == '[') || (*p == '\n'))
+            continue;
         numTokens = tokenize_string(p, 2, tokens);
         if (numTokens != 0) {
             if (numTokens == 2) {
@@ -282,13 +299,18 @@ void configfile_save(const char *filename) {
 
         switch (option->type) {
             case CONFIG_TYPE_BOOL:
-                fprintf(file, "%s %s\n", option->name, *option->boolValue ? "true" : "false");
+                fprintf(file, "%s = \"%s\"\n", option->name, *option->boolValue ? "true" : "false");
                 break;
             case CONFIG_TYPE_UINT:
-                fprintf(file, "%s %u\n", option->name, *option->uintValue);
+                fprintf(file, "%s = \"%u\"\n", option->name, *option->uintValue);
                 break;
             case CONFIG_TYPE_FLOAT:
-                fprintf(file, "%s %f\n", option->name, *option->floatValue);
+                fprintf(file, "%s = \"%f\"\n", option->name, *option->floatValue);
+                break;
+            case CONFIG_TYPE_SECTION:
+                /*if (i != 0)
+                    fprintf(file, "\n", option->name);*/
+                fprintf(file, "[%s]\n", option->name);
                 break;
             default:
                 assert(0); // unknown type

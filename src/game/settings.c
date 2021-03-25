@@ -1,7 +1,5 @@
 #include <ultra64.h>
 
-s8 gSettingsMenu = 1;
-
 s8 g60FPS = 1;
 s8 configFullscreen = 1;
 int gCustomFullscreenResolution = 0;
@@ -28,10 +26,10 @@ s8 gFixMantaRayRings = 1;
 s8 gRespawnBlueCoinSwitch = 1;
 s8 gRemoveAnnoyingWarps = 1;
 s8 gPyramidCutscene = 1;
+s8 gTrapdoorSound = 1;
 s8 gDisableBooDialogue = 1;
 s8 gTalkEasier = 1;
 s8 gDisableToadFading = 1;
-s8 gTrapdoorSound = 1;
 s8 gSkipCutscenes = 0;
 s8 gLeaveAnyTime = 0;
 s8 gShow100CoinStar = 0;
@@ -42,13 +40,13 @@ int gDontKick = 0;
 s8 gImprovedCamera = 1;
 s8 gCenterCam = 1;
 s8 gInvertedCamera = 0;
-int gCameraSpeed = 32;
-int gAdditionalCameraDistance = 0;
-int gAdditionalFOV = 0;
+float gCameraSpeed = 32.0f;
+float gAdditionalCameraDistance = 0.0f;
+float gAdditionalFOV = 0.0f;
 
 s8 gDisableDrawDistance = 1;
 s8 gNoLowPoly = 1;
-int gDrawDistanceMultiplier = 4;
+float gDrawDistanceMultiplier = 1.0f;
 int gNoiseType = 0;
 
 int gNewHud = 2;
@@ -82,6 +80,7 @@ int gTextureUpscaling = 0;
 unsigned int configKeyA          = 0x26;
 unsigned int configKeyB          = 0x33;
 unsigned int configKeyStart      = 0x39;
+unsigned int configKeyL          = 0x35;
 unsigned int configKeyR          = 0x36;
 unsigned int configKeyZ          = 0x25;
 unsigned int configKeyCUp        = 0x148;

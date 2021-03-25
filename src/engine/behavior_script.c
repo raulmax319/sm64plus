@@ -999,7 +999,7 @@ void cur_obj_update(void) {
             }
             else {
                 // If the object has a render distance, check if it should be shown.
-                if (distanceFromMario > gCurrentObject->oDrawingDistance * (gDrawDistanceMultiplier / 4.0f)) {
+                if (distanceFromMario > gCurrentObject->oDrawingDistance * gDrawDistanceMultiplier) {
                     // Out of render distance, hide the object.
                     gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
                     gCurrentObject->activeFlags |= ACTIVE_FLAG_FAR_AWAY;

@@ -32,7 +32,7 @@
 
 #include "compat.h"
 
-#define CONFIG_FILE "sm64config.txt"
+#define CONFIG_FILE "settings.ini"
 
 OSMesg D_80339BEC;
 OSMesgQueue gSIEventMesgQueue;

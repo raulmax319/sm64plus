@@ -1,7 +1,5 @@
 #include <ultra64.h>
 
-extern s8 gSettingsMenu;
-
 extern s8 g60FPS;
 extern s8 configFullscreen;
 extern s8 gCustomFullscreenResolution;
@@ -28,10 +26,10 @@ extern s8 gFixMantaRayRings;
 extern s8 gRespawnBlueCoinSwitch;
 extern s8 gRemoveAnnoyingWarps;
 extern s8 gPyramidCutscene;
+extern s8 gTrapdoorSound;
 extern s8 gDisableBooDialogue;
 extern s8 gTalkEasier;
 extern s8 gDisableToadFading;
-extern s8 gTrapdoorSound;
 extern s8 gSkipCutscenes;
 extern s8 gLeaveAnyTime;
 extern s8 gShow100CoinStar;
@@ -42,13 +40,13 @@ extern int gDontKick;
 extern s8 gImprovedCamera;
 extern s8 gCenterCam;
 extern s8 gInvertedCamera;
-extern int gCameraSpeed;
-extern int gAdditionalCameraDistance;
-extern int gAdditionalFOV;
+extern float gCameraSpeed;
+extern float gAdditionalCameraDistance;
+extern float gAdditionalFOV;
 
 extern s8 gDisableDrawDistance;
 extern s8 gNoLowPoly;
-extern int gDrawDistanceMultiplier;
+extern float gDrawDistanceMultiplier;
 extern int gNoiseType;
 
 extern int gNewHud;
@@ -82,6 +80,7 @@ extern int gTextureUpscaling;
 extern unsigned int configKeyA;
 extern unsigned int configKeyB;
 extern unsigned int configKeyStart;
+extern unsigned int configKeyL;
 extern unsigned int configKeyR;
 extern unsigned int configKeyZ;
 extern unsigned int configKeyCUp;
