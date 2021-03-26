@@ -223,7 +223,11 @@ void configfile_load(const char *filename) {
 
     printf("Loading configuration from '%s'\n", filename);
 
-    file = fopen(filename, "r");
+    char* str = malloc(128);
+    strcpy(str, getenv("LOCALAPPDATA"));
+    strcat(str, filename);
+
+    file = fopen(str, "r");
     if (file == NULL) {
         // Create a new config file and save defaults
         printf("Config file '%s' not found. Creating it.\n", filename);
@@ -288,7 +292,11 @@ void configfile_save(const char *filename) {
 
     printf("Saving configuration to '%s'\n", filename);
 
-    file = fopen(filename, "w");
+    char* str = malloc(128);
+    strcpy(str, getenv("LOCALAPPDATA"));
+    strcat(str, filename);
+
+    file = fopen(str, "w");
     if (file == NULL) {
         // error
         return;

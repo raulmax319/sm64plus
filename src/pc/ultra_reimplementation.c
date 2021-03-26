@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "lib/src/libultra_internal.h"
 #include "macros.h"
 
 #ifdef TARGET_WEB
 #include <emscripten.h>
 #endif
+
+#define SAVE_PATH "\\SM64Thing\\savedata.bin"
 
 extern OSMgrArgs piMgrArgs;
 
@@ -146,7 +149,11 @@ s32 osEepromLongRead(UNUSED OSMesgQueue *mq, u8 address, u8 *buffer, int nbytes)
         ret = 0;
     }
 #else
-    FILE *fp = fopen("sm64_save_file.bin", "rb");
+    char* str = malloc(128);
+    strcpy(str, getenv("LOCALAPPDATA"));
+    strcat(str, SAVE_PATH);
+
+    FILE *fp = fopen(str, "rb");
     if (fp == NULL) {
         return -1;
     }
@@ -176,7 +183,11 @@ s32 osEepromLongWrite(UNUSED OSMesgQueue *mq, u8 address, u8 *buffer, int nbytes
     }, content);
     s32 ret = 0;
 #else
-    FILE* fp = fopen("sm64_save_file.bin", "wb");
+    char* str = malloc(128);
+    strcpy(str, getenv("LOCALAPPDATA"));
+    strcat(str, SAVE_PATH);
+
+    FILE* fp = fopen(str, "wb");
     if (fp == NULL) {
         return -1;
     }
