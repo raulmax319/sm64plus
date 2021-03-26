@@ -31,7 +31,6 @@ struct ConfigOption {
 
 static const struct ConfigOption options[] = {
     {.name = "DISPLAY", .type = CONFIG_TYPE_SECTION},
-    {.name = "60fps",.type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS},
     {.name = "fullscreen",     .type = CONFIG_TYPE_BOOL, .boolValue = &configFullscreen},
     {.name = "custom_fullscreen_resolution",.type = CONFIG_TYPE_BOOL, .boolValue = &gCustomFullscreenResolution},
     {.name = "fullscreen_width",.type = CONFIG_TYPE_UINT, .uintValue = &gFullscreenWidth},
@@ -79,6 +78,7 @@ static const struct ConfigOption options[] = {
     {.name = "additional_fov", .type = CONFIG_TYPE_FLOAT, .floatValue = &gAdditionalFOV},
 
     {.name = "GRAPHICS", .type = CONFIG_TYPE_SECTION},
+    {.name = "60fps",.type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS},
     {.name = "disable_draw_distance",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableDrawDistance},
     {.name = "disable_low_poly_mario",.type = CONFIG_TYPE_BOOL, .boolValue = &gNoLowPoly},
     {.name = "draw_distance_multiplier",.type = CONFIG_TYPE_FLOAT, .floatValue = &gDrawDistanceMultiplier},
@@ -120,7 +120,7 @@ static const struct ConfigOption options[] = {
     {.name = "show_debug_profiler",.type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler},
     {.name = "texture_upscaling",.type = CONFIG_TYPE_UINT, .uintValue = &gTextureUpscaling},
 
-    {.name = "KEYBOARD MAPPING", .type = CONFIG_TYPE_SECTION},
+    {.name = "KEY MAPPING", .type = CONFIG_TYPE_SECTION},
     {.name = "key_a",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyA},
     {.name = "key_b",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyB},
     {.name = "key_start",      .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStart},

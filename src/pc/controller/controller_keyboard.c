@@ -11,7 +11,7 @@
 
 static int keyboard_buttons_down;
 
-static int keyboard_mapping[13][2];
+static int keyboard_mapping[14][2];
 
 static int keyboard_map_scancode(int scancode) {
     int ret = 0;

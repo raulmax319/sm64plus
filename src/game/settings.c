@@ -1,6 +1,5 @@
 #include <ultra64.h>
 
-s8 g60FPS = 1;
 s8 configFullscreen = 1;
 int gCustomFullscreenResolution = 0;
 int gFullscreenWidth = 1920;
@@ -44,6 +43,7 @@ float gCameraSpeed = 32.0f;
 float gAdditionalCameraDistance = 0.0f;
 float gAdditionalFOV = 0.0f;
 
+s8 g60FPS = 1;
 s8 gDisableDrawDistance = 1;
 s8 gNoLowPoly = 1;
 float gDrawDistanceMultiplier = 1.0f;

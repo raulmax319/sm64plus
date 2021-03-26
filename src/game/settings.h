@@ -1,6 +1,5 @@
 #include <ultra64.h>
 
-extern s8 g60FPS;
 extern s8 configFullscreen;
 extern s8 gCustomFullscreenResolution;
 extern int gFullscreenWidth;
@@ -44,6 +43,7 @@ extern float gCameraSpeed;
 extern float gAdditionalCameraDistance;
 extern float gAdditionalFOV;
 
+extern s8 g60FPS;
 extern s8 gDisableDrawDistance;
 extern s8 gNoLowPoly;
 extern float gDrawDistanceMultiplier;
