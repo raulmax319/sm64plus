@@ -19,7 +19,7 @@
 // TODO: Figure something out for sZoomOutAreaMasks?
 DEFINE_LEVEL("CASTLE GROUNDS",       LEVEL_CASTLE_GROUNDS,   COURSE_NONE,     castle_grounds,   outside,  25000,    0x08, 0x08, 0x08, _,         _)
 DEFINE_LEVEL("CASTLE INSIDE",    LEVEL_CASTLE,           COURSE_NONE,     castle_inside,    inside,   20000,    0x20, 0x20, 0x30, _,         sCamCastle)
-DEFINE_LEVEL("CASTLE COURTYARD",        LEVEL_CASTLE_COURTYARD, COURSE_NONE,     castle_courtyard, outside,  20000,    0x08, 0x08, 0x08, _,         _)
+DEFINE_LEVEL("COURTYARD",        LEVEL_CASTLE_COURTYARD, COURSE_NONE,     castle_courtyard, outside,  20000,    0x08, 0x08, 0x08, _,         _)
 DEFINE_LEVEL("BOB",   LEVEL_BOB,              COURSE_BOB,      bob,              generic,  15000,    0x08, 0x08, 0x08, _,         _)
 DEFINE_LEVEL("WF",       LEVEL_WF,               COURSE_WF,       wf,               grass,    13000,    0x08, 0x08, 0x08, _,         _)
 DEFINE_LEVEL("IRB", LEVEL_JRB,              COURSE_JRB,      jrb,              water,    20000,    0x10, 0x18, 0x18, sDynJrb,   _)

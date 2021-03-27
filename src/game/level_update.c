@@ -888,7 +888,7 @@ void initiate_delayed_warp(void) {
                     break;
 
                 default:
-                    if (gRemoveAnnoyingWarps && (sDelayedWarpOp & WARP_OP_TRIGGERS_LEVEL_SELECT)) {
+                    if (gRemoveAnnoyingWarps && (sDelayedWarpOp & WARP_OP_TRIGGERS_LEVEL_SELECT) && (area_get_warp_node(sSourceWarpNodeId)->node.destLevel & 0x7F) == LEVEL_CASTLE_GROUNDS) {
                         warpNode = area_get_warp_node(WARP_NODE_DEATH);
                     }
                     else {

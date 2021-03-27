@@ -1501,11 +1501,16 @@ void update_mario_health(struct MarioState *m) {
                     // when in snow terrains lose 3 health.
                     // If using the debug level select, do not lose any HP to water.
                     if ((m->pos[1] >= (m->waterLevel - 140)) && !terrainIsSnow) {
-                        if (!save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                        if (!(save_file_get_flags() & SAVE_FLAG_HARD_MODE)) {
                             m->health += 0x1A;
                         }
-                    } else if (!save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE) {
-                        m->health -= (terrainIsSnow ? 3 : 1);
+                    } else if (!(save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE)) {
+                        if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
+                            m->health -= (terrainIsSnow ? 6 : 3);
+                        }
+                        else {
+                            m->health -= (terrainIsSnow ? 3 : 1);
+                        }
                     }
                 }
             }
@@ -1535,7 +1540,7 @@ void update_mario_health(struct MarioState *m) {
         }
 
         // Play a noise to alert the player when Mario is close to drowning.
-        if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && (!save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE)) {
+        if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && (!(save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE))) {
             play_sound(SOUND_MOVING_ALMOST_DROWNING, gDefaultSoundArgs);
 #ifdef VERSION_SH
             if (!gRumblePakTimer) {

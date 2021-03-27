@@ -57,17 +57,15 @@ static const struct ConfigOption options[] = {
     {.name = "fix_manta_ray_rings", .type = CONFIG_TYPE_BOOL, .boolValue = &gFixMantaRayRings},
     {.name = "make_blue_coin_switches_respawn", .type = CONFIG_TYPE_BOOL, .boolValue = &gRespawnBlueCoinSwitch},
     {.name = "remove_annoying_warps",.type = CONFIG_TYPE_BOOL, .boolValue = &gRemoveAnnoyingWarps},
-    {.name = "enable_the_unused_pyramid_cutscene",.type = CONFIG_TYPE_BOOL, .boolValue = &gPyramidCutscene},
-    {.name = "enable_the_unused_trapdoor_sound", .type = CONFIG_TYPE_BOOL, .boolValue = &gTrapdoorSound},
     {.name = "disable_repeat_boo_messages",.type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBooDialogue},
     {.name = "make_it_easier_to_talk_to_the_npcs", .type = CONFIG_TYPE_BOOL, .boolValue = &gTalkEasier},
     {.name = "disable_toads_fading_out", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableToadFading},
-    {.name = "skip_cutscenes",     .type = CONFIG_TYPE_BOOL, .boolValue = &gSkipCutscenes},
     {.name = "allow_leaving_the_level_at_any_time", .type = CONFIG_TYPE_BOOL, .boolValue = &gLeaveAnyTime},
     {.name = "show_the_100_coin_star_in_star_select",.type = CONFIG_TYPE_BOOL, .boolValue = &gShow100CoinStar},
     {.name = "make_secrets_visible",.type = CONFIG_TYPE_BOOL, .boolValue = &gVisibleSecrets},
     {.name = "allow_the_cannons_to_rotate_more",.type = CONFIG_TYPE_BOOL, .boolValue = &gFlexibleCannons},
     {.name = "stay_in_level_after_getting_a_star",   .type = CONFIG_TYPE_UINT, .uintValue = &gDontKick},
+    {.name = "skip_cutscenes",     .type = CONFIG_TYPE_BOOL, .boolValue = &gSkipCutscenes},
 
     {.name = "CAMERA", .type = CONFIG_TYPE_SECTION},
     {.name = "improved_camera",  .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedCamera},
@@ -85,7 +83,7 @@ static const struct ConfigOption options[] = {
     {.name = "noise_type",     .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType},
 
     {.name = "HUD", .type = CONFIG_TYPE_SECTION},
-    {.name = "hud_style",       .type = CONFIG_TYPE_UINT, .uintValue = &gNewHud},
+    {.name = "hud_style",       .type = CONFIG_TYPE_UINT, .uintValue = &gHudStyle},
     {.name = "4by3_hud",     .type = CONFIG_TYPE_BOOL, .boolValue = &gCenterHud},
     {.name = "hud_filtering",.type = CONFIG_TYPE_BOOL, .boolValue = &gHUDFiltering},
     {.name = "hud_upscaling",  .type = CONFIG_TYPE_UINT, .uintValue = &gHUDUpscaling},
@@ -94,9 +92,16 @@ static const struct ConfigOption options[] = {
 
     {.name = "EXTRA MOVES", .type = CONFIG_TYPE_SECTION},
     {.name = "wall_sliding",.type = CONFIG_TYPE_BOOL, .boolValue = &gModernWallJump},
+    {.name = "ground_pound_jump",  .type = CONFIG_TYPE_BOOL, .boolValue = &gGroundPoundJump},
     {.name = "sunshine_dive_hop",  .type = CONFIG_TYPE_BOOL, .boolValue = &gSunshineDive},
     {.name = "odyssey_ground_pound_dive",  .type = CONFIG_TYPE_BOOL, .boolValue = &gOdysseyDive},
     {.name = "flashback_ground_pound",  .type = CONFIG_TYPE_BOOL, .boolValue = &gFlashbackPound},
+
+    {.name = "RESTORATIONS", .type = CONFIG_TYPE_SECTION},
+    {.name = "enable_the_unused_pyramid_cutscene",.type = CONFIG_TYPE_BOOL, .boolValue = &gPyramidCutscene},
+    {.name = "enable_the_unused_trapdoor_sound", .type = CONFIG_TYPE_BOOL, .boolValue = &gTrapdoorSound},
+    {.name = "replace_triple_jump_with_twirl", .type = CONFIG_TYPE_BOOL, .boolValue = &gTwirlTripleJump},
+    {.name = "make_mario_sparkle_at_level_start", .type = CONFIG_TYPE_BOOL, .boolValue = &gSpawnSparkles},
 
     {.name = "BONUS MODES", .type = CONFIG_TYPE_SECTION},
     {.name = "infinite_lives_mode",  .type = CONFIG_TYPE_BOOL, .boolValue = &gLifeMode},
@@ -120,6 +125,20 @@ static const struct ConfigOption options[] = {
     {.name = "show_debug_profiler",.type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler},
     {.name = "texture_upscaling",.type = CONFIG_TYPE_UINT, .uintValue = &gTextureUpscaling},
 
+    {.name = "XINPUT MAPPING", .type = CONFIG_TYPE_SECTION},
+    {.name = "button_a",          .type = CONFIG_TYPE_UINT, .uintValue = &configButtonA},
+    {.name = "button_b",          .type = CONFIG_TYPE_UINT, .uintValue = &configButtonB},
+    {.name = "button_x",          .type = CONFIG_TYPE_UINT, .uintValue = &configButtonX},
+    {.name = "button_y",          .type = CONFIG_TYPE_UINT, .uintValue = &configButtonY},
+    {.name = "button_start",      .type = CONFIG_TYPE_UINT, .uintValue = &configButtonStart},
+    {.name = "button_select",     .type = CONFIG_TYPE_UINT, .uintValue = &configButtonSelect},
+    {.name = "button_l",          .type = CONFIG_TYPE_UINT, .uintValue = &configButtonL},
+    {.name = "button_r",          .type = CONFIG_TYPE_UINT, .uintValue = &configButtonR},
+    {.name = "button_zl",         .type = CONFIG_TYPE_UINT, .uintValue = &configButtonZL},
+    {.name = "button_zr",         .type = CONFIG_TYPE_UINT, .uintValue = &configButtonZR},
+    {.name = "button_thumbleft",  .type = CONFIG_TYPE_UINT, .uintValue = &configButtonThumbLeft},
+    {.name = "button_thumbright", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonThumbRight},
+
     {.name = "KEY MAPPING", .type = CONFIG_TYPE_SECTION},
     {.name = "key_a",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyA},
     {.name = "key_b",          .type = CONFIG_TYPE_UINT, .uintValue = &configKeyB},
@@ -134,7 +153,7 @@ static const struct ConfigOption options[] = {
     {.name = "key_stickup",    .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickUp},
     {.name = "key_stickdown",  .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickDown},
     {.name = "key_stickleft",  .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickLeft},
-    {.name = "key_stickright", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickRight}
+    {.name = "key_stickright", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickRight},
 };
 
 // Reads an entire line from a file (excluding the newline character) and returns an allocated string
@@ -184,6 +203,9 @@ static char *word_split(char *str) {
     // Precondition: str must not point to whitespace
     assert(!isspace(*str));
 
+    if (*str == '\"')
+        str++;
+
     // Find either the next whitespace char or end of string
     while (!isspace(*str) && *str != '\0' && *str != '=' && *str != '\"')
         str++;
@@ -207,10 +229,11 @@ static unsigned int tokenize_string(char *str, int maxTokens, char **tokens) {
     while (str[0] != '\0' && count < maxTokens) {
         if ((str[count] == ';') || (str[count] == '#'))
             break;
-        if (str[count] != '\"') {
-            tokens[count] = str;
-            str = word_split(str);
+        if (str[count] == '\"') {
+            str[count]++;
         }
+        tokens[count] = str;
+        str = word_split(str);
         count++;
     }
     return count;

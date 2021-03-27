@@ -310,7 +310,8 @@ static void import_texture_rgba16(int tile) {
         uint8_t g = (col16 >> 6) & 0x1f;
         uint8_t b = (col16 >> 1) & 0x1f;
         if ((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT) {
-            // Return different palettes
+            // Return different palettes.
+            // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
             switch (get_palette()) {
                 default:
                     rgba32_buf[4*i + 0] = SCALE_5_8(r);
@@ -328,6 +329,10 @@ static void import_texture_rgba16(int tile) {
                     rgba32_buf[4*i + 2] = SCALE_5_8(max(min(b*1.0625-(r+g)*0.03125,31), 0));
                 break;
                 case 3: // Whomp's Fortress
+                    rgba32_buf[4*i + 0] = SCALE_5_8(min(r+g*0.5f,31));
+                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
+                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.0625f+g*0.0625f,31));
+                break;
                 case 21: // Metal Cave
                     rgba32_buf[4*i + 0] = SCALE_5_8(min(r+g*0.625f+b*0.0625f,31));
                     rgba32_buf[4*i + 1] = SCALE_5_8(min(g+r*0.25f+b*0.03125,31));
@@ -375,19 +380,33 @@ static void import_texture_rgba16(int tile) {
                     rgba32_buf[4*i + 2] = SCALE_5_8(b);
                 break;
                 case 12: // Wet Dry World
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min(round(sqrt(r/31.0f)*8)*4,31));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min(round(sqrt(g/31.0f)*8)*4,31));
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(round(sqrt(b/31.0f)*8)*4,31));
+                    rgba32_buf[4*i + 0] = SCALE_5_8(min(round(sqrt(r/31.0f)*8)*4, 31));
+                    rgba32_buf[4*i + 1] = SCALE_5_8(min(round(sqrt(g/31.0f)*8)*4, 31));
+                    rgba32_buf[4*i + 2] = SCALE_5_8(min(round(sqrt(b/31.0f)*8)*4, 31));
                 break;
                 case 13: // Donkey Slide
-                    rgba32_buf[4*i + 0] = SCALE_5_8(max(min(r+g*1.25-b*1.5,31), 0));
+                    rgba32_buf[4*i + 0] = SCALE_5_8(max(min(r+g*1.25-b*1.5, 27), 0));
                     rgba32_buf[4*i + 1] = SCALE_5_8(g);
                     rgba32_buf[4*i + 2] = SCALE_5_8(b);
                 break;
                 case 14: // Tiny Huge Island
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min(r*0.75, 31));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min(g*0.5+r*0.0625+b*0.0625, 31));
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.5+g*0.5,31));
+                    if (g > r+b) {
+                        rgba32_buf[4*i + 0] = SCALE_5_8(r);
+                        rgba32_buf[4*i + 1] = SCALE_5_8(g);
+                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.5+g*0.5,31));
+                    }
+                    else if (r+g+b < 23)
+                    {
+                        rgba32_buf[4*i + 0] = SCALE_5_8(r/2);
+                        rgba32_buf[4*i + 1] = SCALE_5_8(min(g+r*1.0625, 31)/2);
+                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*1.03125, 31)/2);
+                    }
+                    else
+                    {
+                        rgba32_buf[4*i + 0] = SCALE_5_8(r);
+                        rgba32_buf[4*i + 1] = SCALE_5_8(g);
+                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.125+g*0.25f,31));
+                    }
                 break;
                 case 16: // Rainbow Ride
                     rgba32_buf[4*i + 0] = SCALE_5_8(r);
@@ -407,9 +426,9 @@ static void import_texture_rgba16(int tile) {
                     }
                     else
                     {
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min(g*0.875+r*0.0625+b*0.0625, 31)*0.875);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.75+g*0.75,31)*0.875);
+                        rgba32_buf[4*i + 0] = SCALE_5_8(r);
+                        rgba32_buf[4*i + 1] = SCALE_5_8(min(g*0.875+r*0.0625+b*0.0625, 31)*0.875);
+                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.75+g*0.75,31)*0.875);
                     }
                 break;
                 case 20: // Secret Slide
@@ -1093,15 +1112,17 @@ static void gfx_sp_tri1(uint8_t vtx1_idx, uint8_t vtx2_idx, uint8_t vtx3_idx) {
                         color = &rdp.prim_color;
                         break;
                     case CC_SHADE:
-                        if (get_palette() == 19) {
-                            tmp.r = (v_arr[i]->color.r+v_arr[i]->color.g+v_arr[i]->color.b)/3;
-                            tmp.g = (v_arr[i]->color.r+v_arr[i]->color.g+v_arr[i]->color.b)/3;
-                            tmp.b = (v_arr[i]->color.r+v_arr[i]->color.g+v_arr[i]->color.b)/3;
-                            tmp.a = v_arr[i]->color.a;
-                            color = &tmp;
-                        }
-                        else {
-                            color = &v_arr[i]->color;
+                        switch (get_palette()) {
+                            default:
+                                color = &v_arr[i]->color;
+                            break;
+                            case 19: // Sky
+                                tmp.r = (v_arr[i]->color.r+v_arr[i]->color.g+v_arr[i]->color.b)/3;
+                                tmp.g = (v_arr[i]->color.r+v_arr[i]->color.g+v_arr[i]->color.b)/3;
+                                tmp.b = (v_arr[i]->color.r+v_arr[i]->color.g+v_arr[i]->color.b)/3;
+                                tmp.a = v_arr[i]->color.a;
+                                color = &tmp;
+                            break;
                         }
                         break;
                     case CC_ENV:
@@ -1401,9 +1422,9 @@ static void gfx_dp_set_fog_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
             rdp.fog_color.b = b;
         break;
         case 2: // bobomb
-            rdp.fog_color.r = 255;
-            rdp.fog_color.g = 255;
-            rdp.fog_color.b = 247;
+            rdp.fog_color.r = 195;
+            rdp.fog_color.g = 229;
+            rdp.fog_color.b = 255;
         break;
         case 4: // jollyy
         case 15: // clock

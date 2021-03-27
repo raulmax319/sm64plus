@@ -19,14 +19,18 @@ static void xinput_read(OSContPad *pad) {
         memset(&state, 0, sizeof(XINPUT_STATE));
         if (XInputGetState(i, &state) == ERROR_SUCCESS) {
             XINPUT_GAMEPAD *gp = &state.Gamepad;
-            if (gp->wButtons & XINPUT_GAMEPAD_START) pad->button |= START_BUTTON;
-            if (gp->wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) pad->button |= Z_TRIG;
-            if (gp->bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) pad->button |= Z_TRIG;
-            if (gp->wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) pad->button |= R_TRIG;
-            if (gp->bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) pad->button |= R_TRIG;
-            if (gp->wButtons & XINPUT_GAMEPAD_A) pad->button |= A_BUTTON;
-            if (gp->wButtons & XINPUT_GAMEPAD_X) pad->button |= B_BUTTON;
-            if (gp->wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) pad->button |= L_TRIG;
+            if (gp->wButtons & XINPUT_GAMEPAD_A) pad->button |= configButtonA;
+            if (gp->wButtons & XINPUT_GAMEPAD_B) pad->button |= configButtonB;
+            if (gp->wButtons & XINPUT_GAMEPAD_X) pad->button |= configButtonX;
+            if (gp->wButtons & XINPUT_GAMEPAD_Y) pad->button |= configButtonY;
+            if (gp->wButtons & XINPUT_GAMEPAD_START) pad->button |= configButtonStart;
+            if (gp->wButtons & XINPUT_GAMEPAD_BACK) pad->button |= configButtonSelect;
+            if (gp->wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) pad->button |= configButtonL;
+            if (gp->wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) pad->button |= configButtonR;
+            if (gp->bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD*2) pad->button |= configButtonZL;
+            if (gp->bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD*2) pad->button |= configButtonZR;
+            if (gp->wButtons & XINPUT_GAMEPAD_LEFT_THUMB) pad->button |= configButtonThumbLeft;
+            if (gp->wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) pad->button |= configButtonThumbRight;
 
             if (gp->wButtons & XINPUT_GAMEPAD_DPAD_LEFT) pad->button |= L_JPAD;
             if (gp->wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) pad->button |= R_JPAD;

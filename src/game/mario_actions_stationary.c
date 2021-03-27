@@ -1039,7 +1039,6 @@ s32 act_twirl_land(struct MarioState *m) {
 
 s32 act_ground_pound_land(struct MarioState *m) {
     m->actionState = 1;
-    
     if (gFlashbackPound) {
         if (m->input & INPUT_OFF_FLOOR) {
             return set_mario_action(m, ACT_FREEFALL, 0);
@@ -1058,6 +1057,11 @@ s32 act_ground_pound_land(struct MarioState *m) {
                 return set_mario_action(m, ACT_CROUCHING, 0);
             }
         }
+        else if ((gGroundPoundJump) && (gPlayer1Controller->buttonDown & A_BUTTON)) {
+            set_mario_action(m, ACT_TRIPLE_JUMP, 0);
+            m->vel[1] = 60.0f;
+            return TRUE;
+        }
         else {
             set_mario_action(m, ACT_BACKWARD_ROLLOUT, 0);
             m->actionState = 1;
@@ -1067,6 +1071,14 @@ s32 act_ground_pound_land(struct MarioState *m) {
         }
     }
     else {
+        if (gGroundPoundJump) {
+            if (gPlayer1Controller->buttonPressed & A_BUTTON) {
+                set_mario_action(m, ACT_TRIPLE_JUMP, 0);
+                m->vel[1] = 60.0f;
+                return TRUE;
+            }
+        }
+
         if (m->input & INPUT_UNKNOWN_10) {
             return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
         }

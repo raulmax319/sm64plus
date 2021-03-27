@@ -1904,6 +1904,15 @@ s32 update_behind_mario_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
         sCSideButtonYaw = 30;
         yawSpeed = 2;
     }
+    // Analog camera
+    if (gPlayer1Controller->stick2X != 0) {
+        if (dist < maxDist) {
+            camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
+        }
+        goalYawOff = -0x3FF8 * (gPlayer1Controller->stick2X / 64.0f);
+        sCSideButtonYaw = 30;
+        yawSpeed = 2;
+    }
     // Rotate up
     if (sCButtonsPressed & D_CBUTTONS) {
         if (gPlayer1Controller->buttonPressed & (U_CBUTTONS | D_CBUTTONS)) {

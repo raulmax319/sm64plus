@@ -1042,6 +1042,9 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
         set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
     }
 
+    if (gSpawnSparkles)
+        m->particleFlags |= PARTICLE_SPARKLES;
+
     return FALSE;
 }
 
@@ -1052,6 +1055,8 @@ s32 act_spawn_spin_landing(struct MarioState *m) {
         load_level_init_text(0);
         set_mario_action(m, ACT_IDLE, 0);
     }
+    if (gSpawnSparkles)
+        m->particleFlags |= PARTICLE_SPARKLES;
     return FALSE;
 }
 
