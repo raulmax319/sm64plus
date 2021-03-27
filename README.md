@@ -3,14 +3,19 @@
 Super Mario 64 Port Thingy is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that aims to add features that will fix the issues in the base game and enhance the gameplay, while keeping the vanilla feel of the game.
 
 These features include (but not limited to):
-- 60FPS support via interpolation.
 - More responsive controls.
 - Improved camera.
 - Additional moves for Mario.
 - Graphical improvements.
 - Game design tweaks.
 - Optional extra modes.
+- 60FPS support via interpolation.
 - Bug fixes.
+
+Features that _might_ be added in the future:
+- Discord Rich Presence support.
+- Smoother vertical movement for "Improved Camera".
+- Full OpenGL support.
 
 To learn about all the options, visit the [Wiki](https://github.com/MorsGames/sm64-port/wiki).
 
