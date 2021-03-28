@@ -843,15 +843,18 @@ void initiate_delayed_warp(void) {
                 case WARP_OP_GAME_OVER:
                     save_file_reload();
                     warp_special(-3);
+                    gCanMirror = 0;
                     break;
 
                 case WARP_OP_CREDITS_END:
                     warp_special(-1);
                     sound_banks_enable(2, 0x03F0);
+                    gCanMirror = 0;
                     break;
 
                 case WARP_OP_DEMO_NEXT:
                     warp_special(-2);
+                    gCanMirror = 0;
                     break;
 
                 case WARP_OP_CREDITS_START:

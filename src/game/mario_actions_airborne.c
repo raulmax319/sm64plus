@@ -534,6 +534,7 @@ s32 act_double_jump(struct MarioState *m) {
 
 s32 act_triple_jump(struct MarioState *m) {
     if (gTwirlTripleJump) {
+        play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_YAHOO);
         return set_mario_action(m, ACT_TWIRLING, 0);
     }
 
@@ -1038,12 +1039,6 @@ s32 act_ground_pound(struct MarioState *m) {
             play_sound(SOUND_MARIO_GROUND_POUND_WAH, m->marioObj->header.gfx.cameraToObject);
             m->actionState = 1;
         }
-
-        if (gOdysseyDive && m->input & INPUT_B_PRESSED) {
-            set_mario_action(m, ACT_DIVE, 0);
-            mario_set_forward_vel(m, 24.0f);
-            m->vel[1] = 28;
-        }
     } else {
         set_mario_animation(m, MARIO_ANIM_GROUND_POUND);
 
@@ -1077,6 +1072,12 @@ s32 act_ground_pound(struct MarioState *m) {
             m->particleFlags |= PARTICLE_VERTICAL_STAR;
             set_mario_action(m, ACT_BACKWARD_AIR_KB, 0);
         }
+    }
+
+    if (gOdysseyDive && m->input & INPUT_B_PRESSED) {
+        set_mario_action(m, ACT_DIVE, 0);
+        mario_set_forward_vel(m, 24.0f);
+        m->vel[1] = 28;
     }
 
     return FALSE;
@@ -1506,7 +1507,8 @@ s32 act_forward_rollout(struct MarioState *m) {
         m->actionState = 1;
     }
 
-    play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
+    if (!gFlashbackPound)
+        play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
 
     update_air_without_turn(m, 0);
 
@@ -1547,7 +1549,8 @@ s32 act_backward_rollout(struct MarioState *m) {
         m->actionState = 1;
     }
 
-    play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
+    if (!gFlashbackPound)
+        play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
 
     update_air_without_turn(m, 0);
 

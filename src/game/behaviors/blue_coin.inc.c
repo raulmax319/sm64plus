@@ -110,7 +110,9 @@ void bhv_blue_coin_switch_loop(void) {
                 // Set to BLUE_COIN_SWITCH_ACT_TICKING
                 o->oAction++;
                 // ???
-                o->oPosY = gMarioObject->oPosY - 40.0f;
+                if (!gRespawnBlueCoinSwitch) {
+                    o->oPosY = gMarioObject->oPosY - 40.0f;
+                }
 
                 // Spawn particles. There's a function that calls this same function
                 // with the same arguments, spawn_mist_particles, why didn't they just call that?
@@ -137,7 +139,7 @@ void bhv_blue_coin_switch_loop(void) {
                 if (gRespawnBlueCoinSwitch && o->oTimer > 240) {
                     cur_obj_unhide();
                     o->oAction = BLUE_COIN_SWITCH_ACT_IDLE;
-                    o->oPosY = o->oPosY + 40.0f;
+                    o->oPosY = o->oPosY - 120.0f;
                 }
                 else {
                     obj_mark_for_deletion(o);

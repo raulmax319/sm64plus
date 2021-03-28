@@ -399,6 +399,8 @@ Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node) {
 s32 lvl_init_act_selector_values_and_stars(UNUSED s32 arg, UNUSED s32 unused) {
     u8 stars = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
 
+    gCanMirror = 0;
+    
     sLoadedActNum = 0;
     sInitSelectedActNum = 0;
     sVisibleStars = 0;
