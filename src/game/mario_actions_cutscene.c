@@ -617,13 +617,13 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 if ((m->actionArg & 1) == 0) {
                     level_trigger_warp(m, WARP_OP_STAR_EXIT);
                 } else {
-                    if (gDontKick == 2) {
+                    if (gStayInLevel == 2) {
                         save_file_do_save(gCurrSaveFileNum - 1);
                         m->actionState = 2;
                     }
                     else {
                         enable_time_stop();
-                        if (gDontKick) {
+                        if (gStayInLevel) {
                             create_dialog_box_with_response(DIALOG_170);
                         }
                         else {
@@ -638,7 +638,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
         if (gDialogResponse == 1) {
             save_file_do_save(gCurrSaveFileNum - 1);
         }
-        else if (gDontKick && gLastCompletedStarNum < 7) {
+        else if (gStayInLevel && gLastCompletedStarNum < 7) {
             level_trigger_warp(m, WARP_OP_STAR_EXIT);
         }
         m->actionState = 2;

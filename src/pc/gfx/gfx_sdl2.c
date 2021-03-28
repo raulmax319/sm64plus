@@ -100,11 +100,11 @@ static void set_fullscreen(bool on, bool call_callback) {
 
     if (on) {
         SDL_DisplayMode mode;
-        if (gCustomFullscreenResolution) {
+        if (configCustomFullscreenResolution) {
             mode.format = SDL_PIXELFORMAT_ARGB8888;
-            mode.w = gFullscreenWidth;
-            mode.h = gFullscreenHeight;
-            mode.refresh_rate = gFullscreenRefreshRate;
+            mode.w = configFullscreenWidth;
+            mode.h = configFullscreenHeight;
+            mode.refresh_rate = configFullscreenRefreshRate;
             mode.driverdata = 0;
             SDL_SetWindowDisplayMode(wnd, &mode);
         }
@@ -116,7 +116,7 @@ static void set_fullscreen(bool on, bool call_callback) {
 
         SDL_ShowCursor(false);
     } else {
-        if (gCustomFullscreenResolution) {
+        if (configCustomFullscreenResolution) {
             SDL_DisplayMode mode;
             SDL_GetDesktopDisplayMode(0, &mode);
             SDL_SetWindowDisplayMode(wnd, &mode);
@@ -127,7 +127,7 @@ static void set_fullscreen(bool on, bool call_callback) {
         SDL_ShowCursor(true);
     }
     SDL_SetWindowSize(wnd, window_width, window_height);
-    if (gCustomFullscreenResolution) {
+    if (configCustomFullscreenResolution) {
         SDL_SetWindowFullscreen(wnd, on ? SDL_WINDOW_FULLSCREEN : 0);
     }
     else {

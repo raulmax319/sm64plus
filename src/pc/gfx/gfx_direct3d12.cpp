@@ -679,8 +679,8 @@ static void gfx_direct3d12_on_resize(void) {
     if (d3d.render_targets[0].Get() != nullptr) {
         d3d.render_targets[0].Reset();
         d3d.render_targets[1].Reset();
-        if (gCustomInternalResolution) {
-            ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, gInternalResolutionWidth, gInternalResolutionHeight, DXGI_FORMAT_UNKNOWN, DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT));
+        if (configCustomInternalResolution) {
+            ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, configInternalResolutionWidth, configInternalResolutionHeight, DXGI_FORMAT_UNKNOWN, DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT));
         }
         else {
             ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT));

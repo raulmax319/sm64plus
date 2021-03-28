@@ -156,7 +156,7 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
 
     if (!enable) {
 
-        if (gCustomFullscreenResolution) {
+        if (configCustomFullscreenResolution) {
             ChangeDisplaySettings(NULL, CDS_RESET);
         }
         RECT r = dxgi.last_window_rect;
@@ -197,16 +197,16 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
         dxgi.is_full_screen = false;
     } else {
 
-        if (gCustomFullscreenResolution) {
+        if (configCustomFullscreenResolution) {
             
             DEVMODE fullscreenSettings;
 
             memset (&fullscreenSettings, 0, sizeof (fullscreenSettings));
             fullscreenSettings.dmSize = sizeof (fullscreenSettings);   
-            fullscreenSettings.dmPelsWidth        = gFullscreenWidth;
-            fullscreenSettings.dmPelsHeight       = gFullscreenHeight;
+            fullscreenSettings.dmPelsWidth        = configFullscreenWidth;
+            fullscreenSettings.dmPelsHeight       = configFullscreenHeight;
             fullscreenSettings.dmBitsPerPel       = 32;
-            fullscreenSettings.dmDisplayFrequency = gFullscreenRefreshRate;
+            fullscreenSettings.dmDisplayFrequency = configFullscreenRefreshRate;
             fullscreenSettings.dmFields           = DM_PELSWIDTH |
                                                     DM_PELSHEIGHT |
                                                     DM_BITSPERPEL |
@@ -581,14 +581,14 @@ void gfx_dxgi_create_factory_and_device(bool debug, int d3d_version, bool (*crea
 }
 
 ComPtr<IDXGISwapChain1> gfx_dxgi_create_swap_chain(IUnknown *device) {
-    bool win8 = IsWindows8OrGreater() && !gCustomInternalResolution; // DXGI_SCALING_NONE is only supported on Win8 and beyond
+    bool win8 = IsWindows8OrGreater() && !configCustomInternalResolution; // DXGI_SCALING_NONE is only supported on Win8 and beyond
     bool dxgi_13 = dxgi.CreateDXGIFactory2 != nullptr; // DXGI 1.3 introduced waitable object
 
     DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
     swap_chain_desc.BufferCount = 2;
-    if (gCustomInternalResolution) {
-        swap_chain_desc.Width = gInternalResolutionWidth;
-        swap_chain_desc.Height = gInternalResolutionHeight;
+    if (configCustomInternalResolution) {
+        swap_chain_desc.Width = configInternalResolutionWidth;
+        swap_chain_desc.Height = configInternalResolutionHeight;
     }
     else {
         swap_chain_desc.Width = 0;

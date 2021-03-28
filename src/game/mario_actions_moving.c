@@ -465,7 +465,7 @@ void update_walking_speed(struct MarioState *m) {
         m->forwardVel = -8.0f;
     }
 
-    if (gBetterControls) {
+    if (gImprovedControls) {
         m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x1000, 0x1000);
     }
     else {
@@ -814,7 +814,7 @@ s32 act_walking(struct MarioState *m) {
         return begin_braking_action(m);
     }
 
-    if (gBetterControls) {
+    if (gImprovedControls) {
         if (analog_stick_held_back(m)) {
             if (m->forwardVel >= 12.0f){
                 return set_mario_action(m, ACT_TURNING_AROUND, 0);
@@ -1067,7 +1067,7 @@ s32 act_braking(struct MarioState *m) {
         return check_common_action_exits(m);
     }
 
-    if (gBetterControls) {
+    if (gImprovedControls) {
         if (apply_slope_decel(m, 2.5f)) {
             return set_mario_action(m, ACT_BRAKING_STOP, 0);
         }
@@ -1355,7 +1355,7 @@ s32 act_burning_ground(struct MarioState *m) {
     m->forwardVel = approach_f32(m->forwardVel, 32.0f, 4.0f, 1.0f);
 
     if (m->input & INPUT_NONZERO_ANALOG) {
-        if (gBetterControls) {
+        if (gImprovedControls) {
             m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
         }
         else {

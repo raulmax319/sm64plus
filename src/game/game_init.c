@@ -202,7 +202,7 @@ void clear_viewport(Vp *viewport, s32 color) {
     s16 vpLry = (viewport->vp.vtrans[1] + viewport->vp.vscale[1]) / 4 - 2;
 
 #ifdef WIDESCREEN
-    if (!gDrawPillarbox) {
+    if (!configForce4by3) {
         vpUlx = GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(vpUlx);
         vpLrx = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(SCREEN_WIDTH - vpLrx);
     }
@@ -583,7 +583,7 @@ void read_controller_inputs(void) {
             controller->rawStickX = controller->controllerData->stick_x;
             controller->rawStickY = controller->controllerData->stick_y;
 
-            if (gDpadInput) {
+            if (gDpadControls) {
                 controller->rawStickX += (((controller->buttonDown & R_JPAD) > 0) - ((controller->buttonDown & L_JPAD) > 0))*80;
                 controller->rawStickY += (((controller->buttonDown & U_JPAD) > 0) - ((controller->buttonDown & D_JPAD) > 0))*80;
             }

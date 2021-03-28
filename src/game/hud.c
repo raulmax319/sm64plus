@@ -57,7 +57,7 @@ s32 sPowerMeterVisibleTimer = 0;
 
 // Custom left and right snapping functions
 s32 get_left(s32 value) {
-    if (gCenterHud || gDrawPillarbox) {
+    if (gCenterHud || configForce4by3) {
         return value;
     }
     else {
@@ -65,7 +65,7 @@ s32 get_left(s32 value) {
     }
 }
 s32 get_right(s32 value) {
-    if (gCenterHud || gDrawPillarbox) {
+    if (gCenterHud || configForce4by3) {
         return SCREEN_WIDTH-value;
     }
     else {

@@ -807,7 +807,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
         case ACT_WATER_JUMP:
         case ACT_HOLD_WATER_JUMP:
             if (actionArg == 0) {
-                if (gBetterControls) {
+                if (gImprovedControls) {
                     set_mario_y_vel_based_on_fspeed(m, 48.0f, 0.0f);
                 }
                 else {
@@ -834,7 +834,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
 
         case ACT_WALL_KICK_AIR:
         set_mario_y_vel_based_on_fspeed(m, 62.0f, 0.0f);
-            if (gBetterControls) {
+            if (gImprovedControls) {
                 if (m->forwardVel < 28.0f) {
                     m->forwardVel = 28.0f;
                 }
@@ -893,7 +893,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             break;
 
         case ACT_SLIDE_KICK:
-            if (gBetterControls) {
+            if (gImprovedControls) {
                 m->vel[1] = 14.0f;
                 if (m->forwardVel < 36.0f) {
                     m->forwardVel = 36.0f;

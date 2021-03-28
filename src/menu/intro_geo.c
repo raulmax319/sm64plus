@@ -190,7 +190,7 @@ Gfx *intro_backdrop_one_image(s32 index, s8 *backgroundTable) {
     s32 tile_no = ((GFX_DIMENSIONS_ASPECT_RATIO*SCREEN_HEIGHT)+TILE_SIZE)/TILE_SIZE;
 	f32 offset = SCREEN_WIDTH/2 - GFX_DIMENSIONS_ASPECT_RATIO*SCREEN_HEIGHT/2;
 
-    if (gDrawPillarbox) {
+    if (configForce4by3) {
         vIntroBgTable = segmented_to_virtual(introBackgroundTextureType[backgroundTable[index]]);
         guTranslate(mtx, introBackgroundOffsetX[index], introBackgroundOffsetY[index], 0.0f);
     }
@@ -229,7 +229,7 @@ Gfx *geo_intro_backdrop(s32 sp48, struct GraphNode *sp4c, UNUSED void *context) 
     s32 tile_no = ((GFX_DIMENSIONS_ASPECT_RATIO*SCREEN_HEIGHT)+TILE_SIZE)/TILE_SIZE;
 
     if (sp48 == 1) {
-        if (gDrawPillarbox) {
+        if (configForce4by3) {
             displayList = alloc_display_list(16 * sizeof(*displayList));
             size = 12;
         }
@@ -272,7 +272,7 @@ Gfx *geo_game_over_tile(s32 sp40, struct GraphNode *sp44, UNUSED void *context) 
             gameOverBackgroundTable[i] = INTRO_BACKGROUND_GAME_OVER;
         }
     } else {
-        if (gDrawPillarbox) {
+        if (configForce4by3) {
             displayList = alloc_display_list(16 * sizeof(*displayList));
             size = (s32) sizeof(gameOverBackgroundTable);
         }

@@ -118,7 +118,7 @@ void print_intro_text(void) {
             print_text_centered(SCREEN_WIDTH / 2, 20, "NO CONTROLLER");
 #endif
         } else {
-            if (gCenterHud || gDrawPillarbox) {
+            if (gCenterHud || configForce4by3) {
 #ifdef VERSION_EU
                 print_text(20, 20, "START");
 #else
@@ -434,7 +434,7 @@ void render_game(void) {
         }
     }
 
-    if (gDrawPillarbox) {
+    if (configForce4by3) {
         gDPSetFillColor(gDisplayListHead++, GPACK_RGBA5551(0, 0, 0, 1));
         gDPFillRectangle(gDisplayListHead++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), 0, 0, SCREEN_HEIGHT);
         gDPFillRectangle(gDisplayListHead++, SCREEN_WIDTH, 0, GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0), SCREEN_HEIGHT);

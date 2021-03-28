@@ -351,7 +351,7 @@ static void geo_process_level_of_detail(struct GraphNodeLevelOfDetail *node) {
 #endif
 
     // You know what they say, if it works, it works.
-    if (gNoLowPoly) {
+    if (gDisableLowPoly) {
         distanceFromCam = 0;
     }
     if (gForceLowPoly) {

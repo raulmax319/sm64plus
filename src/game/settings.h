@@ -1,21 +1,21 @@
 #include <ultra64.h>
 
 extern s8 configFullscreen;
-extern s8 gCustomFullscreenResolution;
-extern unsigned int gFullscreenWidth;
-extern unsigned int gFullscreenHeight;
-extern unsigned int gFullscreenRefreshRate;
-extern unsigned int gWindowWidth;
-extern unsigned int gWindowHeight;
-extern s8 gCustomInternalResolution;
-extern unsigned int gInternalResolutionWidth;
-extern unsigned int gInternalResolutionHeight;
-extern s8 gDrawPillarbox;
+extern s8 configCustomFullscreenResolution;
+extern unsigned int configFullscreenWidth;
+extern unsigned int configFullscreenHeight;
+extern unsigned int configFullscreenRefreshRate;
+extern unsigned int configWindowWidth;
+extern unsigned int configWindowHeight;
+extern s8 configCustomInternalResolution;
+extern unsigned int configInternalResolutionWidth;
+extern unsigned int configInternalResolutionHeight;
+extern s8 configForce4by3;
 
-extern s8 gBetterControls;
+extern s8 gImprovedControls;
 extern s8 gBackwardSpeedCap;
-extern s8 gDpadInput;
-extern s8 gAirTurn;
+extern s8 gDpadControls;
+extern s8 gFullAirControl;
 extern s8 gDisableBLJ;
 extern s8 gDisableFallDamage;
 extern unsigned int gControllerDeadzone;
@@ -31,11 +31,11 @@ extern s8 gLeaveAnyTime;
 extern s8 gShow100CoinStar;
 extern s8 gVisibleSecrets;
 extern s8 gFlexibleCannons;
-extern unsigned int gDontKick;
+extern unsigned int gStayInLevel;
 extern s8 gSkipCutscenes;
 
 extern s8 gImprovedCamera;
-extern s8 gCenterCam;
+extern s8 gCenterCameraButton;
 extern s8 gInvertedCamera;
 extern float gCameraSpeed;
 extern float gAdditionalCameraDistance;
@@ -43,7 +43,7 @@ extern float gAdditionalFOV;
 
 extern s8 g60FPS;
 extern s8 gDisableDrawDistance;
-extern s8 gNoLowPoly;
+extern s8 gDisableLowPoly;
 extern float gDrawDistanceMultiplier;
 extern unsigned int gNoiseType;
 
@@ -54,7 +54,7 @@ extern unsigned int gHUDUpscaling;
 extern s8 gAlwaysShowHealth;
 extern s8 gHideHud;
 
-extern s8 gModernWallJump;
+extern s8 gWallSliding;
 extern s8 gGroundPoundJump;
 extern s8 gSunshineDive;
 extern s8 gOdysseyDive;
