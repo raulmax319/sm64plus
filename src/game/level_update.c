@@ -1,5 +1,7 @@
 #include <ultra64.h>
 
+#include <stdlib.h>
+
 #include "sm64.h"
 #include "seq_ids.h"
 #include "dialog_ids.h"
@@ -114,12 +116,13 @@ const char *credits16[] = { "4SCREEN TEXT WRITER", "GERMAN TRANSLATION", "THOMAS
                             "THOMAS SPINDLER" };
 #endif
 const char *credits17[] = { "4MARIO VOICE", "PEACH VOICE", "CHARLES MARTINET", "LESLIE SWAN" };
-const char *credits18[] = { "3SPECIAL THANKS TO", "EAD STAFF", "ALL NINTENDO PERSONNEL",
+const char *credits18[] = { "3SM64 PLUS BY", "MORS" };
+/*const char *credits18[] = { "3SPECIAL THANKS TO", "EAD STAFF", "ALL NINTENDO PERSONNEL",
 #ifdef VERSION_US
                            "MARIO CLUB STAFF" };
 #else // VERSION_EU
                            "SUPER MARIO CLUB STAFF" };
-#endif
+#endif*/
 const char *credits19[] = { "1PRODUCER", "SHIGERU MIYAMOTO" };
 const char *credits20[] = { "1EXECUTIVE PRODUCER", "HIROSHI YAMAUCHI" };
 #endif
@@ -1041,6 +1044,8 @@ s32 play_mode_paused(void) {
         raise_background_noise(1);
         gCameraMovementFlags &= ~CAM_MOVE_PAUSE_SCREEN;
         set_play_mode(PLAY_MODE_NORMAL);
+    } else if (gQuitOption && gPauseScreenMode == 3) {
+        exit(0);
     } else {
         // Exit level
 

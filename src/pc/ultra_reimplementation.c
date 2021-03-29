@@ -8,7 +8,7 @@
 #include <emscripten.h>
 #endif
 
-#define SAVE_PATH "\\SM64Thing\\savedata.bin"
+#define SAVE_PATH "\\SM64Plus\\savedata.bin"
 
 extern OSMgrArgs piMgrArgs;
 

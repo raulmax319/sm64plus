@@ -422,7 +422,7 @@ else # TARGET_N64
 AS := as
 ifneq ($(TARGET_WEB),1)
   CC := gcc
-  CXX := g++
+  CXX := g++ -o sm64plus icon.res
 else
   CC := emcc
 endif

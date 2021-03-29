@@ -41,8 +41,10 @@ static void xinput_read(OSContPad *pad) {
                 if (gp->sThumbRX < -0x4000) pad->button |= L_CBUTTONS;
                 if (gp->sThumbRX > 0x4000) pad->button |= R_CBUTTONS;
             }
-            if (gp->sThumbRY < -0x4000) pad->button |= D_CBUTTONS;
-            if (gp->sThumbRY > 0x4000) pad->button |= U_CBUTTONS;
+            if (!gVerticalCamera) {
+                if (gp->sThumbRY < -0x4000) pad->button |= D_CBUTTONS;
+                if (gp->sThumbRY > 0x4000) pad->button |= U_CBUTTONS;
+            }
 
             uint32_t magnitude_sq = (uint32_t)(gp->sThumbLX * gp->sThumbLX) + (uint32_t)(gp->sThumbLY * gp->sThumbLY);
             if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
@@ -55,6 +57,12 @@ static void xinput_read(OSContPad *pad) {
                 uint32_t magnitude_sq2 = (uint32_t)(gp->sThumbRX * gp->sThumbRX) + (uint32_t)(gp->sThumbRY * gp->sThumbRY);
                 if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
                     pad->stick2_x = gp->sThumbRX / 409;
+                }
+            }
+            if (gVerticalCamera) {
+                uint32_t magnitude_sq2 = (uint32_t)(gp->sThumbRX * gp->sThumbRX) + (uint32_t)(gp->sThumbRY * gp->sThumbRY);
+                if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
+                    pad->stick2_y = gp->sThumbRY / 409;
                 }
             }
             break;

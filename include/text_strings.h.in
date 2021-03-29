@@ -201,6 +201,7 @@
 #define TEXT_MYSCORE _("MYSCORE")
 #define TEXT_CONTINUE _("CONTINUE")
 #define TEXT_EXIT_COURSE _("EXIT COURSE")
+#define TEXT_EXIT_GAME _("QUIT GAME")
 #ifndef VERSION_EU // "R" text is different in EU
 #define TEXT_CAMERA_ANGLE_R _("SET CAMERA ANGLE WITH R")
 #endif
@@ -208,8 +209,10 @@
 // Camera Options
 #define TEXT_LAKITU_MARIO _("LAKITU + MARIO")
 #define TEXT_LAKITU_STOP _("LAKITU + STOP")
+#define TEXT_LAKITU_MANUAL _("LAKITU + MANUAL")
 #define TEXT_NORMAL_UPCLOSE __("(NORMAL)(UP-CLOSE)")
 #define TEXT_NORMAL_FIXED __("(NORMAL)(FIXED)")
+#define TEXT_NORMAL_3RDPERSON __("(NORMAL)(3RD PERS.)")
 
 // Course Completed Misc Text
 #define TEXT_CATCH _("CATCH")

@@ -27,6 +27,7 @@ extern s8 gRemoveAnnoyingWarps;
 extern s8 gDisableBooDialogue;
 extern s8 gTalkEasier;
 extern s8 gDisableToadFading;
+extern s8 gQuitOption;
 extern s8 gLeaveAnyTime;
 extern s8 gShow100CoinStar;
 extern s8 gVisibleSecrets;
@@ -35,6 +36,7 @@ extern unsigned int gStayInLevel;
 extern s8 gSkipCutscenes;
 
 extern s8 gImprovedCamera;
+extern s8 gManualCamera;
 extern s8 gCenterCameraButton;
 extern s8 gInvertedCamera;
 extern float gCameraSpeed;
@@ -64,6 +66,7 @@ extern s8 gPyramidCutscene;
 extern s8 gTrapdoorSound;
 extern s8 gTwirlTripleJump;
 extern s8 gSpawnSparkles;
+extern s8 gReplaceKeysWithStars;
 
 extern s8 gLifeMode;
 extern s8 gEncoreMode;
@@ -78,7 +81,7 @@ extern s8 gForceLowPoly;
 extern s8 gNearestNeighbor;
 
 extern s8 gDebugMovementMode;
-
+extern s8 gVerticalCamera;
 extern unsigned int gTextureUpscaling;
 
 extern unsigned int configButtonA;

@@ -54,10 +54,18 @@ static void keyboard_init(void) {
     set_keyboard_mapping(i++, A_BUTTON,     configKeyA);
     set_keyboard_mapping(i++, B_BUTTON,     configKeyB);
     set_keyboard_mapping(i++, Z_TRIG,       configKeyZ);
-    set_keyboard_mapping(i++, U_CBUTTONS,   configKeyCUp);
-    set_keyboard_mapping(i++, L_CBUTTONS,   configKeyCLeft);
-    set_keyboard_mapping(i++, D_CBUTTONS,   configKeyCDown);
-    set_keyboard_mapping(i++, R_CBUTTONS,   configKeyCRight);
+    if (gImprovedCamera) {
+        set_keyboard_mapping(i++, U_CBUTTONS,   configKeyCUp);
+        set_keyboard_mapping(i++, 0x100000,   configKeyCLeft);
+        set_keyboard_mapping(i++, D_CBUTTONS,   configKeyCDown);
+        set_keyboard_mapping(i++, 0x200000,   configKeyCRight);
+    }
+    else {
+        set_keyboard_mapping(i++, U_CBUTTONS,   configKeyCUp);
+        set_keyboard_mapping(i++, L_CBUTTONS,   configKeyCLeft);
+        set_keyboard_mapping(i++, D_CBUTTONS,   configKeyCDown);
+        set_keyboard_mapping(i++, R_CBUTTONS,   configKeyCRight);
+    }
     set_keyboard_mapping(i++, L_TRIG,       configKeyL);
     set_keyboard_mapping(i++, R_TRIG,       configKeyR);
     set_keyboard_mapping(i++, START_BUTTON, configKeyStart);
@@ -80,6 +88,19 @@ static void keyboard_read(OSContPad *pad) {
     }
     if ((keyboard_buttons_down & 0xc0000) == 0x80000) {
         pad->stick_y = 127;
+    }
+
+    if ((keyboard_buttons_down & 0x300000) == 0x100000) {
+        pad->stick2_x = -128;
+    }
+    if ((keyboard_buttons_down & 0x300000) == 0x200000) {
+        pad->stick2_x = 127;
+    }
+    if ((keyboard_buttons_down & 0xc00000) == 0x400000) {
+        pad->stick2_y = -128;
+    }
+    if ((keyboard_buttons_down & 0xc00000) == 0x800000) {
+        pad->stick2_y = 127;
     }
 }
 

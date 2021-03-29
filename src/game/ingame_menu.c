@@ -784,7 +784,11 @@ void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8
         }
     }
 
-    if (gMenuHoldKeyTimer == 10) {
+    if (gQuitOption && gMenuHoldKeyTimer == 14) {
+        gMenuHoldKeyTimer = 12;
+        gMenuHoldKeyIndex = 0;
+    }
+    else if (gMenuHoldKeyTimer == 10) {
         gMenuHoldKeyTimer = 8;
         gMenuHoldKeyIndex = 0;
     } else {
@@ -2366,6 +2370,7 @@ void render_pause_my_score_coins(void) {
 void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     u8 textLakituMario[] = { TEXT_LAKITU_MARIO };
     u8 textLakituStop[] = { TEXT_LAKITU_STOP };
+    u8 textLakituManual[] = { TEXT_LAKITU_MANUAL };
 #ifdef VERSION_EU
     u8 textNormalUpClose[][20] = {
         { TEXT_NORMAL_UPCLOSE },
@@ -2382,6 +2387,7 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 #else
     u8 textNormalUpClose[] = { TEXT_NORMAL_UPCLOSE };
     u8 textNormalFixed[] = { TEXT_NORMAL_FIXED };
+    u8 textNormal3rdPerson[] = { TEXT_NORMAL_3RDPERSON };
 #endif
 
     handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 2);
@@ -2389,8 +2395,8 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
-    print_generic_string(x + 14, y + 2, textLakituMario);
-    print_generic_string(x + TXT1_X, y - 13, textNormalUpClose);
+    print_generic_string(x + 14, y + 2, gManualCamera ? textLakituManual : textLakituMario);
+    print_generic_string(x + TXT1_X, y - 13, gManualCamera ? textNormal3rdPerson : textNormalUpClose);
     print_generic_string(x + 124, y + 2, textLakituStop);
     print_generic_string(x + TXT2_X, y - 13, textNormalFixed);
 
@@ -2442,9 +2448,13 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     u8 textContinue[] = { TEXT_CONTINUE };
     u8 textExitCourse[] = { TEXT_EXIT_COURSE };
     u8 textCameraAngleR[] = { TEXT_CAMERA_ANGLE_R };
+    u8 textExitGame[] = { TEXT_EXIT_GAME };
 #endif
 
-    handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
+    if (gQuitOption)
+        handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 4);
+    else
+        handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
@@ -2452,8 +2462,16 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     print_generic_string(x + 10, y - 2, textContinue);
     print_generic_string(x + 10, y - 17, textExitCourse);
 
-    if (index[0] != 3) {
-        print_generic_string(x + 10, y - 33, textCameraAngleR);
+    if ((gQuitOption && index[0] != 4) || (!gQuitOption && index[0] != 3)) {
+        if (gQuitOption) {
+            print_generic_string(x + 10, y - 33, textExitGame);
+            print_generic_string(x + 10, y - 49, textCameraAngleR);
+        }
+        else {
+            print_generic_string(x + 10, y - 33, textCameraAngleR);
+
+        }
+        
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 
         create_dl_translation_matrix(MENU_MTX_PUSH, x - X_VAL8, (y - ((index[0] - 1) * yIndex)) - Y_VAL8, 0);
@@ -2463,8 +2481,12 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
         gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
     }
 
-    if (index[0] == 3) {
+    if (!gQuitOption && index[0] == 3) {
         render_pause_camera_options(x - 42, y - 42, &gDialogCameraAngleIndex, 110);
+    }
+    if (gQuitOption && index[0] == 4) {
+        print_generic_string(x + 10, y - 33, textExitGame);
+        render_pause_camera_options(x - 42, y - 50, &gDialogCameraAngleIndex, 110);
     }
 }
 
@@ -2702,7 +2724,7 @@ s16 render_pause_courses_and_castle(void) {
                 gDialogBoxState = DIALOG_STATE_OPENING;
                 gMenuMode = -1;
 
-                if (gDialogLineNum == 2) {
+                if ((gQuitOption && gDialogLineNum == 3) || (gDialogLineNum == 2)) {
                     num = gDialogLineNum;
                 } else {
                     num = 1;

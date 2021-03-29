@@ -27,6 +27,8 @@
 #include "gfx_screen_config.h"
 #include "gfx_pc.h"
 
+#include ".\resource.h"
+
 #define DECLARE_GFX_DXGI_FUNCTIONS
 #include "gfx_dxgi.h"
 
@@ -327,12 +329,12 @@ static void gfx_dxgi_init(const char *game_name, bool start_in_fullscreen) {
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = nullptr;
-    wcex.hIcon          = nullptr;
+    wcex.hIcon          = LoadIcon(nullptr, MAKEINTRESOURCE(STAR_ICON));
+    wcex.hIconSm        = LoadIcon(nullptr, MAKEINTRESOURCE(STAR_ICON));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)GetStockObject(BLACK_BRUSH);
     wcex.lpszMenuName   = nullptr;
     wcex.lpszClassName  = WINCLASS_NAME;
-    wcex.hIconSm        = nullptr;
 
     ATOM winclass = RegisterClassExW(&wcex);
 

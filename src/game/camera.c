@@ -339,6 +339,11 @@ s16 s8DirModeBaseYaw;
 s16 s8DirModeYawOffset;
 
 /**
+ * Player-controlled yaw offset in manual, a multiple of 22.5 degrees.
+ */
+s16 sManualModeYawOffset;
+
+/**
  * The distance that the camera will look ahead of Mario in the direction Mario is facing.
  */
 f32 sPanDistance;
@@ -954,6 +959,29 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 }
 
 /**
+ * Update the camera during manual mode
+ */
+s32 update_manual_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+    UNUSED f32 cenDistX = sMarioCamState->pos[0] - c->areaCenX;
+    UNUSED f32 cenDistZ = sMarioCamState->pos[2] - c->areaCenZ;
+    s16 camYaw = s8DirModeBaseYaw + sManualModeYawOffset;
+    s16 pitch = look_down_slopes(camYaw)/2;
+    f32 posY;
+    f32 focusY;
+    UNUSED f32 unused1;
+    UNUSED f32 unused2;
+    UNUSED f32 unused3;
+    f32 yOff = 150.f;
+    f32 baseDist = 700.f+gAdditionalCameraDistance;
+
+    sAreaYaw = camYaw;
+    calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
+    focus_on_mario(focus, pos, posY + yOff, focusY + yOff, sLakituDist + baseDist, pitch, camYaw);
+
+    return camYaw;
+}
+
+/**
  * Moves the camera for the radial and outward radial camera modes.
  *
  * If sModeOffsetYaw is 0, the camera points directly at the area center point.
@@ -1243,6 +1271,55 @@ void mode_8_directions_camera(struct Camera *c) {
 
     lakitu_zoom(400.f, 0x900);
     c->nextYaw = update_8_directions_camera(c, c->focus, pos);
+    c->pos[0] = pos[0];
+    c->pos[2] = pos[2];
+    sAreaYawChange = sAreaYaw - oldAreaYaw;
+    set_camera_height(c, pos[1]);
+}
+
+
+/**
+ * A custom mode that gives you more control with the camera
+ */
+void mode_manual_camera(struct Camera *c) {
+    Vec3f pos;
+    UNUSED u8 unused[8];
+    s16 oldAreaYaw = sAreaYaw;
+
+    radial_camera_input(c, 0.f);
+
+    if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
+        sManualModeYawOffset += DEGREES(22.5);
+        play_sound_cbutton_side();
+    }
+    if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
+        sManualModeYawOffset -= DEGREES(22.5);
+        play_sound_cbutton_side();
+    }
+
+    // Analog camera code
+    if (gPlayer1Controller->stick2X != 0) {
+        if (gPlayer1Controller->stick2X > 0) {
+            gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
+        }
+        else {
+            gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_LEFT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
+        }
+        sManualModeYawOffset -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
+    }
+
+    if (gCenterCameraButton) {
+        if (gPlayer1Controller->buttonPressed & L_TRIG) {
+            sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
+            play_sound_rbutton_changed();
+        }
+        if (gPlayer1Controller->buttonDown & L_TRIG) {
+            camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), LROTATE_SPEED);
+        }
+    }
+
+    lakitu_zoom(800.f, 0x900);
+    c->nextYaw = update_manual_camera(c, c->focus, pos);
     c->pos[0] = pos[0];
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
@@ -3095,6 +3172,9 @@ void update_camera(struct Camera *c) {
             if (gPlayer1Controller->buttonPressed & R_TRIG) {
                 if (set_cam_angle(0) == CAM_ANGLE_LAKITU) {
                     set_cam_angle(CAM_ANGLE_MARIO);
+                    if (gManualCamera) {
+                        sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
+                    }
                 } else {
                     set_cam_angle(CAM_ANGLE_LAKITU);
                 }
@@ -3171,7 +3251,10 @@ void update_camera(struct Camera *c) {
                     break;
 
                 default:
-                    mode_mario_camera(c);
+                    if (gManualCamera)
+                        mode_manual_camera(c);
+                    else
+                        mode_mario_camera(c);
             }
         } else {
             switch (c->mode) {

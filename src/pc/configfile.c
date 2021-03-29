@@ -60,6 +60,7 @@ static const struct ConfigOption options[] = {
     { .name = "disable_repeat_boo_messages", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBooDialogue },
     { .name = "make_it_easier_to_talk_to_the_npcs", .type = CONFIG_TYPE_BOOL, .boolValue = &gTalkEasier },
     { .name = "disable_toads_fading_out", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableToadFading },
+    { .name = "add_a_quit_option_to_the_pause_menu", .type = CONFIG_TYPE_BOOL, .boolValue = &gQuitOption },
     { .name = "allow_leaving_the_level_at_any_time", .type = CONFIG_TYPE_BOOL, .boolValue = &gLeaveAnyTime },
     { .name = "show_the_100_coin_star_in_star_select", .type = CONFIG_TYPE_BOOL, .boolValue = &gShow100CoinStar },
     { .name = "make_secrets_visible", .type = CONFIG_TYPE_BOOL, .boolValue = &gVisibleSecrets },
@@ -68,7 +69,8 @@ static const struct ConfigOption options[] = {
     { .name = "skip_cutscenes", .type = CONFIG_TYPE_BOOL, .boolValue = &gSkipCutscenes },
 
     { .name = "CAMERA", .type = CONFIG_TYPE_SECTION },
-    { .name = "improved_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedCamera },
+    { .name = "analog_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedCamera },
+    { .name = "manual_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gManualCamera },
     { .name = "center_camera_button", .type = CONFIG_TYPE_BOOL, .boolValue = &gCenterCameraButton },
     { .name = "invert_camera_controls", .type = CONFIG_TYPE_BOOL, .boolValue = &gInvertedCamera },
     { .name = "analog_camera_speed", .type = CONFIG_TYPE_FLOAT, .floatValue = &gCameraSpeed },
@@ -102,7 +104,8 @@ static const struct ConfigOption options[] = {
     { .name = "enable_the_unused_trapdoor_sound", .type = CONFIG_TYPE_BOOL, .boolValue = &gTrapdoorSound },
     { .name = "replace_triple_jump_with_twirl", .type = CONFIG_TYPE_BOOL, .boolValue = &gTwirlTripleJump },
     { .name = "make_mario_sparkle_at_level_start", .type = CONFIG_TYPE_BOOL, .boolValue = &gSpawnSparkles },
-
+    { .name = "replace_keys_with_stars_when_collected", .type = CONFIG_TYPE_BOOL, .boolValue = &gReplaceKeysWithStars },
+    
     { .name = "BONUS MODES", .type = CONFIG_TYPE_SECTION },
     { .name = "infinite_lives_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gLifeMode },
     { .name = "encore_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gEncoreMode },
@@ -121,8 +124,8 @@ static const struct ConfigOption options[] = {
     { .name = "level_select", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugLevelSelect },
     { .name = "show_debug_display", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowDebugText },
     { .name = "debug_movement_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugMovementMode },
-
     { .name = "show_debug_profiler", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler },
+    { .name = "vertical_analog_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gVerticalCamera },
     { .name = "texture_upscaling", .type = CONFIG_TYPE_UINT, .uintValue = &gTextureUpscaling },
 
     { .name = "XINPUT MAPPING", .type = CONFIG_TYPE_SECTION },

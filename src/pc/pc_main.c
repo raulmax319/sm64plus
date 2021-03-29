@@ -32,7 +32,7 @@
 
 #include "compat.h"
 
-#define CONFIG_FILE "\\SM64Thing\\settings.ini"
+#define CONFIG_FILE "\\SM64Plus\\settings.ini"
 
 OSMesg D_80339BEC;
 OSMesgQueue gSIEventMesgQueue;
@@ -202,7 +202,7 @@ void main_func(void) {
     wm_api = &gfx_dummy_wm_api;
 #endif
 
-    gfx_init(wm_api, rendering_api, "Super Mario 64 PC-Port", configFullscreen);
+    gfx_init(wm_api, rendering_api, "Super Mario 64 Plus", configFullscreen);
     
     wm_api->set_fullscreen_changed_callback(on_fullscreen_changed);
     wm_api->set_keyboard_callbacks(keyboard_on_key_down, keyboard_on_key_up, keyboard_on_all_keys_up);

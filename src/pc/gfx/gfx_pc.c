@@ -5,6 +5,10 @@
 #include <stdbool.h>
 #include <assert.h>
 
+//#include <stdio.h>
+//#define STB_IMAGE_IMPLEMENTATION
+//#include <stb/stb_image.h>
+
 #ifndef _LANGUAGE_C
 #define _LANGUAGE_C
 #endif
@@ -666,6 +670,23 @@ static void import_texture_ci8(int tile) {
     gfx_rapi->upload_texture(rgba32_buf, width, height);
 }
 
+/*static bool import_texture_custom(const char *fullpath) {
+    
+    int w, h;
+
+    u8 *data = stbi_load(fullpath, &w, &h, NULL, 4);
+
+    if (data == NULL)
+    {
+        return FALSE;
+    }
+
+    gfx_rapi->upload_texture(data, w, h);
+    stbi_image_free(data);
+
+    return TRUE;
+}*/
+
 static void import_texture(int tile) {
     uint8_t fmt = rdp.texture_tile.fmt;
     uint8_t siz = rdp.texture_tile.siz;
@@ -674,6 +695,20 @@ static void import_texture(int tile) {
         return;
     }
     
+    /*if (gExternalTextures) {
+        
+        char path[1024];
+        snprintf(path, sizeof(path), "custom_textures/%x.png", (unsigned int)PHYSICAL_TO_VIRTUAL(rdp.texture_to_load.addr));
+
+        if (import_texture_custom(path))
+            return;
+        
+        FILE* fp = fopen(path, "w");
+        
+        fwrite(rdp.loaded_texture[tile].addr, siz, 1, fp);
+        fclose(fp);
+    }*/
+
     int t0 = get_time();
     if (fmt == G_IM_FMT_RGBA) {
         if (siz == G_IM_SIZ_16b) {

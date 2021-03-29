@@ -148,15 +148,15 @@
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
 s8 configFullscreen = 1;
-int configCustomFullscreenResolution = 0;
-int configFullscreenWidth = 1920;
-int configFullscreenHeight = 1080;
-int configFullscreenRefreshRate = 60;
-int configWindowWidth = 1280;
-int configWindowHeight = 720;
+unsigned int configCustomFullscreenResolution = 0;
+unsigned int configFullscreenWidth = 1920;
+unsigned int configFullscreenHeight = 1080;
+unsigned int configFullscreenRefreshRate = 60;
+unsigned int configWindowWidth = 1280;
+unsigned int configWindowHeight = 720;
 s8 configCustomInternalResolution = 0;
-int configInternalResolutionWidth = 3840;
-int configInternalResolutionHeight = 2160;
+unsigned int configInternalResolutionWidth = 3840;
+unsigned int configInternalResolutionHeight = 2160;
 s8 configForce4by3 = 0;
 
 s8 gImprovedControls = 1;
@@ -165,7 +165,7 @@ s8 gDpadControls = 1;
 s8 gFullAirControl = 0;
 s8 gDisableBLJ = 0;
 s8 gDisableFallDamage = 0;
-int gControllerDeadzone = 512;
+unsigned int gControllerDeadzone = 512;
 
 s8 gCollisionFixes = 1;
 s8 gFixMantaRayRings = 1;
@@ -174,14 +174,16 @@ s8 gRemoveAnnoyingWarps = 1;
 s8 gDisableBooDialogue = 1;
 s8 gTalkEasier = 1;
 s8 gDisableToadFading = 1;
+s8 gQuitOption = 1;
 s8 gLeaveAnyTime = 0;
 s8 gShow100CoinStar = 0;
 s8 gVisibleSecrets = 0;
 s8 gFlexibleCannons = 0;
-int gStayInLevel = 0;
+unsigned int gStayInLevel = 0;
 s8 gSkipCutscenes = 0;
 
 s8 gImprovedCamera = 1;
+s8 gManualCamera = 1;
 s8 gCenterCameraButton = 1;
 s8 gInvertedCamera = 0;
 float gCameraSpeed = 32.0f;
@@ -192,12 +194,12 @@ s8 g60FPS = 1;
 s8 gDisableDrawDistance = 1;
 s8 gDisableLowPoly = 1;
 float gDrawDistanceMultiplier = 1.0f;
-int gNoiseType = 0;
+unsigned int gNoiseType = 0;
 
-int gHudStyle = 2;
+unsigned int gHudStyle = 2;
 s8 gCenterHud = 0;
 s8 gHUDFiltering = 0;
-int gHUDUpscaling = 0;
+unsigned int gHUDUpscaling = 0;
 s8 gAlwaysShowHealth = 0;
 s8 gHideHud = 0;
 
@@ -211,6 +213,7 @@ s8 gPyramidCutscene = 1;
 s8 gTrapdoorSound = 1;
 s8 gTwirlTripleJump = 0;
 s8 gSpawnSparkles = 0;
+s8 gReplaceKeysWithStars = 0;
 
 s8 gLifeMode = 0;
 s8 gEncoreMode = 0;
@@ -225,8 +228,8 @@ s8 gForceLowPoly = 0;
 s8 gNearestNeighbor = 0;
 
 s8 gDebugMovementMode = 0;
-
-int gTextureUpscaling = 0;
+s8 gVerticalCamera = 0;
+unsigned int gTextureUpscaling = 0;
 
 unsigned int configButtonA = A_BUTTON;
 unsigned int configButtonB = Z_TRIG;
@@ -247,10 +250,10 @@ unsigned int configKeyStart = DIK_SPACE;
 unsigned int configKeyL = DIK_C;
 unsigned int configKeyR = DIK_RSHIFT;
 unsigned int configKeyZ = DIK_K;
-unsigned int configKeyCUp = DIK_UP;
-unsigned int configKeyCDown = DIK_DOWN;
-unsigned int configKeyCLeft = DIK_LEFT;
-unsigned int configKeyCRight = DIK_RIGHT;
+unsigned int configKeyCUp = 0x0148;
+unsigned int configKeyCDown = 0x0150;
+unsigned int configKeyCLeft = 0x014B;
+unsigned int configKeyCRight = 0x014D;
 unsigned int configKeyStickUp = DIK_W;
 unsigned int configKeyStickDown = DIK_S;
 unsigned int configKeyStickLeft = DIK_A;

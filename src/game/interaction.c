@@ -772,10 +772,11 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
     u32 starGrabAction = ACT_STAR_DANCE_EXIT;
     u32 noExit = (o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) != 0;
     u32 grandStar = (o->oInteractionSubtype & INT_SUBTYPE_GRAND_STAR) != 0;
+    u32 canStay = gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 
+    && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS;
 
     // Don't kick Mario if staying in levels is active
-    if (gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 
-    && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS) {
+    if (canStay) {
         noExit = 1;
 	}
 
@@ -807,6 +808,10 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 
         if (m->action & ACT_FLAG_AIR) {
             starGrabAction = ACT_FALL_AFTER_STAR_GRAB;
+        }
+
+        if (canStay) {
+            starGrabAction = ACT_STAR_DANCE_NO_EXIT;
         }
 
         spawn_object(o, MODEL_NONE, bhvStarKeyCollectionPuffSpawner);
@@ -1710,8 +1715,7 @@ u32 check_read_sign(struct MarioState *m, struct Object *o) {
     if (((m->input & READ_MASK && !gTalkEasier) || (gTalkEasier && m->input & INPUT_B_PRESSED)) 
     && mario_can_talk(m, 0) && object_facing_mario(m, o, SIGN_RANGE)) {
         s16 facingDYaw = (s16)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1];
-        if ((facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) ||
-        (gTalkEasier && facingDYaw >= -0x8000 && facingDYaw <= 0x8000)) {
+        if ((facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) || (gTalkEasier)) {
             f32 targetX = o->oPosX + 105.0f * sins(o->oMoveAngleYaw);
             f32 targetZ = o->oPosZ + 105.0f * coss(o->oMoveAngleYaw);
 
@@ -1732,8 +1736,7 @@ u32 check_npc_talk(struct MarioState *m, struct Object *o) {
     if (((m->input & READ_MASK && !gTalkEasier) || (gTalkEasier && m->input & INPUT_B_PRESSED))
     && mario_can_talk(m, 1)) {
         s16 facingDYaw = mario_obj_angle_to_object(m, o) - m->faceAngle[1];
-        if ((facingDYaw >= -0x4000 && facingDYaw <= 0x4000) ||
-        (gTalkEasier && facingDYaw >= -0x8000 && facingDYaw <= 0x8000)) {
+        if ((facingDYaw >= -0x4000 && facingDYaw <= 0x4000) || (gTalkEasier)) {
             o->oInteractStatus = INT_STATUS_INTERACTED;
 
             m->interactObj = o;

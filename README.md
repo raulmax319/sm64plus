@@ -1,6 +1,6 @@
-# Super Mario 64 Port Thingy
+# Super Mario 64 Plus
 
-Super Mario 64 Port Thingy is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that aims to add features that will fix the issues in the base game and enhance the gameplay, while keeping the vanilla feel of the game.
+Super Mario 64 Plus is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that aims to add features that will fix the issues in the base game and enhance the gameplay, while keeping the vanilla feel of the game.
 
 These features include (but not limited to):
 - More responsive controls.
