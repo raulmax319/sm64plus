@@ -139,15 +139,25 @@ u32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
             case SURFACE_DEEP_QUICKSAND:
             case SURFACE_DEEP_MOVING_QUICKSAND:
                 if ((m->quicksandDepth += sinkingSpeed) >= 160.0f) {
-                    update_mario_sound_and_camera(m);
-                    return drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 0);
+                    if (mario_has_improved_metal_cap(m)) {
+                        m->quicksandDepth = 160.0f;
+                    }
+                    else {
+                        update_mario_sound_and_camera(m);
+                        return drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 0);
+                    }
                 }
                 break;
 
             case SURFACE_INSTANT_QUICKSAND:
             case SURFACE_INSTANT_MOVING_QUICKSAND:
-                update_mario_sound_and_camera(m);
-                return drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 0);
+                if (mario_has_improved_metal_cap(m)) {
+                    m->quicksandDepth = 0.0f;
+                }
+                else {
+                    update_mario_sound_and_camera(m);
+                    return drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 0);
+                }
                 break;
 
             default:
@@ -194,7 +204,7 @@ u32 mario_update_moving_sand(struct MarioState *m) {
 u32 mario_update_windy_ground(struct MarioState *m) {
     struct Surface *floor = m->floor;
 
-    if (floor->type == SURFACE_HORIZONTAL_WIND) {
+    if (!mario_has_improved_metal_cap(m) && floor->type == SURFACE_HORIZONTAL_WIND) {
         f32 pushSpeed;
         s16 pushAngle = floor->force << 8;
 
@@ -571,8 +581,15 @@ void apply_gravity(struct MarioState *m) {
         m->vel[1] /= 4.0f;
     } else if (m->action & ACT_FLAG_METAL_WATER) {
         m->vel[1] -= 1.6f;
-        if (m->vel[1] < -16.0f) {
-            m->vel[1] = -16.0f;
+        if (gImprovedMetalCap) {
+            if (m->vel[1] < -24.0f) {
+                m->vel[1] = -24.0f;
+            }
+        }
+        else {
+            if (m->vel[1] < -16.0f) {
+                m->vel[1] = -16.0f;
+            }
         }
     } else if ((m->flags & MARIO_WING_CAP) && m->vel[1] < 0.0f && (m->input & INPUT_A_DOWN)) {
         m->marioBodyState->wingFlutter = TRUE;

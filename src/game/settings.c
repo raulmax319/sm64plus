@@ -1,5 +1,8 @@
 #include <ultra64.h>
 
+#include "area.h"
+#include "save_file.h"
+
 // DirectInput keyboard scan codes (from https://gist.github.com/tracend/912308)
 
 #define DIK_ESCAPE          0x01
@@ -147,6 +150,8 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
+char* gTitleString = "Super Mario 64 Plus v1.0.0";
+
 s8 configFullscreen = 1;
 unsigned int configCustomFullscreenResolution = 0;
 unsigned int configFullscreenWidth = 1920;
@@ -167,24 +172,24 @@ s8 gDisableBLJ = 0;
 s8 gDisableFallDamage = 0;
 unsigned int gControllerDeadzone = 512;
 
+unsigned int gStayInLevel = 2;
 s8 gCollisionFixes = 1;
 s8 gFixMantaRayRings = 1;
 s8 gRespawnBlueCoinSwitch = 1;
 s8 gRemoveAnnoyingWarps = 1;
+s8 gImprovedMetalCap = 1;
 s8 gDisableBooDialogue = 1;
 s8 gTalkEasier = 1;
-s8 gDisableToadFading = 1;
 s8 gQuitOption = 1;
 s8 gLeaveAnyTime = 0;
 s8 gShow100CoinStar = 0;
 s8 gVisibleSecrets = 0;
 s8 gFlexibleCannons = 0;
-unsigned int gStayInLevel = 0;
 s8 gSkipCutscenes = 0;
 
 s8 gImprovedCamera = 1;
-s8 gManualCamera = 1;
 s8 gCenterCameraButton = 1;
+s8 gManualCamera = 1;
 s8 gInvertedCamera = 0;
 float gCameraSpeed = 32.0f;
 float gAdditionalCameraDistance = 0.0f;
@@ -201,6 +206,7 @@ s8 gCenterHud = 0;
 s8 gHUDFiltering = 0;
 unsigned int gHUDUpscaling = 0;
 s8 gAlwaysShowHealth = 0;
+s8 gStarGetText = 0;
 s8 gHideHud = 0;
 
 s8 gWallSliding = 1;
@@ -228,6 +234,7 @@ s8 gForceLowPoly = 0;
 s8 gNearestNeighbor = 0;
 
 s8 gDebugMovementMode = 0;
+s8 gDebugCapChanger = 0;
 s8 gVerticalCamera = 0;
 unsigned int gTextureUpscaling = 0;
 
@@ -258,3 +265,25 @@ unsigned int configKeyStickUp = DIK_W;
 unsigned int configKeyStickDown = DIK_S;
 unsigned int configKeyStickLeft = DIK_A;
 unsigned int configKeyStickRight = DIK_D;
+
+// These probably don't belong here, but I don't have a better place for them at the moment.
+unsigned int gCollectedStar = 0;
+s8 stay_in_level() {
+    if (gStayInLevel == 2 && (
+    // If we have collected the first star in the first act in these levels, kick us out.
+    (gCurrActNum == 1 && gCollectedStar == 0 &&
+    (gCurrLevelNum == LEVEL_BOB || gCurrLevelNum == LEVEL_WF || gCurrLevelNum == LEVEL_JRB || gCurrLevelNum == LEVEL_SSL
+    || gCurrLevelNum == LEVEL_CCM || gCurrLevelNum == LEVEL_BBH || gCurrLevelNum == LEVEL_TTM
+    // In addition to all of above, kick us only if the submarine is there in DDD.
+    || (!save_file_get_flags() & SAVE_FLAG_DDD_MOVED_BACK) && gCurrLevelNum == LEVEL_DDD)) ||
+    // Kick us from the slide exit and the lonely mushroom in TTM as well.
+    (gCollectedStar == 5 && gCurrLevelNum == LEVEL_TTM) ||
+    // If we have collected any stars in any sublevels except for these, kick us again.
+    (gCurrAreaIndex > 1 && gCurrLevelNum != LEVEL_DDD && gCurrLevelNum != LEVEL_THI) ||
+    // Well, kick us from the wiggler room tho.
+    (gCollectedStar == 5 && gCurrLevelNum == LEVEL_THI)
+    ))
+        return FALSE;
+    return gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 
+    && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS;
+}

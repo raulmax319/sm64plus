@@ -611,19 +611,22 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
 
             case 42:
                 play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
+                if (gStarGetText) {
+                    gHudDisplay.starGet = 1;
+                }
                 break;
 
             case 80:
                 if ((m->actionArg & 1) == 0) {
                     level_trigger_warp(m, WARP_OP_STAR_EXIT);
                 } else {
-                    if (gStayInLevel == 2) {
+                    if (gStayInLevel >= 2) {
                         save_file_do_save(gCurrSaveFileNum - 1);
                         m->actionState = 2;
                     }
                     else {
                         enable_time_stop();
-                        if (gStayInLevel) {
+                        if (stay_in_level()) {
                             create_dialog_box_with_response(DIALOG_170);
                         }
                         else {
@@ -638,7 +641,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
         if (gDialogResponse == 1) {
             save_file_do_save(gCurrSaveFileNum - 1);
         }
-        else if (gStayInLevel && gLastCompletedStarNum < 7) {
+        else if (stay_in_level() && gLastCompletedStarNum < 7) {
             level_trigger_warp(m, WARP_OP_STAR_EXIT);
         }
         m->actionState = 2;

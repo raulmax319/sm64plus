@@ -14,7 +14,9 @@ These features include (but not limited to):
 
 Features that _might_ be added in the future:
 - Discord Rich Presence support.
-- Smoother vertical movement for "Improved Camera".
+- Smoother vertical camera movement.
+- Rumble.
+- Custom texture pack support.
 - Full OpenGL support.
 
 To learn about all the options, visit the [Wiki](https://github.com/MorsGames/sm64-port/wiki).

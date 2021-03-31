@@ -201,7 +201,8 @@
 #define TEXT_MYSCORE _("MYSCORE")
 #define TEXT_CONTINUE _("CONTINUE")
 #define TEXT_EXIT_COURSE _("EXIT COURSE")
-#define TEXT_EXIT_GAME _("QUIT GAME")
+#define TEXT_EXIT_GAME _("EXIT TO DESKTOP")
+#define TEXT_EXIT_GAME_ZR _("Z & R: EXIT TO DESKTOP")
 #ifndef VERSION_EU // "R" text is different in EU
 #define TEXT_CAMERA_ANGLE_R _("SET CAMERA ANGLE WITH R")
 #endif
@@ -486,5 +487,7 @@
 #define TEXT_MENU_NONE_DE _("")
 #define TEXT_MENU_STARS_DE _("   GEHEIME STERNE")
 #endif // VERSION_EU
+
+#define TEXT_YOU_GOT_A_STAR _("YOU GOT A STAR")
 
 #endif // TEXT_STRINGS_H

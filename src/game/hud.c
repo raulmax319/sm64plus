@@ -14,6 +14,8 @@
 #include "save_file.h"
 #include "print.h"
 
+#include "text_strings.h"
+
 #include "settings.h"
 
 /* @file hud.c
@@ -54,6 +56,10 @@ static struct PowerMeterHUD sPowerMeterHUD = {
 // Gets reset when the health is filled and stops counting
 // when the power meter is hidden.
 s32 sPowerMeterVisibleTimer = 0;
+
+float sStarGetAlpha = 0.0f;
+float sStarGetBounce = 0.0f;
+float sStarGetSpeed = 0.0f;
 
 // Custom left and right snapping functions
 s32 get_left(s32 value) {
@@ -99,6 +105,8 @@ static struct CameraHUD sCameraHUD = { CAM_STATUS_NONE };
 static u32 sPowerMeterLastRenderTimestamp;
 static s16 sPowerMeterLastY;
 static Gfx *sPowerMeterDisplayListPos;
+
+static Gfx *sStarGetDisplayListPos;
 
 void patch_interpolated_hud(void) {
     if (sPowerMeterDisplayListPos != NULL) {
@@ -581,6 +589,91 @@ void render_hud_camera_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
 }
 
+void render_hud_level_stars() {
+    s32 i;
+
+    u8 flag = 1;
+    u8 starFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
+
+    for (i = 0; i < 7; i++, flag <<= 1) {
+        if (starFlags & flag) {
+            print_text(get_left(HUD_LEFT_X) + i*16, 19, "-");
+        }
+        /*else {
+            print_text(get_left(HUD_LEFT_X) + i*16, 19, "*");
+        }*/
+    }
+}
+
+void render_you_got_a_star(u32 secondFrame) {
+
+    if (!gHudDisplay.starGet)
+        return;
+    
+    u8 youGotAStar[] = { TEXT_YOU_GOT_A_STAR };
+
+    // Set the bounce speed at the start
+    if (sStarGetAlpha == 0.0f)
+        sStarGetSpeed = -4.0f;
+
+    // Gravity
+    sStarGetSpeed += 0.25f;
+
+    // Add the speed to the position and limit it
+    sStarGetBounce = MIN(sStarGetBounce + sStarGetSpeed, 0.0f);
+
+    // Rendering
+    if (secondFrame == 1) {
+        if (sStarGetDisplayListPos != NULL) {
+            gDPSetEnvColor(sStarGetDisplayListPos++, 255, 255, 255, 255 * sStarGetAlpha);
+            print_hud_lut_string_to_displaylist(HUD_LUT_GLOBAL, SCREEN_WIDTH / 2 - 78, 160 + sStarGetBounce, youGotAStar, sStarGetDisplayListPos);
+            sStarGetDisplayListPos = NULL;
+        }
+    }
+    if (secondFrame == 0) {
+
+        Mtx *matrix = (Mtx *) alloc_display_list(sizeof(Mtx));
+        if (matrix) {
+            create_dl_translation_matrix(MENU_MTX_PUSH, (get_left(0)*2) / 2, 88.0f - (1.0f - sStarGetAlpha) * 16.0f, 0);
+            guScale(matrix, (SCREEN_WIDTH + get_right(0)*2) / 130.0f, 32.0f * sStarGetAlpha / 80.0f, 1.f);
+            gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(matrix), G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_NOPUSH);
+            gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 255 * sStarGetAlpha / 2);
+            gSPDisplayList(gDisplayListHead++, dl_draw_text_bg_box);
+            gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+        }
+
+        gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+        sStarGetDisplayListPos = gDisplayListHead;
+        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255 * sStarGetAlpha);
+        print_hud_lut_string(HUD_LUT_GLOBAL, SCREEN_WIDTH / 2 - 78, 160 + sStarGetBounce, youGotAStar);
+        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+        gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
+
+        if (sStarGetSpeed > 4.0f && sStarGetSpeed < 25.0f) {
+            print_text_centered(SCREEN_WIDTH / 2 - 8, 34, "STAR");
+            print_text_fmt_int(SCREEN_WIDTH / 2 + 20, 34, "%2d", gCollectedStar+1);
+        }
+    }
+
+    // Using the speed as a timer since we never actually stop the speed from increasing
+    if (sStarGetSpeed > 27.0f) {
+
+        // Reduce the alpha, no one likes suddenly disappearing UI elements
+        sStarGetAlpha -= 0.0625f;
+
+        // If finally fully transparent, reset stuff
+        if (sStarGetAlpha <= 0.0f) {
+            gHudDisplay.starGet = 0;
+            sStarGetSpeed = 0.0f;
+            sStarGetAlpha = 0.0f;
+            sStarGetBounce = 0.0f;
+        }
+    }
+    // Fade in
+    else if (sStarGetAlpha < 1.0f)
+        sStarGetAlpha += 0.0625f;
+}
+
 /**
  * Render HUD strings using hudDisplayFlags with it's render functions,
  * excluding the cannon reticle which detects a camera preset for it.
@@ -642,6 +735,15 @@ void render_hud(void) {
 
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_TIMER) {
             render_hud_timer();
+        }
+
+        if (gStayInLevel && gHudStyle && 
+        gCurrLevelNum != LEVEL_CASTLE_GROUNDS && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3) {
+            render_hud_level_stars();
+        }
+
+        if (gStarGetText) {
+            render_you_got_a_star(0);
         }
     }
 }

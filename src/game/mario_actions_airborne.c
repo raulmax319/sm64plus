@@ -45,6 +45,10 @@ void play_knockback_sound(struct MarioState *m) {
 #endif
 
 s32 lava_boost_on_wall(struct MarioState *m) {
+
+    if (mario_has_improved_metal_cap(m))
+        return FALSE;
+
     m->faceAngle[1] = atan2s(m->wall->normal.z, m->wall->normal.x);
 
     if (m->forwardVel < 24.0f) {
@@ -163,7 +167,7 @@ s32 check_horizontal_wind(struct MarioState *m) {
 
     floor = m->floor;
 
-    if (floor->type == SURFACE_HORIZONTAL_WIND) {
+    if (!mario_has_improved_metal_cap(m) && floor->type == SURFACE_HORIZONTAL_WIND) {
         pushAngle = floor->force << 8;
 
         m->slideVelX += 1.2f * sins(pushAngle);
@@ -496,9 +500,6 @@ u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, 
 }
 
 s32 act_jump(struct MarioState *m) {
-    if (gDebugMovementMode) {
-        set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
-    }
     if (check_kick_or_dive_in_air(m)) {
         return TRUE;
     }
@@ -2272,6 +2273,10 @@ s32 mario_execute_airborne_action(struct MarioState *m) {
         case ACT_WALL_SLIDE:           cancel = act_wall_slide(m);           break;
     }
     /* clang-format on */
+
+    if ((gDebugMovementMode) && (gPlayer1Controller->buttonDown & L_TRIG)) {
+        set_mario_action(gMarioState, ACT_DEBUG_FREE_MOVE, 0);
+    }
 
     return cancel;
 }

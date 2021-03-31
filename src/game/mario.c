@@ -33,6 +33,9 @@
 #include "sound_init.h"
 #include "thread6.h"
 
+#include "audio/external.h"
+#include "seq_ids.h"
+
 #include "settings.h"
 
 u32 unused80339F10;
@@ -1712,7 +1715,7 @@ static void debug_update_mario_cap(u16 button, s32 flags, u16 capTimer, u16 capM
     // This checks for Z_TRIG instead of Z_DOWN flag
     // (which is also what other debug functions do),
     // so likely debug behavior rather than unused behavior.
-    if ((gPlayer1Controller->buttonDown & Z_TRIG) && (gPlayer1Controller->buttonPressed & button)
+    if ((gPlayer1Controller->buttonDown & L_TRIG) && (gPlayer1Controller->buttonPressed & button)
         && !(gMarioState->flags & flags)) {
         gMarioState->flags |= (flags + MARIO_CAP_ON_HEAD);
 
@@ -1744,6 +1747,13 @@ void func_sh_8025574C(void) {
  */
 s32 execute_mario_action(UNUSED struct Object *o) {
     s32 inLoop = TRUE;
+
+    if (gDebugCapChanger) {
+
+        debug_update_mario_cap(CONT_LEFT, MARIO_WING_CAP, 1800, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP));
+        debug_update_mario_cap(CONT_UP, MARIO_METAL_CAP, 600, SEQUENCE_ARGS(4, SEQ_EVENT_METAL_CAP));
+        debug_update_mario_cap(CONT_RIGHT, MARIO_VANISH_CAP, 600, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP));
+    }
 
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
@@ -1825,6 +1835,10 @@ s32 execute_mario_action(UNUSED struct Object *o) {
     }
 
     return 0;
+}
+
+u32 mario_has_improved_metal_cap(struct MarioState *m) {
+    return (gImprovedMetalCap) && (m->flags & MARIO_METAL_CAP);
 }
 
 /**************************************************

@@ -139,7 +139,7 @@ void bhv_blue_coin_switch_loop(void) {
                 if (gRespawnBlueCoinSwitch && o->oTimer > 240) {
                     cur_obj_unhide();
                     o->oAction = BLUE_COIN_SWITCH_ACT_IDLE;
-                    o->oPosY = o->oPosY - 120.0f;
+                    o->oPosY = o->oPosY + 120.0f;
                 }
                 else {
                     obj_mark_for_deletion(o);

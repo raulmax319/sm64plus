@@ -24,4 +24,6 @@ enum CameraHUDLut {
 void set_hud_camera_status(s16 status);
 void render_hud(void);
 
+void render_you_got_a_star(u32 secondFrame);
+
 #endif // HUD_H

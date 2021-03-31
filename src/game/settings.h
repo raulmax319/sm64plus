@@ -1,5 +1,7 @@
 #include <ultra64.h>
 
+extern char* gTitleString;
+
 extern s8 configFullscreen;
 extern s8 configCustomFullscreenResolution;
 extern unsigned int configFullscreenWidth;
@@ -20,24 +22,24 @@ extern s8 gDisableBLJ;
 extern s8 gDisableFallDamage;
 extern unsigned int gControllerDeadzone;
 
+extern unsigned int gStayInLevel;
 extern s8 gCollisionFixes;
 extern s8 gFixMantaRayRings;
 extern s8 gRespawnBlueCoinSwitch;
 extern s8 gRemoveAnnoyingWarps;
+extern s8 gImprovedMetalCap;
 extern s8 gDisableBooDialogue;
 extern s8 gTalkEasier;
-extern s8 gDisableToadFading;
 extern s8 gQuitOption;
 extern s8 gLeaveAnyTime;
 extern s8 gShow100CoinStar;
 extern s8 gVisibleSecrets;
 extern s8 gFlexibleCannons;
-extern unsigned int gStayInLevel;
 extern s8 gSkipCutscenes;
 
 extern s8 gImprovedCamera;
-extern s8 gManualCamera;
 extern s8 gCenterCameraButton;
+extern s8 gManualCamera;
 extern s8 gInvertedCamera;
 extern float gCameraSpeed;
 extern float gAdditionalCameraDistance;
@@ -54,6 +56,7 @@ extern s8 gCenterHud;
 extern s8 gHUDFiltering;
 extern unsigned int gHUDUpscaling;
 extern s8 gAlwaysShowHealth;
+extern s8 gStarGetText;
 extern s8 gHideHud;
 
 extern s8 gWallSliding;
@@ -81,6 +84,7 @@ extern s8 gForceLowPoly;
 extern s8 gNearestNeighbor;
 
 extern s8 gDebugMovementMode;
+extern s8 gDebugCapChanger;
 extern s8 gVerticalCamera;
 extern unsigned int gTextureUpscaling;
 
@@ -111,3 +115,6 @@ extern unsigned int configKeyStickUp;
 extern unsigned int configKeyStickDown;
 extern unsigned int configKeyStickLeft;
 extern unsigned int configKeyStickRight;
+
+extern unsigned int gCollectedStar;
+extern s8 stay_in_level();

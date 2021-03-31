@@ -772,11 +772,12 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
     u32 starGrabAction = ACT_STAR_DANCE_EXIT;
     u32 noExit = (o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) != 0;
     u32 grandStar = (o->oInteractionSubtype & INT_SUBTYPE_GRAND_STAR) != 0;
-    u32 canStay = gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 
-    && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS;
 
+    starIndex = (o->oBehParams >> 24) & 0x1F;
+    gCollectedStar = starIndex;
+    
     // Don't kick Mario if staying in levels is active
-    if (canStay) {
+    if (stay_in_level()) {
         noExit = 1;
 	}
 
@@ -810,17 +811,13 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
             starGrabAction = ACT_FALL_AFTER_STAR_GRAB;
         }
 
-        if (canStay) {
-            starGrabAction = ACT_STAR_DANCE_NO_EXIT;
-        }
-
         spawn_object(o, MODEL_NONE, bhvStarKeyCollectionPuffSpawner);
 
         o->oInteractStatus = INT_STATUS_INTERACTED;
         m->interactObj = o;
         m->usedObj = o;
 
-        starIndex = (o->oBehParams >> 24) & 0x1F;
+        
         save_file_collect_star_or_key(m->numCoins, starIndex);
 
         m->numStars =
@@ -1125,7 +1122,7 @@ u32 interact_tornado(struct MarioState *m, UNUSED u32 interactType, struct Objec
 u32 interact_whirlpool(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     struct Object *marioObj = m->marioObj;
 
-    if (m->action != ACT_CAUGHT_IN_WHIRLPOOL) {
+    if (!mario_has_improved_metal_cap(m) && m->action != ACT_CAUGHT_IN_WHIRLPOOL) {
         mario_stop_riding_and_holding(m);
         o->oInteractStatus = INT_STATUS_INTERACTED;
         m->interactObj = o;
@@ -1148,7 +1145,7 @@ u32 interact_whirlpool(struct MarioState *m, UNUSED u32 interactType, struct Obj
 u32 interact_strong_wind(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     UNUSED struct Object *marioObj = m->marioObj;
 
-    if (m->action != ACT_GETTING_BLOWN) {
+    if (!mario_has_improved_metal_cap(m) && m->action != ACT_GETTING_BLOWN) {
         mario_stop_riding_and_holding(m);
         o->oInteractStatus = INT_STATUS_INTERACTED;
         m->interactObj = o;
@@ -1227,7 +1224,7 @@ u32 interact_clam_or_bubba(struct MarioState *m, UNUSED u32 interactType, struct
         o->oInteractStatus = INT_STATUS_INTERACTED;
         m->interactObj = o;
         return set_mario_action(m, ACT_EATEN_BY_BUBBA, 0);
-    } else if (take_damage_and_knock_back(m, o)) {
+    } else if (!mario_has_improved_metal_cap(m) && take_damage_and_knock_back(m, o)) {
         return TRUE;
     }
 
@@ -1322,6 +1319,9 @@ static u32 interact_stub(UNUSED struct MarioState *m, UNUSED u32 interactType, s
 }
 
 u32 interact_mr_blizzard(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+    if (mario_has_improved_metal_cap(m))
+        return FALSE;
+    
     if (take_damage_and_knock_back(m, o)) {
         return TRUE;
     }
@@ -1496,7 +1496,8 @@ u32 interact_koopa_shell(struct MarioState *m, UNUSED u32 interactType, struct O
 }
 
 u32 check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    if ((!(m->action & (ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ATTACKING)) || !sInvulnerable)
+    if (!mario_has_improved_metal_cap(m)
+        && (!(m->action & (ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ATTACKING)) || !sInvulnerable)
         && (o->oInteractionSubtype & INT_SUBTYPE_GRABS_MARIO)) {
         if (object_facing_mario(m, o, 0x2AAA)) {
             mario_stop_riding_and_holding(m);
@@ -1838,7 +1839,7 @@ void check_death_barrier(struct MarioState *m) {
 }
 
 void check_lava_boost(struct MarioState *m) {
-    if (!(m->action & ACT_FLAG_RIDING_SHELL) && m->pos[1] < m->floorHeight + 10.0f) {
+    if (!mario_has_improved_metal_cap(m) && !(m->action & ACT_FLAG_RIDING_SHELL) && m->pos[1] < m->floorHeight + 10.0f) {
         if (!(m->flags & MARIO_METAL_CAP)) {
             m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 12 : 18;
         }

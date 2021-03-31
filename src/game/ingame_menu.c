@@ -1,4 +1,5 @@
 #include <ultra64.h>
+#include <stdlib.h>
 
 #include "actors/common1.h"
 #include "area.h"
@@ -621,6 +622,77 @@ void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const u8 *str) {
 
             gSPDisplayList(gDisplayListHead++, dl_rgba16_load_tex_block);
             gSPTextureRectangle(gDisplayListHead++, curX << 2, curY << 2, (curX + 16) << 2,
+                                (curY + 16) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+
+            curX += xStride;
+#ifdef VERSION_EU
+            break;
+        }
+#endif
+#if defined(VERSION_US) || defined(VERSION_SH)
+        }
+#endif
+    strPos++;
+    }
+}
+void print_hud_lut_string_to_displaylist(s8 hudLUT, s16 x, s16 y, const u8 *str, Gfx* displayList) {
+    s32 strPos = 0;
+    void **hudLUT1 = segmented_to_virtual(menu_hud_lut); // Japanese Menu HUD Color font
+    void **hudLUT2 = segmented_to_virtual(main_hud_lut); // 0-9 A-Z HUD Color Font
+    u32 curX = x;
+    u32 curY = y;
+
+    u32 xStride; // X separation
+
+    if (hudLUT == HUD_LUT_JPMENU) {
+        xStride = 16;
+    } else { // HUD_LUT_GLOBAL
+#if defined(VERSION_JP)
+        xStride = 14;
+#else
+        xStride = 12; //? Shindou uses this.
+#endif
+    }
+
+    while (str[strPos] != GLOBAR_CHAR_TERMINATOR) {
+#ifdef VERSION_EU
+        switch (str[strPos]) {
+            case GLOBAL_CHAR_SPACE:
+                curX += xStride / 2;
+                break;
+            case HUD_CHAR_A_UMLAUT:
+                print_hud_char_umlaut(curX, curY, ASCII_TO_DIALOG('A'));
+                curX += xStride;
+                break;
+            case HUD_CHAR_O_UMLAUT:
+                print_hud_char_umlaut(curX, curY, ASCII_TO_DIALOG('O'));
+                curX += xStride;
+                break;
+            case HUD_CHAR_U_UMLAUT:
+                print_hud_char_umlaut(curX, curY, ASCII_TO_DIALOG('U'));
+                curX += xStride;
+                break;
+            default:
+#endif
+#if defined(VERSION_US) || defined(VERSION_SH)
+        if (str[strPos] == GLOBAL_CHAR_SPACE) {
+            if (0) //! dead code
+            {
+            }
+            curX += 8;
+            ; //! useless statement
+        } else {
+#endif
+            gDPPipeSync(displayList++);
+
+            if (hudLUT == HUD_LUT_JPMENU)
+                gDPSetTextureImage(displayList++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT1[str[strPos]]);
+
+            if (hudLUT == HUD_LUT_GLOBAL)
+                gDPSetTextureImage(displayList++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT2[str[strPos]]);
+
+            gSPDisplayList(displayList++, dl_rgba16_load_tex_block);
+            gSPTextureRectangle(displayList++, curX << 2, curY << 2, (curX + 16) << 2,
                                 (curY + 16) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
             curX += xStride;
@@ -2738,6 +2810,16 @@ s16 render_pause_courses_and_castle(void) {
             print_hud_pause_colorful_str();
             render_pause_castle_menu_box(160, 143);
             render_pause_castle_main_strings(104, 60);
+            if (gQuitOption) {
+                u8 textExitGameR[] = { TEXT_EXIT_GAME_ZR };
+                gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+                gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+                print_generic_string(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(12), 8, textExitGameR);
+                gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
+                if ((gPlayer1Controller->buttonDown & Z_TRIG) && (gPlayer1Controller->buttonDown & R_TRIG)) {
+                    exit(0);
+                }
+            }
 
 #ifdef VERSION_EU
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | Z_TRIG | START_BUTTON))

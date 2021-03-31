@@ -92,6 +92,10 @@ static void patch_interpolations(void) {
     patch_title_screen_scales();
     patch_interpolated_dialog();
     patch_interpolated_hud();
+
+    if (gStarGetText)
+        render_you_got_a_star(1);
+
     patch_interpolated_paintings();
     patch_interpolated_bubble_particles();
     patch_interpolated_snow_particles();
@@ -120,6 +124,9 @@ void produce_one_frame(void) {
     gfx_start_frame();
     if (g60FPS) {
         patch_interpolations();
+    }
+    else if (gStarGetText) {
+        render_you_got_a_star(3);
     }
     send_display_list(gGfxSPTask);
     gfx_end_frame();
@@ -202,7 +209,7 @@ void main_func(void) {
     wm_api = &gfx_dummy_wm_api;
 #endif
 
-    gfx_init(wm_api, rendering_api, "Super Mario 64 Plus", configFullscreen);
+    gfx_init(wm_api, rendering_api, gTitleString, configFullscreen);
     
     wm_api->set_fullscreen_changed_callback(on_fullscreen_changed);
     wm_api->set_keyboard_callbacks(keyboard_on_key_down, keyboard_on_key_up, keyboard_on_all_keys_up);

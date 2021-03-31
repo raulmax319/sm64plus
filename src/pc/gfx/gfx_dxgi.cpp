@@ -27,7 +27,7 @@
 #include "gfx_screen_config.h"
 #include "gfx_pc.h"
 
-#include ".\resource.h"
+#include "resource.h"
 
 #define DECLARE_GFX_DXGI_FUNCTIONS
 #include "gfx_dxgi.h"
