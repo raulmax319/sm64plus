@@ -172,7 +172,6 @@ s8 gDisableBLJ = 0;
 s8 gDisableFallDamage = 0;
 unsigned int gControllerDeadzone = 512;
 
-unsigned int gStayInLevel = 2;
 s8 gCollisionFixes = 1;
 s8 gFixMantaRayRings = 1;
 s8 gRespawnBlueCoinSwitch = 1;
@@ -181,6 +180,7 @@ s8 gImprovedMetalCap = 1;
 s8 gDisableBooDialogue = 1;
 s8 gTalkEasier = 1;
 s8 gQuitOption = 1;
+unsigned int gStayInLevel = 0;
 s8 gLeaveAnyTime = 0;
 s8 gShow100CoinStar = 0;
 s8 gVisibleSecrets = 0;
@@ -206,6 +206,7 @@ s8 gCenterHud = 0;
 s8 gHUDFiltering = 0;
 unsigned int gHUDUpscaling = 0;
 s8 gAlwaysShowHealth = 0;
+s8 gHudStars = 0;
 s8 gStarGetText = 0;
 s8 gHideHud = 0;
 

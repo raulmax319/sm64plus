@@ -22,7 +22,6 @@ extern s8 gDisableBLJ;
 extern s8 gDisableFallDamage;
 extern unsigned int gControllerDeadzone;
 
-extern unsigned int gStayInLevel;
 extern s8 gCollisionFixes;
 extern s8 gFixMantaRayRings;
 extern s8 gRespawnBlueCoinSwitch;
@@ -31,6 +30,7 @@ extern s8 gImprovedMetalCap;
 extern s8 gDisableBooDialogue;
 extern s8 gTalkEasier;
 extern s8 gQuitOption;
+extern unsigned int gStayInLevel;
 extern s8 gLeaveAnyTime;
 extern s8 gShow100CoinStar;
 extern s8 gVisibleSecrets;
@@ -56,6 +56,7 @@ extern s8 gCenterHud;
 extern s8 gHUDFiltering;
 extern unsigned int gHUDUpscaling;
 extern s8 gAlwaysShowHealth;
+extern s8 gHudStars;
 extern s8 gStarGetText;
 extern s8 gHideHud;
 

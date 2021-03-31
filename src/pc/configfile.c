@@ -53,7 +53,6 @@ static const struct ConfigOption options[] = {
     { .name = "analog_stick_deadzone", .type = CONFIG_TYPE_UINT, .uintValue = &gControllerDeadzone },
 
     { .name = "TWEAKS", .type = CONFIG_TYPE_SECTION },
-    { .name = "stay_in_level_after_getting_a_star", .type = CONFIG_TYPE_UINT, .uintValue = &gStayInLevel },
     { .name = "fix_collision_errors", .type = CONFIG_TYPE_BOOL, .boolValue = &gCollisionFixes },
     { .name = "fix_manta_ray_rings", .type = CONFIG_TYPE_BOOL, .boolValue = &gFixMantaRayRings },
     { .name = "make_blue_coin_switches_respawn", .type = CONFIG_TYPE_BOOL, .boolValue = &gRespawnBlueCoinSwitch },
@@ -62,6 +61,7 @@ static const struct ConfigOption options[] = {
     { .name = "disable_repeat_boo_messages", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBooDialogue },
     { .name = "make_it_easier_to_talk_to_the_npcs", .type = CONFIG_TYPE_BOOL, .boolValue = &gTalkEasier },
     { .name = "add_a_quit_option_to_the_pause_menu", .type = CONFIG_TYPE_BOOL, .boolValue = &gQuitOption },
+    { .name = "stay_in_level_after_getting_a_star", .type = CONFIG_TYPE_UINT, .uintValue = &gStayInLevel },
     { .name = "allow_leaving_the_level_at_any_time", .type = CONFIG_TYPE_BOOL, .boolValue = &gLeaveAnyTime },
     { .name = "show_the_100_coin_star_in_star_select", .type = CONFIG_TYPE_BOOL, .boolValue = &gShow100CoinStar },
     { .name = "make_secrets_visible", .type = CONFIG_TYPE_BOOL, .boolValue = &gVisibleSecrets },
@@ -90,6 +90,7 @@ static const struct ConfigOption options[] = {
     { .name = "hud_filtering", .type = CONFIG_TYPE_BOOL, .boolValue = &gHUDFiltering },
     { .name = "hud_upscaling", .type = CONFIG_TYPE_UINT, .uintValue = &gHUDUpscaling },
     { .name = "always_show_the_health_meter", .type = CONFIG_TYPE_BOOL, .boolValue = &gAlwaysShowHealth },
+    { .name = "show_the_collected_stars", .type = CONFIG_TYPE_BOOL, .boolValue = &gHudStars },
     { .name = "show_the_you_got_a_star_text", .type = CONFIG_TYPE_BOOL, .boolValue = &gStarGetText },
     { .name = "hide_hud", .type = CONFIG_TYPE_BOOL, .boolValue = &gHideHud },
 

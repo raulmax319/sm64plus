@@ -742,7 +742,7 @@ void render_hud(void) {
             render_hud_timer();
         }
 
-        if (gStayInLevel && gHudStyle && 
+        if (gHudStars && 
         gCurrLevelNum != LEVEL_CASTLE_GROUNDS && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3) {
             render_hud_level_stars();
         }
