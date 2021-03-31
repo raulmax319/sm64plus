@@ -271,6 +271,7 @@ void load_mario_area(void) {
     func_80320890();
     load_area(gMarioSpawnInfo->areaIndex);
 
+    hide_you_got_a_star();
     gCanMirror = 1;
     if (gEncoreMode)
         gReimportTextures = 1;

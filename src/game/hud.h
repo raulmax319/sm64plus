@@ -22,8 +22,10 @@ enum CameraHUDLut {
 };
 
 void set_hud_camera_status(s16 status);
-void render_hud(void);
 
+void hide_you_got_a_star();
 void render_you_got_a_star(u32 secondFrame);
+
+void render_hud(void);
 
 #endif // HUD_H

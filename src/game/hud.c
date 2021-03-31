@@ -605,6 +605,13 @@ void render_hud_level_stars() {
     }
 }
 
+void hide_you_got_a_star() {
+    gHudDisplay.starGet = 0;
+    sStarGetSpeed = 0.0f;
+    sStarGetAlpha = 0.0f;
+    sStarGetBounce = 0.0f;
+}
+
 void render_you_got_a_star(u32 secondFrame) {
 
     if (!gHudDisplay.starGet)
@@ -649,24 +656,22 @@ void render_you_got_a_star(u32 secondFrame) {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 
-        if (sStarGetSpeed > 4.0f && sStarGetSpeed < 25.0f) {
-            print_text_centered(SCREEN_WIDTH / 2 - 8, 34, "STAR");
-            print_text_fmt_int(SCREEN_WIDTH / 2 + 20, 34, "%2d", gCollectedStar+1);
+        if (sStarGetSpeed > 4.0f && sStarGetSpeed < 31.0f && stay_in_level()) {
+            print_text_centered(SCREEN_WIDTH / 2 - 24, 34, "STAR");
+            print_text_centered(SCREEN_WIDTH / 2 + 15, 34, "-");
+            print_text_fmt_int(SCREEN_WIDTH / 2 + 21, 34, "%2d", gCollectedStar+1);
         }
     }
 
     // Using the speed as a timer since we never actually stop the speed from increasing
-    if (sStarGetSpeed > 27.0f) {
+    if (sStarGetSpeed > 31.0f) {
 
         // Reduce the alpha, no one likes suddenly disappearing UI elements
         sStarGetAlpha -= 0.0625f;
 
         // If finally fully transparent, reset stuff
         if (sStarGetAlpha <= 0.0f) {
-            gHudDisplay.starGet = 0;
-            sStarGetSpeed = 0.0f;
-            sStarGetAlpha = 0.0f;
-            sStarGetBounce = 0.0f;
+            hide_you_got_a_star();
         }
     }
     // Fade in
