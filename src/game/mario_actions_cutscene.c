@@ -1,5 +1,7 @@
 #include <PR/ultratypes.h>
 
+#include <stdlib.h>
+
 #include "prevent_bss_reordering.h"
 #include "sm64.h"
 #include "area.h"
@@ -236,6 +238,9 @@ s32 get_star_collection_dialog(struct MarioState *m) {
     s32 dialogID = 0;
     s32 numStarsRequired;
 
+    if (gSkipCutscenes)
+        return 0;
+
     for (i = 0; i < ARRAY_COUNT(sStarsNeededForDialog); i++) {
         numStarsRequired = sStarsNeededForDialog[i];
         if (m->prevNumStarsForDialog < numStarsRequired && m->numStars >= numStarsRequired) {
@@ -258,7 +263,10 @@ void handle_save_menu(struct MarioState *m) {
             save_file_do_save(gCurrSaveFileNum - 1);
 
             if (gSaveOptSelectIndex == SAVE_OPT_SAVE_AND_QUIT) {
-                fade_into_special_warp(-2, 0); // reset game
+                if (gQuitOption)
+                    exit(0);
+                else
+                    fade_into_special_warp(-2, 0); // reset game
             }
         }
 
@@ -479,7 +487,7 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
         // finished action
         else if (m->actionState == 25) {
             disable_time_stop();
-            if (gNeverEnteredCastle) {
+            if (gNeverEnteredCastle && !stay_in_level()) {
                 gNeverEnteredCastle = FALSE;
                 play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
             }
@@ -611,8 +619,10 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
 
             case 42:
                 play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
-                if (gStarGetText) {
+                if (gStayInLevel) {
                     gHudDisplay.starGet = 1;
+                    if (!sTimerRunning)
+                        level_control_timer(TIMER_CONTROL_HIDE);
                 }
                 break;
 
@@ -978,8 +988,15 @@ s32 act_warp_door_spawn(struct MarioState *m) {
             m->usedObj->oInteractStatus = 0x00080000;
         }
     } else if (m->usedObj->oAction == 0) {
-        if (!gSkipCutscenes && gNeverEnteredCastle == TRUE && gCurrLevelNum == LEVEL_CASTLE) {
-            set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_021);
+        if (gNeverEnteredCastle == TRUE && gCurrLevelNum == LEVEL_CASTLE) {
+            if (gSkipCutscenes) {
+                set_mario_action(m, ACT_IDLE, 0);
+                play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
+                gNeverEnteredCastle = FALSE;
+            }
+            else {
+                set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_021);
+            }
         } else {
             set_mario_action(m, ACT_IDLE, 0);
         }

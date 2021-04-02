@@ -247,6 +247,9 @@ void load_level_init_text(u32 arg) {
     s32 gotAchievement;
     u32 dialogID = gCurrentArea->dialog[arg];
 
+    if (gSkipCutscenes)
+        return;
+
     switch (dialogID) {
         case DIALOG_129:
             gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP;
@@ -882,14 +885,20 @@ void initiate_delayed_warp(void) {
                     break;
 
                 case WARP_OP_STAR_EXIT:
-                    warpNode = area_get_warp_node(sSourceWarpNodeId);
+                    if (restart_level_after_star()) {
+                        save_file_do_save(gCurrSaveFileNum - 1);
+                        warp_special(gCurrLevelNum);
+                    }
+                    else {
+                        warpNode = area_get_warp_node(sSourceWarpNodeId);
 
-                    initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
-                                  warpNode->node.destNode, sDelayedWarpArg);
+                        initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
+                                    warpNode->node.destNode, sDelayedWarpArg);
 
-                    check_if_should_set_warp_checkpoint(&warpNode->node);
-                    if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) {
-                        level_set_transition(2, NULL);
+                        check_if_should_set_warp_checkpoint(&warpNode->node);
+                        if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) {
+                            level_set_transition(2, NULL);
+                        }
                     }
                     break;
 
@@ -1357,6 +1366,25 @@ s32 lvl_set_current_level(UNUSED s16 arg0, s32 levelNum) {
     }
 
     if (gDebugLevelSelect && !gShowProfiler) {
+        return 0;
+    }
+
+    if (gSkipStarSelect) {
+        s32 i;
+        u8 level;
+        u8 flag = 1;
+        u8 starFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
+        for (i = 0; i < 7; i++, flag <<= 1) {
+            if (!(starFlags & flag)) {
+                level = i + 1;
+                break;
+            }
+            level = 8;
+        }
+        if (level > 7)
+            return 1;
+        gCurrActNum = level;
+        gDialogCourseActNum = gCurrActNum;
         return 0;
     }
 

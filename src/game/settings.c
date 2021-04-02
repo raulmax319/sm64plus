@@ -162,25 +162,35 @@ unsigned int configWindowHeight = 720;
 s8 configCustomInternalResolution = 0;
 unsigned int configInternalResolutionWidth = 3840;
 unsigned int configInternalResolutionHeight = 2160;
+
+s8 g60FPS = 1;
+s8 gDisableDrawDistance = 1;
+s8 gDisableLowPoly = 1;
+float gDrawDistanceMultiplier = 1.0f;
+unsigned int gNoiseType = 0;
 s8 configForce4by3 = 0;
 
+// TODO (Mors): Rename these with a config prefix.
 s8 gImprovedControls = 1;
 s8 gBackwardSpeedCap = 1;
 s8 gDpadControls = 1;
 s8 gFullAirControl = 0;
 s8 gDisableBLJ = 0;
 s8 gDisableFallDamage = 0;
-unsigned int gControllerDeadzone = 512;
 
 s8 gCollisionFixes = 1;
 s8 gFixMantaRayRings = 1;
 s8 gRespawnBlueCoinSwitch = 1;
 s8 gRemoveAnnoyingWarps = 1;
+// TODO (Mors): Turn this into a "updated powerups" option eventually.
+// Vanish Mario would fall slower, and Wing Mario would have completely revamped flying.
 s8 gImprovedMetalCap = 1;
 s8 gDisableBooDialogue = 1;
 s8 gTalkEasier = 1;
 s8 gQuitOption = 1;
 unsigned int gStayInLevel = 0;
+s8 gSkipStarSelect = 0;
+s8 gRestartLevelAfterStar = 0;
 s8 gLeaveAnyTime = 0;
 s8 gShow100CoinStar = 0;
 s8 gVisibleSecrets = 0;
@@ -195,19 +205,12 @@ float gCameraSpeed = 32.0f;
 float gAdditionalCameraDistance = 0.0f;
 float gAdditionalFOV = 0.0f;
 
-s8 g60FPS = 1;
-s8 gDisableDrawDistance = 1;
-s8 gDisableLowPoly = 1;
-float gDrawDistanceMultiplier = 1.0f;
-unsigned int gNoiseType = 0;
-
 unsigned int gHudStyle = 2;
 s8 gCenterHud = 0;
 s8 gHUDFiltering = 0;
 unsigned int gHUDUpscaling = 0;
-s8 gAlwaysShowHealth = 0;
 s8 gHudStars = 0;
-s8 gStarGetText = 0;
+s8 gAlwaysShowHealth = 0;
 s8 gHideHud = 0;
 
 s8 gWallSliding = 1;
@@ -251,6 +254,7 @@ unsigned int configButtonZL = Z_TRIG;
 unsigned int configButtonZR = R_TRIG;
 unsigned int configButtonThumbLeft = 0;
 unsigned int configButtonThumbRight = L_TRIG;
+unsigned int gControllerDeadzone = 512;
 
 unsigned int configKeyA = DIK_L;
 unsigned int configKeyB = DIK_COMMA;
@@ -268,23 +272,38 @@ unsigned int configKeyStickLeft = DIK_A;
 unsigned int configKeyStickRight = DIK_D;
 
 // These probably don't belong here, but I don't have a better place for them at the moment.
-unsigned int gCollectedStar = 0;
+// TODO (Mors): Move this out to somewhere that fits.
+s16 gCollectedStar = 0;
+
 s8 stay_in_level() {
     if (gStayInLevel == 2 && (
     // If we have collected the first star in the first act in these levels, kick us out.
     (gCurrActNum == 1 && gCollectedStar == 0 &&
-    (gCurrLevelNum == LEVEL_BOB || gCurrLevelNum == LEVEL_WF || gCurrLevelNum == LEVEL_JRB || gCurrLevelNum == LEVEL_SSL
-    || gCurrLevelNum == LEVEL_CCM || gCurrLevelNum == LEVEL_BBH || gCurrLevelNum == LEVEL_TTM
+    (gCurrLevelNum == LEVEL_BOB || gCurrLevelNum == LEVEL_WF || gCurrLevelNum == LEVEL_JRB || gCurrLevelNum == LEVEL_BBH || 
+    gCurrLevelNum == LEVEL_CCM || gCurrLevelNum == LEVEL_TTM || gCurrLevelNum == LEVEL_SSL || 
     // In addition to all of above, kick us only if the submarine is there in DDD.
-    || (!save_file_get_flags() & SAVE_FLAG_DDD_MOVED_BACK) && gCurrLevelNum == LEVEL_DDD)) ||
-    // Kick us from the slide exit and the lonely mushroom in TTM as well.
+    ((!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) && gCurrLevelNum == LEVEL_DDD))) ||
+    // Kick us from the lonely mushroom in TTM as well.
     (gCollectedStar == 5 && gCurrLevelNum == LEVEL_TTM) ||
     // If we have collected any stars in any sublevels except for these, kick us again.
     (gCurrAreaIndex > 1 && gCurrLevelNum != LEVEL_DDD && gCurrLevelNum != LEVEL_THI) ||
     // Well, kick us from the wiggler room tho.
-    (gCollectedStar == 5 && gCurrLevelNum == LEVEL_THI)
+    (gCollectedStar == 5 && gCurrLevelNum == LEVEL_THI) ||
+    // Let the bonus levels kick us out too
+    (gCollectedStar == 0 && (gCurrLevelNum == LEVEL_PSS || gCurrLevelNum == LEVEL_COTMC || gCurrLevelNum == LEVEL_TOTWC ||
+    gCurrLevelNum == LEVEL_VCUTM || gCurrLevelNum == LEVEL_WMOTR || gCurrLevelNum == LEVEL_SA))
     ))
         return FALSE;
-    return gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 
+    return gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3
     && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS;
+}
+
+s8 restart_level_after_star() {
+    return gRestartLevelAfterStar &&
+    gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3 &&
+    gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS &&
+    gCurrLevelNum != LEVEL_BITDW && gCurrLevelNum != LEVEL_BITFS && gCurrLevelNum != LEVEL_BITS &&
+    gCurrLevelNum != LEVEL_PSS && gCurrLevelNum != LEVEL_COTMC && gCurrLevelNum != LEVEL_TOTWC &&
+    gCurrLevelNum != LEVEL_VCUTM && gCurrLevelNum != LEVEL_WMOTR && gCurrLevelNum != LEVEL_SA &&
+    ((save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) || gCurrLevelNum != LEVEL_DDD);
 }

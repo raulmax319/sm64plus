@@ -423,7 +423,7 @@ void render_hud_stars(void) {
         }
         else if (gHudDisplay.stars < 100) {
             print_text(get_left(HUD_LEFT_X), HUD_TOP_Y_NEW, "-"); // 'Star' glyph
-            print_text(get_left(HUD_LEFT_X) + 15, HUD_TOP_Y_NEW, "*"); // 'X' glyph
+            print_text(get_left(HUD_LEFT_X) + 17, HUD_TOP_Y_NEW, "*"); // 'X' glyph
             print_text_fmt_int(get_left(HUD_LEFT_X) + 31, HUD_TOP_Y_NEW, "%d", gHudDisplay.stars);
         }
         else {
@@ -589,19 +589,25 @@ void render_hud_camera_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
 }
 
-void render_hud_level_stars() {
+void render_hud_level_stars(s16 starCount) {
     s32 i;
 
     u8 flag = 1;
     u8 starFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
 
-    for (i = 0; i < 7; i++, flag <<= 1) {
+    u8 starText[] = { GLYPH_STAR, GLYPH_SPACE };
+
+    for (i = 0; i < starCount; i++, flag <<= 1) {
+        gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
         if (starFlags & flag) {
-            print_text(get_left(HUD_LEFT_X) + i*16, 19, "-");
+            gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255 * (1-sStarGetAlpha));
         }
-        /*else {
-            print_text(get_left(HUD_LEFT_X) + i*16, 19, "*");
-        }*/
+        else {
+            gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 63 * (1-sStarGetAlpha));
+        }
+        print_hud_lut_string(HUD_LUT_GLOBAL, get_left(HUD_LEFT_X) + i*16, SCREEN_HEIGHT-35, starText);
+        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+        gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     }
 }
 
@@ -629,37 +635,100 @@ void render_you_got_a_star(u32 secondFrame) {
     // Add the speed to the position and limit it
     sStarGetBounce = MIN(sStarGetBounce + sStarGetSpeed, 0.0f);
 
+    Mtx *matrix = (Mtx *) alloc_display_list(sizeof(Mtx));
+    if (matrix) {
+        if (stay_in_level() || restart_level_after_star()) {
+            create_dl_translation_matrix(MENU_MTX_PUSH, (get_left(0)*2) / 2, 88.0f - (1.0f - sStarGetAlpha) * 32.0f, 0);
+            guScale(matrix, (SCREEN_WIDTH + get_right(0)*2) / 130.0f, 64.0f * sStarGetAlpha / 80.0f, 1.f);
+        }
+        else {
+            create_dl_translation_matrix(MENU_MTX_PUSH, (get_left(0)*2) / 2, 88.0f - (1.0f - sStarGetAlpha) * 16.0f, 0);
+            guScale(matrix, (SCREEN_WIDTH + get_right(0)*2) / 130.0f, 32.0f * sStarGetAlpha / 80.0f, 1.f);
+        }
+    }
+
     // Rendering
     if (secondFrame == 1) {
         if (sStarGetDisplayListPos != NULL) {
             gDPSetEnvColor(sStarGetDisplayListPos++, 255, 255, 255, 255 * sStarGetAlpha);
-            print_hud_lut_string_to_displaylist(HUD_LUT_GLOBAL, SCREEN_WIDTH / 2 - 78, 160 + sStarGetBounce, youGotAStar, sStarGetDisplayListPos);
+            if (stay_in_level() || restart_level_after_star())
+                print_hud_lut_string_to_displaylist(HUD_LUT_GLOBAL, SCREEN_WIDTH / 2 - 78, 159 + sStarGetBounce, youGotAStar, sStarGetDisplayListPos);
+            else
+                print_hud_lut_string_to_displaylist(HUD_LUT_GLOBAL, SCREEN_WIDTH / 2 - 78, 160 + sStarGetBounce, youGotAStar, sStarGetDisplayListPos);
             sStarGetDisplayListPos = NULL;
         }
     }
     if (secondFrame == 0) {
 
-        Mtx *matrix = (Mtx *) alloc_display_list(sizeof(Mtx));
+        // Black box
         if (matrix) {
-            create_dl_translation_matrix(MENU_MTX_PUSH, (get_left(0)*2) / 2, 88.0f - (1.0f - sStarGetAlpha) * 16.0f, 0);
-            guScale(matrix, (SCREEN_WIDTH + get_right(0)*2) / 130.0f, 32.0f * sStarGetAlpha / 80.0f, 1.f);
             gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(matrix), G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_NOPUSH);
             gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 255 * sStarGetAlpha / 2);
             gSPDisplayList(gDisplayListHead++, dl_draw_text_bg_box);
             gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
         }
 
+        // You got a star!
+
         gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
         sStarGetDisplayListPos = gDisplayListHead;
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255 * sStarGetAlpha);
-        print_hud_lut_string(HUD_LUT_GLOBAL, SCREEN_WIDTH / 2 - 78, 160 + sStarGetBounce, youGotAStar);
+        if (stay_in_level() || restart_level_after_star()) 
+            print_hud_lut_string(HUD_LUT_GLOBAL, SCREEN_WIDTH / 2 - 78, 159 + sStarGetBounce, youGotAStar);
+        else
+            print_hud_lut_string(HUD_LUT_GLOBAL, SCREEN_WIDTH / 2 - 78, 160 + sStarGetBounce, youGotAStar);
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 
-        if (sStarGetSpeed > 4.0f && sStarGetSpeed < 31.0f && stay_in_level()) {
-            print_text_centered(SCREEN_WIDTH / 2 - 24, 34, "STAR");
-            print_text_centered(SCREEN_WIDTH / 2 + 15, 34, "-");
-            print_text_fmt_int(SCREEN_WIDTH / 2 + 21, 34, "%2d", gCollectedStar+1);
+        // Course and act name
+        if (stay_in_level() || restart_level_after_star()) {
+            void **courseNameTbl;
+            u8 *courseName;
+            void **actNameTbl;
+            u8 courseIndex;
+
+            // Gonna keep these ifdefs in case I decide to add compatibility with other region ROMs.
+#ifndef VERSION_EU
+            courseNameTbl = segmented_to_virtual(seg2_course_name_table);
+            actNameTbl = segmented_to_virtual(seg2_act_name_table);
+#endif
+
+            courseIndex = gCurrCourseNum - 1;
+
+#ifdef VERSION_EU
+            switch (gInGameLanguage) {
+                case LANGUAGE_ENGLISH:
+                    actNameTbl = segmented_to_virtual(act_name_table_eu_en);
+                    courseNameTbl = segmented_to_virtual(course_name_table_eu_en);
+                    break;
+                case LANGUAGE_FRENCH:
+                    actNameTbl = segmented_to_virtual(act_name_table_eu_fr);
+                    courseNameTbl = segmented_to_virtual(course_name_table_eu_fr);
+                    break;
+                case LANGUAGE_GERMAN:
+                    actNameTbl = segmented_to_virtual(act_name_table_eu_de);
+                    courseNameTbl = segmented_to_virtual(course_name_table_eu_de);
+                    break;
+            }
+#endif
+
+            gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+
+            gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255 * sStarGetAlpha);
+
+            courseName = segmented_to_virtual(courseNameTbl[courseIndex]);
+
+            if (courseIndex < COURSE_STAGES_COUNT) {
+                u8 *actName = segmented_to_virtual(actNameTbl[(gCurrCourseNum - 1) * 6 + gCollectedStar]);
+                print_generic_string(get_str_x_pos_from_center(SCREEN_WIDTH/2, actName, 1.0f), 28, actName);
+            }
+            else {
+                u8 actName[] = { TEXT_POWER_STAR_PLACEHOLDER };
+                print_generic_string(get_str_x_pos_from_center(SCREEN_WIDTH/2, actName, 1.0f), 28, actName);
+            }
+            print_generic_string(get_str_x_pos_from_center(SCREEN_WIDTH/2, &courseName[3], 1.0f), 44, &courseName[3]);
+
+            gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
         }
     }
 
@@ -742,12 +811,22 @@ void render_hud(void) {
             render_hud_timer();
         }
 
-        if (gHudStars && 
-        gCurrLevelNum != LEVEL_CASTLE_GROUNDS && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3) {
-            render_hud_level_stars();
+        if (gHudStars && gCurrLevelNum != LEVEL_CASTLE_GROUNDS && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD
+        && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3 && gCurrLevelNum != LEVEL_ENDING) {
+            if (gCurrLevelNum == LEVEL_BITDW || gCurrLevelNum == LEVEL_BITFS || gCurrLevelNum == LEVEL_BITS ||
+            gCurrLevelNum == LEVEL_COTMC || gCurrLevelNum == LEVEL_TOTWC || gCurrLevelNum == LEVEL_VCUTM ||
+            gCurrLevelNum == LEVEL_WMOTR || gCurrLevelNum == LEVEL_SA) {
+                render_hud_level_stars(1);
+            }
+            else if (gCurrLevelNum == LEVEL_PSS) {
+                render_hud_level_stars(2);
+            }
+            else {
+                render_hud_level_stars(6 + (gShow100CoinStar || (save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1) & (1 << 6))));
+            }
         }
 
-        if (gStarGetText) {
+        if (gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3) {
             render_you_got_a_star(0);
         }
     }

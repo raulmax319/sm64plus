@@ -41,6 +41,13 @@ static const struct ConfigOption options[] = {
     { .name = "custom_internal_resolution", .type = CONFIG_TYPE_BOOL, .boolValue = &configCustomInternalResolution },
     { .name = "internal_resolution_width", .type = CONFIG_TYPE_UINT, .uintValue = &configInternalResolutionWidth },
     { .name = "internal_resolution_height", .type = CONFIG_TYPE_UINT, .uintValue = &configInternalResolutionHeight },
+
+    { .name = "GRAPHICS", .type = CONFIG_TYPE_SECTION },
+    { .name = "60fps", .type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS },
+    { .name = "disable_draw_distance", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableDrawDistance },
+    { .name = "disable_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLowPoly },
+    { .name = "draw_distance_multiplier", .type = CONFIG_TYPE_FLOAT, .floatValue = &gDrawDistanceMultiplier },
+    { .name = "noise_type", .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType },
     { .name = "force_4by3", .type = CONFIG_TYPE_BOOL, .boolValue = &configForce4by3 },
 
     { .name = "CONTROLS", .type = CONFIG_TYPE_SECTION },
@@ -50,7 +57,6 @@ static const struct ConfigOption options[] = {
     { .name = "full_air_control", .type = CONFIG_TYPE_BOOL, .boolValue = &gFullAirControl },
     { .name = "disable_blj", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBLJ },
     { .name = "disable_fall_damage", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableFallDamage },
-    { .name = "analog_stick_deadzone", .type = CONFIG_TYPE_UINT, .uintValue = &gControllerDeadzone },
 
     { .name = "TWEAKS", .type = CONFIG_TYPE_SECTION },
     { .name = "fix_collision_errors", .type = CONFIG_TYPE_BOOL, .boolValue = &gCollisionFixes },
@@ -62,6 +68,8 @@ static const struct ConfigOption options[] = {
     { .name = "make_it_easier_to_talk_to_the_npcs", .type = CONFIG_TYPE_BOOL, .boolValue = &gTalkEasier },
     { .name = "add_a_quit_option_to_the_pause_menu", .type = CONFIG_TYPE_BOOL, .boolValue = &gQuitOption },
     { .name = "stay_in_level_after_getting_a_star", .type = CONFIG_TYPE_UINT, .uintValue = &gStayInLevel },
+    { .name = "skip_star_select", .type = CONFIG_TYPE_BOOL, .boolValue = &gSkipStarSelect },
+    { .name = "restart_the_level_instead_of_leaving", .type = CONFIG_TYPE_BOOL, .boolValue = &gRestartLevelAfterStar },
     { .name = "allow_leaving_the_level_at_any_time", .type = CONFIG_TYPE_BOOL, .boolValue = &gLeaveAnyTime },
     { .name = "show_the_100_coin_star_in_star_select", .type = CONFIG_TYPE_BOOL, .boolValue = &gShow100CoinStar },
     { .name = "make_secrets_visible", .type = CONFIG_TYPE_BOOL, .boolValue = &gVisibleSecrets },
@@ -77,21 +85,13 @@ static const struct ConfigOption options[] = {
     { .name = "additional_camera_distance", .type = CONFIG_TYPE_FLOAT, .floatValue = &gAdditionalCameraDistance },
     { .name = "additional_fov", .type = CONFIG_TYPE_FLOAT, .floatValue = &gAdditionalFOV },
 
-    { .name = "GRAPHICS", .type = CONFIG_TYPE_SECTION },
-    { .name = "60fps", .type = CONFIG_TYPE_BOOL, .boolValue = &g60FPS },
-    { .name = "disable_draw_distance", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableDrawDistance },
-    { .name = "disable_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLowPoly },
-    { .name = "draw_distance_multiplier", .type = CONFIG_TYPE_FLOAT, .floatValue = &gDrawDistanceMultiplier },
-    { .name = "noise_type", .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType },
-
     { .name = "HUD", .type = CONFIG_TYPE_SECTION },
     { .name = "hud_style", .type = CONFIG_TYPE_UINT, .uintValue = &gHudStyle },
     { .name = "4by3_hud", .type = CONFIG_TYPE_BOOL, .boolValue = &gCenterHud },
     { .name = "hud_filtering", .type = CONFIG_TYPE_BOOL, .boolValue = &gHUDFiltering },
     { .name = "hud_upscaling", .type = CONFIG_TYPE_UINT, .uintValue = &gHUDUpscaling },
-    { .name = "always_show_the_health_meter", .type = CONFIG_TYPE_BOOL, .boolValue = &gAlwaysShowHealth },
     { .name = "show_the_collected_stars", .type = CONFIG_TYPE_BOOL, .boolValue = &gHudStars },
-    { .name = "show_the_you_got_a_star_text", .type = CONFIG_TYPE_BOOL, .boolValue = &gStarGetText },
+    { .name = "always_show_the_health_meter", .type = CONFIG_TYPE_BOOL, .boolValue = &gAlwaysShowHealth },
     { .name = "hide_hud", .type = CONFIG_TYPE_BOOL, .boolValue = &gHideHud },
 
     { .name = "EXTRA MOVES", .type = CONFIG_TYPE_SECTION },
@@ -144,6 +144,7 @@ static const struct ConfigOption options[] = {
     { .name = "button_zr", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonZR },
     { .name = "button_thumbleft", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonThumbLeft },
     { .name = "button_thumbright", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonThumbRight },
+    { .name = "analog_stick_deadzone", .type = CONFIG_TYPE_UINT, .uintValue = &gControllerDeadzone },
 
     { .name = "KEY MAPPING", .type = CONFIG_TYPE_SECTION },
     { .name = "key_a", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyA },

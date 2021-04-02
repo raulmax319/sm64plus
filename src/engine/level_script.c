@@ -474,9 +474,9 @@ static void level_cmd_place_object(void) {
     struct SpawnInfo *spawnInfo;
 
     // This is a mess, you probably won't forgive me but I hope god will.
-    u8 canLoad = (gCurrLevelNum != LEVEL_DDD && gCurrLevelNum != LEVEL_JRB && ( gCurrLevelNum == LEVEL_LLL || (!(CMD_GET(u8, 2) & (1 << 0)) && gCurrActNum != 1) || ((CMD_GET(u8, 2) & (1 << 0)) && gCurrActNum == 1))) ||
-    (gCurrLevelNum == LEVEL_DDD && (save_file_get_flags() & SAVE_FLAG_DDD_MOVED_BACK)) ||
-    (gCurrLevelNum == LEVEL_JRB && ((gCurrActNum == 1 && (CMD_GET(u8, 2) & (1 << 0))) || (CMD_GET(u8, 2) & (1 << 1))));
+    u8 canLoad = ( gCurrLevelNum != LEVEL_DDD && gCurrLevelNum != LEVEL_JRB && ( gCurrLevelNum == LEVEL_LLL || (!(CMD_GET(u8, 2) & (1 << 0)) && gCurrActNum != 1) || ((CMD_GET(u8, 2) & (1 << 0)) && gCurrActNum == 1)) ) ||
+    ( gCurrLevelNum == LEVEL_DDD && (save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) ) ||
+    ( gCurrLevelNum == LEVEL_JRB && ((gCurrActNum == 1 && (CMD_GET(u8, 2) & (1 << 0))) || (gCurrActNum > 1 && (CMD_GET(u8, 2) & (1 << 1)))) );
 
     if (sCurrAreaIndex != -1 &&
     (((!gStayInLevel || gCurrLevelNum != LEVEL_JRB) && (CMD_GET(u8, 2) & val7)) || CMD_GET(u8, 2) == 0x1F || (gStayInLevel && canLoad))) {

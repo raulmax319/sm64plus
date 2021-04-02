@@ -24,6 +24,8 @@
 #include "sound_init.h"
 #include "thread6.h"
 
+#include "ingame_menu.h"
+
 #include "settings.h"
 
 #define INT_GROUND_POUND_OR_TWIRL (1 << 0) // 0x01
@@ -779,6 +781,16 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
     // Don't kick Mario if staying in levels is active
     if (stay_in_level()) {
         noExit = 1;
+
+        // Increase the act number
+        if (gCurrActNum-1 == gCollectedStar && gCurrActNum != 6) {
+            gCurrActNum++;
+            gDialogCourseActNum++;
+            while ((save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1) & 1 << (gCurrActNum-1)) && gCurrActNum != 6) {
+                gCurrActNum++;
+                gDialogCourseActNum++;
+            }
+        }
 	}
 
     if (m->health >= 0x100) {
@@ -816,7 +828,6 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         o->oInteractStatus = INT_STATUS_INTERACTED;
         m->interactObj = o;
         m->usedObj = o;
-
         
         save_file_collect_star_or_key(m->numCoins, starIndex);
 

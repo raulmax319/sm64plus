@@ -316,6 +316,7 @@ static void import_texture_rgba16(int tile) {
         if ((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT) {
             // Return different palettes.
             // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
+            // TODO (Mors): Have a more proper implementation. Maybe implement a sort of scripting system with palette files?
             switch (get_palette()) {
                 default:
                     rgba32_buf[4*i + 0] = SCALE_5_8(r);
