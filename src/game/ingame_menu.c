@@ -2473,7 +2473,7 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
-    print_generic_string(x + 14, y + 2, (gManualCamera == 2) ? textLakituManual : ((gManualCamera == 1) ? textManualMario : textManualMario));
+    print_generic_string(x + 14, y + 2, (gManualCamera == 2) ? textLakituManual : ((gManualCamera == 1) ? textManualMario : textLakituMario));
     print_generic_string(x + TXT1_X, y - 13, (gManualCamera == 2) ? textNormalCustom : ((gManualCamera == 1) ? textCustomUpClose : textNormalUpClose));
     print_generic_string(x + 124, y + 2, (gManualCamera == 1) ? textManualStop : textLakituStop);
     print_generic_string(x + TXT2_X, y - 13, (gManualCamera == 1) ? textCustomFixed : textNormalFixed);

@@ -1,6 +1,6 @@
 # Super Mario 64 Plus
 
-Super Mario 64 Plus is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that focuses on extensive customizability, and aims to add features that will fix some of the issues in the base game and enhance the gameplay, while keeping the vanilla feel.
+Super Mario 64 Plus is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that focuses on customizability and aims to add features that not only fix some of the issues found in the base game but also enhance the gameplay overall with extra options.
 
 These features include (but not limited to):
 - More responsive controls
@@ -10,6 +10,9 @@ These features include (but not limited to):
 - Optional extra modes
 - 60FPS support via interpolation
 - Various bug fixes
+
+Download the launcher from MFGG: https://www.mfgg.net/?act=resdb&param=02&c=2&id=38190
+If you need support, please head to the Super Mario Flashback official Discord server: http://discord.mors-games.com/
 
 ## FAQ
 
@@ -21,7 +24,7 @@ A: Yes.
 
 This repo does **not** include all the assets necessary for compiling the game. A prior copy of the game is required to extract the assets. Binaries of the game will **not** be distributed for this very reason.
 
-That being said, there is an official launcher that will help you build the game and configure its settings easily. You can download it from MFGG (once it's out). It is for 64-bit Windows systems only.
+That being said, there is an official launcher that will help you build the game and configure its settings easily. You can download it from [MFGG]([once it's out](https://www.mfgg.net/?act=resdb&param=02&c=2&id=38190)). It is for 64-bit Windows systems only.
 
 You can also build the game manually if you prefer to do so, or if you're not on a Windows platform. To do that, follow the following instructions.
 
@@ -29,9 +32,9 @@ Features that _might_ get added in the future:
 - Discord Rich Presence support
 - Smoother vertical camera movement
 - Rumble
-- Rolling
+- Odyssey-like rolling
 - Custom texture pack support
-- Full OpenGL support
+- Full OpenGL and SDL support
 
 ## Manual Building
 
