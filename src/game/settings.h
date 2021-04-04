@@ -46,7 +46,8 @@ extern s8 gSkipCutscenes;
 
 extern s8 gImprovedCamera;
 extern s8 gCenterCameraButton;
-extern s8 gManualCamera;
+extern unsigned int gManualCamera;
+extern s8 gSmarterManualCamera;
 extern s8 gInvertedCamera;
 extern float gCameraSpeed;
 extern float gAdditionalCameraDistance;

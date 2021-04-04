@@ -718,7 +718,7 @@ void render_you_got_a_star(u32 secondFrame) {
 
             courseName = segmented_to_virtual(courseNameTbl[courseIndex]);
 
-            if (courseIndex < COURSE_STAGES_COUNT) {
+            if (courseIndex < COURSE_STAGES_COUNT && gCollectedStar < 6) {
                 u8 *actName = segmented_to_virtual(actNameTbl[(gCurrCourseNum - 1) * 6 + gCollectedStar]);
                 print_generic_string(get_str_x_pos_from_center(SCREEN_WIDTH/2, actName, 1.0f), 28, actName);
             }

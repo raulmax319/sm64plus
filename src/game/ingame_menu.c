@@ -2442,6 +2442,9 @@ void render_pause_my_score_coins(void) {
 void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     u8 textLakituMario[] = { TEXT_LAKITU_MARIO };
     u8 textLakituStop[] = { TEXT_LAKITU_STOP };
+
+    u8 textManualMario[] = { TEXT_MANUAL_MARIO };
+    u8 textManualStop[] = { TEXT_MANUAL_STOP };
     u8 textLakituManual[] = { TEXT_LAKITU_MANUAL };
 #ifdef VERSION_EU
     u8 textNormalUpClose[][20] = {
@@ -2459,7 +2462,10 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 #else
     u8 textNormalUpClose[] = { TEXT_NORMAL_UPCLOSE };
     u8 textNormalFixed[] = { TEXT_NORMAL_FIXED };
-    u8 textNormal3rdPerson[] = { TEXT_NORMAL_3RDPERSON };
+
+    u8 textCustomUpClose[] = { TEXT_CUSTOM_UPCLOSE };
+    u8 textCustomFixed[] = { TEXT_CUSTOM_FIXED };
+    u8 textNormalCustom[] = { TEXT_NORMAL_CUSTOM };
 #endif
 
     handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 2);
@@ -2467,10 +2473,10 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
-    print_generic_string(x + 14, y + 2, gManualCamera ? textLakituManual : textLakituMario);
-    print_generic_string(x + TXT1_X, y - 13, gManualCamera ? textNormal3rdPerson : textNormalUpClose);
-    print_generic_string(x + 124, y + 2, textLakituStop);
-    print_generic_string(x + TXT2_X, y - 13, textNormalFixed);
+    print_generic_string(x + 14, y + 2, (gManualCamera == 2) ? textLakituManual : ((gManualCamera == 1) ? textManualMario : textManualMario));
+    print_generic_string(x + TXT1_X, y - 13, (gManualCamera == 2) ? textNormalCustom : ((gManualCamera == 1) ? textCustomUpClose : textNormalUpClose));
+    print_generic_string(x + 124, y + 2, (gManualCamera == 1) ? textManualStop : textLakituStop);
+    print_generic_string(x + TXT2_X, y - 13, (gManualCamera == 1) ? textCustomFixed : textNormalFixed);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     create_dl_translation_matrix(MENU_MTX_PUSH, ((index[0] - 1) * xIndex) + x, y + Y_VAL7, 0);

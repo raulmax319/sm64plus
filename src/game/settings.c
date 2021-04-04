@@ -199,7 +199,8 @@ s8 gSkipCutscenes = 0;
 
 s8 gImprovedCamera = 1;
 s8 gCenterCameraButton = 1;
-s8 gManualCamera = 1;
+unsigned int gManualCamera = 0;
+s8 gSmarterManualCamera = 0;
 s8 gInvertedCamera = 0;
 float gCameraSpeed = 32.0f;
 float gAdditionalCameraDistance = 0.0f;

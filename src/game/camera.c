@@ -978,6 +978,10 @@ s32 update_manual_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
     focus_on_mario(focus, pos, posY + yOff, focusY + yOff, sLakituDist + baseDist, pitch, camYaw);
 
+    if (gSmarterManualCamera) {
+        pan_ahead_of_player(c);
+    }
+
     return camYaw;
 }
 
@@ -1316,6 +1320,11 @@ void mode_manual_camera(struct Camera *c) {
         if (gPlayer1Controller->buttonDown & L_TRIG) {
             camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), LROTATE_SPEED);
         }
+    }
+
+    if (gSmarterManualCamera) {
+        camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 
+            ABS(gMarioState->forwardVel * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 8 : 12) ));
     }
 
     lakitu_zoom(800.f, 0x900);
@@ -3172,11 +3181,14 @@ void update_camera(struct Camera *c) {
             if (gPlayer1Controller->buttonPressed & R_TRIG) {
                 if (set_cam_angle(0) == CAM_ANGLE_LAKITU) {
                     set_cam_angle(CAM_ANGLE_MARIO);
-                    if (gManualCamera) {
+                    if (gManualCamera == 2) {
                         sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
                     }
                 } else {
                     set_cam_angle(CAM_ANGLE_LAKITU);
+                    if (gManualCamera == 1) {
+                        sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
+                    }
                 }
             }
         }
@@ -3233,85 +3245,124 @@ void update_camera(struct Camera *c) {
         sYawSpeed = 0x400;
 
         if (sSelectionFlags & CAM_MODE_MARIO_ACTIVE) {
-            switch (c->mode) {
-                case CAMERA_MODE_BEHIND_MARIO:
-                    mode_behind_mario_camera(c);
-                    break;
+            if (gManualCamera == 2) {
+                switch (c->mode) {
+                    case CAMERA_MODE_BEHIND_MARIO:
+                        mode_behind_mario_camera(c);
+                        break;
 
-                case CAMERA_MODE_C_UP:
-                    mode_c_up_camera(c);
-                    break;
+                    case CAMERA_MODE_C_UP:
+                        mode_c_up_camera(c);
+                        break;
 
-                case CAMERA_MODE_WATER_SURFACE:
-                    mode_water_surface_camera(c);
-                    break;
+                    case CAMERA_MODE_INSIDE_CANNON:
+                        mode_cannon_camera(c);
+                        break;
 
-                case CAMERA_MODE_INSIDE_CANNON:
-                    mode_cannon_camera(c);
-                    break;
-
-                default:
-                    if (gManualCamera)
+                    default:
                         mode_manual_camera(c);
-                    else
+                        break;
+                }
+            }
+            else {
+                switch (c->mode) {
+                    case CAMERA_MODE_BEHIND_MARIO:
+                        mode_behind_mario_camera(c);
+                        break;
+
+                    case CAMERA_MODE_C_UP:
+                        mode_c_up_camera(c);
+                        break;
+
+                    case CAMERA_MODE_WATER_SURFACE:
+                        mode_water_surface_camera(c);
+                        break;
+
+                    case CAMERA_MODE_INSIDE_CANNON:
+                        mode_cannon_camera(c);
+                        break;
+
+                    default:
                         mode_mario_camera(c);
+                        break;
+                }
             }
         } else {
-            switch (c->mode) {
-                case CAMERA_MODE_BEHIND_MARIO:
-                    mode_behind_mario_camera(c);
-                    break;
+            if (gManualCamera == 1) {
+                switch (c->mode) {
+                    case CAMERA_MODE_BEHIND_MARIO:
+                        mode_behind_mario_camera(c);
+                        break;
 
-                case CAMERA_MODE_C_UP:
-                    mode_c_up_camera(c);
-                    break;
+                    case CAMERA_MODE_C_UP:
+                        mode_c_up_camera(c);
+                        break;
 
-                case CAMERA_MODE_WATER_SURFACE:
-                    mode_water_surface_camera(c);
-                    break;
+                    case CAMERA_MODE_INSIDE_CANNON:
+                        mode_cannon_camera(c);
+                        break;
 
-                case CAMERA_MODE_INSIDE_CANNON:
-                    mode_cannon_camera(c);
-                    break;
+                    default:
+                        mode_manual_camera(c);
+                }
+            }
+            else {
+                switch (c->mode) {
+                    case CAMERA_MODE_BEHIND_MARIO:
+                        mode_behind_mario_camera(c);
+                        break;
 
-                case CAMERA_MODE_8_DIRECTIONS:
-                    mode_8_directions_camera(c);
-                    break;
+                    case CAMERA_MODE_C_UP:
+                        mode_c_up_camera(c);
+                        break;
 
-                case CAMERA_MODE_RADIAL:
-                    mode_radial_camera(c);
-                    break;
+                    case CAMERA_MODE_WATER_SURFACE:
+                        mode_water_surface_camera(c);
+                        break;
 
-                case CAMERA_MODE_OUTWARD_RADIAL:
-                    mode_outward_radial_camera(c);
-                    break;
+                    case CAMERA_MODE_INSIDE_CANNON:
+                        mode_cannon_camera(c);
+                        break;
 
-                case CAMERA_MODE_CLOSE:
-                    mode_lakitu_camera(c);
-                    break;
+                    case CAMERA_MODE_8_DIRECTIONS:
+                        mode_8_directions_camera(c);
+                        break;
 
-                case CAMERA_MODE_FREE_ROAM:
-                    mode_lakitu_camera(c);
-                    break;
-                case CAMERA_MODE_BOSS_FIGHT:
-                    mode_boss_fight_camera(c);
-                    break;
+                    case CAMERA_MODE_RADIAL:
+                        mode_radial_camera(c);
+                        break;
 
-                case CAMERA_MODE_PARALLEL_TRACKING:
-                    mode_parallel_tracking_camera(c);
-                    break;
+                    case CAMERA_MODE_OUTWARD_RADIAL:
+                        mode_outward_radial_camera(c);
+                        break;
 
-                case CAMERA_MODE_SLIDE_HOOT:
-                    mode_slide_camera(c);
-                    break;
+                    case CAMERA_MODE_CLOSE:
+                        mode_lakitu_camera(c);
+                        break;
 
-                case CAMERA_MODE_FIXED:
-                    mode_fixed_camera(c);
-                    break;
+                    case CAMERA_MODE_FREE_ROAM:
+                        mode_lakitu_camera(c);
+                        break;
+                    case CAMERA_MODE_BOSS_FIGHT:
+                        mode_boss_fight_camera(c);
+                        break;
 
-                case CAMERA_MODE_SPIRAL_STAIRS:
-                    mode_spiral_stairs_camera(c);
-                    break;
+                    case CAMERA_MODE_PARALLEL_TRACKING:
+                        mode_parallel_tracking_camera(c);
+                        break;
+
+                    case CAMERA_MODE_SLIDE_HOOT:
+                        mode_slide_camera(c);
+                        break;
+
+                    case CAMERA_MODE_FIXED:
+                        mode_fixed_camera(c);
+                        break;
+
+                    case CAMERA_MODE_SPIRAL_STAIRS:
+                        mode_spiral_stairs_camera(c);
+                        break;
+                }
             }
         }
     }
