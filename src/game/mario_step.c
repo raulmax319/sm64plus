@@ -416,7 +416,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
     lowerWall = resolve_and_return_wall_collisions(nextPos, 30.0f, 50.0f);
 
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-    if (gCollisionFixes) {
+    if (gFixVariousBugs) {
         ceilHeight = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
     }
     else {
@@ -448,7 +448,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
 
     //! This check uses f32, but findFloor uses short (overflow jumps)
     if (nextPos[1] <= floorHeight) {
-        if (!gCollisionFixes || gMarioObject->platform == NULL | (m->vel[1]<=0)) {
+        if (!gFixVariousBugs || (gMarioObject->platform == NULL | (m->vel[1]<=0))) {
             if (ceilHeight - floorHeight > 160.0f) {
                 m->pos[0] = nextPos[0];
                 m->pos[2] = nextPos[2];

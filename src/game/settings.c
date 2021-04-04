@@ -163,14 +163,16 @@ s8 configCustomInternalResolution = 0;
 unsigned int configInternalResolutionWidth = 3840;
 unsigned int configInternalResolutionHeight = 2160;
 
+float configSeqVolume[] = {1, 1, 1};
+
+// TODO (Mors): Rename these with a config prefix.
 s8 g60FPS = 1;
 s8 gDisableDrawDistance = 1;
-s8 gDisableLowPoly = 1;
 float gDrawDistanceMultiplier = 1.0f;
+s8 gDisableLowPoly = 1;
 unsigned int gNoiseType = 0;
 s8 configForce4by3 = 0;
 
-// TODO (Mors): Rename these with a config prefix.
 s8 gImprovedControls = 1;
 s8 gBackwardSpeedCap = 1;
 s8 gDpadControls = 1;
@@ -178,8 +180,7 @@ s8 gFullAirControl = 0;
 s8 gDisableBLJ = 0;
 s8 gDisableFallDamage = 0;
 
-s8 gCollisionFixes = 1;
-s8 gFixMantaRayRings = 1;
+s8 gFixVariousBugs = 1;
 s8 gRespawnBlueCoinSwitch = 1;
 s8 gRemoveAnnoyingWarps = 1;
 // TODO (Mors): Turn this into a "updated powerups" option eventually.

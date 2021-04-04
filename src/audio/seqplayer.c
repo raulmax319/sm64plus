@@ -7,6 +7,8 @@
 #include "load.h"
 #include "seqplayer.h"
 
+#include "game/settings.h"
+
 #define PORTAMENTO_IS_SPECIAL(x) ((x).mode & 0x80)
 #define PORTAMENTO_MODE(x) ((x).mode & ~0x80)
 #define PORTAMENTO_MODE_1 1
@@ -1576,7 +1578,7 @@ GLOBAL_ASM("asm/non_matchings/sequence_channel_process_script_jp.s")
 GLOBAL_ASM("asm/non_matchings/sequence_channel_process_script_us.s")
 #endif
 
-void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
+void sequence_player_process_sequence(struct SequencePlayer *seqPlayer, float seqVol) {
     u8 cmd;
     u8 loBits;
     u8 temp;
@@ -1863,7 +1865,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                                 if (seqPlayer->fadeTimerUnkEu != 0) {
                                     seqPlayer->fadeVelocity = (temp32 / 127.0f - seqPlayer->fadeVolume) / FLOAT_CAST(seqPlayer->fadeTimer);
                                 } else {
-                                    seqPlayer->fadeVolume = temp32 / 127.0f;
+                                    seqPlayer->fadeVolume = temp32 / 127.0f * seqVol;
                                 }
                         }
                         break;
@@ -1873,18 +1875,18 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                         switch (seqPlayer->state) {
                             case SEQUENCE_PLAYER_STATE_2:
                                 if (seqPlayer->fadeTimer != 0) {
-                                    f32 targetVolume = FLOAT_CAST(temp) / US_FLOAT(127.0);
+                                    f32 targetVolume = FLOAT_CAST(temp) / US_FLOAT(127.0) * seqVol;
                                     seqPlayer->fadeVelocity = (targetVolume - seqPlayer->fadeVolume)
                                                               / FLOAT_CAST(seqPlayer->fadeTimer);
                                     break;
                                 }
                                 // fallthrough
                             case SEQUENCE_PLAYER_STATE_0:
-                                seqPlayer->fadeVolume = FLOAT_CAST(temp) / US_FLOAT(127.0);
+                                seqPlayer->fadeVolume = FLOAT_CAST(temp) / US_FLOAT(127.0) * seqVol;
                                 break;
                             case SEQUENCE_PLAYER_STATE_FADE_OUT:
                             case SEQUENCE_PLAYER_STATE_4:
-                                seqPlayer->volume = FLOAT_CAST(temp) / US_FLOAT(127.0);
+                                seqPlayer->volume = FLOAT_CAST(temp) / US_FLOAT(127.0) * seqVol;
                                 break;
                         }
                         break;
@@ -1892,7 +1894,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                     case 0xda: // seq_changevol
                         temp = m64_read_u8(state);
                         seqPlayer->fadeVolume =
-                            seqPlayer->fadeVolume + (f32) (s8)temp / US_FLOAT(127.0);
+                            seqPlayer->fadeVolume + (f32) (s8)temp / US_FLOAT(127.0) * seqVol;
                         break;
 #endif
 
@@ -2042,10 +2044,10 @@ void process_sequences(UNUSED s32 iterationsRemaining) {
     for (i = 0; i < SEQUENCE_PLAYERS; i++) {
         if (gSequencePlayers[i].enabled == TRUE) {
 #ifdef VERSION_EU
-            sequence_player_process_sequence(&gSequencePlayers[i]);
+            sequence_player_process_sequence(&gSequencePlayers[i], configSeqVolume[i]);
             sequence_player_process_sound(&gSequencePlayers[i]);
 #else
-            sequence_player_process_sequence(gSequencePlayers + i);
+            sequence_player_process_sequence(gSequencePlayers + i, configSeqVolume[i]);
             sequence_player_process_sound(gSequencePlayers + i);
 #endif
         }

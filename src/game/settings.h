@@ -13,10 +13,12 @@ extern s8 configCustomInternalResolution;
 extern unsigned int configInternalResolutionWidth;
 extern unsigned int configInternalResolutionHeight;
 
+extern float configSeqVolume[];
+
 extern s8 g60FPS;
 extern s8 gDisableDrawDistance;
-extern s8 gDisableLowPoly;
 extern float gDrawDistanceMultiplier;
+extern s8 gDisableLowPoly;
 extern unsigned int gNoiseType;
 extern s8 configForce4by3;
 
@@ -27,8 +29,7 @@ extern s8 gFullAirControl;
 extern s8 gDisableBLJ;
 extern s8 gDisableFallDamage;
 
-extern s8 gCollisionFixes;
-extern s8 gFixMantaRayRings;
+extern s8 gFixVariousBugs;
 extern s8 gRespawnBlueCoinSwitch;
 extern s8 gRemoveAnnoyingWarps;
 extern s8 gImprovedMetalCap;
