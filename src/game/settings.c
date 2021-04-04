@@ -193,7 +193,6 @@ unsigned int gStayInLevel = 0;
 s8 gSkipStarSelect = 0;
 s8 gRestartLevelAfterStar = 0;
 s8 gLeaveAnyTime = 0;
-s8 gShow100CoinStar = 0;
 s8 gVisibleSecrets = 0;
 s8 gFlexibleCannons = 0;
 s8 gSkipCutscenes = 0;
@@ -211,6 +210,7 @@ s8 gCenterHud = 0;
 s8 gHUDFiltering = 0;
 unsigned int gHUDUpscaling = 0;
 s8 gHudStars = 0;
+s8 gShow100CoinStar = 0;
 s8 gAlwaysShowHealth = 0;
 s8 gHideHud = 0;
 

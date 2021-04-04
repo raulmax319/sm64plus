@@ -40,7 +40,6 @@ extern unsigned int gStayInLevel;
 extern s8 gSkipStarSelect;
 extern s8 gRestartLevelAfterStar;
 extern s8 gLeaveAnyTime;
-extern s8 gShow100CoinStar;
 extern s8 gVisibleSecrets;
 extern s8 gFlexibleCannons;
 extern s8 gSkipCutscenes;
@@ -58,6 +57,7 @@ extern s8 gCenterHud;
 extern s8 gHUDFiltering;
 extern unsigned int gHUDUpscaling;
 extern s8 gHudStars;
+extern s8 gShow100CoinStar;
 extern s8 gAlwaysShowHealth;
 extern s8 gHideHud;
 
