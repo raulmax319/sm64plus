@@ -14,59 +14,9 @@ These features include (but not limited to):
 Download the launcher from MFGG: https://www.mfgg.net/?act=resdb&param=02&c=2&id=38190
 If you need support, please head to the Super Mario Flashback official Discord server: http://discord.mors-games.com/
 
-## FAQ
+This repo does **not** include all the assets necessary for compiling the game. A prior copy of the game is required to extract the assets. Binaries of the game itself will **not** be distributed for this very reason.
 
-**Q:** I can't build. I'm getting an error!
-
-**A:** You can try a few things. Try reinstalling MSYS2 and deleting the SM64Plus folder first. Disabling your antivirus could help as well. If all else fails, just restart your computer. If those don't help, you can ask for help on the Discord server.
-
-
-**Q:** I could build, but the game doesn't launch.
-
-**A:** You can rebuild the game from the main menu. When asked to clear your build files, say yes. If this doesn't work, also try restarting your computer.
-
-
-**Q:** The game is running too fast!
-
-**A:** You can try to limit the game's FPS using Nvidia's control panel or other 3rd party tools. Make sure that you limit the "sm64.us.f3dex2e.exe"'s frame rate, and not the launcher.
-
-
-**Q:** My controller works in the launcher, but not in the actual game. What do I do?
-
-**A:** The game itself doesn't have support for DirectInput controllers yet. You need to use a tool like DS4Windows, BetterJoyForCemu, or 360ce depending on your controller. Or alternatively, you can also put the game in your Steam library and play it that way, Steam takes care of all that for you.
-
-
-**Q:** Can I use mods with this? What about Render96?
-
-**A:** There's no support for mods for other SM64 PC port forks, and there will never be unfortunately. This includes Render96 too. As for texture packs, support for them is planned for the future.
-
-
-**Q:** Can I have a logo of the game?
-
-**A:** Sure. Shoutouts to @Benial for doing such a good job with it.
-
-
-**Q:** Is there Linux or Mac support?
-
-**A:** Nope. It might get Linux support in the future, but not yet.
-
-
-**Q:** Is your game safe?
-
-**A:** Yeah. If your antivirus is giving you any warnings, it's most likely false. You especially shouldn't trust Chrome on this kind of stuff.
-
-
-**Q:** Will Nintendo take this game down?
-
-**A:** https://twitter.com/OfficialMFGG/status/1121019925521489920
-
-## Keep in mind...
-
-This repo does **not** include all the assets necessary for compiling the game. A prior copy of the game is required to extract the assets. Binaries of the game will **not** be distributed for this very reason.
-
-That being said, there is an official launcher that will help you build the game and configure its settings easily. You can download it from [MFGG]([once it's out](https://www.mfgg.net/?act=resdb&param=02&c=2&id=38190)). It is for 64-bit Windows systems only.
-
-You can also build the game manually if you prefer to do so, or if you're not on a Windows platform. To do that, follow the following instructions.
+You can also build the game manually if you prefer to do so, or if you're not on a Windows platform. To do that, follow the instructions below.
 
 Features that _might_ get added in the future:
 - Discord Rich Presence support
@@ -75,6 +25,60 @@ Features that _might_ get added in the future:
 - Odyssey-like rolling
 - Custom texture pack support
 - Full OpenGL and SDL support
+
+## FAQ
+
+**Q:** I can't build. I'm getting an error!
+
+**A:** You can try a few things. Try reinstalling MSYS2 and deleting the SM64Plus folder first. Disabling your antivirus could help as well. If all else fails, just restart your computer. If those don't help, you can ask for help on the Discord server.
+
+<br>
+
+**Q:** I could build, but the game doesn't launch.
+
+**A:** You can rebuild the game from the main menu. When asked to clear your build files, say yes. If this doesn't work, also try restarting your computer.
+
+<br>
+
+**Q:** The game is running too fast!
+
+**A:** You can try to limit the game's FPS using Nvidia's control panel or other 3rd party tools. Make sure that you limit the "sm64.us.f3dex2e.exe"'s frame rate, and not the launcher.
+
+<br>
+
+**Q:** My controller works in the launcher, but not in the actual game. What do I do?
+
+**A:** The game itself doesn't have support for DirectInput controllers yet. You need to use a tool like DS4Windows, BetterJoyForCemu, or 360ce depending on your controller. Or alternatively, you can also put the game in your Steam library and play it that way, Steam takes care of all that for you.
+
+<br>
+
+**Q:** Can I use mods with this? What about Render96?
+
+**A:** There's no support for mods for other SM64 PC port forks, and there will never be unfortunately. This includes Render96 too. As for texture packs, support for them is planned for the future.
+
+<br>
+
+**Q:** Can I have a logo of the game?
+
+**A:** Sure. Shoutouts to @Benial for doing such a good job with it.
+
+<br>
+
+**Q:** Is there Linux or Mac support?
+
+**A:** Nope. It might get Linux support in the future, but not yet.
+
+<br>
+
+**Q:** Is your game safe?
+
+**A:** Yeah. If your antivirus is giving you any warnings, it's most likely false. You especially shouldn't trust Chrome on this kind of stuff.
+
+<br>
+
+**Q:** Will Nintendo take this game down?
+
+**A:** https://twitter.com/OfficialMFGG/status/1121019925521489920
 
 ## Changelog
 
@@ -107,6 +111,18 @@ Features that _might_ get added in the future:
 4. Place a *Super Mario 64* ROM called `baserom.us.z64` into the project folder for asset extraction.
 5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
 6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e.exe`.
+
+### Linux (Untested!)
+
+1. Install prerequisites (Ubuntu) with `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`.
+2. Clone the repo with `git clone https://github.com/MorsGames/sm64-port.git`.
+3. Place a Super Mario 64 ROM called `baserom.us.z64` into the project folder for asset extraction.
+5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
+5. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
+
+## Additional options
+
+* You can target OpenGL by using `make ENABLE_OPENGL=1`. **CURRENTLY NONFUNCTIONAL DUE TO ISSUES WITH SDL!** Help is needed to fix this!
 
 ## Credits.
 - **Mors:** Most new things you see here.
