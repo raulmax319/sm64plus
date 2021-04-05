@@ -48,7 +48,7 @@ static void cloud_act_spawn_parts(void) {
  * Wait for mario to approach, then unhide and enter the spawn parts action.
  */
 static void cloud_act_fwoosh_hidden(void) {
-    if (o->oDistanceToMario < 2000.0f * gDrawDistanceMultiplier && !gDisableDrawDistance) {
+    if (o->oDistanceToMario < 2000.0f * gDrawDistanceMultiplier || gDisableDrawDistance) {
         cur_obj_unhide();
         o->oAction = CLOUD_ACT_SPAWN_PARTS;
     }

@@ -152,7 +152,7 @@ static void pokey_act_uninitialized(void) {
     s32 i;
     s16 partModel;
 
-    if (o->oDistanceToMario < 2000.0f * gDrawDistanceMultiplier && !gDisableDrawDistance) {
+    if (o->oDistanceToMario < 2000.0f * gDrawDistanceMultiplier || gDisableDrawDistance) {
         partModel = MODEL_POKEY_HEAD;
 
         for (i = 0; i < 5; i++) {

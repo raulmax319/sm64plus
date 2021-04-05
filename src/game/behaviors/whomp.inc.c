@@ -233,6 +233,10 @@ void whomp_act_8(void) {
         if (cur_obj_update_dialog_with_cutscene(2, 2, CUTSCENE_DIALOG, DIALOG_115)) {
             obj_set_angle(o, 0, 0, 0);
             cur_obj_hide();
+
+            // Uhhhhh, I'm not sure what causes its hitbox to stay in the stage so I'll just apply this hacky fix.
+            cur_obj_scale(0.0f);
+
             cur_obj_become_intangible();
             spawn_mist_particles_variable(0, 0, 200.0f);
             spawn_triangle_break_particles(20, 138, 3.0f, 4);
