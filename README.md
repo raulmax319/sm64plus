@@ -17,30 +17,47 @@ If you need support, please head to the Super Mario Flashback official Discord s
 ## FAQ
 
 **Q:** I can't build. I'm getting an error!
+
 **A:** You can try a few things. Try reinstalling MSYS2 and deleting the SM64Plus folder first. Disabling your antivirus could help as well. If all else fails, just restart your computer. If those don't help, you can ask for help on the Discord server.
 
+
 **Q:** I could build, but the game doesn't launch.
+
 **A:** You can rebuild the game from the main menu. When asked to clear your build files, say yes. If this doesn't work, also try restarting your computer.
 
+
 **Q:** The game is running too fast!
+
 **A:** You can try to limit the game's FPS using Nvidia's control panel or other 3rd party tools. Make sure that you limit the "sm64.us.f3dex2e.exe"'s frame rate, and not the launcher.
 
+
 **Q:** My controller works in the launcher, but not in the actual game. What do I do?
+
 **A:** The game itself doesn't have support for DirectInput controllers yet. You need to use a tool like DS4Windows, BetterJoyForCemu, or 360ce depending on your controller. Or alternatively, you can also put the game in your Steam library and play it that way, Steam takes care of all that for you.
 
+
 **Q:** Can I use mods with this? What about Render96?
+
 **A:** There's no support for mods for other SM64 PC port forks, and there will never be unfortunately. This includes Render96 too. As for texture packs, support for them is planned for the future.
 
+
 **Q:** Can I have a logo of the game?
+
 **A:** Sure. Shoutouts to @Benial for doing such a good job with it.
 
+
 **Q:** Is there Linux or Mac support?
+
 **A:** Nope. It might get Linux support in the future, but not yet.
 
+
 **Q:** Is your game safe?
+
 **A:** Yeah. If your antivirus is giving you any warnings, it's most likely false. You especially shouldn't trust Chrome on this kind of stuff.
 
+
 **Q:** Will Nintendo take this game down?
+
 **A:** https://twitter.com/OfficialMFGG/status/1121019925521489920
 
 ## Keep in mind...
@@ -62,14 +79,14 @@ Features that _might_ get added in the future:
 ## Changelog
 
 ### v1.0.1 (06/04/2021):
-Launcher:
+**Launcher:**
 - Disabled DirectInput support because the game itself doesn't support it yet, which causes confusion.
 - Made it possible to reload all settings from the presets menu.
 - Made it possible to build the game while MSYS2 is installed on a different location.
 - Made keyboard configuration less cumbersome.
 - Made the wording during the initial setup a bit clearer.
 
-Game itself:
+**Game itself:**
 - Fixed certain enemies (like Pokeys and Goomba triplets) not spawning when the draw distance is disabled.
 - Fixed King Whomp's collisions not unloading after his defeat.
 - Did other minor fixes.
