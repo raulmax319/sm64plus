@@ -12,6 +12,7 @@ These features include (but not limited to):
 - Various bug fixes
 
 Download the launcher from MFGG: https://www.mfgg.net/?act=resdb&param=02&c=2&id=38190
+
 If you need support, please head to the Super Mario Flashback official Discord server: http://discord.mors-games.com/
 
 This repo does **not** include all the assets necessary for compiling the game. A prior copy of the game is required to extract the assets. Binaries of the game itself will **not** be distributed for this very reason.
@@ -36,7 +37,9 @@ Features that _might_ get added in the future:
 
 **Q:** I could build, but the game doesn't launch.
 
-**A:** You can rebuild the game from the main menu. When asked to clear your build files, say yes. If this doesn't work, also try restarting your computer.
+**A:** It seems like reinstalling MSYS2 and deleting the SM64Plus folder fixes the issues for most people. Disabling your antivirus could also help in some cases. If all else fails, you can try the old "restarting your computer" trick.
+
+If you're still stuck after trying all that, you can post your error to the #help-me channel of the Discord server.
 
 <br>
 
@@ -46,21 +49,21 @@ Features that _might_ get added in the future:
 
 <br>
 
-**Q:** My controller works in the launcher, but not in the actual game. What do I do?
+**Q:** My controller doesn't work in the game. What do I do?
 
-**A:** The game itself doesn't have support for DirectInput controllers yet. You need to use a tool like DS4Windows, BetterJoyForCemu, or 360ce depending on your controller. Or alternatively, you can also put the game in your Steam library and play it that way, Steam takes care of all that for you.
+**A:** The game itself doesn't have support for DirectInput controllers yet. You can add it to your Steam library, which seems to make most controllers work. You can also use a tool like DS4Windows, BetterJoyForCemu, or 360ce depending on your controller.
 
 <br>
 
 **Q:** Can I use mods with this? What about Render96?
 
-**A:** There's no support for mods for other SM64 PC port forks, and there will never be unfortunately. This includes Render96 too. As for texture packs, support for them is planned for the future.
+**A:** There's no official support for mods for other PC port forks, and there (most likely) will never be unfortunately. This includes Render96 too, there are no current plans for adding support for it here.
 
 <br>
 
 **Q:** Can I have a logo of the game?
 
-**A:** Sure. Shoutouts to @Benial for doing such a good job with it.
+**A:** [Sure](https://cdn.discordapp.com/attachments/828684639618203688/828756298643931176/sm64plus-centred.png). Shoutouts to @Benial for doing such a good job with it.
 
 <br>
 
