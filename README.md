@@ -110,16 +110,16 @@ If you're still stuck after trying all that, you can post your error to the #hel
   * 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 mingw-w64-x86_64-glew`
   * 32-bit (untested, but should also work on 64-bit machines): Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc mingw-w64-i686-SDL2 mingw-w64-i686-glew`
   * Do not install `gcc`.
-3. Clone the repo with `git clone https://github.com/MorsGames/sm64-port.git`, then enter it with `cd sm64-port`.
-4. Place a *Super Mario 64* ROM called `baserom.us.z64` into the project folder for asset extraction.
+3. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`, then enter it with `cd sm64plus`.
+4. Place a *Super Mario 64* ROM called `baserom.us.z64` into the repository folder for asset extraction.
 5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
 6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e.exe`.
 
 ### Linux (Untested!)
 
 1. Install prerequisites (Ubuntu) with `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`.
-2. Clone the repo with `git clone https://github.com/MorsGames/sm64-port.git`.
-3. Place a Super Mario 64 ROM called `baserom.us.z64` into the project folder for asset extraction.
+2. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`.
+3. Place a Super Mario 64 ROM called `baserom.us.z64` into the repository folder for asset extraction.
 5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
 5. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
 
