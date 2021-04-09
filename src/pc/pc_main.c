@@ -32,7 +32,11 @@
 
 #include "compat.h"
 
+#ifdef __linux__
+#define CONFIG_FILE "/SM64Plus/settings.ini"
+#elif defined(_WIN32) || defined(_WIN64)
 #define CONFIG_FILE "\\SM64Plus\\settings.ini"
+#endif
 
 OSMesg D_80339BEC;
 OSMesgQueue gSIEventMesgQueue;

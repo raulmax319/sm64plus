@@ -11,6 +11,8 @@
 
 #include "controller_api.h"
 
+#include "game/settings.h"
+
 #define DEADZONE 4960
 
 static bool init_ok;
@@ -81,7 +83,7 @@ static void controller_sdl_read(OSContPad *pad) {
 
     if (gImprovedCamera) {
         uint32_t magnitude_sq2 = (uint32_t)(rightx * rightx) + (uint32_t)(righty * righty);
-        if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
+        if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
             pad->stick2_x = rightx / 409;
         }
     }

@@ -10,6 +10,10 @@
 #include "../game/settings.h"
 #include "../game/main.h"
 
+#ifdef __linux__
+#include <pwd.h>
+#endif
+
 #define ARRAY_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
 
 enum ConfigOptionType {
@@ -260,16 +264,23 @@ void configfile_load(const char *filename) {
     FILE *file;
     char *line;
 
-    printf("Loading configuration from '%s'\n", filename);
-
     char *str = malloc(128);
+#ifdef __linux__
+    if (strcpy(str, getenv("HOME"))[0] == "\0") {
+        strcpy(str, getpwuid(getuid())->pw_dir);
+    }
+    strcat(str, "/.config");
+#elif defined(_WIN32) || defined(_WIN64)
     strcpy(str, getenv("LOCALAPPDATA"));
+#endif
     strcat(str, filename);
+
+    printf("Loading configuration from '%s'\n", str);
 
     file = fopen(str, "r");
     if (file == NULL) {
         // Create a new config file and save defaults
-        printf("Config file '%s' not found. Creating it.\n", filename);
+        printf("Config file '%s' not found. Creating it.\n", str);
         configfile_save(filename);
         return;
     }
@@ -329,11 +340,28 @@ void configfile_load(const char *filename) {
 void configfile_save(const char *filename) {
     FILE *file;
 
-    printf("Saving configuration to '%s'\n", filename);
-
+    char *dir = malloc(128);
+#ifdef __linux__
+    if (strcpy(dir, getenv("HOME"))[0] == "\0") {
+        strcpy(dir, getpwuid(getuid())->pw_dir);
+    }
+    strcat(dir, "/.config");
+#elif defined(_WIN32) || defined(_WIN64)
+    strcpy(dir, getenv("LOCALAPPDATA"));
+#endif
     char *str = malloc(128);
-    strcpy(str, getenv("LOCALAPPDATA"));
+    strcpy(str, dir);
     strcat(str, filename);
+
+    printf("Saving configuration to '%s'\n", str);
+
+#ifdef __linux__
+    strcat(dir, "/");
+    char* copy = strdup(filename);
+    strcat(dir, strtok(copy + 1, "/"));
+    free(copy);
+    mkdir(dir, 0777);
+#endif
 
     file = fopen(str, "w");
     if (file == NULL) {
