@@ -714,12 +714,12 @@ s32 act_in_cannon(struct MarioState *m) {
 
         case 2:
             if (gImprovedControls) {
-                m->faceAngle[0] -= (s16)(m->controller->stickY * 6.0f);
-                marioObj->oMarioCannonInputYaw -= (s16)(m->controller->stickX * 6.0f);
+                m->faceAngle[0] -= (s16)((m->controller->stickY + m->controller->stick2Y) * 6.0f);
+                marioObj->oMarioCannonInputYaw -= (s16)((m->controller->stickX + m->controller->stick2X) * 6.0f);
             }
             else {
-                m->faceAngle[0] -= (s16)(m->controller->stickY * 10.0f);
-                marioObj->oMarioCannonInputYaw -= (s16)(m->controller->stickX * 10.0f);
+                m->faceAngle[0] -= (s16)((m->controller->stickY + m->controller->stick2Y) * 10.0f);
+                marioObj->oMarioCannonInputYaw -= (s16)((m->controller->stickX + m->controller->stick2X) * 10.0f);
             }
 
             if (m->faceAngle[0] > 0x38E3) {

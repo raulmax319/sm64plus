@@ -13,6 +13,7 @@ static int keyboard_buttons_down;
 
 static long mouse_x;
 static long mouse_y;
+static s8 mouse_wheel;
 
 static int keyboard_mapping[15][2];
 
@@ -47,7 +48,7 @@ void keyboard_on_mouse_move(long x, long y) {
     mouse_y = y;
 }
 
-void keyboard_on_mouse_press(s8 left, s8 right, s8 middle) {
+void keyboard_on_mouse_press(s8 left, s8 right, s8 middle, s8 wheel) {
     if (left > 0)
         keyboard_buttons_down |= configMouseLeft;
     if (left < 0)
@@ -62,6 +63,15 @@ void keyboard_on_mouse_press(s8 left, s8 right, s8 middle) {
         keyboard_buttons_down |= configMouseMiddle;
     if (middle < 0)
         keyboard_buttons_down &= ~configMouseMiddle;
+
+    if (wheel < 0) {
+        keyboard_buttons_down |= configMouseWheelDown;   
+        mouse_wheel = wheel;
+    }
+    if (wheel > 0) {
+        keyboard_buttons_down |= configMouseWheelUp;
+        mouse_wheel = wheel;
+    }
 }
 
 static void set_keyboard_mapping(int index, int mask, int scancode) {
@@ -108,6 +118,15 @@ static void keyboard_read(OSContPad *pad) {
             pad->stick2_x = mouse_x*gMouseSensitivity;
         if (mouse_y != 0)
             pad->stick2_y = mouse_y*gMouseSensitivity;
+        if (mouse_wheel < -1) {
+            keyboard_buttons_down &= ~configMouseWheelDown;
+            mouse_wheel = 0;
+        }
+        if (mouse_wheel > 1) {
+            keyboard_buttons_down &= ~configMouseWheelUp;
+            mouse_wheel = 0;
+        }
+        mouse_wheel *= 2;
     }
 
     pad->button |= keyboard_buttons_down;

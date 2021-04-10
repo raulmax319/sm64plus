@@ -69,6 +69,8 @@ extern float gMouseSensitivity;
 extern unsigned int configMouseLeft;
 extern unsigned int configMouseRight;
 extern unsigned int configMouseMiddle;
+extern unsigned int configMouseWheelUp;
+extern unsigned int configMouseWheelDown;
 
 extern s8 gWallSliding;
 extern s8 gGroundPoundJump;

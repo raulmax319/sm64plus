@@ -222,6 +222,8 @@ float gMouseSensitivity = 4.0f;
 unsigned int configMouseLeft = A_BUTTON;
 unsigned int configMouseRight = B_BUTTON;
 unsigned int configMouseMiddle = Z_TRIG;
+unsigned int configMouseWheelUp = U_CBUTTONS;
+unsigned int configMouseWheelDown = D_CBUTTONS;
 
 s8 gWallSliding = 1;
 s8 gGroundPoundJump = 0;

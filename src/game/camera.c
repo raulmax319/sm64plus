@@ -961,7 +961,7 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 /**
  * Update the camera during manual mode
  */
-s32 update_manual_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+s32 update_manual_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff) {
     UNUSED f32 cenDistX = sMarioCamState->pos[0] - c->areaCenX;
     UNUSED f32 cenDistZ = sMarioCamState->pos[2] - c->areaCenZ;
     s16 camYaw = s8DirModeBaseYaw + sManualModeYawOffset;
@@ -971,7 +971,6 @@ s32 update_manual_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     UNUSED f32 unused1;
     UNUSED f32 unused2;
     UNUSED f32 unused3;
-    f32 yOff = 150.f;
     f32 baseDist = 700.f+gAdditionalCameraDistance;
 
     sAreaYaw = camYaw;
@@ -1285,7 +1284,7 @@ void mode_8_directions_camera(struct Camera *c) {
 /**
  * A custom mode that gives you more control with the camera
  */
-void mode_manual_camera(struct Camera *c) {
+void mode_manual_camera(struct Camera *c, f32 yOff) {
     Vec3f pos;
     UNUSED u8 unused[8];
     s16 oldAreaYaw = sAreaYaw;
@@ -1328,7 +1327,7 @@ void mode_manual_camera(struct Camera *c) {
     }
 
     lakitu_zoom(800.f, 0x900);
-    c->nextYaw = update_manual_camera(c, c->focus, pos);
+    c->nextYaw = update_manual_camera(c, c->focus, pos, yOff);
     c->pos[0] = pos[0];
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
@@ -2824,8 +2823,8 @@ void move_mario_head_c_up(UNUSED struct Camera *c) {
     UNUSED s16 pitch = sCUpCameraPitch;
     UNUSED s16 yaw = sModeOffsetYaw;
 
-    sCUpCameraPitch += (s16)(gPlayer1Controller->stickY * 10.f);
-    sModeOffsetYaw -= (s16)(gPlayer1Controller->stickX * 10.f);
+    sCUpCameraPitch += (s16)((gPlayer1Controller->stickY + gPlayer1Controller->stick2Y) * 10.f);
+    sModeOffsetYaw -= (s16)((gPlayer1Controller->stickX + gPlayer1Controller->stick2X) * 10.f);
 
     // Bound looking up to nearly 80 degrees.
     if (sCUpCameraPitch > 0x38E3) {
@@ -2943,14 +2942,14 @@ s32 update_in_cannon(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
  * Updates the camera when Mario is in a cannon.
  * sCannonYOffset is used to make the camera rotate down when Mario has just entered the cannon
  */
-void mode_cannon_camera(struct Camera *c) {
+void mode_cannon_camera(struct Camera *c, s8 manual) {
     UNUSED u8 unused[24];
 
     sLakituPitch = 0;
     gCameraMovementFlags &= ~CAM_MOVING_INTO_MODE;
     c->nextYaw = update_in_cannon(c, c->focus, c->pos);
     if (gPlayer1Controller->buttonPressed & A_BUTTON) {
-        set_camera_mode(c, CAMERA_MODE_BEHIND_MARIO, 1);
+        set_camera_mode(c, manual ? CAMERA_MODE_NONE : CAMERA_MODE_BEHIND_MARIO, 1);
         sPanDistance = 0.f;
         sCannonYOffset = 0.f;
         sStatusFlags &= ~CAM_FLAG_BLOCK_SMOOTH_MOVEMENT;
@@ -3248,19 +3247,23 @@ void update_camera(struct Camera *c) {
             if (gManualCamera == 2) {
                 switch (c->mode) {
                     case CAMERA_MODE_BEHIND_MARIO:
-                        mode_behind_mario_camera(c);
+                        mode_manual_camera(c, -75.0f);
                         break;
 
                     case CAMERA_MODE_C_UP:
                         mode_c_up_camera(c);
                         break;
+        
+                    case CAMERA_MODE_WATER_SURFACE:
+                        mode_manual_camera(c, 75.0f);
+                        break;
 
                     case CAMERA_MODE_INSIDE_CANNON:
-                        mode_cannon_camera(c);
+                        mode_cannon_camera(c, 1);
                         break;
 
                     default:
-                        mode_manual_camera(c);
+                        mode_manual_camera(c, 150.0f);
                         break;
                 }
             }
@@ -3279,7 +3282,7 @@ void update_camera(struct Camera *c) {
                         break;
 
                     case CAMERA_MODE_INSIDE_CANNON:
-                        mode_cannon_camera(c);
+                        mode_cannon_camera(c, 0);
                         break;
 
                     default:
@@ -3291,19 +3294,23 @@ void update_camera(struct Camera *c) {
             if (gManualCamera == 1) {
                 switch (c->mode) {
                     case CAMERA_MODE_BEHIND_MARIO:
-                        mode_behind_mario_camera(c);
+                        mode_manual_camera(c, -75.0f);
                         break;
 
                     case CAMERA_MODE_C_UP:
                         mode_c_up_camera(c);
                         break;
 
+                    case CAMERA_MODE_WATER_SURFACE:
+                        mode_manual_camera(c, 75.0f);
+                        break;
+
                     case CAMERA_MODE_INSIDE_CANNON:
-                        mode_cannon_camera(c);
+                        mode_cannon_camera(c, 1);
                         break;
 
                     default:
-                        mode_manual_camera(c);
+                        mode_manual_camera(c, 150.0f);
                 }
             }
             else {
@@ -3321,7 +3328,7 @@ void update_camera(struct Camera *c) {
                         break;
 
                     case CAMERA_MODE_INSIDE_CANNON:
-                        mode_cannon_camera(c);
+                        mode_cannon_camera(c, 0);
                         break;
 
                     case CAMERA_MODE_8_DIRECTIONS:

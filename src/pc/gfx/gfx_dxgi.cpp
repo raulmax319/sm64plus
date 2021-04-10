@@ -77,7 +77,7 @@ static struct {
     bool (*on_key_up)(int scancode);
     void (*on_all_keys_up)(void);
     void (*on_mouse_move)(long x, long y);
-    void (*on_mouse_press)(s8 left, s8 right, s8 middle);
+    void (*on_mouse_press)(s8 left, s8 right, s8 middle, s8 wheel);
 } dxgi;
 
 static void load_dxgi_library(void) {
@@ -302,22 +302,25 @@ static LRESULT CALLBACK gfx_dxgi_wnd_proc(HWND h_wnd, UINT message, WPARAM w_par
                 return DefWindowProcW(h_wnd, message, w_param, l_param);
             }
         case WM_LBUTTONDOWN:
-            dxgi.on_mouse_press(1, 0, 0);
+            dxgi.on_mouse_press(1, 0, 0, 0);
             break;
         case WM_RBUTTONDOWN:
-            dxgi.on_mouse_press(0, 1, 0);
+            dxgi.on_mouse_press(0, 1, 0, 0);
             break;
         case WM_MBUTTONDOWN:
-            dxgi.on_mouse_press(0, 0, 1);
+            dxgi.on_mouse_press(0, 0, 1, 0);
             break;
         case WM_LBUTTONUP:
-            dxgi.on_mouse_press(-1, 0, 0);
+            dxgi.on_mouse_press(-1, 0, 0, 0);
             break;
         case WM_RBUTTONUP:
-            dxgi.on_mouse_press(0, -1, 0);
+            dxgi.on_mouse_press(0, -1, 0, 0);
             break;
         case WM_MBUTTONUP:
-            dxgi.on_mouse_press(0, 0, -1);
+            dxgi.on_mouse_press(0, 0, -1, 0);
+            break;
+        case WM_MOUSEWHEEL:
+            dxgi.on_mouse_press(0, 0, 0, GET_WHEEL_DELTA_WPARAM(w_param)/WHEEL_DELTA);
             break;
         default:
             return DefWindowProcW(h_wnd, message, w_param, l_param);
@@ -389,7 +392,7 @@ static void gfx_dxgi_set_fullscreen(bool enable) {
     toggle_borderless_window_full_screen(enable, true);
 }
 
-static void gfx_dxgi_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void), void (*on_mouse_move)(long x, long y), void on_mouse_press(s8 left, s8 right, s8 middle)) {
+static void gfx_dxgi_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void), void (*on_mouse_move)(long x, long y), void on_mouse_press(s8 left, s8 right, s8 middle, s8 wheel)) {
     dxgi.on_key_down = on_key_down;
     dxgi.on_key_up = on_key_up;
     dxgi.on_all_keys_up = on_all_keys_up;

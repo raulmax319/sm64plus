@@ -31,21 +31,23 @@ Features that _might_ get added in the future:
 
 **Q:** I can't build. I'm getting an error!
 
-**A:** You can try a few things. Try reinstalling MSYS2 and deleting the SM64Plus folder first. Disabling your antivirus could help as well. If all else fails, just restart your computer. If those don't help, you can ask for help on the Discord server.
+**A:** It seems like reinstalling MSYS2 and deleting the SM64Plus folder fixes the issues for most people. Disabling your antivirus could also help in some cases.
+
+One other alternative you have is to use [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/) instead to build the game. Or you can also just compile the game manually, following the instructions from below.
+
+If these don't help, you can ask for help on our Discord server. **Don't ask for help without following these steps first, and don't ask me help about sm64pcBuilder2 or building manually.**
 
 <br>
 
 **Q:** I could build, but the game doesn't launch.
 
-**A:** It seems like reinstalling MSYS2 and deleting the SM64Plus folder fixes the issues for most people. Disabling your antivirus could also help in some cases. If all else fails, you can try the old "restarting your computer" trick.
-
-If you're still stuck after trying all that, you can post your error to the #help-me channel of the Discord server.
+**A:** You can try rebuilding the game from the main menu. When asked to clear your build files, say yes.
 
 <br>
 
 **Q:** The game is running too fast!
 
-**A:** You can try to limit the game's FPS using Nvidia's control panel or other 3rd party tools. Make sure that you limit the "sm64.us.f3dex2e.exe"'s frame rate, and not the launcher.
+**A:** You can try to limit the game's FPS using Nvidia's control panel or other 3rd party tools. Make sure that you limit the "sm64.us.f3dex2e.exe"'s frame rate, and not the launcher's.
 
 <br>
 
@@ -57,7 +59,7 @@ If you're still stuck after trying all that, you can post your error to the #hel
 
 **Q:** Can I use mods with this? What about Render96?
 
-**A:** There's no official support for mods for other PC port forks, and there (most likely) will never be unfortunately. This includes Render96 too, there are no current plans for adding support for it here.
+**A:** You can use custom model mods using [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/). There is no support for texture mods yet however. There is no support for Render96 too, and there are no current plans for adding support specifically for it here.
 
 <br>
 
@@ -88,7 +90,8 @@ If you're still stuck after trying all that, you can post your error to the #hel
 ### v1.1.0 (??/04/2021):
 **Launcher:**
 - Added the new settings to the launcher.
-- Made it take longer to reload settings from the launcher.
+- Made it take longer to reload all the settings from presets to prevent accidental reloads.
+- Added the C-buttons to the list of reassignable buttons for controllers.
 
 **Game itself:**
 - Added the "Graphics Backend" setting, which makes it possible to switch between Direct3D11 and Direct3D12 without rebuilding.

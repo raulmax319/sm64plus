@@ -6,7 +6,7 @@
 
 struct GfxWindowManagerAPI {
     void (*init)(const char *game_name, bool start_in_fullscreen);
-    void (*set_keyboard_callbacks)(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void), void (*on_mouse_move)(long x, long y), void (*on_mouse_press)(s8 left, s8 right, s8 middle));
+    void (*set_keyboard_callbacks)(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void), void (*on_mouse_move)(long x, long y), void (*on_mouse_press)(s8 left, s8 right, s8 middle, s8 wheel));
     void (*set_fullscreen_changed_callback)(void (*on_fullscreen_changed)(bool is_now_fullscreen));
     void (*set_fullscreen)(bool enable);
     void (*main_loop)(void (*run_one_game_iter)(void));
