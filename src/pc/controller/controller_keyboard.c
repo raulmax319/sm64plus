@@ -11,7 +11,10 @@
 
 static int keyboard_buttons_down;
 
-static int keyboard_mapping[14][2];
+static long mouse_x;
+static long mouse_y;
+
+static int keyboard_mapping[15][2];
 
 static int keyboard_map_scancode(int scancode) {
     int ret = 0;
@@ -37,6 +40,28 @@ bool keyboard_on_key_up(int scancode) {
 
 void keyboard_on_all_keys_up(void) {
     keyboard_buttons_down = 0;
+}
+
+void keyboard_on_mouse_move(long x, long y) {
+    mouse_x = x;
+    mouse_y = y;
+}
+
+void keyboard_on_mouse_press(s8 left, s8 right, s8 middle) {
+    if (left > 0)
+        keyboard_buttons_down |= configMouseLeft;
+    if (left < 0)
+        keyboard_buttons_down &= ~configMouseLeft;
+
+    if (right > 0)
+        keyboard_buttons_down |= configMouseRight;
+    if (right < 0)
+        keyboard_buttons_down &= ~configMouseRight;
+
+    if (middle > 0)
+        keyboard_buttons_down |= configMouseMiddle;
+    if (middle < 0)
+        keyboard_buttons_down &= ~configMouseMiddle;
 }
 
 static void set_keyboard_mapping(int index, int mask, int scancode) {
@@ -69,6 +94,7 @@ static void keyboard_init(void) {
     set_keyboard_mapping(i++, L_TRIG,       configKeyL);
     set_keyboard_mapping(i++, R_TRIG,       configKeyR);
     set_keyboard_mapping(i++, START_BUTTON, configKeyStart);
+    set_keyboard_mapping(i++, 0x1000000,    configKeyWalk);
 
 #ifdef TARGET_WEB
     controller_emscripten_keyboard_init();
@@ -76,31 +102,39 @@ static void keyboard_init(void) {
 }
 
 static void keyboard_read(OSContPad *pad) {
+    // Camera movement with mouse
+    if (gMouseCam) {
+        if (mouse_x != 0)
+            pad->stick2_x = mouse_x*gMouseSensitivity;
+        if (mouse_y != 0)
+            pad->stick2_y = mouse_y*gMouseSensitivity;
+    }
+
     pad->button |= keyboard_buttons_down;
     if ((keyboard_buttons_down & 0x30000) == 0x10000) {
-        pad->stick_x = -128;
+        pad->stick_x = (keyboard_buttons_down & 0x1000000) ? -32 : -128;
     }
     if ((keyboard_buttons_down & 0x30000) == 0x20000) {
-        pad->stick_x = 127;
+        pad->stick_x = (keyboard_buttons_down & 0x1000000) ? 32 : 127;
     }
     if ((keyboard_buttons_down & 0xc0000) == 0x40000) {
-        pad->stick_y = -128;
+        pad->stick_y = (keyboard_buttons_down & 0x1000000) ? -32 : -128;
     }
     if ((keyboard_buttons_down & 0xc0000) == 0x80000) {
-        pad->stick_y = 127;
+        pad->stick_y = (keyboard_buttons_down & 0x1000000) ? 32 : 127;
     }
 
     if ((keyboard_buttons_down & 0x300000) == 0x100000) {
-        pad->stick2_x = -128;
+        pad->stick2_x = -80;
     }
     if ((keyboard_buttons_down & 0x300000) == 0x200000) {
-        pad->stick2_x = 127;
+        pad->stick2_x = 80;
     }
     if ((keyboard_buttons_down & 0xc00000) == 0x400000) {
-        pad->stick2_y = -128;
+        pad->stick2_y = -80;
     }
     if ((keyboard_buttons_down & 0xc00000) == 0x800000) {
-        pad->stick2_y = 127;
+        pad->stick2_y = 80;
     }
 }
 

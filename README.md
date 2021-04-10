@@ -85,6 +85,29 @@ If you're still stuck after trying all that, you can post your error to the #hel
 
 ## Changelog
 
+### v1.1.0 (??/04/2021):
+**Launcher:**
+- Added the new settings to the launcher.
+- Made it take longer to reload settings from the launcher.
+
+**Game itself:**
+- Added the "Graphics Backend" setting, which makes it possible to switch between Direct3D11 and Direct3D12 without rebuilding.
+- Added "Increase Underwater Shell Time", which makes the underwater shells last longer.
+- Added "Casual Mode", which makes Mario not lose any health when underwater, and reduces all damage taken by half.
+- Added a bunch of mouse related settings. You can now control the camera and some of the menus with your mouse.
+- Added a key which makes Mario walk slower. This is to compensate for the lack of analog controls with a keyboard.
+- Added "Paper Mode", which makes Mario thin like a paper.
+- Added "Wireframe Mode". Guess what this one does.
+- Split the "Analog Stick Deadzone" setting into two, one for each analog stick.
+- Added more options for the "Infinite Lives Mode" and "Encore Mode" settings, allowing further customizability.
+- Made Mario lose health slower when underwater during hard mode.
+- Tweaked wall jumping to be stronger when wall sliding is enabled.
+- Ground pound diving is also made faster now.
+- Made Metal Mario more consistent with the "Improved Metal Mario" setting.
+- Made the window center on the screen at game start.
+- Reverted the level select level order back to original and fixed a crash casued by missing characters.
+- Fixed other various minor bugs.
+
 ### v1.0.1 (06/04/2021):
 **Launcher:**
 - Disabled DirectInput support because the game itself doesn't support it yet, which causes confusion.

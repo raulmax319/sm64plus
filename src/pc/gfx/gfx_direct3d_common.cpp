@@ -1,4 +1,4 @@
-#if defined(ENABLE_DX11) || defined(ENABLE_DX12)
+#if !defined(__linux__) && !defined(__BSD__)
 
 #include <cstdio>
 

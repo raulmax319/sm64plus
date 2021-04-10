@@ -39,40 +39,9 @@ ifeq ($(TARGET_N64),0)
     endif
   endif
 
-  ifeq ($(TARGET_WINDOWS),1)
-    # On Windows, default to DirectX 11
-    ifneq ($(ENABLE_OPENGL),1)
-      ifneq ($(ENABLE_DX12),1)
-        ENABLE_DX11 ?= 1
-      endif
-    endif
-  else
-    # On others, default to OpenGL
+  ifeq ($(TARGET_WINDOWS),0)
+    # Enable OpenGL on non-Windows systems
     ENABLE_OPENGL ?= 1
-  endif
-
-  # Sanity checks
-  ifeq ($(ENABLE_DX11),1)
-    ifneq ($(TARGET_WINDOWS),1)
-      $(error The DirectX 11 backend is only supported on Windows)
-    endif
-    ifeq ($(ENABLE_OPENGL),1)
-      $(error Cannot specify multiple graphics backends)
-    endif
-    ifeq ($(ENABLE_DX12),1)
-      $(error Cannot specify multiple graphics backends)
-    endif
-  endif
-  ifeq ($(ENABLE_DX12),1)
-    ifneq ($(TARGET_WINDOWS),1)
-      $(error The DirectX 12 backend is only supported on Windows)
-    endif
-    ifeq ($(ENABLE_OPENGL),1)
-      $(error Cannot specify multiple graphics backends)
-    endif
-    ifeq ($(ENABLE_DX11),1)
-      $(error Cannot specify multiple graphics backends)
-    endif
   endif
 
 endif
@@ -458,7 +427,7 @@ ifeq ($(ENABLE_OPENGL),1)
   GFX_LDFLAGS :=
   ifeq ($(TARGET_WINDOWS),1)
     GFX_CFLAGS  += $(shell sdl2-config --cflags) -DGLEW_STATIC
-    GFX_LDFLAGS += $(shell sdl2-config --libs) -Llib -lpthread -lglew32 -lm -lglu32 -lsetupapi -ldinput8 -luser32 -lgdi32 -limm32 -lole32 -loleaut32 -lshell32 -lwinmm -lversion -luuid -lopengl32 -static
+    GFX_LDFLAGS += $(shell sdl2-config --libs) -Llib -lpthread -lglew32 -lm -lglu32 -lsetupapi -ldinput8 -luser32 -limm32 -lole32 -loleaut32 -lshell32 -lwinmm -lversion -luuid -lopengl32 -static
   endif
   ifeq ($(TARGET_LINUX),1)
     GFX_CFLAGS  += $(shell sdl2-config --cflags)
@@ -469,12 +438,8 @@ ifeq ($(ENABLE_OPENGL),1)
     GFX_LDFLAGS += -lGL -lSDL2
   endif
 endif
-ifeq ($(ENABLE_DX11),1)
-  GFX_CFLAGS := -DENABLE_DX11
-  PLATFORM_LDFLAGS += -lgdi32 -static
-endif
-ifeq ($(ENABLE_DX12),1)
-  GFX_CFLAGS := -DENABLE_DX12
+ifeq ($(TARGET_WINDOWS),1)
+  GFX_CFLAGS :=
   PLATFORM_LDFLAGS += -lgdi32 -static
 endif
 

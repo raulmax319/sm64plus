@@ -80,7 +80,7 @@ static void controller_sdl_read(OSContPad *pad) {
 #endif
 
     if (gImprovedCamera) {
-        uint32_t magnitude_sq2 = (uint32_t)(rightx * rightx) + (uint32_t)(righty * righty);
+        uint32_t magnitude_sq2 = (uint32_t)(rightx * rightx);
         if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
             pad->stick2_x = rightx / 409;
         }
@@ -89,9 +89,17 @@ static void controller_sdl_read(OSContPad *pad) {
         if (rightx < -0x4000) pad->button |= L_CBUTTONS;
         if (rightx > 0x4000) pad->button |= R_CBUTTONS;
     }
-    
-    if (righty < -0x4000) pad->button |= U_CBUTTONS;
-    if (righty > 0x4000) pad->button |= D_CBUTTONS;
+
+    if (gVerticalCamera) {
+        uint32_t magnitude_sq2 = (uint32_t)(righty * righty);
+        if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
+            pad->stick2_y = righty / 409;
+        }
+    }
+    else {
+        if (righty < -0x4000) pad->button |= U_CBUTTONS;
+        if (righty > 0x4000) pad->button |= D_CBUTTONS;
+    }
 
     if (ltrig > 30 * 256) pad->button |= Z_TRIG;
     if (rtrig > 30 * 256) pad->button |= R_TRIG;

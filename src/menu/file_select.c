@@ -21,6 +21,9 @@
 #include "sm64.h"
 #include "text_strings.h"
 
+#include "config.h"
+#include "gfx_dimensions.h"
+
 #include "game/settings.h"
 
 #include "eu_translation.h"
@@ -1629,22 +1632,39 @@ void handle_controller_cursor_input(void) {
     }
 
     // Move cursor
-    sCursorPos[0] += rawStickX / 8;
-    sCursorPos[1] += rawStickY / 8;
+    sCursorPos[0] += (rawStickX + (gMouseCam ? gPlayer1Controller->rawStick2X : 0)) / 8;
+    sCursorPos[1] += (rawStickY - (gMouseCam ? gPlayer1Controller->rawStick2Y : 0)) / 8;
 
     // Stop cursor from going offscreen
-    if (sCursorPos[0] > 132.0f) {
-        sCursorPos[0] = 132.0f;
-    }
-    if (sCursorPos[0] < -132.0f) {
-        sCursorPos[0] = -132.0f;
-    }
+    if (gCenterHud || configForce4by3) {
+        if (sCursorPos[0] > 132.0f) {
+            sCursorPos[0] = 132.0f;
+        }
+        if (sCursorPos[0] < -132.0f) {
+            sCursorPos[0] = -132.0f;
+        }
 
-    if (sCursorPos[1] > 90.0f) {
-        sCursorPos[1] = 90.0f;
+        if (sCursorPos[1] > 90.0f) {
+            sCursorPos[1] = 90.0f;
+        }
+        if (sCursorPos[1] < -90.0f) {
+            sCursorPos[1] = -90.0f;
+        }
     }
-    if (sCursorPos[1] < -90.0f) {
-        sCursorPos[1] = -90.0f;
+    else {
+        if (sCursorPos[0] > SCREEN_WIDTH/2*GFX_DIMENSIONS_ASPECT_RATIO - 98.0f) {
+            sCursorPos[0] = SCREEN_WIDTH/2*GFX_DIMENSIONS_ASPECT_RATIO - 98.0f;
+        }
+        if (sCursorPos[0] < -SCREEN_WIDTH/2*GFX_DIMENSIONS_ASPECT_RATIO + 76.0f) {
+            sCursorPos[0] = -SCREEN_WIDTH/2*GFX_DIMENSIONS_ASPECT_RATIO + 76.0f;
+        }
+
+        if (sCursorPos[1] > SCREEN_HEIGHT/2 - 6.0f) {
+            sCursorPos[1] = SCREEN_HEIGHT/2 - 6.0f;
+        }
+        if (sCursorPos[1] < -SCREEN_HEIGHT/2 + 26.0f) {
+            sCursorPos[1] = -SCREEN_HEIGHT/2 + 26.0f;
+        }
     }
 
     if (sCursorClickingTimer == 0) {

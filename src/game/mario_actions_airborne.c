@@ -95,7 +95,7 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
                 play_sound(SOUND_MARIO_ATTACKED, m->marioObj->header.gfx.cameraToObject);
                 return drop_and_set_mario_action(m, hardFallAction, 4);
             } else if (fallHeight > damageHeight && !mario_floor_is_slippery(m)) {
-                if (!gDisableFallDamage) {
+                if ((!gDisableFallDamage) && (!mario_has_improved_metal_cap(m))) {
                     m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 8 : 12;
                 }
                 m->squishTimer = 30;
@@ -1077,7 +1077,7 @@ s32 act_ground_pound(struct MarioState *m) {
 
     if (gOdysseyDive && m->input & INPUT_B_PRESSED) {
         set_mario_action(m, ACT_DIVE, 0);
-        mario_set_forward_vel(m, 24.0f);
+        mario_set_forward_vel(m, 40.0f);
         m->vel[1] = 28;
     }
 
@@ -1261,6 +1261,7 @@ s32 act_wall_slide(struct MarioState *m) {
     m->marioObj->header.gfx.angle[1] = m->faceAngle[1];
     if (m->input & INPUT_A_PRESSED) {
         m->faceAngle[1] += 0x8000;
+        mario_set_forward_vel(m, 32.0f);
         m->particleFlags |= PARTICLE_VERTICAL_STAR;
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }

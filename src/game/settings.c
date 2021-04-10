@@ -162,6 +162,7 @@ unsigned int configWindowHeight = 720;
 s8 configCustomInternalResolution = 0;
 unsigned int configInternalResolutionWidth = 3840;
 unsigned int configInternalResolutionHeight = 2160;
+unsigned int configGraphicsBackend = 1;
 
 float configSeqVolume[] = {1, 1, 1};
 
@@ -183,6 +184,7 @@ s8 gDisableFallDamage = 0;
 s8 gFixVariousBugs = 1;
 s8 gRespawnBlueCoinSwitch = 1;
 s8 gRemoveAnnoyingWarps = 1;
+s8 gIncreaseShellTime = 1;
 // TODO (Mors): Turn this into a "updated powerups" option eventually.
 // Vanish Mario would fall slower, and Wing Mario would have completely revamped flying.
 s8 gImprovedMetalCap = 1;
@@ -215,6 +217,12 @@ s8 gShow100CoinStar = 0;
 s8 gAlwaysShowHealth = 0;
 s8 gHideHud = 0;
 
+s8 gMouseCam = 1;
+float gMouseSensitivity = 4.0f;
+unsigned int configMouseLeft = A_BUTTON;
+unsigned int configMouseRight = B_BUTTON;
+unsigned int configMouseMiddle = Z_TRIG;
+
 s8 gWallSliding = 1;
 s8 gGroundPoundJump = 0;
 s8 gSunshineDive = 0;
@@ -227,14 +235,17 @@ s8 gTwirlTripleJump = 0;
 s8 gSpawnSparkles = 0;
 s8 gReplaceKeysWithStars = 0;
 
-s8 gLifeMode = 0;
-s8 gEncoreMode = 0;
+unsigned int gLifeMode = 0;
+unsigned int gEncoreMode = 0;
 s8 gGreenDemon = 0;
 s8 gHardSave = 0;
 s8 gDaredevilSave = 0;
 s8 gHardcoreSave = 0;
+s8 gCasualMode = 0;
 
+s8 gPaperMode = 0;
 s8 gFXMode = 0;
+s8 gWireframeMode = 0;
 s8 gDisableLighting = 0;
 s8 gForceLowPoly = 0;
 s8 gNearestNeighbor = 0;
@@ -256,7 +267,8 @@ unsigned int configButtonZL = Z_TRIG;
 unsigned int configButtonZR = R_TRIG;
 unsigned int configButtonThumbLeft = 0;
 unsigned int configButtonThumbRight = L_TRIG;
-unsigned int gControllerDeadzone = 512;
+unsigned int gControllerLeftDeadzone = 512;
+unsigned int gControllerRightDeadzone = 512;
 
 unsigned int configKeyA = DIK_L;
 unsigned int configKeyB = DIK_COMMA;
@@ -272,6 +284,7 @@ unsigned int configKeyStickUp = DIK_W;
 unsigned int configKeyStickDown = DIK_S;
 unsigned int configKeyStickLeft = DIK_A;
 unsigned int configKeyStickRight = DIK_D;
+unsigned int configKeyWalk = DIK_LSHIFT;
 
 // These probably don't belong here, but I don't have a better place for them at the moment.
 // TODO (Mors): Move this out to somewhere that fits.

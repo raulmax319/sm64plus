@@ -1259,6 +1259,11 @@ void squish_mario_model(struct MarioState *m) {
 
             vec3f_set(m->marioObj->header.gfx.scale, 1.4f, 0.4f, 1.4f);
         }
+        if (gPaperMode) {
+            m->marioObj->header.gfx.scale[0] *= 1.0625;
+            m->marioObj->header.gfx.scale[1] *= 1.0625;
+            m->marioObj->header.gfx.scale[2] *= 0.03125;
+        }
     }
 }
 
@@ -1497,7 +1502,7 @@ void update_mario_health(struct MarioState *m) {
                     m->health -= 4;
                 }
             } else {
-                if ((m->action & ACT_FLAG_SWIMMING) && !(m->action & ACT_FLAG_INTANGIBLE)) {
+                if ((m->action & ACT_FLAG_SWIMMING) && !(m->action & ACT_FLAG_INTANGIBLE) && (!mario_has_improved_metal_cap(m))) {
                     terrainIsSnow = (m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW;
 
                     // When Mario is near the water surface, recover health (unless in snow),
@@ -1509,7 +1514,11 @@ void update_mario_health(struct MarioState *m) {
                         }
                     } else if (!(save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE)) {
                         if (save_file_get_flags() & SAVE_FLAG_HARD_MODE) {
-                            m->health -= (terrainIsSnow ? 6 : 3);
+                            m->health -= (terrainIsSnow ? 4 : 2);
+                        }
+                        else if (gCasualMode) {
+                            if (terrainIsSnow)
+                                m->health -= 1;
                         }
                         else {
                             m->health -= (terrainIsSnow ? 3 : 1);
@@ -1524,7 +1533,10 @@ void update_mario_health(struct MarioState *m) {
             m->healCounter--;
         }
         if (m->hurtCounter > 0) {
-            m->health -= 0x40;
+            if (gCasualMode)
+                m->health -= 0x20;
+            else
+                m->health -= 0x40;
             m->hurtCounter--;
         }
 

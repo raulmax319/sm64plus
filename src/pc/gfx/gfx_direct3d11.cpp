@@ -1,4 +1,4 @@
-#ifdef ENABLE_DX11
+#if !defined(__linux__) && !defined(__BSD__)
 
 #include <cstdio>
 #include <vector>
@@ -259,7 +259,7 @@ static void gfx_d3d11_init(void) {
     d3d.swap_chain = gfx_dxgi_create_swap_chain(d3d.device.Get());
 
     // Enable MSAA
-    // I fucking TRIED but couldn't get it working I'm STUPID if anyone reading this that knows what they are doing let me know lol
+    // I fricking (no swearing in my kids game) TRIED but couldn't get it working I'm STUPID if anyone reading this that knows what they are doing let me know lol
     /*
     DXGI_SWAP_CHAIN_DESC1 swap_chain_desc;
     ThrowIfFailed(d3d.swap_chain->GetDesc1(&swap_chain_desc));
@@ -600,7 +600,7 @@ static void gfx_d3d11_draw_triangles(float buf_vbo[], size_t buf_vbo_len, size_t
         D3D11_RASTERIZER_DESC rasterizer_desc;
         ZeroMemory(&rasterizer_desc, sizeof(D3D11_RASTERIZER_DESC));
 
-        rasterizer_desc.FillMode = D3D11_FILL_SOLID;
+        rasterizer_desc.FillMode = gWireframeMode ? D3D11_FILL_WIREFRAME : D3D11_FILL_SOLID;
         rasterizer_desc.CullMode = D3D11_CULL_NONE;
         rasterizer_desc.FrontCounterClockwise = true;
         rasterizer_desc.DepthBias = 0;

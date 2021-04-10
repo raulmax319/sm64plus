@@ -362,12 +362,7 @@ void render_hud_mario_lives(void) {
         x = get_left(22);
         y = HUD_TOP_Y;
     }
-    /*if (gLifeMode) {
-        print_text(x, y, "Q"); // The new'Mario Head' glyph
-    }
-    else {*/
-        print_text(x, y, ","); // 'Mario Head' glyph
-    //}
+    print_text(x, y, ","); // 'Mario Head' glyph
     if (gHudStyle > 0) {
         print_text(x+17, y, "*"); // 'X' glyph
         print_text_fmt_int(x+33, y, "%d", gHudDisplay.lives);
@@ -785,7 +780,7 @@ void render_hud(void) {
             render_hud_cannon_reticle();
         }
 
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_LIVES && !(save_file_get_flags() & SAVE_FLAG_HARDCORE_MODE)) {
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_LIVES && !(save_file_get_flags() & SAVE_FLAG_HARDCORE_MODE) && gLifeMode != 1) {
             render_hud_mario_lives();
         }
 

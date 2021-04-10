@@ -12,6 +12,7 @@ extern unsigned int configWindowHeight;
 extern s8 configCustomInternalResolution;
 extern unsigned int configInternalResolutionWidth;
 extern unsigned int configInternalResolutionHeight;
+extern unsigned int configGraphicsBackend;
 
 extern float configSeqVolume[];
 
@@ -32,6 +33,7 @@ extern s8 gDisableFallDamage;
 extern s8 gFixVariousBugs;
 extern s8 gRespawnBlueCoinSwitch;
 extern s8 gRemoveAnnoyingWarps;
+extern s8 gIncreaseShellTime;
 extern s8 gImprovedMetalCap;
 extern s8 gDisableBooDialogue;
 extern s8 gTalkEasier;
@@ -62,6 +64,12 @@ extern s8 gShow100CoinStar;
 extern s8 gAlwaysShowHealth;
 extern s8 gHideHud;
 
+extern s8 gMouseCam;
+extern float gMouseSensitivity;
+extern unsigned int configMouseLeft;
+extern unsigned int configMouseRight;
+extern unsigned int configMouseMiddle;
+
 extern s8 gWallSliding;
 extern s8 gGroundPoundJump;
 extern s8 gSunshineDive;
@@ -74,14 +82,17 @@ extern s8 gTwirlTripleJump;
 extern s8 gSpawnSparkles;
 extern s8 gReplaceKeysWithStars;
 
-extern s8 gLifeMode;
-extern s8 gEncoreMode;
+extern unsigned int gLifeMode;
+extern unsigned int gEncoreMode;
 extern s8 gGreenDemon;
 extern s8 gHardSave;
 extern s8 gDaredevilSave;
 extern s8 gHardcoreSave;
+extern s8 gCasualMode;
 
+extern s8 gPaperMode;
 extern s8 gFXMode;
+extern s8 gWireframeMode;
 extern s8 gDisableLighting;
 extern s8 gForceLowPoly;
 extern s8 gNearestNeighbor;
@@ -103,7 +114,8 @@ extern unsigned int configButtonZL;
 extern unsigned int configButtonZR;
 extern unsigned int configButtonThumbLeft;
 extern unsigned int configButtonThumbRight;
-extern unsigned int gControllerDeadzone;
+extern unsigned int gControllerLeftDeadzone;
+extern unsigned int gControllerRightDeadzone;
 
 extern unsigned int configKeyA;
 extern unsigned int configKeyB;
@@ -119,6 +131,7 @@ extern unsigned int configKeyStickUp;
 extern unsigned int configKeyStickDown;
 extern unsigned int configKeyStickLeft;
 extern unsigned int configKeyStickRight;
+extern unsigned int configKeyWalk;
 
 extern s16 gCollectedStar;
 extern s8 stay_in_level();

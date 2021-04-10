@@ -167,6 +167,8 @@ static struct {
     bool (*on_key_down)(int scancode);
     bool (*on_key_up)(int scancode);
     void (*on_all_keys_up)(void);
+    void (*on_mouse_move)(long x, long y);
+    void (*on_mouse_press)(s8 left, s8 right, s8 middle);
     
     PFNGLXGETSYNCVALUESOMLPROC glXGetSyncValuesOML;
     PFNGLXSWAPBUFFERSMSCOMLPROC glXSwapBuffersMscOML;
@@ -395,7 +397,7 @@ static void gfx_glx_set_fullscreen(bool enable) {
     gfx_glx_set_fullscreen_state(enable, true);
 }
 
-static void gfx_glx_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void)) {
+static void gfx_glx_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void), void (*on_mouse_move)(long x, long y), void (*on_mouse_press)(s8 left, s8 right, s8 middle)) {
     glx.on_key_down = on_key_down;
     glx.on_key_up = on_key_up;
     glx.on_all_keys_up = on_all_keys_up;

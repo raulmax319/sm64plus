@@ -21,6 +21,11 @@
 #include "shape_helper.h"
 #include "skin.h"
 
+#include "./game/settings.h"
+
+#include "config.h"
+#include "gfx_dimensions.h"
+
 #define MAX_GD_DLS 1000
 #define OS_MESG_SI_COMPLETE 0x33333333
 
@@ -2392,12 +2397,12 @@ void parse_p1_controller(void) {
     p1cont = &sGdContPads[0];
     p1contPrev = &sPrevFrameCont[0];
     // stick values
-    gdctrl->stickXf = (f32) p1cont->stick_x;
-    gdctrl->stickYf = (f32) p1cont->stick_y;
+    gdctrl->stickXf = (f32) p1cont->stick_x + (gMouseCam ? p1cont->stick2_x : 0);
+    gdctrl->stickYf = (f32) p1cont->stick_y - (gMouseCam ? p1cont->stick2_y : 0);
     gdctrl->stickDeltaX = gdctrl->stickX;
     gdctrl->stickDeltaY = gdctrl->stickY;
-    gdctrl->stickX = (s32) p1cont->stick_x;
-    gdctrl->stickY = (s32) p1cont->stick_y;
+    gdctrl->stickX = (s32) p1cont->stick_x + (gMouseCam ? p1cont->stick2_x : 0);
+    gdctrl->stickY = (s32) p1cont->stick_y - (gMouseCam ? p1cont->stick2_y : 0);
     gdctrl->stickDeltaX -= gdctrl->stickX;
     gdctrl->stickDeltaY -= gdctrl->stickY;
     // button values (as bools)
@@ -2475,24 +2480,49 @@ void parse_p1_controller(void) {
         gdctrl->csrY -= gdctrl->stickY * 0.1; //? 0.1f
     }
     // border checks? is this for the cursor finger movement?
-    if ((f32) gdctrl->csrX < (sScreenView2->parent->upperLeft.x + 16.0f)) {
-        gdctrl->csrX = (s32)(sScreenView2->parent->upperLeft.x + 16.0f);
-    }
+    if (gCenterHud || configForce4by3) {
 
-    if ((f32) gdctrl->csrX
-        > (sScreenView2->parent->upperLeft.x + sScreenView2->parent->lowerRight.x - 48.0f)) {
-        gdctrl->csrX =
-            (s32)(sScreenView2->parent->upperLeft.x + sScreenView2->parent->lowerRight.x - 48.0f);
-    }
+        if ((f32) gdctrl->csrX < (sScreenView2->parent->upperLeft.x + 16.0f)) {
+            gdctrl->csrX = (s32)(sScreenView2->parent->upperLeft.x + 16.0f);
+        }
 
-    if ((f32) gdctrl->csrY < (sScreenView2->parent->upperLeft.y + 16.0f)) {
-        gdctrl->csrY = (s32)(sScreenView2->parent->upperLeft.y + 16.0f);
-    }
+        if ((f32) gdctrl->csrX
+            > (sScreenView2->parent->upperLeft.x + sScreenView2->parent->lowerRight.x - 48.0f)) {
+            gdctrl->csrX =
+                (s32)(sScreenView2->parent->upperLeft.x + sScreenView2->parent->lowerRight.x - 48.0f);
+        }
 
-    if ((f32) gdctrl->csrY
-        > (sScreenView2->parent->upperLeft.y + sScreenView2->parent->lowerRight.y - 32.0f)) {
-        gdctrl->csrY =
-            (s32)(sScreenView2->parent->upperLeft.y + sScreenView2->parent->lowerRight.y - 32.0f);
+        if ((f32) gdctrl->csrY < (sScreenView2->parent->upperLeft.y + 16.0f)) {
+            gdctrl->csrY = (s32)(sScreenView2->parent->upperLeft.y + 16.0f);
+        }
+
+        if ((f32) gdctrl->csrY
+            > (sScreenView2->parent->upperLeft.y + sScreenView2->parent->lowerRight.y - 32.0f)) {
+            gdctrl->csrY =
+                (s32)(sScreenView2->parent->upperLeft.y + sScreenView2->parent->lowerRight.y - 32.0f);
+        }
+    }
+    else {
+
+        if ((f32) gdctrl->csrX < (GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(sScreenView2->parent->upperLeft.x))) {
+            gdctrl->csrX = (s32)(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(sScreenView2->parent->upperLeft.x));
+        }
+
+        if ((f32) gdctrl->csrX
+            > (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(sScreenView2->parent->upperLeft.x + sScreenView2->parent->upperLeft.x) - 32.0f)) {
+            gdctrl->csrX =
+                (s32)(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(sScreenView2->parent->upperLeft.x + sScreenView2->parent->upperLeft.x) - 32.0f);
+        }
+
+        if ((f32) gdctrl->csrY < (sScreenView2->parent->upperLeft.y)) {
+            gdctrl->csrY = (s32)(sScreenView2->parent->upperLeft.y);
+        }
+
+        if ((f32) gdctrl->csrY
+            > (sScreenView2->parent->upperLeft.y + sScreenView2->parent->lowerRight.y - 32.0f)) {
+            gdctrl->csrY =
+                (s32)(sScreenView2->parent->upperLeft.y + sScreenView2->parent->lowerRight.y - 32.0f);
+        }
     }
 
     for (i = 0; i < sizeof(OSContPad); i++) {

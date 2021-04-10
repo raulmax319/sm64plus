@@ -191,28 +191,39 @@ void main_func(void) {
     request_anim_frame(on_anim_frame);
 #endif
 
-#if defined(ENABLE_DX12)
-    rendering_api = &gfx_direct3d12_api;
-    wm_api = &gfx_dxgi_api;
-#elif defined(ENABLE_DX11)
-    rendering_api = &gfx_direct3d11_api;
-    wm_api = &gfx_dxgi_api;
-#elif defined(ENABLE_OPENGL)
-    rendering_api = &gfx_opengl_api;
-    #if defined(__linux__) || defined(__BSD__)
-        wm_api = &gfx_glx;
-    #else
-        wm_api = &gfx_sdl;
-    #endif
-#elif defined(ENABLE_GFX_DUMMY)
-    rendering_api = &gfx_dummy_renderer_api;
-    wm_api = &gfx_dummy_wm_api;
-#endif
+    switch (configGraphicsBackend)
+    {
+#if !defined(__linux__) && !defined(__BSD__)
+    case 0:
+        rendering_api = &gfx_direct3d11_api;
+        wm_api = &gfx_dxgi_api;
+        break;
 
+    case 1:
+        rendering_api = &gfx_direct3d12_api;
+        wm_api = &gfx_dxgi_api;
+        break;
+
+#if defined(ENABLE_OPENGL)
+    case 2:
+        rendering_api = &gfx_opengl_api;
+        wm_api = &gfx_sdl;
+        break;
+#endif
+#else
+    case 0:
+        rendering_api = &gfx_opengl_api;
+        wm_api = &gfx_glx;
+#endif
+    default:
+        rendering_api = &gfx_dummy_renderer_api;
+        wm_api = &gfx_dummy_wm_api;
+        break;
+    }
     gfx_init(wm_api, rendering_api, gTitleString, configFullscreen);
     
     wm_api->set_fullscreen_changed_callback(on_fullscreen_changed);
-    wm_api->set_keyboard_callbacks(keyboard_on_key_down, keyboard_on_key_up, keyboard_on_all_keys_up);
+    wm_api->set_keyboard_callbacks(keyboard_on_key_down, keyboard_on_key_up, keyboard_on_all_keys_up, keyboard_on_mouse_move, keyboard_on_mouse_press);
     
 #if HAVE_WASAPI
     if (audio_api == NULL && audio_wasapi.init()) {
