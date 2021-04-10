@@ -7,6 +7,8 @@
 
 #include "controller_api.h"
 
+#include "game/settings.h"
+
 void *wup_start(void *a);
 bool wup_get_controller_input(uint16_t *buttons, uint8_t axis[6]);
 
@@ -31,7 +33,7 @@ static void controller_wup_read(OSContPad *pad) {
         if (buttons & 0x0200) pad->button |= B_BUTTON;
         if (buttons & 0x1000) pad->button |= L_TRIG;
         if (gImprovedCamera) {
-            if (stick2_x != 0) {
+            if (pad->stick2_x != 0) {
                 pad->stick2_x = saturate(axis[2] - 128 - 0);
             }
         }
@@ -39,7 +41,7 @@ static void controller_wup_read(OSContPad *pad) {
             if (axis[2] < 0x40) pad->button |= L_CBUTTONS;
         }
         if (gVerticalCamera) {
-            if (stick2_y != 0) {
+            if (pad->stick2_y != 0) {
                 pad->stick2_y = saturate(axis[3] - 128 - 0);
             }
         }
