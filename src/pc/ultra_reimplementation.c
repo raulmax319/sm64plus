@@ -174,6 +174,7 @@ s32 osEepromLongRead(UNUSED OSMesgQueue *mq, u8 address, u8 *buffer, int nbytes)
     }
     fclose(fp);
 #elif defined(_WIN32) || defined(_WIN64)
+    char* str = malloc(128);
     strcpy(str, getenv("LOCALAPPDATA"));
     strcat(str, SAVE_PATH);
 
@@ -229,6 +230,7 @@ s32 osEepromLongWrite(UNUSED OSMesgQueue *mq, u8 address, u8 *buffer, int nbytes
     s32 ret = fwrite(content, 1, 512, fp) == 512 ? 0 : -1;
     fclose(fp);
 #elif defined(_WIN32) || defined(_WIN64)
+    char* str = malloc(128);
     strcpy(str, getenv("LOCALAPPDATA"));
     strcat(str, SAVE_PATH);
 

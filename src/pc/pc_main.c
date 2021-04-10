@@ -28,6 +28,9 @@
 
 #include "controller/controller_keyboard.h"
 
+#include "game/hud.h"
+#include "configfile.h"
+
 #include "game/settings.h"
 
 #include "compat.h"

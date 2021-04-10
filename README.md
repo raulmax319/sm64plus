@@ -106,6 +106,7 @@ If you're still stuck after trying all that, you can post your error to the #hel
 - Made Metal Mario more consistent with the "Improved Metal Mario" setting.
 - Made the window center on the screen at game start.
 - Reverted the level select level order back to original and fixed a crash casued by missing characters.
+- Added Linux support thanks to [TheEssem](https://github.com/TheEssem).
 - Fixed other various minor bugs.
 
 ### v1.0.1 (06/04/2021):
