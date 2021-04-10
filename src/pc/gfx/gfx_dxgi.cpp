@@ -1,4 +1,4 @@
-#if defined(ENABLE_DX11) || defined(ENABLE_DX12)
+#if !defined(__linux__) && !defined(__BSD__)
 
 #include <stdint.h>
 #include <math.h>
@@ -76,6 +76,8 @@ static struct {
     bool (*on_key_down)(int scancode);
     bool (*on_key_up)(int scancode);
     void (*on_all_keys_up)(void);
+    void (*on_mouse_move)(long x, long y);
+    void (*on_mouse_press)(s8 left, s8 right, s8 middle);
 } dxgi;
 
 static void load_dxgi_library(void) {
@@ -193,8 +195,8 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
             SetWindowPos(dxgi.h_wnd, NULL, r.left, r.top, r.right - r.left, r.bottom - r.top, SWP_FRAMECHANGED);
             ShowWindow(dxgi.h_wnd, SW_RESTORE);
         }
-
-        ShowCursor(TRUE);
+        if (gMouseCam)
+            ShowCursor(TRUE);
 
         dxgi.is_full_screen = false;
     } else {
@@ -230,7 +232,8 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
         SetWindowLongPtr(dxgi.h_wnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
         SetWindowPos(dxgi.h_wnd, HWND_TOP, primary.left, primary.top, primary.right - primary.left, primary.bottom - primary.top, SWP_FRAMECHANGED);
 
-        ShowCursor(FALSE);
+        if (gMouseCam)
+            ShowCursor(FALSE);
 
         dxgi.is_full_screen = true;
     }
@@ -298,6 +301,24 @@ static LRESULT CALLBACK gfx_dxgi_wnd_proc(HWND h_wnd, UINT message, WPARAM w_par
             } else {
                 return DefWindowProcW(h_wnd, message, w_param, l_param);
             }
+        case WM_LBUTTONDOWN:
+            dxgi.on_mouse_press(1, 0, 0);
+            break;
+        case WM_RBUTTONDOWN:
+            dxgi.on_mouse_press(0, 1, 0);
+            break;
+        case WM_MBUTTONDOWN:
+            dxgi.on_mouse_press(0, 0, 1);
+            break;
+        case WM_LBUTTONUP:
+            dxgi.on_mouse_press(-1, 0, 0);
+            break;
+        case WM_RBUTTONUP:
+            dxgi.on_mouse_press(0, -1, 0);
+            break;
+        case WM_MBUTTONUP:
+            dxgi.on_mouse_press(0, 0, -1);
+            break;
         default:
             return DefWindowProcW(h_wnd, message, w_param, l_param);
     }
@@ -338,6 +359,8 @@ static void gfx_dxgi_init(const char *game_name, bool start_in_fullscreen) {
 
     ATOM winclass = RegisterClassExW(&wcex);
 
+    if (gMouseCam)
+        ShowCursor(FALSE);
 
     run_as_dpi_aware([&] () {
         // We need to be dpi aware when calculating the size
@@ -345,7 +368,7 @@ static void gfx_dxgi_init(const char *game_name, bool start_in_fullscreen) {
         AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
         dxgi.h_wnd = CreateWindowW(WINCLASS_NAME, w_title, WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, 0, wr.right - wr.left, wr.bottom - wr.top, nullptr, nullptr, nullptr, nullptr);
+            GetSystemMetrics(SM_CXFULLSCREEN)/2 - wr.right/2, GetSystemMetrics(SM_CYFULLSCREEN)/2 - wr.bottom/2, wr.right - wr.left, wr.bottom - wr.top, nullptr, nullptr, nullptr, nullptr);
     });
 
     load_dxgi_library();
@@ -366,10 +389,12 @@ static void gfx_dxgi_set_fullscreen(bool enable) {
     toggle_borderless_window_full_screen(enable, true);
 }
 
-static void gfx_dxgi_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void)) {
+static void gfx_dxgi_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void), void (*on_mouse_move)(long x, long y), void on_mouse_press(s8 left, s8 right, s8 middle)) {
     dxgi.on_key_down = on_key_down;
     dxgi.on_key_up = on_key_up;
     dxgi.on_all_keys_up = on_all_keys_up;
+    dxgi.on_mouse_move = on_mouse_move;
+    dxgi.on_mouse_press = on_mouse_press;
 }
 
 static void gfx_dxgi_main_loop(void (*run_one_game_iter)(void)) {
@@ -400,6 +425,19 @@ static uint64_t qpc_to_us(uint64_t qpc) {
 }
 
 static bool gfx_dxgi_start_frame(void) {
+
+    // Before rendering, center the mouse cursor and set the mouse movement variables.
+    if (gMouseCam) {
+        POINT cursorPoint;
+        GetCursorPos(&cursorPoint);
+        POINT screenPoint;
+        screenPoint.x = dxgi.current_width/2;
+        screenPoint.y = dxgi.current_height/2;
+        ClientToScreen(dxgi.h_wnd, &screenPoint);
+        dxgi.on_mouse_move(cursorPoint.x-screenPoint.x, cursorPoint.y-screenPoint.y);
+        SetCursorPos(screenPoint.x, screenPoint.y);
+    }
+
     DXGI_FRAME_STATISTICS stats;
     if (dxgi.swap_chain->GetFrameStatistics(&stats) == S_OK && (stats.SyncRefreshCount != 0 || stats.SyncQPCTime.QuadPart != 0ULL)) {
         {

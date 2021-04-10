@@ -496,6 +496,8 @@ static void gfx_opengl_start_frame(void) {
     glDepthMask(GL_TRUE); // Must be set to clear Z-buffer
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if (gWireframeMode)
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     glEnable(GL_SCISSOR_TEST);
 }
 

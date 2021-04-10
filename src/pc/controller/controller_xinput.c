@@ -8,7 +8,8 @@
 #include "controller_api.h"
 #include "game/settings.h"
 
-#define DEADZONE gControllerDeadzone*10
+#define LEFT_DEADZONE gControllerLeftDeadzone*10
+#define RIGHT_DEADZONE gControllerRightDeadzone*10
 
 static void xinput_init(void) {
 }
@@ -47,7 +48,7 @@ static void xinput_read(OSContPad *pad) {
             }
 
             uint32_t magnitude_sq = (uint32_t)(gp->sThumbLX * gp->sThumbLX) + (uint32_t)(gp->sThumbLY * gp->sThumbLY);
-            if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
+            if (magnitude_sq > (uint32_t)(LEFT_DEADZONE * LEFT_DEADZONE)) {
                 // Game expects stick coordinates within -80..80
                 // 32768 / 409 = ~80
                 pad->stick_x = gp->sThumbLX / 409;
@@ -55,13 +56,13 @@ static void xinput_read(OSContPad *pad) {
             }
             if (gImprovedCamera) {
                 uint32_t magnitude_sq2 = (uint32_t)(gp->sThumbRX * gp->sThumbRX) + (uint32_t)(gp->sThumbRY * gp->sThumbRY);
-                if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
+                if (magnitude_sq2 > (uint32_t)(RIGHT_DEADZONE * RIGHT_DEADZONE)) {
                     pad->stick2_x = gp->sThumbRX / 409;
                 }
             }
             if (gVerticalCamera) {
                 uint32_t magnitude_sq2 = (uint32_t)(gp->sThumbRX * gp->sThumbRX) + (uint32_t)(gp->sThumbRY * gp->sThumbRY);
-                if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
+                if (magnitude_sq2 > (uint32_t)(RIGHT_DEADZONE * RIGHT_DEADZONE)) {
                     pad->stick2_y = gp->sThumbRY / 409;
                 }
             }

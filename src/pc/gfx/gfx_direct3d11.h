@@ -1,4 +1,4 @@
-#ifdef ENABLE_DX11
+#if !defined(__linux__) && !defined(__BSD__)
 
 #ifndef GFX_DIRECT3D11_H
 #define GFX_DIRECT3D11_H

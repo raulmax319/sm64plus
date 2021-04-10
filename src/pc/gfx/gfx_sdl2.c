@@ -35,6 +35,8 @@ static void (*on_fullscreen_changed_callback)(bool is_now_fullscreen);
 static bool (*on_key_down_callback)(int scancode);
 static bool (*on_key_up_callback)(int scancode);
 static void (*on_all_keys_up_callback)(void);
+static void (*on_mouse_move)(long x, long y);
+static void (*on_mouse_press)(s8 left, s8 right, s8 middle);
 
 static Uint32 last_time;
 
@@ -237,7 +239,7 @@ static void gfx_sdl_set_fullscreen(bool enable) {
     set_fullscreen(enable, true);
 }
 
-static void gfx_sdl_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void)) {
+static void gfx_sdl_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bool (*on_key_up)(int scancode), void (*on_all_keys_up)(void), void (*on_mouse_move)(long x, long y), void (*on_mouse_press)(s8 left, s8 right, s8 middle)) {
     on_key_down_callback = on_key_down;
     on_key_up_callback = on_key_up;
     on_all_keys_up_callback = on_all_keys_up;

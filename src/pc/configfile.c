@@ -45,6 +45,7 @@ static const struct ConfigOption options[] = {
     { .name = "custom_internal_resolution", .type = CONFIG_TYPE_BOOL, .boolValue = &configCustomInternalResolution },
     { .name = "internal_resolution_width", .type = CONFIG_TYPE_UINT, .uintValue = &configInternalResolutionWidth },
     { .name = "internal_resolution_height", .type = CONFIG_TYPE_UINT, .uintValue = &configInternalResolutionHeight },
+    { .name = "graphics_backend", .type = CONFIG_TYPE_UINT, .uintValue = &configGraphicsBackend },
 
     { .name = "AUDIO", .type = CONFIG_TYPE_SECTION },
     { .name = "music_volume", .type = CONFIG_TYPE_FLOAT, .floatValue = &configSeqVolume[0] },
@@ -59,10 +60,6 @@ static const struct ConfigOption options[] = {
     { .name = "noise_type", .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType },
     { .name = "force_4by3", .type = CONFIG_TYPE_BOOL, .boolValue = &configForce4by3 },
 
-    { .name = "AUDIO", .type = CONFIG_TYPE_SECTION },
-    { .name = "music_volume", .type = CONFIG_TYPE_FLOAT, .floatValue = &configSeqVolume[0] },
-    { .name = "jingle_volume", .type = CONFIG_TYPE_FLOAT, .floatValue = &configSeqVolume[1] },
-    { .name = "sound_volume", .type = CONFIG_TYPE_FLOAT, .floatValue = &configSeqVolume[2] },
     { .name = "CONTROLS", .type = CONFIG_TYPE_SECTION },
     { .name = "improved_controls", .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedControls },
     { .name = "backward_speed_cap", .type = CONFIG_TYPE_BOOL, .boolValue = &gBackwardSpeedCap },
@@ -75,6 +72,7 @@ static const struct ConfigOption options[] = {
     { .name = "fix_various_bugs", .type = CONFIG_TYPE_BOOL, .boolValue = &gFixVariousBugs },
     { .name = "make_blue_coin_switches_respawn", .type = CONFIG_TYPE_BOOL, .boolValue = &gRespawnBlueCoinSwitch },
     { .name = "remove_annoying_warps", .type = CONFIG_TYPE_BOOL, .boolValue = &gRemoveAnnoyingWarps },
+    { .name = "increase_underwater_shell_time", .type = CONFIG_TYPE_BOOL, .boolValue = &gIncreaseShellTime },
     { .name = "improve_metal_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedMetalCap },
     { .name = "disable_repeat_boo_messages", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableBooDialogue },
     { .name = "make_it_easier_to_talk_to_the_npcs", .type = CONFIG_TYPE_BOOL, .boolValue = &gTalkEasier },
@@ -107,6 +105,13 @@ static const struct ConfigOption options[] = {
     { .name = "always_show_the_health_meter", .type = CONFIG_TYPE_BOOL, .boolValue = &gAlwaysShowHealth },
     { .name = "hide_hud", .type = CONFIG_TYPE_BOOL, .boolValue = &gHideHud },
 
+    { .name = "MOUSE", .type = CONFIG_TYPE_SECTION },
+    { .name = "mouse_support", .type = CONFIG_TYPE_BOOL, .boolValue = &gMouseCam },
+    { .name = "mouse_sensitivity", .type = CONFIG_TYPE_FLOAT, .floatValue = &gMouseSensitivity },
+    { .name = "left_mouse_button_action", .type = CONFIG_TYPE_UINT, .uintValue = &configMouseLeft },
+    { .name = "right_mouse_button_action", .type = CONFIG_TYPE_UINT, .uintValue = &configMouseRight },
+    { .name = "middle_mouse_button_action", .type = CONFIG_TYPE_UINT, .uintValue = &configMouseMiddle },
+
     { .name = "EXTRA MOVES", .type = CONFIG_TYPE_SECTION },
     { .name = "wall_sliding", .type = CONFIG_TYPE_BOOL, .boolValue = &gWallSliding },
     { .name = "ground_pound_jump", .type = CONFIG_TYPE_BOOL, .boolValue = &gGroundPoundJump },
@@ -122,15 +127,18 @@ static const struct ConfigOption options[] = {
     { .name = "replace_keys_with_stars_when_collected", .type = CONFIG_TYPE_BOOL, .boolValue = &gReplaceKeysWithStars },
     
     { .name = "BONUS MODES", .type = CONFIG_TYPE_SECTION },
-    { .name = "infinite_lives_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gLifeMode },
-    { .name = "encore_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gEncoreMode },
+    { .name = "infinite_lives_mode", .type = CONFIG_TYPE_UINT, .uintValue = &gLifeMode },
+    { .name = "encore_mode", .type = CONFIG_TYPE_UINT, .uintValue = &gEncoreMode },
     { .name = "green_demon_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gGreenDemon },
     { .name = "hard_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gHardSave },
     { .name = "daredevil_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gDaredevilSave },
     { .name = "permadeath_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gHardcoreSave },
+    { .name = "casual_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gCasualMode },
 
     { .name = "FOR FUN", .type = CONFIG_TYPE_SECTION },
+    { .name = "paper_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gPaperMode },
     { .name = "fx_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode },
+    { .name = "wireframe_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gWireframeMode },
     { .name = "disable_lighting", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLighting },
     { .name = "force_use_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly },
     { .name = "nearest_neighbor_filtering", .type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor },
@@ -157,7 +165,8 @@ static const struct ConfigOption options[] = {
     { .name = "button_zr", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonZR },
     { .name = "button_thumbleft", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonThumbLeft },
     { .name = "button_thumbright", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonThumbRight },
-    { .name = "analog_stick_deadzone", .type = CONFIG_TYPE_UINT, .uintValue = &gControllerDeadzone },
+    { .name = "left_analog_stick_deadzone", .type = CONFIG_TYPE_UINT, .uintValue = &gControllerLeftDeadzone },
+    { .name = "right_analog_stick_deadzone", .type = CONFIG_TYPE_UINT, .uintValue = &gControllerRightDeadzone },
 
     { .name = "KEY MAPPING", .type = CONFIG_TYPE_SECTION },
     { .name = "key_a", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyA },
@@ -174,6 +183,7 @@ static const struct ConfigOption options[] = {
     { .name = "key_stickdown", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickDown },
     { .name = "key_stickleft", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickLeft },
     { .name = "key_stickright", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyStickRight },
+    { .name = "key_walktrigger", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyWalk },
 };
 
 // Reads an entire line from a file (excluding the newline character) and returns an allocated string

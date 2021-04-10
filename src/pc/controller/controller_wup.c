@@ -33,13 +33,19 @@ static void controller_wup_read(OSContPad *pad) {
         if (buttons & 0x0200) pad->button |= B_BUTTON;
         if (buttons & 0x1000) pad->button |= L_TRIG;
         if (gImprovedCamera) {
-            if (pad->stick2_x != 0 || pad->stick2_y != 0) {
+            if (pad->stick2_x != 0) {
                 pad->stick2_x = saturate(axis[2] - 128 - 0);
-                //pad->stick2_y = saturate(axis[3] - 128 - 0);
             }
         }
         else {
             if (axis[2] < 0x40) pad->button |= L_CBUTTONS;
+        }
+        if (gVerticalCamera) {
+            if (pad->stick2_y != 0) {
+                pad->stick2_y = saturate(axis[3] - 128 - 0);
+            }
+        }
+        else {
             if (axis[2] > 0xC0) pad->button |= R_CBUTTONS;
         }
         if (axis[3] < 0x40) pad->button |= D_CBUTTONS;

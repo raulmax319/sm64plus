@@ -72,11 +72,7 @@ u16 gDemoInputListID = 0;
 struct DemoInput gRecordedDemoInput = { 0 }; // possibly removed in EU. TODO: Check
 
 s8 get_mirror() {
-    if (gEncoreMode == 0) {
-        return 0;
-    }
-
-    if (gCurrCourseNum == COURSE_CAKE_END) {
+    if (gEncoreMode == 0 || gEncoreMode == 2 || gCurrCourseNum == COURSE_CAKE_END) {
         return 0;
     }
 
@@ -84,7 +80,7 @@ s8 get_mirror() {
 }
 
 s16 get_palette() {
-    if (!gEncoreMode || !gCanMirror) {
+    if (gEncoreMode == 0 || gEncoreMode == 3 || !gCanMirror) {
         return 0;
     }
 
@@ -486,10 +482,12 @@ void adjust_analog_stick(struct Controller *controller) {
         controller->stickY *= 64 / controller->stickMag;
         controller->stickMag = 64;
     }
-    if (controller->stick2Mag > 64) {
-        controller->stick2X *= 64 / controller->stick2Mag;
-        controller->stick2Y *= 64 / controller->stick2Mag;
-        controller->stick2Mag = 64;
+    // The value is much higher for the second stick since we want the camera to move faster with mouse in use.
+    // Not too fast though...
+    if (controller->stick2Mag > 768) {
+        controller->stick2X *= 768 / controller->stick2Mag;
+        controller->stick2Y *= 768 / controller->stick2Mag;
+        controller->stick2Mag = 768;
     }
 }
 
