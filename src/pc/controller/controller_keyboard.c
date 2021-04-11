@@ -49,6 +49,9 @@ void keyboard_on_mouse_move(long x, long y) {
 }
 
 void keyboard_on_mouse_press(s8 left, s8 right, s8 middle, s8 wheel) {
+    if (!gMouseCam)
+        return;
+        
     if (left > 0)
         keyboard_buttons_down |= configMouseLeft;
     if (left < 0)

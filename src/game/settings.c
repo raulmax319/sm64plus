@@ -150,7 +150,7 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
-char* gTitleString = "Super Mario 64 Plus v1.0.1";
+char* gTitleString = "Super Mario 64 Plus v1.1.0";
 
 s8 configFullscreen = 1;
 unsigned int configCustomFullscreenResolution = 0;
@@ -176,6 +176,7 @@ s8 configForce4by3 = 0;
 
 s8 gImprovedControls = 1;
 s8 gBackwardSpeedCap = 1;
+s8 gImprovedHanging = 1;
 s8 gDpadControls = 1;
 s8 gFullAirControl = 0;
 s8 gDisableBLJ = 0;
@@ -184,10 +185,7 @@ s8 gDisableFallDamage = 0;
 s8 gFixVariousBugs = 1;
 s8 gRespawnBlueCoinSwitch = 1;
 s8 gRemoveAnnoyingWarps = 1;
-s8 gIncreaseShellTime = 1;
-// TODO (Mors): Turn this into a "updated powerups" option eventually.
-// Vanish Mario would fall slower, and Wing Mario would have completely revamped flying.
-s8 gImprovedMetalCap = 1;
+s8 gImprovePowerups = 1;
 s8 gDisableBooDialogue = 1;
 s8 gTalkEasier = 1;
 s8 gQuitOption = 1;
@@ -232,7 +230,8 @@ s8 gOdysseyDive = 0;
 s8 gFlashbackPound = 0;
 
 s8 gPyramidCutscene = 1;
-s8 gTrapdoorSound = 1;
+s8 gUnusedSounds = 1;
+s8 gPenguinSadEyes = 1;
 s8 gTwirlTripleJump = 0;
 s8 gSpawnSparkles = 0;
 s8 gReplaceKeysWithStars = 0;

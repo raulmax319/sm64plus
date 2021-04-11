@@ -13,7 +13,8 @@
 
 #include "game/settings.h"
 
-#define DEADZONE 4960
+#define DEADZONE_LEFT gControllerLeftDeadzone * 10
+#define DEADZONE_RIGHT gControllerRightDeadzone * 10
 
 static bool init_ok;
 static SDL_GameController *sdl_cntrl;
@@ -83,7 +84,7 @@ static void controller_sdl_read(OSContPad *pad) {
 
     if (gImprovedCamera) {
         uint32_t magnitude_sq2 = (uint32_t)(rightx * rightx);
-        if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
+        if (magnitude_sq2 > (uint32_t)(DEADZONE_RIGHT * DEADZONE_RIGHT)) {
             pad->stick2_x = rightx / 409;
         }
     }
@@ -94,7 +95,7 @@ static void controller_sdl_read(OSContPad *pad) {
 
     if (gVerticalCamera) {
         uint32_t magnitude_sq2 = (uint32_t)(righty * righty);
-        if (magnitude_sq2 > (uint32_t)(DEADZONE * DEADZONE)) {
+        if (magnitude_sq2 > (uint32_t)(DEADZONE_RIGHT * DEADZONE_RIGHT)) {
             pad->stick2_y = righty / 409;
         }
     }
@@ -107,7 +108,7 @@ static void controller_sdl_read(OSContPad *pad) {
     if (rtrig > 30 * 256) pad->button |= R_TRIG;
 
     uint32_t magnitude_sq = (uint32_t)(leftx * leftx) + (uint32_t)(lefty * lefty);
-    if (magnitude_sq > (uint32_t)(DEADZONE * DEADZONE)) {
+    if (magnitude_sq > (uint32_t)(DEADZONE_LEFT * DEADZONE_LEFT)) {
         // Game expects stick coordinates within -80..80
         // 32768 / 409 = ~80
         pad->stick_x = leftx / 409;

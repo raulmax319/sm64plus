@@ -1329,9 +1329,9 @@ void mode_manual_camera(struct Camera *c, f32 yOff) {
     lakitu_zoom(800.f, 0x900);
     c->nextYaw = update_manual_camera(c, c->focus, pos, yOff);
     c->pos[0] = pos[0];
+    c->pos[1] = pos[1];
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
-    set_camera_height(c, pos[1]);
 }
 
 /**

@@ -77,7 +77,7 @@ static void sequence_channel_process_sound(struct SequenceChannel *seqChannel) {
 }
 #endif
 
-void sequence_player_process_sound(struct SequencePlayer *seqPlayer) {
+void sequence_player_process_sound(struct SequencePlayer *seqPlayer, float seqVol) {
     s32 i;
 
     if (seqPlayer->fadeTimer != 0) {
@@ -86,8 +86,8 @@ void sequence_player_process_sound(struct SequencePlayer *seqPlayer) {
         seqPlayer->recalculateVolume = TRUE;
 #endif
 
-        if (seqPlayer->fadeVolume > US_FLOAT2(1)) {
-            seqPlayer->fadeVolume = US_FLOAT2(1);
+        if (seqPlayer->fadeVolume > US_FLOAT2(1) * seqVol) {
+            seqPlayer->fadeVolume = US_FLOAT2(1) * seqVol;
         }
         if (seqPlayer->fadeVolume < 0) {
             seqPlayer->fadeVolume = 0;

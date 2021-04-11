@@ -25,6 +25,7 @@ extern s8 configForce4by3;
 
 extern s8 gImprovedControls;
 extern s8 gBackwardSpeedCap;
+extern s8 gImprovedHanging;
 extern s8 gDpadControls;
 extern s8 gFullAirControl;
 extern s8 gDisableBLJ;
@@ -33,8 +34,7 @@ extern s8 gDisableFallDamage;
 extern s8 gFixVariousBugs;
 extern s8 gRespawnBlueCoinSwitch;
 extern s8 gRemoveAnnoyingWarps;
-extern s8 gIncreaseShellTime;
-extern s8 gImprovedMetalCap;
+extern s8 gImprovePowerups;
 extern s8 gDisableBooDialogue;
 extern s8 gTalkEasier;
 extern s8 gQuitOption;
@@ -79,7 +79,8 @@ extern s8 gOdysseyDive;
 extern s8 gFlashbackPound;
 
 extern s8 gPyramidCutscene;
-extern s8 gTrapdoorSound;
+extern s8 gUnusedSounds;
+extern s8 gPenguinSadEyes;
 extern s8 gTwirlTripleJump;
 extern s8 gSpawnSparkles;
 extern s8 gReplaceKeysWithStars;

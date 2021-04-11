@@ -1499,7 +1499,7 @@ void update_mario_health(struct MarioState *m) {
         if (((u32) m->healCounter | (u32) m->hurtCounter) == 0) {
             if ((m->input & INPUT_IN_POISON_GAS) && !(m->action & ACT_FLAG_INTANGIBLE)) {
                 if (!(m->flags & MARIO_METAL_CAP) && !gDebugLevelSelect) {
-                    m->health -= 4;
+                    m->health -= (save_file_get_flags() & SAVE_FLAG_HARD_MODE) ? 8 : 4;
                 }
             } else {
                 if ((m->action & ACT_FLAG_SWIMMING) && !(m->action & ACT_FLAG_INTANGIBLE) && (!mario_has_improved_metal_cap(m))) {
@@ -1555,7 +1555,7 @@ void update_mario_health(struct MarioState *m) {
         }
 
         // Play a noise to alert the player when Mario is close to drowning.
-        if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && (!(save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE))) {
+        if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && (!(save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE)) && (!mario_has_improved_metal_cap(m))) {
             play_sound(SOUND_MOVING_ALMOST_DROWNING, gDefaultSoundArgs);
 #ifdef VERSION_SH
             if (!gRumblePakTimer) {
@@ -1850,7 +1850,7 @@ s32 execute_mario_action(UNUSED struct Object *o) {
 }
 
 u32 mario_has_improved_metal_cap(struct MarioState *m) {
-    return (gImprovedMetalCap) && (m->flags & MARIO_METAL_CAP);
+    return (gImprovePowerups) && (m->flags & MARIO_METAL_CAP);
 }
 
 /**************************************************

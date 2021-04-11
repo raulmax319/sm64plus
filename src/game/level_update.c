@@ -1381,10 +1381,11 @@ s32 lvl_set_current_level(UNUSED s16 arg0, s32 levelNum) {
             }
             level = 8;
         }
-        if (level > 7)
+        if (level >= 7)
             return 1;
         gCurrActNum = level;
         gDialogCourseActNum = gCurrActNum;
+        set_mario_initial_action(gMarioState, MARIO_SPAWN_SPIN_AIRBORNE, sWarpDest.arg);
         return 0;
     }
 

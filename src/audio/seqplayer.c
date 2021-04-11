@@ -2045,10 +2045,10 @@ void process_sequences(UNUSED s32 iterationsRemaining) {
         if (gSequencePlayers[i].enabled == TRUE) {
 #ifdef VERSION_EU
             sequence_player_process_sequence(&gSequencePlayers[i], configSeqVolume[i]);
-            sequence_player_process_sound(&gSequencePlayers[i]);
+            sequence_player_process_sound(&gSequencePlayers[i], configSeqVolume[i]);
 #else
             sequence_player_process_sequence(gSequencePlayers + i, configSeqVolume[i]);
-            sequence_player_process_sound(gSequencePlayers + i);
+            sequence_player_process_sound(gSequencePlayers + i, configSeqVolume[i]);
 #endif
         }
     }

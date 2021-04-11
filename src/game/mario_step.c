@@ -581,7 +581,7 @@ void apply_gravity(struct MarioState *m) {
         m->vel[1] /= 4.0f;
     } else if (m->action & ACT_FLAG_METAL_WATER) {
         m->vel[1] -= 1.6f;
-        if (gImprovedMetalCap) {
+        if (gImprovePowerups) {
             if (m->vel[1] < -24.0f) {
                 m->vel[1] = -24.0f;
             }

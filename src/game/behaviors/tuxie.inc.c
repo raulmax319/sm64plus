@@ -291,18 +291,27 @@ Gfx *geo_switch_tuxie_mother_eyes(s32 run, struct GraphNode *node, UNUSED Mat4 *
     if (run == TRUE) {
         obj = (struct Object *) gCurGraphNodeObject;
         switchCase = (struct GraphNodeSwitchCase *) node;
-        switchCase->selectedCase = 0;
 
-        // timer logic for blinking. uses cases 0-2.
-        timer = gGlobalTimer % 50;
-        if (timer < 43)
+        // Sad penguin eyes. Very sad times.
+        // Blinking looks weird with these eyes so it's disabled.
+        if ((gPenguinSadEyes) && (obj->oAction != 2) && (obj->behavior == segmented_to_virtual(bhvTuxiesMother))) {
+            switchCase->selectedCase = 4;
+        }
+        else {
             switchCase->selectedCase = 0;
-        else if (timer < 45)
-            switchCase->selectedCase = 1;
-        else if (timer < 47)
-            switchCase->selectedCase = 2;
-        else
-            switchCase->selectedCase = 1;
+
+            // timer logic for blinking. uses cases 0-2.
+            timer = gGlobalTimer % 50;
+            if (timer < 43)
+                switchCase->selectedCase = 0;
+            else if (timer < 45)
+                switchCase->selectedCase = 1;
+            else if (timer < 47)
+                switchCase->selectedCase = 2;
+            else
+                switchCase->selectedCase = 1;
+
+        }
 
         /** make Tuxie's Mother have angry eyes if Mario takes the correct baby
          * after giving it back. The easiest way to check this is to see if she's
