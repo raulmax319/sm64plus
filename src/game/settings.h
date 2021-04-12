@@ -20,6 +20,7 @@ extern s8 g60FPS;
 extern s8 gDisableDrawDistance;
 extern float gDrawDistanceMultiplier;
 extern s8 gDisableLowPoly;
+extern s8 gNearestNeighbor;
 extern unsigned int gNoiseType;
 extern s8 configForce4by3;
 
@@ -98,7 +99,6 @@ extern s8 gFXMode;
 extern s8 gWireframeMode;
 extern s8 gDisableLighting;
 extern s8 gForceLowPoly;
-extern s8 gNearestNeighbor;
 
 extern s8 gDebugMovementMode;
 extern s8 gDebugCapChanger;

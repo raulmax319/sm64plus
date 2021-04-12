@@ -631,8 +631,16 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                     level_trigger_warp(m, WARP_OP_STAR_EXIT);
                 } else {
                     if (gStayInLevel >= 2) {
-                        save_file_do_save(gCurrSaveFileNum - 1);
-                        m->actionState = 2;
+                        // Ask if we wanna stay in certain subareas
+                        if (gStayInLevel == 2 && gCurrAreaIndex > 1 && 
+                        (gCurrLevelNum == LEVEL_SSL || gCurrLevelNum == LEVEL_LLL || gCurrLevelNum == LEVEL_WDW)) {
+                            create_dialog_box_with_response(DIALOG_170);
+                            m->actionState = 1;
+                        }
+                        else {
+                            save_file_do_save(gCurrSaveFileNum - 1);
+                            m->actionState = 2;
+                        }
                     }
                     else {
                         enable_time_stop();

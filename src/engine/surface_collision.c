@@ -237,6 +237,9 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
 
     ceil = NULL;
 
+    if (gFixVariousBugs)
+        *pheight = CELL_HEIGHT_LIMIT;
+
     // Stay in this loop until out of ceilings.
     while (surfaceNode != NULL) {
         surf = surfaceNode->surface;
@@ -273,20 +276,37 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
             continue;
         }
 
-        {
-            f32 nx = surf->normal.x;
-            f32 ny = surf->normal.y;
-            f32 nz = surf->normal.z;
-            f32 oo = surf->originOffset;
-            f32 height;
+        f32 nx = surf->normal.x;
+        f32 ny = surf->normal.y;
+        f32 nz = surf->normal.z;
+        f32 oo = surf->originOffset;
+        f32 height;
 
-            // If a wall, ignore it. Likely a remnant, should never occur.
-            if (ny == 0.0f) {
+        // If a wall, ignore it. Likely a remnant, should never occur.
+        if (ny == 0.0f) {
+            continue;
+        }
+
+        // Find the ceil height at the specific point.
+        height = -(x * nx + nz * z + oo) / ny;
+
+        if (gFixVariousBugs) {
+            if (height > *pheight) {
                 continue;
             }
-
-            // Find the ceil height at the specific point.
-            height = -(x * nx + nz * z + oo) / ny;
+            if (y > height) {
+                continue;
+            }
+            if (y >= surf->upperY) {
+                continue;
+            }
+            *pheight = height;
+            ceil = surf;
+            if (height == y) {
+                break;
+            }
+        }
+        else {
 
             // Checks for ceiling interaction with a 78 unit buffer.
             //! (Exposed Ceilings) Because any point above a ceiling counts

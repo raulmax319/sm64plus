@@ -57,6 +57,7 @@ static const struct ConfigOption options[] = {
     { .name = "disable_draw_distance", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableDrawDistance },
     { .name = "draw_distance_multiplier", .type = CONFIG_TYPE_FLOAT, .floatValue = &gDrawDistanceMultiplier },
     { .name = "disable_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLowPoly },
+    { .name = "nearest_neighbor_filtering", .type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor },
     { .name = "noise_type", .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType },
     { .name = "force_4by3", .type = CONFIG_TYPE_BOOL, .boolValue = &configForce4by3 },
 
@@ -144,7 +145,6 @@ static const struct ConfigOption options[] = {
     { .name = "wireframe_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gWireframeMode },
     { .name = "disable_lighting", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLighting },
     { .name = "force_use_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly },
-    { .name = "nearest_neighbor_filtering", .type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor },
 
     { .name = "DEBUG", .type = CONFIG_TYPE_SECTION },
     { .name = "level_select", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugLevelSelect },

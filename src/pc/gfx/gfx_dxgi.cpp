@@ -45,6 +45,8 @@
 
 using namespace Microsoft::WRL; // For ComPtr
 
+static bool mouse_capture = true;
+
 static struct {
     HWND h_wnd;
     bool showing_error;
@@ -195,7 +197,7 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
             SetWindowPos(dxgi.h_wnd, NULL, r.left, r.top, r.right - r.left, r.bottom - r.top, SWP_FRAMECHANGED);
             ShowWindow(dxgi.h_wnd, SW_RESTORE);
         }
-        if (gMouseCam)
+        if (!gMouseCam)
             ShowCursor(TRUE);
 
         dxgi.is_full_screen = false;
@@ -232,7 +234,7 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
         SetWindowLongPtr(dxgi.h_wnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
         SetWindowPos(dxgi.h_wnd, HWND_TOP, primary.left, primary.top, primary.right - primary.left, primary.bottom - primary.top, SWP_FRAMECHANGED);
 
-        if (gMouseCam)
+        if (!gMouseCam)
             ShowCursor(FALSE);
 
         dxgi.is_full_screen = true;
@@ -303,12 +305,15 @@ static LRESULT CALLBACK gfx_dxgi_wnd_proc(HWND h_wnd, UINT message, WPARAM w_par
             }
         case WM_LBUTTONDOWN:
             dxgi.on_mouse_press(1, 0, 0, 0);
+            mouse_capture = true;
             break;
         case WM_RBUTTONDOWN:
             dxgi.on_mouse_press(0, 1, 0, 0);
+            mouse_capture = true;
             break;
         case WM_MBUTTONDOWN:
             dxgi.on_mouse_press(0, 0, 1, 0);
+            mouse_capture = true;
             break;
         case WM_LBUTTONUP:
             dxgi.on_mouse_press(-1, 0, 0, 0);
@@ -321,6 +326,10 @@ static LRESULT CALLBACK gfx_dxgi_wnd_proc(HWND h_wnd, UINT message, WPARAM w_par
             break;
         case WM_MOUSEWHEEL:
             dxgi.on_mouse_press(0, 0, 0, GET_WHEEL_DELTA_WPARAM(w_param)/WHEEL_DELTA);
+            break;
+        case WM_CAPTURECHANGED:
+        case WM_KILLFOCUS:
+            mouse_capture = false;
             break;
         default:
             return DefWindowProcW(h_wnd, message, w_param, l_param);
@@ -430,7 +439,7 @@ static uint64_t qpc_to_us(uint64_t qpc) {
 static bool gfx_dxgi_start_frame(void) {
 
     // Before rendering, center the mouse cursor and set the mouse movement variables.
-    if (gMouseCam) {
+    if (gMouseCam && mouse_capture) {
         POINT cursorPoint;
         GetCursorPos(&cursorPoint);
         POINT screenPoint;

@@ -171,6 +171,7 @@ s8 g60FPS = 1;
 s8 gDisableDrawDistance = 1;
 float gDrawDistanceMultiplier = 1.0f;
 s8 gDisableLowPoly = 1;
+s8 gNearestNeighbor = 0;
 unsigned int gNoiseType = 0;
 s8 configForce4by3 = 0;
 
@@ -249,7 +250,6 @@ s8 gFXMode = 0;
 s8 gWireframeMode = 0;
 s8 gDisableLighting = 0;
 s8 gForceLowPoly = 0;
-s8 gNearestNeighbor = 0;
 
 s8 gDebugMovementMode = 0;
 s8 gDebugCapChanger = 0;
@@ -299,11 +299,7 @@ s8 stay_in_level() {
     gCurrLevelNum == LEVEL_CCM || gCurrLevelNum == LEVEL_TTM || gCurrLevelNum == LEVEL_SSL || 
     // In addition to all of above, kick us only if the submarine is there in DDD.
     ((!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) && gCurrLevelNum == LEVEL_DDD))) ||
-    // Kick us from the lonely mushroom in TTM as well.
-    (gCollectedStar == 5 && gCurrLevelNum == LEVEL_TTM) ||
-    // If we have collected any stars in any sublevels except for these, kick us again.
-    (gCurrAreaIndex > 1 && gCurrLevelNum != LEVEL_DDD && gCurrLevelNum != LEVEL_THI) ||
-    // Well, kick us from the wiggler room tho.
+    // Kick us from the wiggler room.
     (gCollectedStar == 5 && gCurrLevelNum == LEVEL_THI) ||
     // Let the bonus levels kick us out too
     (gCollectedStar == 0 && (gCurrLevelNum == LEVEL_PSS || gCurrLevelNum == LEVEL_COTMC || gCurrLevelNum == LEVEL_TOTWC ||

@@ -881,8 +881,8 @@ s32 act_air_throw(struct MarioState *m) {
 
 s32 act_water_jump(struct MarioState *m) {
     if (gImprovedControls) {
-        if (m->forwardVel < 20.0f) {
-            mario_set_forward_vel(m, 20.0f);
+        if (m->forwardVel < 22.0f) {
+            mario_set_forward_vel(m, 22.0f);
         }
     }
     else {
@@ -902,7 +902,7 @@ s32 act_water_jump(struct MarioState *m) {
 
         case AIR_STEP_HIT_WALL:
             if (gImprovedControls) {
-                mario_set_forward_vel(m, 20.0f);
+                mario_set_forward_vel(m, 24.0f);
             }
             else {
                 mario_set_forward_vel(m, 15.0f);
@@ -931,8 +931,8 @@ s32 act_hold_water_jump(struct MarioState *m) {
     }
 
     if (gImprovedControls) {
-        if (m->forwardVel < 20.0f) {
-            mario_set_forward_vel(m, 20.0f);
+        if (m->forwardVel < 22.0f) {
+            mario_set_forward_vel(m, 22.0f);
         }
     }
     else {
@@ -2003,7 +2003,8 @@ s32 act_flying(struct MarioState *m) {
 }
 
 s32 act_riding_hoot(struct MarioState *m) {
-    if (!(m->input & INPUT_A_DOWN) || (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK7)) {
+    if (((!(m->input & INPUT_A_DOWN) && !gImprovedHanging) || ((m->input & INPUT_A_PRESSED) && gImprovedHanging))
+    || (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK7)) {
         m->usedObj->oInteractStatus = 0;
         m->usedObj->oHootMarioReleaseTime = gGlobalTimer;
 

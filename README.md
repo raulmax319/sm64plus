@@ -90,26 +90,31 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 ### v1.1.0 (??/04/2021):
 **Launcher:**
 - Added the new settings to the launcher.
+- Moved the "Nearest Neighbor Filtering" setting to the "Graphics" tab.
 - Made it so that the launcher now can change button prompts depending on if you're using a keyboard or gamepad.
 - Made it take longer to reload all the settings from presets to prevent accidental reloads.
 - Added the C-buttons to the list of reassignable buttons for controllers.
 - Removed some keys from the key selection options.
+- Certain animations got tweaked.
 
 **Game itself:**
 - Added the "Graphics Backend" setting, which makes it possible to switch between Direct3D11 and Direct3D12 without rebuilding.
 - Added the "Improved Hanging" setting, which makes movement when hanging on ceilings faster, and removes the requirement of holding A.
 - Added the "Restore Mother Penguin's Sad Eyes" setting, which restores the unused, sad looking eye texture for the mother penguin.
+- Added the "Casual Mode" setting, which makes Mario not lose any health when underwater, and reduces all damage taken by half.
+- Added the "Paper Mode" setting, which makes Mario thin like a paper.
+- Added the "Wireframe Mode" setting. Guess what this one does.
 - Added a bunch of mouse related settings. You can now control the camera and navigate some of the menus using your mouse.
-- Added "Casual Mode", which makes Mario not lose any health when underwater, and reduces all damage taken by half.
-- Added "Paper Mode", which makes Mario thin like a paper.
-- Added "Wireframe Mode". Guess what this one does.
 - Added a key which makes Mario walk slower. This is to compensate for the lack of analog controls with a keyboard.
 - Split the "Analog Stick Deadzone" setting into two, one for each analog stick.
+- "Fix Various Bugs" now fixes more bugs.
 - Changed the "Improved Metal Mario" setting to "Improved Powerups". It now also makes underwater shells last longer and makes Metal Mario's interactions with enemies and hazards more consistent.
 - Changed the "Restore the Unused Trapdoor Sound" to "Restore Unused Sound Effects". It also now brings back the sound effects that were supposed to play during the Bowser defeat cutscenes.
 - Added more options for the "Infinite Lives Mode" and "Encore Mode" settings, allowing further customizability.
 - Made it so that when Hard Mode is active Mario loses health slower underwater, and faster in toxic gas.
-- Tweaked both the "Wall Sliding" and "Odyssey Ground Pound Dive" settings.
+- Some tweaks have been made to the "Improved Controls", "Wall Sliding", and "Odyssey Ground Pound Dive" settings.
+- Made it so that when getting a star in a sub-area while the "Stay in Level After Getting a Star" setting is on, now you're asked if you want to keep playing or not.
+- In addition to above, the lonely mushroom in TTM doesn't kick you out or cause a forced restart anymore.
 - Fixed various issues regarding the "Manual Camera" setting.
 - Made the game window be centered on main display at the game start.
 - Reverted the level select level order back to original and fixed a crash casued by missing characters.

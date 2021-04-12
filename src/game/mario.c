@@ -552,7 +552,10 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
 f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
     UNUSED f32 unused;
 
-    return find_ceil(pos[0], height + 80.0f, pos[2], ceil);
+    if (gFixVariousBugs)
+        return find_ceil(pos[0], height + 4.0f, pos[2], ceil);
+    else
+        return find_ceil(pos[0], height + 80.0f, pos[2], ceil);
 }
 
 /**
@@ -1369,8 +1372,10 @@ void update_mario_geometry_inputs(struct MarioState *m) {
         vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
         m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
     }
-
-    m->ceilHeight = vec3f_find_ceil(&m->pos[0], m->floorHeight, &m->ceil);
+    if (gFixVariousBugs)
+        m->ceilHeight = vec3f_find_ceil(m->pos, m->pos[1], &m->ceil);
+    else
+        m->ceilHeight = vec3f_find_ceil(&m->pos[0], m->floorHeight, &m->ceil);
     gasLevel = find_poison_gas_level(m->pos[0], m->pos[2]);
     m->waterLevel = find_water_level(m->pos[0], m->pos[2]);
 
