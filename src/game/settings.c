@@ -210,7 +210,6 @@ float gAdditionalFOV = 0.0f;
 unsigned int gHudStyle = 2;
 s8 gCenterHud = 0;
 s8 gHUDFiltering = 0;
-unsigned int gHUDUpscaling = 0;
 s8 gHudStars = 0;
 s8 gShow100CoinStar = 0;
 s8 gAlwaysShowHealth = 0;
@@ -254,7 +253,6 @@ s8 gForceLowPoly = 0;
 s8 gDebugMovementMode = 0;
 s8 gDebugCapChanger = 0;
 s8 gVerticalCamera = 0;
-unsigned int gTextureUpscaling = 0;
 
 unsigned int configButtonA = A_BUTTON;
 unsigned int configButtonB = Z_TRIG;

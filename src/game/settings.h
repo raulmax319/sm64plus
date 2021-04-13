@@ -59,7 +59,6 @@ extern float gAdditionalFOV;
 extern unsigned int gHudStyle;
 extern s8 gCenterHud;
 extern s8 gHUDFiltering;
-extern unsigned int gHUDUpscaling;
 extern s8 gHudStars;
 extern s8 gShow100CoinStar;
 extern s8 gAlwaysShowHealth;
@@ -103,7 +102,6 @@ extern s8 gForceLowPoly;
 extern s8 gDebugMovementMode;
 extern s8 gDebugCapChanger;
 extern s8 gVerticalCamera;
-extern unsigned int gTextureUpscaling;
 
 extern unsigned int configButtonA;
 extern unsigned int configButtonB;

@@ -87,7 +87,7 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 ## Changelog
 
-### v1.1.0 (??/04/2021):
+### v1.1.0 (13/04/2021):
 **Launcher:**
 - Added the new settings to the launcher.
 - Moved the "Nearest Neighbor Filtering" setting to the "Graphics" tab.
@@ -97,7 +97,8 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 - Removed some keys from the key selection options.
 - Certain animations got tweaked.
 
-**Game itself:**
+**Additions:**
+- Added support for texture packs, and changed the way the textures are loaded.
 - Added the "Graphics Backend" setting, which makes it possible to switch between Direct3D11 and Direct3D12 without rebuilding.
 - Added the "Improved Hanging" setting, which makes movement when hanging on ceilings faster, and removes the requirement of holding A.
 - Added the "Restore Mother Penguin's Sad Eyes" setting, which restores the unused, sad looking eye texture for the mother penguin.
@@ -106,20 +107,27 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 - Added the "Wireframe Mode" setting. Guess what this one does.
 - Added a bunch of mouse related settings. You can now control the camera and navigate some of the menus using your mouse.
 - Added a key which makes Mario walk slower. This is to compensate for the lack of analog controls with a keyboard.
+
+**Changes:**
+- Removed the "HUD Upscaling" and "Texture Upscaling" settings. They were already pretty laggy, but with the introduction of texture packs they aren't necessary.
 - Split the "Analog Stick Deadzone" setting into two, one for each analog stick.
-- "Fix Various Bugs" now fixes more bugs.
 - Changed the "Improved Metal Mario" setting to "Improved Powerups". It now also makes underwater shells last longer and makes Metal Mario's interactions with enemies and hazards more consistent.
 - Changed the "Restore the Unused Trapdoor Sound" to "Restore Unused Sound Effects". It also now brings back the sound effects that were supposed to play during the Bowser defeat cutscenes.
+- Made it so that "Fix Various Bugs" now fixes more bugs.
 - Added more options for the "Infinite Lives Mode" and "Encore Mode" settings, allowing further customizability.
 - Made it so that when Hard Mode is active Mario loses health slower underwater, and faster in toxic gas.
-- Some tweaks have been made to the "Improved Controls", "Wall Sliding", and "Odyssey Ground Pound Dive" settings.
-- Made it so that when getting a star in a sub-area while the "Stay in Level After Getting a Star" setting is on, now you're asked if you want to keep playing or not.
+- Tweaked some of the Encore Mode palettes, and fixed a ton of issues with them.
+- Made some tweaks to the "Improved Controls", "Wall Sliding", and "Odyssey Ground Pound Dive" settings.
+- Made it so that when getting a star in a sub-area with the "Stay in Level After Getting a Star" setting is on, you're now asked if you want to keep playing or not.
 - In addition to above, the lonely mushroom in TTM doesn't kick you out or cause a forced restart anymore.
-- Fixed various issues regarding the "Manual Camera" setting.
 - Made the game window be centered on main display at the game start.
+- Added Linux support thanks to [TheEssem](https://github.com/TheEssem). Still needs further testing.
+
+**Fixes:**
+- Fixed the broken audio volume settings.
+- Fixed various issues regarding the "Manual Camera" setting.
 - Reverted the level select level order back to original and fixed a crash casued by missing characters.
-- Added Linux support thanks to [TheEssem](https://github.com/TheEssem).
-- Fixed various issues.
+- Fixed various other issues.
 
 ### v1.0.1 (06/04/2021):
 **Launcher:**
@@ -129,7 +137,7 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 - Made keyboard configuration less cumbersome.
 - Made the wording during the initial setup a bit clearer.
 
-**Game itself:**
+**Fixes:**
 - Fixed certain enemies (like Pokeys and Goomba triplets) not spawning when the draw distance is disabled.
 - Fixed King Whomp's collisions not unloading after his defeat.
 - Did other minor fixes.

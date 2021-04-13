@@ -100,7 +100,6 @@ static const struct ConfigOption options[] = {
     { .name = "hud_style", .type = CONFIG_TYPE_UINT, .uintValue = &gHudStyle },
     { .name = "4by3_hud", .type = CONFIG_TYPE_BOOL, .boolValue = &gCenterHud },
     { .name = "hud_filtering", .type = CONFIG_TYPE_BOOL, .boolValue = &gHUDFiltering },
-    { .name = "hud_upscaling", .type = CONFIG_TYPE_UINT, .uintValue = &gHUDUpscaling },
     { .name = "show_the_collected_stars", .type = CONFIG_TYPE_BOOL, .boolValue = &gHudStars },
     { .name = "always_show_the_100_coin_star", .type = CONFIG_TYPE_BOOL, .boolValue = &gShow100CoinStar },
     { .name = "always_show_the_health_meter", .type = CONFIG_TYPE_BOOL, .boolValue = &gAlwaysShowHealth },
@@ -153,7 +152,6 @@ static const struct ConfigOption options[] = {
     { .name = "debug_cap_changer", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugCapChanger },
     { .name = "show_debug_profiler", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler },
     { .name = "vertical_analog_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gVerticalCamera },
-    { .name = "texture_upscaling", .type = CONFIG_TYPE_UINT, .uintValue = &gTextureUpscaling },
 
     { .name = "XINPUT MAPPING", .type = CONFIG_TYPE_SECTION },
     { .name = "button_a", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonA },

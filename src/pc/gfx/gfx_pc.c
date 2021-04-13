@@ -5,9 +5,9 @@
 #include <stdbool.h>
 #include <assert.h>
 
-//#include <stdio.h>
-//#define STB_IMAGE_IMPLEMENTATION
-//#include <stb/stb_image.h>
+#include <stdio.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 
 #ifndef _LANGUAGE_C
 #define _LANGUAGE_C
@@ -19,8 +19,6 @@
 #include "gfx_window_manager_api.h"
 #include "gfx_rendering_api.h"
 #include "gfx_screen_config.h"
-
-#include "filters.h"
 
 #include "../../game/game_init.h"
 #include "../../game/settings.h"
@@ -35,6 +33,12 @@
 #define SCALE_8_4(VAL_) ((VAL_) / 0x11)
 #define SCALE_3_8(VAL_) ((VAL_) * 0x24)
 #define SCALE_8_3(VAL_) ((VAL_) / 0x24)
+
+#define ENCORE_COLOR(VAL_) MAX(min(VAL_, 255), 0)
+#define ENCORE_R 4*i+0
+#define ENCORE_G 4*i+1
+#define ENCORE_B 4*i+2
+#define ENCORE_A 4*i+3
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -301,11 +305,9 @@ static bool gfx_texture_cache_lookup(int tile, struct TextureHashmapNode **n, co
     return false;
 }
 
-static void import_texture_rgba16(int tile) {
+/*static void import_texture_rgba16(int tile) {
     uint8_t rgba32_buf[8192];
     uint8_t rgba32_buf_out[8192*4*4];
-    xbr_data *xbrData;
-	xbr_params xbrParams;
     
     for (uint32_t i = 0; i < rdp.loaded_texture[tile].size_bytes / 2; i++) {
         uint16_t col16 = (rdp.loaded_texture[tile].addr[2 * i] << 8) | rdp.loaded_texture[tile].addr[2 * i + 1];
@@ -313,203 +315,16 @@ static void import_texture_rgba16(int tile) {
         uint8_t r = col16 >> 11;
         uint8_t g = (col16 >> 6) & 0x1f;
         uint8_t b = (col16 >> 1) & 0x1f;
-        if ((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT) {
-            // Return different palettes.
-            // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
-            // TODO (Mors): Have a more proper implementation. Maybe implement a sort of scripting system with palette files?
-            switch (get_palette()) {
-                default:
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(b);
-                break;
-                case 1: // Castle grounds
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.125+g*0.25f,31));
-                break;
-                case 2: //Bob Omb Battlefield
-                    rgba32_buf[4*i + 0] = SCALE_5_8(max(min(r*1.125+g*0.625-b*0.625,31),0));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(max(min(b*1.0625-(r+g)*0.03125,31), 0));
-                break;
-                case 3: // Whomp's Fortress
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min(r+g*0.5f,31));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.0625f+g*0.0625f,31));
-                break;
-                case 21: // Metal Cave
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min(r+g*0.625f+b*0.0625f,31));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min(g+r*0.25f+b*0.03125,31));
-                    rgba32_buf[4*i + 2] = SCALE_5_8(b);
-                break;
-                case 4: // Jolly Roger Bay
-                case 15: // Tick Tock Clock
-                case 22: // Wing Mario Over the Rainbows
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min(r*0.75, 31)*0.75);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min(g*0.5+r*0.0625+b*0.0625, 31)*0.75);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.5+g*0.5,31)*0.75);
-                break;
-                case 5: // Cool Cool Mountain
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b*0.96875+r*0.5f+g*0.5f,31));
-                break;
-                case 6: // Big Boo's Haunt
-                case 19: // Sky
-                    rgba32_buf[4*i + 0] = SCALE_5_8((r+g+b)/3);
-                    rgba32_buf[4*i + 1] = SCALE_5_8((r+g+b)/3);
-                    rgba32_buf[4*i + 2] = SCALE_5_8((r+g+b)/3);
-                break;
-                case 7: // Hazy Maze Cave
-                    rgba32_buf[4*i + 0] = SCALE_5_8(max(min(r-g*0.5+b*0.5,31),0));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(max(min((g-r*0.5+b*0.5)*1.5-(r-g*0.5+b*0.5+b*0.75+g*0.25)*0.25, 31),0));
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b*0.75+g*0.25,31));
-                break;
-                case 8: // Lethal Lava Land
-                case 23: // Vanish Cap area
-                case 10: // Dire Dire Docks
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min(r+g*0.5+b*0.5, 31));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min(g+r*0.0625+b*0.0625, 31));
-                    rgba32_buf[4*i + 2] = SCALE_5_8(b*0.875);
-                break;
-                case 9: // Shitting Sand Land
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b*0.5+r*0.25+g*0.25, 31));
-                break;
-                case 11: // Snowman
-                case 24: // Shit level
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min(r+b*0.25, 31));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(b);
-                break;
-                case 12: // Wet Dry World
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min(round(sqrt(r/31.0f)*8)*4, 31));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min(round(sqrt(g/31.0f)*8)*4, 31));
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(round(sqrt(b/31.0f)*8)*4, 31));
-                break;
-                case 13: // Donkey Slide
-                    rgba32_buf[4*i + 0] = SCALE_5_8(max(min(r+g*1.25-b*1.5, 27), 0));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(b);
-                break;
-                case 14: // Tiny Huge Island
-                    if (g > r+b) {
-                        rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                        rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.5+g*0.5,31));
-                    }
-                    else if (r+g+b < 23)
-                    {
-                        rgba32_buf[4*i + 0] = SCALE_5_8(r/2);
-                        rgba32_buf[4*i + 1] = SCALE_5_8(min(g+r*1.0625, 31)/2);
-                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*1.03125, 31)/2);
-                    }
-                    else
-                    {
-                        rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                        rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.125+g*0.25f,31));
-                    }
-                break;
-                case 16: // Rainbow Ride
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(max(min(b+g*1.25-r*0.5,31),0));
-                break;
-                case 17: // Dank world
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(b);
-                    rgba32_buf[4*i + 2] = SCALE_5_8(g);
-                break;
-                case 18: // Bowser in the Fire Sea
-                    if (r > (g+b)*2) {
-                        rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                        rgba32_buf[4*i + 1] = SCALE_5_8(min(g*0.875+r*0.0625+b*0.0625, 31)*0.3125+g*0.5);
-                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.75+g*0.75,31)*0.625);
-                    }
-                    else
-                    {
-                        rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                        rgba32_buf[4*i + 1] = SCALE_5_8(min(g*0.875+r*0.0625+b*0.0625, 31)*0.875);
-                        rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.75+g*0.75,31)*0.875);
-                    }
-                break;
-                case 20: // Secret Slide
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                    rgba32_buf[4*i + 1] = SCALE_5_8((r+g+b)/3);
-                    rgba32_buf[4*i + 2] = SCALE_5_8((r+g+b)/3);
-                break;
-                case 25: // Secret Aquarium
-                    rgba32_buf[4*i + 0] = SCALE_5_8(r*0.875);
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min(g*0.875+r*0.0625+b*0.0625, 31));
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min(b+r*0.75+g*0.75,31));
-                break;
-                case 26: // Ending
-                    rgba32_buf[4*i + 0] = SCALE_5_8(min((r+g+b)/2,31));
-                    rgba32_buf[4*i + 1] = SCALE_5_8(min((r+g+b)/2.5,31));
-                    rgba32_buf[4*i + 2] = SCALE_5_8(min((r+g+b)/3,31));
-                break;
-            }
-                    
-        }
-        else {
-                rgba32_buf[4*i + 0] = SCALE_5_8(r);
-                rgba32_buf[4*i + 1] = SCALE_5_8(g);
-                rgba32_buf[4*i + 2] = SCALE_5_8(b);
-        }
-
+        rgba32_buf[4*i + 0] = SCALE_5_8(r);
+        rgba32_buf[4*i + 1] = SCALE_5_8(g);
+        rgba32_buf[4*i + 2] = SCALE_5_8(b);
         rgba32_buf[4*i + 3] = a ? 255 : 0;
     }
     
     uint32_t width = rdp.texture_tile.line_size_bytes / 2;
     uint32_t height = rdp.loaded_texture[tile].size_bytes / rdp.texture_tile.line_size_bytes;
     
-    if (gTextureUpscaling && (rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT) {
-        xbrData = malloc(sizeof(xbr_data));
-        xbr_init_data(xbrData);
-
-        xbrParams.data = xbrData;
-        xbrParams.input = rgba32_buf;
-        xbrParams.output = rgba32_buf_out;
-        xbrParams.inWidth = width;
-        xbrParams.inHeight = height;
-        xbrParams.inPitch = width * 4;
-        xbrParams.outPitch = width * 4 * 4;
-
-        switch (gTextureUpscaling) {
-            case 1: xbr_filter_hq4x(&xbrParams); break;
-            case 2: xbr_filter_xbr4x(&xbrParams); break;
-        }
-
-        free(xbrData);
-        gfx_rapi->upload_texture(rgba32_buf_out, width*4, height*4);
-    }
-
-    else if (gHUDUpscaling && (rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) == G_TF_POINT) {
-        xbrData = malloc(sizeof(xbr_data));
-        xbr_init_data(xbrData);
-
-        xbrParams.data = xbrData;
-        xbrParams.input = rgba32_buf;
-        xbrParams.output = rgba32_buf_out;
-        xbrParams.inWidth = width;
-        xbrParams.inHeight = height;
-        xbrParams.inPitch = width * 4;
-        xbrParams.outPitch = width * 4 * 4;
-
-        switch (gHUDUpscaling) {
-            case 1: xbr_filter_hq4x(&xbrParams); break;
-            case 2: xbr_filter_xbr4x(&xbrParams); break;
-        }
-
-        free(xbrData);
-        gfx_rapi->upload_texture(rgba32_buf_out, width*4, height*4);
-    }
-    else {
-        gfx_rapi->upload_texture(rgba32_buf, width, height);
-    }
+    gfx_rapi->upload_texture(rgba32_buf, width, height);
 }
 
 static void import_texture_rgba32(int tile) {
@@ -669,24 +484,177 @@ static void import_texture_ci8(int tile) {
     uint32_t height = rdp.loaded_texture[tile].size_bytes / rdp.texture_tile.line_size_bytes;
     
     gfx_rapi->upload_texture(rgba32_buf, width, height);
-}
+}*/
 
-/*static bool import_texture_custom(const char *fullpath) {
-    
+static bool import_texture_custom(const char *path) {
     int w, h;
-
-    u8 *data = stbi_load(fullpath, &w, &h, NULL, 4);
+    u8 *data = stbi_load(path, &w, &h, NULL, 4);
 
     if (data == NULL)
     {
         return FALSE;
     }
 
+    // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
+    // TODO (Mors): Have a more proper implementation. Maybe implement a sort of scripting system with palette files?
+    if (((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT)
+    && (rdp.texture_tile.fmt == G_IM_FMT_RGBA) && (rdp.texture_tile.siz == G_IM_SIZ_16b)
+    && ((strstr(path, "actors") == NULL)
+    || (strstr(path, "door") != NULL)
+    || (strstr(path, "leaves") != NULL)
+    || (strstr(path, "tree") != NULL)
+    || (strstr(path, "star") != NULL)
+    || (strstr(path, "wooden_signpost") != NULL)
+    || (strstr(path, "manta") != NULL)
+    || (strstr(path, "sushi") != NULL)
+    || (strstr(path, "water_ring") != NULL)
+    || (get_palette() == 19)
+    )) {
+
+        for (int i = 0; i < w*h; i++) {
+            int r = data[ENCORE_R];
+            int g = data[ENCORE_G];
+            int b = data[ENCORE_B];
+            // Return different palettes.
+            switch (get_palette()) {
+
+                case 1: // Castle grounds
+                    //  [ENCORE_R]
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b + r*0.1875 + g*0.375f);
+                break;
+                case 2: //Bob Omb Battlefield
+                    data[ENCORE_R] = ENCORE_COLOR(r*1.125 + g*0.625 - b*0.625);
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b*1.0625 - (r+g)*0.03125);
+                break;
+                case 3: // Whomp's Fortress
+                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.5f);
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.0625f+g*0.0625f);
+                break;
+                case 21: // Metal Cave
+                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.625f+b*0.0625f);
+                    data[ENCORE_G] = ENCORE_COLOR(g+r*0.25f+b*0.03125);
+                    //  [ENCORE_B]
+                break;
+                case 4: // Jolly Roger Bay
+                case 15: // Tick Tock Clock
+                case 22: // Wing Mario Over the Rainbows
+                    data[ENCORE_R] = ENCORE_COLOR(r*0.75)*0.75;
+                    data[ENCORE_G] = ENCORE_COLOR(g*0.5+r*0.0625+b*0.0625)*0.75;
+                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.5+g*0.5)*0.75;
+                break;
+                case 5: // Cool Cool Mountain
+                    //  [ENCORE_R]
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b*0.96875+r*0.5f+g*0.5f);
+                break;
+                case 6: // Big Boo's Haunt
+                case 19: // Sky
+                    data[ENCORE_R] = ((r+g+b)/3);
+                    data[ENCORE_G] = ((r+g+b)/3);
+                    data[ENCORE_B] = ((r+g+b)/3);
+                break;
+                case 7: // Hazy Maze Cave
+                    data[ENCORE_R] = ENCORE_COLOR(r-g*0.5+b*0.5);
+                    data[ENCORE_G] = ENCORE_COLOR((g-r*0.5+b*0.5)*1.5-(r-g*0.5+b*0.5+b*0.75+g*0.25)*0.25);
+                    data[ENCORE_B] = ENCORE_COLOR(b*0.75+g*0.25);
+                break;
+                case 8: // Lethal Lava Land
+                case 23: // Vanish Cap area
+                case 10: // Dire Dire Docks
+                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.5+b*0.5);
+                    data[ENCORE_G] = ENCORE_COLOR(g+r*0.0625+b*0.0625);
+                    data[ENCORE_B] = (b*0.875);
+                break;
+                case 9: // Shitting Sand Land
+                    //  [ENCORE_R]
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b*0.5+r*0.25+g*0.25);
+                break;
+                case 11: // Snowman
+                case 24: // Poopoo level
+                    data[ENCORE_R] = ENCORE_COLOR(r+b*0.25);
+                    //  [ENCORE_G]
+                    //  [ENCORE_B]
+                break;
+                case 12: // Wet Dry World
+                    data[ENCORE_R] = ENCORE_COLOR(round(sqrt(r/127.0f)*8)*24);
+                    data[ENCORE_G] = ENCORE_COLOR(round(sqrt(g/127.0f)*8)*24);
+                    data[ENCORE_B] = ENCORE_COLOR(round(sqrt(b/127.0f)*8)*24);
+                break;
+                case 13: // Donkey Slide
+                    data[ENCORE_R] = ENCORE_COLOR(min(r+g*1.25-b*1.5, 239));
+                    //  [ENCORE_G]
+                    //  [ENCORE_B]
+                break;
+                case 14: // Tiny Huge Island
+                    if (g > r+b) {
+                        //  [ENCORE_R]
+                        //  [ENCORE_G]
+                        data[ENCORE_B] = ENCORE_COLOR(b+r*0.5+g*0.5);
+                    }
+                    else if (r+g+b < 95)
+                    {
+                        data[ENCORE_R] = r/2;
+                        data[ENCORE_G] = ENCORE_COLOR((g+r*1.0625)/2);
+                        data[ENCORE_B] = ENCORE_COLOR((b+r*1.03125)/2);
+                    }
+                    else
+                    {
+                        //  [ENCORE_R]
+                        //  [ENCORE_G]
+                        data[ENCORE_B] = ENCORE_COLOR(b+r*0.125+g*0.25f);
+                    }
+                break;
+                case 16: // Rainbow Ride
+                    //  [ENCORE_R]
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b+g*1.25-r*0.5);
+                break;
+                case 17: // Dank world
+                    //  [ENCORE_R]
+                    data[ENCORE_G] = b;
+                    data[ENCORE_B] = g;
+                break;
+                case 18: // Bowser in the Fire Sea
+                    if (r > (g+b)*2) {
+                        //  [ENCORE_R]
+                        data[ENCORE_G] = ENCORE_COLOR((g*0.875+r*0.0625+b*0.0625)*0.3125+g*0.5);
+                        data[ENCORE_B] = ENCORE_COLOR((b+r*0.75+g*0.75)*0.625);
+                    }
+                    else
+                    {
+                        //  [ENCORE_R]
+                        data[ENCORE_G] = ENCORE_COLOR((g*0.875+r*0.0625+b*0.0625)*0.875);
+                        data[ENCORE_B] = ENCORE_COLOR((b+r*0.75+g*0.75)*0.875);
+                    }
+                break;
+                case 20: // Secret Slide
+                    //  [ENCORE_R]
+                    data[ENCORE_G] = (r+g+b)/3;
+                    data[ENCORE_B] = (r+g+b)/3;
+                break;
+                case 25: // Secret Aquarium
+                    data[ENCORE_R] = ENCORE_COLOR(r*0.875);
+                    data[ENCORE_G] = ENCORE_COLOR(g*0.875+r*0.0625+b*0.0625);
+                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.75+g*0.75);
+                break;
+                case 26: // Ending (doesn't work)
+                    data[ENCORE_R] = ENCORE_COLOR((r+g+b)/2);
+                    data[ENCORE_G] = ENCORE_COLOR((r+g+b)/2.5);
+                    data[ENCORE_B] = ENCORE_COLOR((r+g+b)/3);
+                break;
+            }
+        }
+    }
+
     gfx_rapi->upload_texture(data, w, h);
     stbi_image_free(data);
 
     return TRUE;
-}*/
+}
 
 static void import_texture(int tile) {
     uint8_t fmt = rdp.texture_tile.fmt;
@@ -695,23 +663,30 @@ static void import_texture(int tile) {
     if (gfx_texture_cache_lookup(tile, &rendering_state.textures[tile], rdp.loaded_texture[tile].addr, fmt, siz)) {
         return;
     }
+
+    // Load from appdata
+    char *dir = malloc(128);
+#ifdef __linux__
+    if (strcpy(dir, getenv("HOME"))[0] == "\0") {
+        strcpy(dir, getpwuid(getuid())->pw_dir);
+    }
+    strcat(dir, "/.config");
+#elif defined(_WIN32) || defined(_WIN64)
+    strcpy(dir, getenv("LOCALAPPDATA"));
+#endif
+    char path[1024];
+    snprintf(path, sizeof(path), "%s/SM64Plus/gfx/%s.png", (const char*)dir, (const char*)rdp.loaded_texture[tile].addr);
+
+    if (import_texture_custom(path))
+        return;
+
+    // Load from the default location
+    char path2[1024];
+    snprintf(path2, sizeof(path2), "gfx/%s.png", (const char*)rdp.loaded_texture[tile].addr);
+
+    import_texture_custom(path2);
     
-    /*if (gExternalTextures) {
-        
-        char path[1024];
-        snprintf(path, sizeof(path), "custom_textures/%x.png", (unsigned int)PHYSICAL_TO_VIRTUAL(rdp.texture_to_load.addr));
-
-        if (import_texture_custom(path))
-            return;
-        
-        FILE* fp = fopen(path, "w");
-        
-        fwrite(rdp.loaded_texture[tile].addr, siz, 1, fp);
-        fclose(fp);
-    }*/
-
-    int t0 = get_time();
-    if (fmt == G_IM_FMT_RGBA) {
+    /*if (fmt == G_IM_FMT_RGBA) {
         if (siz == G_IM_SIZ_16b) {
             import_texture_rgba16(tile);
         } else if (siz == G_IM_SIZ_32b) {
@@ -747,9 +722,7 @@ static void import_texture(int tile) {
         }
     } else {
         abort();
-    }
-    int t1 = get_time();
-    //printf("Time diff: %d\n", t1 - t0);
+    }*/
 }
 
 static void gfx_normalize_vector(float v[3]) {
