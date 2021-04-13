@@ -57,21 +57,34 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 <br>
 
-**Q:** Can I use mods with this? What about Render96?
+**Q:** Can I have a logo of the game?
 
-**A:** You can use custom model mods using [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/). There is no support for texture mods yet however. There is no support for Render96 too, and there are no current plans for adding support specifically for it here.
+**A:** [Sure](https://cdn.discordapp.com/attachments/828684639618203688/828756298643931176/sm64plus-centred.png). Shoutouts to [Benial](https://twitter.com/Benial17) for doing such a good job with it.
 
 <br>
 
-**Q:** Can I have a logo of the game?
+**Q:** Can I use mods with this? 
 
-**A:** [Sure](https://cdn.discordapp.com/attachments/828684639618203688/828756298643931176/sm64plus-centred.png). Shoutouts to @Benial for doing such a good job with it.
+**A:** Starting with version 1.1.0 there are 2 types of mods you can use.
+
+**1) Texture Packs**
+
+You can install custom texture packs by copying the texture files to the "C:\Users\YourUsername\AppData\Local\SM64Plus\gfx" folder. If you're asked to replace files, say yes. The folder layout and file names for the textures should be the same as what most other PC port forks. Make sure that the texture pack you're using has segmented skybox textures, otherwise you won't be able to see any differences with the skybox.
+This feature is considered experimental and may have issues.
+
+**2) Custom Models**
+
+You can install custom model mods easily using [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/).
+
+**Q:** What about Render96?
+
+**A:** The official Render96 texture pack works with SM64Plus, but lacks the segmented skybox textures. The models are not tested but they should work as well.
 
 <br>
 
 **Q:** Is there Linux or Mac support?
 
-**A:** Nope. It might get Linux support in the future, but not yet.
+**A:** Linux support is in works but needs further testing. There's no Mac support planned.
 
 <br>
 
@@ -98,7 +111,7 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 - Certain animations got tweaked.
 
 **Additions:**
-- Added support for texture packs, and changed the way the textures are loaded.
+- Added experimental support for texture packs. Read the FAQ to learn how to use them.
 - Added the "Graphics Backend" setting, which makes it possible to switch between Direct3D11 and Direct3D12 without rebuilding.
 - Added the "Improved Hanging" setting, which makes movement when hanging on ceilings faster, and removes the requirement of holding A.
 - Added the "Restore Mother Penguin's Sad Eyes" setting, which restores the unused, sad looking eye texture for the mother penguin.
@@ -109,6 +122,7 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 - Added a key which makes Mario walk slower. This is to compensate for the lack of analog controls with a keyboard.
 
 **Changes:**
+- Changed the way the textures are loaded.
 - Removed the "HUD Upscaling" and "Texture Upscaling" settings. They were already pretty laggy, but with the introduction of texture packs they aren't necessary.
 - Split the "Analog Stick Deadzone" setting into two, one for each analog stick.
 - Changed the "Improved Metal Mario" setting to "Improved Powerups". It now also makes underwater shells last longer and makes Metal Mario's interactions with enemies and hazards more consistent.
@@ -116,7 +130,7 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 - Made it so that "Fix Various Bugs" now fixes more bugs.
 - Added more options for the "Infinite Lives Mode" and "Encore Mode" settings, allowing further customizability.
 - Made it so that when Hard Mode is active Mario loses health slower underwater, and faster in toxic gas.
-- Tweaked some of the Encore Mode palettes, and fixed a ton of issues with them.
+- Tweaked some of the Encore Mode palettes.
 - Made some tweaks to the "Improved Controls", "Wall Sliding", and "Odyssey Ground Pound Dive" settings.
 - Made it so that when getting a star in a sub-area with the "Stay in Level After Getting a Star" setting is on, you're now asked if you want to keep playing or not.
 - In addition to above, the lonely mushroom in TTM doesn't kick you out or cause a forced restart anymore.
@@ -125,6 +139,7 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 **Fixes:**
 - Fixed the broken audio volume settings.
+- Fixed palette errors in Encore Mode.
 - Fixed various issues regarding the "Manual Camera" setting.
 - Reverted the level select level order back to original and fixed a crash casued by missing characters.
 - Fixed various other issues.
@@ -173,7 +188,7 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 ## Credits.
 - **Mors:** Most new things you see here.
-- **Benial:** Logo.
+- **(Benial)[https://twitter.com/Benial17]:** Logo.
 - **[sm64-port](https://github.com/sm64-port/sm64-port) Team:** The port that was used as a base for this project.
 - **[A bunch of clever folks](https://github.com/n64decomp/sm64):** The original decompilation used for the port.
 - **Emil:** The original 60FPS patch.
