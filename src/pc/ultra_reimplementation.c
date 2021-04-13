@@ -12,11 +12,7 @@
 #include <pwd.h>
 #endif
 
-#ifdef __linux__
-#define SAVE_PATH "/SM64Plus/savedata.bin"
-#elif defined(_WIN32) || defined(_WIN64)
-#define SAVE_PATH "\\SM64Plus\\savedata.bin"
-#endif
+#define SAVE_PATH "savedata.bin"
 
 extern OSMgrArgs piMgrArgs;
 
@@ -156,29 +152,8 @@ s32 osEepromLongRead(UNUSED OSMesgQueue *mq, u8 address, u8 *buffer, int nbytes)
         memcpy(buffer, content + address * 8, nbytes);
         ret = 0;
     }
-#elif defined(__linux__)
-    char* str = malloc(128);
-    if (strcpy(str, getenv("HOME"))[0] == "\0") {
-        strcpy(str, getpwuid(getuid())->pw_dir);
-    }
-    strcat(str, "/.config");
-    strcat(str, SAVE_PATH);
-
-    FILE *fp = fopen(str, "rb");
-    if (fp == NULL) {
-        return -1;
-    }
-    if (fread(content, 1, 512, fp) == 512) {
-        memcpy(buffer, content + address * 8, nbytes);
-        ret = 0;
-    }
-    fclose(fp);
-#elif defined(_WIN32) || defined(_WIN64)
-    char* str = malloc(128);
-    strcpy(str, getenv("LOCALAPPDATA"));
-    strcat(str, SAVE_PATH);
-
-    FILE *fp = fopen(str, "rb");
+#else
+    FILE *fp = fopen(SAVE_PATH, "rb");
     if (fp == NULL) {
         return -1;
     }
@@ -207,34 +182,8 @@ s32 osEepromLongWrite(UNUSED OSMesgQueue *mq, u8 address, u8 *buffer, int nbytes
         localStorage.sm64_save_file = btoa(str);
     }, content);
     s32 ret = 0;
-#elif defined(__linux__)
-    char* dir = malloc(128);
-    if (strcpy(dir, getenv("HOME"))[0] == "\0") {
-        strcpy(dir, getpwuid(getuid())->pw_dir);
-    }
-    strcat(dir, "/.config");
-    char *str = malloc(128);
-    strcpy(str, dir);
-    strcat(str, SAVE_PATH);
-
-    strcat(dir, "/");
-    char* copy = strdup(SAVE_PATH);
-    strcat(dir, strtok(copy + 1, "/"));
-    free(copy);
-
-    mkdir(dir, 0777);
-    FILE* fp = fopen(str, "wb");
-    if (fp == NULL) {
-        return -1;
-    }
-    s32 ret = fwrite(content, 1, 512, fp) == 512 ? 0 : -1;
-    fclose(fp);
-#elif defined(_WIN32) || defined(_WIN64)
-    char* str = malloc(128);
-    strcpy(str, getenv("LOCALAPPDATA"));
-    strcat(str, SAVE_PATH);
-
-    FILE* fp = fopen(str, "wb");
+#else
+    FILE* fp = fopen(SAVE_PATH, "wb");
     if (fp == NULL) {
         return -1;
     }

@@ -78,8 +78,8 @@ struct TextureHashmapNode {
     bool linear_filter;
 };
 static struct {
-    struct TextureHashmapNode *hashmap[1024];
-    struct TextureHashmapNode pool[512];
+    struct TextureHashmapNode *hashmap[8192];
+    struct TextureHashmapNode pool[4096];
     uint32_t pool_pos;
 } gfx_texture_cache;
 
@@ -664,23 +664,7 @@ static void import_texture(int tile) {
         return;
     }
 
-    // Load from appdata
-    char *dir = malloc(128);
-#ifdef __linux__
-    if (strcpy(dir, getenv("HOME"))[0] == "\0") {
-        strcpy(dir, getpwuid(getuid())->pw_dir);
-    }
-    strcat(dir, "/.config");
-#elif defined(_WIN32) || defined(_WIN64)
-    strcpy(dir, getenv("LOCALAPPDATA"));
-#endif
-    char path[1024];
-    snprintf(path, sizeof(path), "%s/SM64Plus/gfx/%s.png", (const char*)dir, (const char*)rdp.loaded_texture[tile].addr);
-
-    if (import_texture_custom(path))
-        return;
-
-    // Load from the default location
+    // Load the textures
     char path2[1024];
     snprintf(path2, sizeof(path2), "gfx/%s.png", (const char*)rdp.loaded_texture[tile].addr);
 

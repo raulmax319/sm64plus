@@ -57,6 +57,12 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 <br>
 
+**Q:** I just updated the game and everything is black!
+
+**A:** Hold "left", "right ", and "backspace" keys down for 4 seconds in the title screen and go through the setup once again.
+
+<br>
+
 **Q:** Can I have a logo of the game?
 
 **A:** [Sure](https://cdn.discordapp.com/attachments/828684639618203688/828756298643931176/sm64plus-centred.png). Shoutouts to [Benial](https://twitter.com/Benial17) for doing such a good job with it.
@@ -75,6 +81,8 @@ This feature is considered experimental and may have issues.
 **2) Custom Models**
 
 You can install custom model mods easily using [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/).
+
+<br>
 
 **Q:** What about Render96?
 
@@ -99,6 +107,22 @@ You can install custom model mods easily using [sm64pcBuilder2](https://sm64pc.i
 **A:** https://twitter.com/OfficialMFGG/status/1121019925521489920
 
 ## Changelog
+
+### v1.1.1 (13/04/2021):
+**Launcher:**
+- Made the launcher automatically copy the texture files to the right place right before launching the game.
+- Added a secret key combination to delete all the game files.
+- Renamed "Pull and Rebuild" to "Pull & Rebuild". Exciting!
+
+**Additions:**
+- Added an error message to the game if the "gfx" folder can't be found.
+
+**Changes:**
+- Changed the "Exit to Desktop" text to "Quit to Desktop".
+- Made the game always use "%LOCALAPPDATA%\SM64Plus" as the working directory to simplify the code mess.
+  
+**Fixes:**
+- Fixed minor texture errors.
 
 ### v1.1.0 (13/04/2021):
 **Launcher:**

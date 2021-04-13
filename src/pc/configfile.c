@@ -275,23 +275,12 @@ void configfile_load(const char *filename) {
     FILE *file;
     char *line;
 
-    char *str = malloc(128);
-#ifdef __linux__
-    if (strcpy(str, getenv("HOME"))[0] == "\0") {
-        strcpy(str, getpwuid(getuid())->pw_dir);
-    }
-    strcat(str, "/.config");
-#elif defined(_WIN32) || defined(_WIN64)
-    strcpy(str, getenv("LOCALAPPDATA"));
-#endif
-    strcat(str, filename);
+    printf("Loading configuration from '%s'\n", filename);
 
-    printf("Loading configuration from '%s'\n", str);
-
-    file = fopen(str, "r");
+    file = fopen(filename, "r");
     if (file == NULL) {
         // Create a new config file and save defaults
-        printf("Config file '%s' not found. Creating it.\n", str);
+        printf("Config file '%s' not found. Creating it.\n", filename);
         configfile_save(filename);
         return;
     }
@@ -352,19 +341,8 @@ void configfile_save(const char *filename) {
     FILE *file;
 
     char *dir = malloc(128);
-#ifdef __linux__
-    if (strcpy(dir, getenv("HOME"))[0] == "\0") {
-        strcpy(dir, getpwuid(getuid())->pw_dir);
-    }
-    strcat(dir, "/.config");
-#elif defined(_WIN32) || defined(_WIN64)
-    strcpy(dir, getenv("LOCALAPPDATA"));
-#endif
-    char *str = malloc(128);
-    strcpy(str, dir);
-    strcat(str, filename);
 
-    printf("Saving configuration to '%s'\n", str);
+    printf("Saving configuration to '%s'\n", filename);
 
 #ifdef __linux__
     strcat(dir, "/");
@@ -374,7 +352,7 @@ void configfile_save(const char *filename) {
     mkdir(dir, 0777);
 #endif
 
-    file = fopen(str, "w");
+    file = fopen(filename, "w");
     if (file == NULL) {
         // error
         return;

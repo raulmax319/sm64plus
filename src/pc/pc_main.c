@@ -1,4 +1,11 @@
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>
+#include <dirent.h>
+#endif
 
 #ifdef TARGET_WEB
 #include <emscripten.h>
@@ -35,11 +42,7 @@
 
 #include "compat.h"
 
-#ifdef __linux__
-#define CONFIG_FILE "/SM64Plus/settings.ini"
-#elif defined(_WIN32) || defined(_WIN64)
-#define CONFIG_FILE "\\SM64Plus\\settings.ini"
-#endif
+#define CONFIG_FILE "settings.ini"
 
 OSMesg D_80339BEC;
 OSMesgQueue gSIEventMesgQueue;
@@ -189,6 +192,34 @@ void main_func(void) {
     main_pool_init(pool, pool + sizeof(pool) / sizeof(pool[0]));
 #endif
     gEffectsMemoryPool = mem_pool_init(0x4000, MEMORY_POOL_LEFT);
+
+    // Set the working directory
+    char *workingdir = malloc(128);
+#ifdef __linux__
+    if (strcpy(workingdir, getenv("HOME"))[0] == "\0") {
+        strcpy(workingdir, getpwuid(getuid())->pw_dir);
+    }
+    strcat(workingdir, "/.config");
+#elif defined(_WIN32) || defined(_WIN64)
+    strcpy(workingdir, getenv("LOCALAPPDATA"));
+    strcat(workingdir, "\\SM64Plus\\");
+#endif
+
+    chdir(workingdir);
+
+    // Check if the textures exist
+    #if defined(_WIN32) || defined(_WIN64)
+
+    DIR* dir = opendir("gfx");
+    if (dir) {
+        closedir(dir);
+    } 
+    else {
+        MessageBox(0, "Failed to find the \"gfx\" folder in \"%LOCALAPPDATA%\\SM64Plus\". If you're using the launcher, try reinstalling the game. If not, copy the folder from \"build\\us_pc\".", "ERROR", MB_ICONERROR);
+        exit(1);
+    }
+
+    #endif
 
     configfile_load(CONFIG_FILE);
     atexit(save_config);
