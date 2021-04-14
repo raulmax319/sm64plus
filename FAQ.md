@@ -4,7 +4,7 @@
 
 **A:** It seems like reinstalling MSYS2 and deleting the SM64Plus folder fixes the issues for most people. Disabling your antivirus could also help in some cases.
 
-One other alternative you have is to use [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/) instead to build the game. Or you can also just compile the game manually, following the instructions from below.
+One other alternative you have is to use [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/) instead to build the game. Or you can also just compile the game manually, following the instructions from the [README file](https://github.com/MorsGames/sm64plus/blob/master/README.md).
 
 If these don't help, you can ask for help on our Discord server. **Don't ask for help without following these steps first, and don't ask me help about sm64pcBuilder2 or building manually.**
 
@@ -34,6 +34,12 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 <br>
 
+## **Q:** How do I access the hidden settigns?
+
+**A:** Press backspace or select on the press any key screen.
+
+<br>
+
 ## **Q:** Can I have the logo of the game?
 
 **A:** [Sure.](https://cdn.discordapp.com/attachments/828684639618203688/828756298643931176/sm64plus-centred.png) Shoutouts to [Benial](https://twitter.com/Benial17) for doing such a good job with it.
@@ -42,17 +48,11 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 ## **Q:** Can I use mods with this? 
 
-**A:** Starting with version 1.1.0 there are 2 types of mods you can use.
-
-**1) Texture Packs**
-
-You can install custom texture packs by copying the texture files to the "C:\Users\YourUsername\AppData\Local\SM64Plus\gfx" folder. If you're asked to replace files, say yes.
+**A:** You can install custom texture packs by copying the texture files to the "C:\Users\YourUsername\AppData\Local\SM64Plus\gfx" folder. If you're asked to replace files, say yes.
 
 The folder layout and file names for the textures is same as what most other PC port forks use. Also, if the texture pack you're using doesn't have segmented skybox textures, you won't be able to see any differences with how the skybox looks.
 
-**1) Custom Models**
-
-You can install custom model mods easily using [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/).
+As for custom models, can install those easily using [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/).
 
 <br>
 
