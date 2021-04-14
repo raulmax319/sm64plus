@@ -150,7 +150,7 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
-char* gTitleString = "Super Mario 64 Plus v1.1.1";
+char* gTitleString = "Super Mario 64 Plus v1.1.2";
 
 s8 configFullscreen = 1;
 unsigned int configCustomFullscreenResolution = 0;
@@ -171,7 +171,7 @@ s8 g60FPS = 1;
 s8 gDisableDrawDistance = 1;
 float gDrawDistanceMultiplier = 1.0f;
 s8 gDisableLowPoly = 1;
-s8 gNearestNeighbor = 0;
+unsigned int gTextureFiltering = 2;
 unsigned int gNoiseType = 0;
 s8 configForce4by3 = 0;
 
@@ -252,6 +252,7 @@ s8 gForceLowPoly = 0;
 
 s8 gDebugMovementMode = 0;
 s8 gDebugCapChanger = 0;
+s8 gMoonJump = 0;
 s8 gVerticalCamera = 0;
 
 unsigned int configButtonA = A_BUTTON;

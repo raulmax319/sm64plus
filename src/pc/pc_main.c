@@ -305,7 +305,6 @@ void main_func(void) {
 }
 
 #if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
 int WINAPI WinMain(UNUSED HINSTANCE hInstance, UNUSED HINSTANCE hPrevInstance, UNUSED LPSTR pCmdLine, UNUSED int nCmdShow) {
     main_func();
     return 0;

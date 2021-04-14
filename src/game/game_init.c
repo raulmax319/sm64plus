@@ -104,11 +104,11 @@ void my_rdp_init(void) {
     gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
     gDPSetTextureDetail(gDisplayListHead++, G_TD_CLAMP);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
-    if (gNearestNeighbor) {
-        gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    if (gTextureFiltering) {
+        gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
     }
     else {
-        gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
+        gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
     }
     gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
 

@@ -52,6 +52,12 @@
 #define MAX_LIGHTS 2
 #define MAX_VERTICES 64
 
+# define MAX_CACHED_TEXTURES 4096
+# define HASH_SHIFT 0
+
+#define HASHMAP_LEN (MAX_CACHED_TEXTURES * 2)
+#define HASH_MASK (HASHMAP_LEN - 1)
+
 struct RGBA {
     uint8_t r, g, b, a;
 };
@@ -78,8 +84,8 @@ struct TextureHashmapNode {
     bool linear_filter;
 };
 static struct {
-    struct TextureHashmapNode *hashmap[8192];
-    struct TextureHashmapNode pool[4096];
+    struct TextureHashmapNode *hashmap[HASHMAP_LEN];
+    struct TextureHashmapNode pool[MAX_CACHED_TEXTURES];
     uint32_t pool_pos;
 } gfx_texture_cache;
 
@@ -172,24 +178,22 @@ static size_t buf_vbo_num_tris;
 static struct GfxWindowManagerAPI *gfx_wapi;
 static struct GfxRenderingAPI *gfx_rapi;
 
-#include <time.h>
-static unsigned long get_time(void) {
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return (unsigned long)ts.tv_sec * 1000000 + ts.tv_nsec / 1000;
-}
+// 4x4 pink-black checkerboard texture to indicate missing textures
+#define MISSING_W 4
+#define MISSING_H 4
+static const uint8_t missing_texture[MISSING_W * MISSING_H * 4] = {
+    0xFF, 0x00, 0xFF, 0xFF,  0xFF, 0x00, 0xFF, 0xFF,  0x00, 0x00, 0x00, 0xFF,  0x00, 0x00, 0x00, 0xFF,
+    0xFF, 0x00, 0xFF, 0xFF,  0xFF, 0x00, 0xFF, 0xFF,  0x00, 0x00, 0x00, 0xFF,  0x00, 0x00, 0x00, 0xFF,
+    0x00, 0x00, 0x00, 0xFF,  0x00, 0x00, 0x00, 0xFF,  0xFF, 0x00, 0xFF, 0xFF,  0xFF, 0x00, 0xFF, 0xFF,
+    0x00, 0x00, 0x00, 0xFF,  0x00, 0x00, 0x00, 0xFF,  0xFF, 0x00, 0xFF, 0xFF,  0xFF, 0x00, 0xFF, 0xFF,
+};
 
 static void gfx_flush(void) {
     if (buf_vbo_len > 0) {
         int num = buf_vbo_num_tris;
-        unsigned long t0 = get_time();
         gfx_rapi->draw_triangles(buf_vbo, buf_vbo_len, buf_vbo_num_tris);
         buf_vbo_len = 0;
         buf_vbo_num_tris = 0;
-        unsigned long t1 = get_time();
-        /*if (t1 - t0 > 1000) {
-            printf("f: %d %d\n", num, (int)(t1 - t0));
-        }*/
     }
 }
 
@@ -286,7 +290,7 @@ static bool gfx_texture_cache_lookup(int tile, struct TextureHashmapNode **n, co
         gfx_texture_cache.pool_pos = 0;
         node = &gfx_texture_cache.hashmap[hash];
         gReimportTextures = 0;
-        //puts("Clearing texture cache");
+        // puts("Clearing texture cache");
     }
     *node = &gfx_texture_cache.pool[gfx_texture_cache.pool_pos++];
     if ((*node)->texture_addr == NULL) {
@@ -492,7 +496,8 @@ static bool import_texture_custom(const char *path) {
 
     if (data == NULL)
     {
-        return FALSE;
+        gfx_rapi->upload_texture(missing_texture, MISSING_W, MISSING_H);
+        return TRUE;
     }
 
     // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
@@ -665,10 +670,10 @@ static void import_texture(int tile) {
     }
 
     // Load the textures
-    char path2[1024];
-    snprintf(path2, sizeof(path2), "gfx/%s.png", (const char*)rdp.loaded_texture[tile].addr);
+    char path[1024];
+    snprintf(path, sizeof(path), "gfx/%s.png", (const char*)rdp.loaded_texture[tile].addr);
 
-    import_texture_custom(path2);
+    import_texture_custom(path);
     
     /*if (fmt == G_IM_FMT_RGBA) {
         if (siz == G_IM_SIZ_16b) {
@@ -1920,12 +1925,9 @@ void gfx_run(Gfx *commands) {
     }
     dropped_frame = false;
     
-    double t0 = gfx_wapi->get_time();
     gfx_rapi->start_frame();
     gfx_run_dl(commands);
     gfx_flush();
-    double t1 = gfx_wapi->get_time();
-    //printf("Process %f %f\n", t1, t1 - t0);
     gfx_rapi->end_frame();
     gfx_wapi->swap_buffers_begin();
 }

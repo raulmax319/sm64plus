@@ -14,6 +14,8 @@
 #include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 
+#include <PR/gbi.h>
+
 #include "gfx_window_manager_api.h"
 #include "gfx_screen_config.h"
 

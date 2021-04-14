@@ -57,7 +57,7 @@ static const struct ConfigOption options[] = {
     { .name = "disable_draw_distance", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableDrawDistance },
     { .name = "draw_distance_multiplier", .type = CONFIG_TYPE_FLOAT, .floatValue = &gDrawDistanceMultiplier },
     { .name = "disable_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLowPoly },
-    { .name = "nearest_neighbor_filtering", .type = CONFIG_TYPE_BOOL, .boolValue = &gNearestNeighbor },
+    { .name = "texture_filtering", .type = CONFIG_TYPE_UINT, .uintValue = &gTextureFiltering },
     { .name = "noise_type", .type = CONFIG_TYPE_UINT, .uintValue = &gNoiseType },
     { .name = "force_4by3", .type = CONFIG_TYPE_BOOL, .boolValue = &configForce4by3 },
 
@@ -150,6 +150,7 @@ static const struct ConfigOption options[] = {
     { .name = "show_debug_display", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowDebugText },
     { .name = "debug_movement_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugMovementMode },
     { .name = "debug_cap_changer", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugCapChanger },
+    { .name = "moon_jump", .type = CONFIG_TYPE_BOOL, .boolValue = &gMoonJump },
     { .name = "show_debug_profiler", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler },
     { .name = "vertical_analog_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gVerticalCamera },
 

@@ -1772,6 +1772,16 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         debug_update_mario_cap(CONT_RIGHT, MARIO_VANISH_CAP, 600, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP));
     }
 
+    // A very direct port of the famouse GS code using https://github.com/sm64gs2pc/sm64gs2pc#limitations
+    if (gMoonJump) {
+        if ((gControllers[0].buttonDown & 0xff) == 0x20)
+        *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0x42200000;
+        if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
+        gMarioStates[0].action = (gMarioStates[0].action & 0xffffffff0000ffff) | 0x3000000;
+        if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
+        gMarioStates[0].action = (gMarioStates[0].action & 0xffffffffffff0000) | 0x880;
+    }
+
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(gMarioState);
