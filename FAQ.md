@@ -28,13 +28,13 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 <br>
 
-## **Q:** I just updated the game and everything is black!
+## **Q:** All/some of the textures appear black and purple, how do I fix this?
 
-**A:** Hold "left", "right ", and "backspace" keys down for 4 seconds in the title screen and go through the setup once again.
+**A:** Delete the "C:\Users\YourUsername\AppData\Local\SM64Plus\gfx" folder. If that doesn't work, hold "left", "right", and "backspace" keys down for 4 seconds in the title screen and go through the setup once again.
 
 <br>
 
-## **Q:** Can I have a logo of the game?
+## **Q:** Can I have the logo of the game?
 
 **A:** [Sure.](https://cdn.discordapp.com/attachments/828684639618203688/828756298643931176/sm64plus-centred.png) Shoutouts to [Benial](https://twitter.com/Benial17) for doing such a good job with it.
 
@@ -46,9 +46,9 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 **1) Texture Packs**
 
-You can install custom texture packs by copying the texture files to the "C:\Users\YourUsername\AppData\Local\SM64Plus\gfx" folder. If you're asked to replace files, say yes. The folder layout and file names for the textures should be the same as what most other PC port forks. Make sure that the texture pack you're using has segmented skybox textures, otherwise you won't be able to see any differences with the skybox.
+You can install custom texture packs by copying the texture files to the "C:\Users\YourUsername\AppData\Local\SM64Plus\gfx" folder. If you're asked to replace files, say yes.
 
-This feature is considered experimental and may have issues.
+The folder layout and file names for the textures is same as what most other PC port forks use. Also, if the texture pack you're using doesn't have segmented skybox textures, you won't be able to see any differences with how the skybox looks.
 
 **1) Custom Models**
 
@@ -58,13 +58,13 @@ You can install custom model mods easily using [sm64pcBuilder2](https://sm64pc.i
 
 ## **Q:** What about Render96?
 
-**A:** The official Render96 texture pack works with SM64Plus, but lacks the segmented skybox textures. The models do not to work directly at the moment, but if you're willing to take on the challenge, it should be possible to fix the errors and make them work.
+**A:** The official Render96 texture pack works with SM64Plus, with the exception of skybox textures. The models do not to work with SM64Plus at this moment. If you're willing to take on the challenge, it should be possible to fix the errors and make them work, but don't expect that to be very trivial.
 
 <br>
 
 ## **Q:** Is there Linux or Mac support?
 
-**A:** Linux support is in works but needs further testing. There's no Mac support planned.
+**A:** Linux support is in works, but needs further testing. There's no Mac support planned.
 
 <br>
 
