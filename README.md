@@ -33,15 +33,21 @@ Features that _might_ get added in the future:
 
 ## Changelog
 
+### v1.1.2.1 (14/04/2021):
+**Fixes:**
+- Removed the mysterious 121st and 122nd stars.
+- Fixed some issues regarding file select text.
+
 ### v1.1.2 (14/04/2021):
 **Launcher:**
+- Added new settings.
 - The launcher now deletes the "gfx" folder right before the initial building process.
 
 **Additions:**
 - Added "Moon Jump" as a debug setting.
 
 **Changes:**
-- Changed the "Nearest Neightbor Filtering" setting to "Texture Filtering", which includes 3-point filtering as an option as well.
+- Changed the "Nearest Neighbor Filtering" setting to "Texture Filtering", which includes 3-point filtering as an option as well.
 - Made it so that missing textures now use a black and purple checkerboard pattern, similarly to the launcher.
   
 **Fixes:**

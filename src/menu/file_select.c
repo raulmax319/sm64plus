@@ -1848,7 +1848,7 @@ void print_main_menu_strings(void) {
         print_menu_generic_string(MARIOTEXT_X2, 65, textHardcoreB);
     }
     else if (is_save_daredevil(1)) {
-        print_menu_generic_string(MARIOTEXT_X1, 65, textDaredevilB);
+        print_menu_generic_string(MARIOTEXT_X2, 65, textDaredevilB);
     }
     else if (is_save_hard(1)) {
         print_menu_generic_string(MARIOTEXT_X2, 65, textHardB);
@@ -1861,7 +1861,7 @@ void print_main_menu_strings(void) {
         print_menu_generic_string(MARIOTEXT_X1, 105, textHardcoreC);
     }
     else if (is_save_daredevil(2)) {
-        print_menu_generic_string(MARIOTEXT_X1, 65, textDaredevilC);
+        print_menu_generic_string(MARIOTEXT_X1, 105, textDaredevilC);
     }
     else if (is_save_hard(2)) {
         print_menu_generic_string(MARIOTEXT_X1, 105, textHardC);
@@ -1874,7 +1874,7 @@ void print_main_menu_strings(void) {
         print_menu_generic_string(MARIOTEXT_X2, 105, textHardcoreD);
     }
     else if (is_save_daredevil(3)) {
-        print_menu_generic_string(MARIOTEXT_X1, 65, textDaredevilD);
+        print_menu_generic_string(MARIOTEXT_X2, 105, textDaredevilD);
     }
     else if (is_save_hard(3)) {
         print_menu_generic_string(MARIOTEXT_X2, 105, textHardD);
