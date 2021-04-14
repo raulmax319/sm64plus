@@ -2,7 +2,7 @@
 
 ## **Q:** I can't build. I'm getting an error!
 
-**A:** It seems like reinstalling MSYS2 and deleting the SM64Plus folder fixes the issues for most people. Disabling your antivirus could also help in some cases.
+**A:** It seems like reinstalling [MSYS2](https://www.msys2.org/) and deleting the "sm64plus" folder fixes the issues for most people. Disabling your antivirus could also help in some cases.
 
 One other alternative you have is to use [sm64pcBuilder2](https://sm64pc.info/sm64pcbuilder2/) instead to build the game. Or you can also just compile the game manually, following the instructions from the [README file](https://github.com/MorsGames/sm64plus/blob/master/README.md).
 
@@ -24,17 +24,17 @@ If these don't help, you can ask for help on our Discord server. **Don't ask for
 
 ## **Q:** My controller doesn't work in the game. What do I do?
 
-**A:** The game itself doesn't have support for DirectInput controllers yet. You can add it to your Steam library, which seems to make most controllers work. You can also use a tool like DS4Windows, BetterJoyForCemu, or 360ce depending on your controller.
+**A:** The game itself only has support for XInput controllers. You can add it to your Steam library, which seems to make most controllers work. You can also use a tool like DS4Windows, BetterJoyForCemu, or 360ce depending on your controller.
 
 <br>
 
-## **Q:** All/some of the textures appear black and purple, how do I fix this?
+## **Q:** Some of the textures appear black and purple, how do I fix this?
 
 **A:** Delete the "C:\Users\YourUsername\AppData\Local\SM64Plus\gfx" folder. If that doesn't work, hold "left", "right", and "backspace" keys down for 4 seconds in the title screen and go through the setup once again.
 
 <br>
 
-## **Q:** How do I access the hidden settigns?
+## **Q:** How do I access the hidden settings?
 
 **A:** Press backspace or select on the press any key screen.
 
@@ -58,7 +58,7 @@ As for custom models, can install those easily using [sm64pcBuilder2](https://sm
 
 ## **Q:** What about Render96?
 
-**A:** The official Render96 texture pack works with SM64Plus, with the exception of skybox textures. The models do not to work with SM64Plus at this moment. If you're willing to take on the challenge, it should be possible to fix the errors and make them work, but don't expect that to be very trivial.
+**A:** The official Render96 texture pack works with SM64Plus, with the exception of skybox textures. The models do not to work with SM64Plus at this moment though. If you're willing to take on the challenge, it should be possible to fix the errors and make them work, but don't expect that to be a trivial task.
 
 <br>
 
