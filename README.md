@@ -33,6 +33,13 @@ Features that _might_ get added in the future:
 
 ## Changelog
 
+### v1.1.3 (18/04/2021):
+**Launcher:**
+- The launcher now tries to fix the broken texture issue automatically.
+
+**Fixes:**
+- Fixed issues regarding Linux support, so the game finally compiles on Linux platforms.
+
 ### v1.1.2.1 (14/04/2021):
 **Fixes:**
 - Removed the mysterious 121st and 122nd stars.
@@ -143,9 +150,12 @@ Features that _might_ get added in the future:
 5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
 6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e.exe`.
 
-### Linux (Untested!)
+### Linux
 
-1. Install prerequisites (Ubuntu) with `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`.
+1. Install the prerequisites:
+  * On Debian / Ubuntu: `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`
+  * On Arch / Manjaro: `sudo pacman -S base-devel python sdl2 glew`
+  * On Fedora: `sudo dnf install make gcc python3 glew-devel SDL2-devel`
 2. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`.
 3. Place a Super Mario 64 ROM called `baserom.us.z64` into the repository folder for asset extraction.
 5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).

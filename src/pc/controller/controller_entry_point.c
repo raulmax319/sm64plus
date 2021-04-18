@@ -25,9 +25,9 @@ static struct ControllerAPI *controller_implementations[] = {
 #else
     &controller_sdl,
 #endif
-#ifdef __linux__
+/*#ifdef __linux__
     &controller_wup,
-#endif
+#endif*/
     &controller_keyboard,
 };
 

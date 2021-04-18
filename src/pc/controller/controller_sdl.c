@@ -53,12 +53,16 @@ static void controller_sdl_read(OSContPad *pad) {
         }
     }
 
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_START)) pad->button |= START_BUTTON;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_LEFTSHOULDER)) pad->button |= Z_TRIG;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) pad->button |= R_TRIG;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_A)) pad->button |= A_BUTTON;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_X)) pad->button |= B_BUTTON;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_RIGHTSTICK)) pad->button |= L_TRIG;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_START)) pad->button |= configButtonStart;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_BACK)) pad->button |= configButtonSelect;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_LEFTSHOULDER)) pad->button |= configButtonL;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) pad->button |= configButtonR;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_A)) pad->button |= configButtonA;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_B)) pad->button |= configButtonB;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_X)) pad->button |= configButtonX;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_Y)) pad->button |= configButtonY;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_LEFTSTICK)) pad->button |= configButtonThumbLeft;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_RIGHTSTICK)) pad->button |= configButtonThumbRight;
 
     int16_t leftx = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_LEFTX);
     int16_t lefty = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_LEFTY);
@@ -104,8 +108,8 @@ static void controller_sdl_read(OSContPad *pad) {
         if (righty > 0x4000) pad->button |= D_CBUTTONS;
     }
 
-    if (ltrig > 30 * 256) pad->button |= Z_TRIG;
-    if (rtrig > 30 * 256) pad->button |= R_TRIG;
+    if (ltrig > 30 * 256) pad->button |= configButtonZL;
+    if (rtrig > 30 * 256) pad->button |= configButtonZR;
 
     uint32_t magnitude_sq = (uint32_t)(leftx * leftx) + (uint32_t)(lefty * lefty);
     if (magnitude_sq > (uint32_t)(DEADZONE_LEFT * DEADZONE_LEFT)) {

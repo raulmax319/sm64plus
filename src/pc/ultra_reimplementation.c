@@ -8,10 +8,6 @@
 #include <emscripten.h>
 #endif
 
-#ifdef __linux__
-#include <pwd.h>
-#endif
-
 #define SAVE_PATH "savedata.bin"
 
 extern OSMgrArgs piMgrArgs;

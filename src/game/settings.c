@@ -150,19 +150,23 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
-char* gTitleString = "Super Mario 64 Plus v1.1.2.1";
+char* gTitleString = "Super Mario 64 Plus v1.1.3";
 
 s8 configFullscreen = 1;
+#if defined(_WIN32) || defined(_WIN64)
 unsigned int configCustomFullscreenResolution = 0;
 unsigned int configFullscreenWidth = 1920;
 unsigned int configFullscreenHeight = 1080;
 unsigned int configFullscreenRefreshRate = 60;
+#endif
 unsigned int configWindowWidth = 1280;
 unsigned int configWindowHeight = 720;
+#if defined(_WIN32) || defined(_WIN64)
 s8 configCustomInternalResolution = 0;
 unsigned int configInternalResolutionWidth = 3840;
 unsigned int configInternalResolutionHeight = 2160;
-unsigned int configGraphicsBackend = 1;
+#endif
+unsigned int configGraphicsBackend = 0;
 
 float configSeqVolume[] = {1, 1, 1};
 
@@ -246,7 +250,9 @@ s8 gCasualMode = 0;
 
 s8 gPaperMode = 0;
 s8 gFXMode = 0;
+#if defined(_WIN32) || defined(_WIN64)
 s8 gWireframeMode = 0;
+#endif
 s8 gDisableLighting = 0;
 s8 gForceLowPoly = 0;
 

@@ -10,10 +10,6 @@
 #include "../game/settings.h"
 #include "../game/main.h"
 
-#ifdef __linux__
-#include <pwd.h>
-#endif
-
 #define ARRAY_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
 
 enum ConfigOptionType {
@@ -36,15 +32,19 @@ struct ConfigOption {
 static const struct ConfigOption options[] = {
     { .name = "DISPLAY", .type = CONFIG_TYPE_SECTION },
     { .name = "fullscreen", .type = CONFIG_TYPE_BOOL, .boolValue = &configFullscreen },
+#if defined(_WIN32) || defined(_WIN64)
     { .name = "custom_fullscreen_resolution", .type = CONFIG_TYPE_BOOL, .boolValue = &configCustomFullscreenResolution },
     { .name = "fullscreen_width", .type = CONFIG_TYPE_UINT, .uintValue = &configFullscreenWidth },
     { .name = "fullscreen_height", .type = CONFIG_TYPE_UINT, .uintValue = &configFullscreenHeight },
     { .name = "fullscreen_refresh_rate", .type = CONFIG_TYPE_UINT, .uintValue = &configFullscreenRefreshRate },
+#endif
     { .name = "window_width", .type = CONFIG_TYPE_UINT, .uintValue = &configWindowWidth },
     { .name = "window_height", .type = CONFIG_TYPE_UINT, .uintValue = &configWindowHeight },
+#if defined(_WIN32) || defined(_WIN64)
     { .name = "custom_internal_resolution", .type = CONFIG_TYPE_BOOL, .boolValue = &configCustomInternalResolution },
     { .name = "internal_resolution_width", .type = CONFIG_TYPE_UINT, .uintValue = &configInternalResolutionWidth },
     { .name = "internal_resolution_height", .type = CONFIG_TYPE_UINT, .uintValue = &configInternalResolutionHeight },
+#endif
     { .name = "graphics_backend", .type = CONFIG_TYPE_UINT, .uintValue = &configGraphicsBackend },
 
     { .name = "AUDIO", .type = CONFIG_TYPE_SECTION },
@@ -105,6 +105,7 @@ static const struct ConfigOption options[] = {
     { .name = "always_show_the_health_meter", .type = CONFIG_TYPE_BOOL, .boolValue = &gAlwaysShowHealth },
     { .name = "hide_hud", .type = CONFIG_TYPE_BOOL, .boolValue = &gHideHud },
 
+#if defined(_WIN32) || defined(_WIN64)
     { .name = "MOUSE", .type = CONFIG_TYPE_SECTION },
     { .name = "mouse_support", .type = CONFIG_TYPE_BOOL, .boolValue = &gMouseCam },
     { .name = "mouse_sensitivity", .type = CONFIG_TYPE_FLOAT, .floatValue = &gMouseSensitivity },
@@ -113,6 +114,7 @@ static const struct ConfigOption options[] = {
     { .name = "middle_mouse_button_action", .type = CONFIG_TYPE_UINT, .uintValue = &configMouseMiddle },
     { .name = "mouse_wheel_up_action", .type = CONFIG_TYPE_UINT, .uintValue = &configMouseWheelUp },
     { .name = "mouse_wheel_down_action", .type = CONFIG_TYPE_UINT, .uintValue = &configMouseWheelDown },
+#endif
 
     { .name = "EXTRA MOVES", .type = CONFIG_TYPE_SECTION },
     { .name = "wall_sliding", .type = CONFIG_TYPE_BOOL, .boolValue = &gWallSliding },
@@ -141,7 +143,9 @@ static const struct ConfigOption options[] = {
     { .name = "FOR FUN", .type = CONFIG_TYPE_SECTION },
     { .name = "paper_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gPaperMode },
     { .name = "fx_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode },
+#if defined(_WIN32) || defined(_WIN64)
     { .name = "wireframe_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gWireframeMode },
+#endif
     { .name = "disable_lighting", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLighting },
     { .name = "force_use_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly },
 
@@ -154,7 +158,11 @@ static const struct ConfigOption options[] = {
     { .name = "show_debug_profiler", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler },
     { .name = "vertical_analog_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gVerticalCamera },
 
+#if defined(_WIN32) || defined(_WIN64)
     { .name = "XINPUT MAPPING", .type = CONFIG_TYPE_SECTION },
+#else
+    { .name = "DINPUT MAPPING", .type = CONFIG_TYPE_SECTION },
+#endif
     { .name = "button_a", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonA },
     { .name = "button_b", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonB },
     { .name = "button_x", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonX },

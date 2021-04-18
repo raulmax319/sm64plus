@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
-#if defined(_WIN32) || defined(_WIN64)
+#ifdef __linux__
+#include <pwd.h>
+#elif defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
 #include <dirent.h>
 #endif
@@ -195,11 +196,11 @@ void main_func(void) {
 
     // Set the working directory
     char *workingdir = malloc(128);
-#ifdef __linux__
+#if defined(__linux__) || defined(__BSD__)
     if (strcpy(workingdir, getenv("HOME"))[0] == "\0") {
         strcpy(workingdir, getpwuid(getuid())->pw_dir);
     }
-    strcat(workingdir, "/.config");
+    strcat(workingdir, "/.config/SM64Plus/");
 #elif defined(_WIN32) || defined(_WIN64)
     strcpy(workingdir, getenv("LOCALAPPDATA"));
     strcat(workingdir, "\\SM64Plus\\");
@@ -208,7 +209,7 @@ void main_func(void) {
     chdir(workingdir);
 
     // Check if the textures exist
-    #if defined(_WIN32) || defined(_WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 
     DIR* dir = opendir("gfx");
     if (dir) {
@@ -219,7 +220,7 @@ void main_func(void) {
         exit(1);
     }
 
-    #endif
+#endif
 
     configfile_load(CONFIG_FILE);
     atexit(save_config);
@@ -231,7 +232,13 @@ void main_func(void) {
 
     switch (configGraphicsBackend)
     {
-#if !defined(__linux__) && !defined(__BSD__)
+#if defined(__linux__) || defined(__BSD__)
+    case 0:
+        rendering_api = &gfx_opengl_api;
+        wm_api = &gfx_glx;
+        break;
+
+#elif defined(_WIN32) || defined(_WIN64)
     case 0:
         rendering_api = &gfx_direct3d11_api;
         wm_api = &gfx_dxgi_api;
@@ -248,10 +255,6 @@ void main_func(void) {
         wm_api = &gfx_sdl;
         break;
 #endif
-#else
-    case 0:
-        rendering_api = &gfx_opengl_api;
-        wm_api = &gfx_glx;
 #endif
     default:
         rendering_api = &gfx_dummy_renderer_api;

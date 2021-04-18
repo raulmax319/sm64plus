@@ -3,15 +3,19 @@
 extern char* gTitleString;
 
 extern s8 configFullscreen;
+#if defined(_WIN32) || defined(_WIN64)
 extern s8 configCustomFullscreenResolution;
 extern unsigned int configFullscreenWidth;
 extern unsigned int configFullscreenHeight;
 extern unsigned int configFullscreenRefreshRate;
+#endif
 extern unsigned int configWindowWidth;
 extern unsigned int configWindowHeight;
+#if defined(_WIN32) || defined(_WIN64)
 extern s8 configCustomInternalResolution;
 extern unsigned int configInternalResolutionWidth;
 extern unsigned int configInternalResolutionHeight;
+#endif
 extern unsigned int configGraphicsBackend;
 
 extern float configSeqVolume[];
@@ -95,7 +99,9 @@ extern s8 gCasualMode;
 
 extern s8 gPaperMode;
 extern s8 gFXMode;
+#if defined(_WIN32) || defined(_WIN64)
 extern s8 gWireframeMode;
+#endif
 extern s8 gDisableLighting;
 extern s8 gForceLowPoly;
 

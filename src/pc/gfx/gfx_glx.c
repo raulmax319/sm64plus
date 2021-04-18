@@ -285,7 +285,8 @@ static void gfx_glx_set_fullscreen_state(bool on, bool call_callback) {
     xev.xclient.data.l[2] = 0;
     xev.xclient.data.l[3] = 0;
     XSendEvent(glx.dpy, glx.root, 0, SubstructureNotifyMask | SubstructureRedirectMask, &xev);
-    gfx_glx_hide_mouse(on);
+    if (!gMouseCam)
+        gfx_glx_hide_mouse(on);
     
     if (glx.on_fullscreen_changed != NULL && call_callback) {
         glx.on_fullscreen_changed(on);
@@ -340,6 +341,8 @@ static void gfx_glx_init(const char *game_name, bool start_in_fullscreen) {
     if (start_in_fullscreen) {
         gfx_glx_set_fullscreen_state(true, false);
     }
+    if (gMouseCam)
+        gfx_glx_hide_mouse(true);
 
     char title[512];
     int len = sprintf(title, "%s (%s)", game_name, GFX_API_NAME);
@@ -407,6 +410,19 @@ static void gfx_glx_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bo
 
 static void gfx_glx_main_loop(void (*run_one_game_iter)(void)) {
     while (1) {
+        // First attempt at making the mouse support work but i cant be bothered to fix the issues with it atm
+        // I'll maybe return to it later, but for now no mouse. Sorry!
+        /*
+        int revert;
+        XGetInputFocus(glx.dpy, &glx.win, &revert);
+        if (gMouseCam && revert) {
+            XSelectInput(glx.dpy, glx.win, KeyReleaseMask);
+            XEvent event;
+            XNextEvent(glx.dpy, &event);
+            glx.on_mouse_move(event.xbutton.x, event.xbutton.y);
+            XWarpPointer(glx.dpy, None, glx.win, 0, 0, 0, 0, 100, 100);
+            XFlush(glx.dpy);
+        }*/
         run_one_game_iter();
     }
 }
@@ -432,7 +448,7 @@ static void gfx_glx_handle_events(void) {
                 int scancode = glx.keymap[xev.xkey.keycode];
                 if (scancode != 0) {
                     if (xev.type == KeyPress) {
-                        if (scancode == 0x44) { // F10
+                        if (scancode == 0x57) { // F11
                             gfx_glx_set_fullscreen_state(!glx.is_fullscreen, true);
                         }
                         if (glx.on_key_down != NULL) {
