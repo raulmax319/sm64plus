@@ -821,6 +821,10 @@ void render_hud(void) {
             }
         }
 
+        if (gMarioWillDie) {
+            print_text_centered(SCREEN_WIDTH / 2, 160, "NOW YOU WILL DIE");
+        }
+
         if (gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3) {
             render_you_got_a_star(0);
         }

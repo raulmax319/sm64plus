@@ -264,6 +264,7 @@ void unload_area(void) {
         gCurrentArea->flags = 0;
         gCurrentArea = NULL;
         gWarpTransition.isActive = FALSE;
+        gMarioWillDie = FALSE;
     }
 }
 

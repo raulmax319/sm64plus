@@ -161,7 +161,7 @@ static const struct ConfigOption options[] = {
 #if defined(_WIN32) || defined(_WIN64)
     { .name = "XINPUT MAPPING", .type = CONFIG_TYPE_SECTION },
 #else
-    { .name = "DINPUT MAPPING", .type = CONFIG_TYPE_SECTION },
+    { .name = "INPUT MAPPING", .type = CONFIG_TYPE_SECTION },
 #endif
     { .name = "button_a", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonA },
     { .name = "button_b", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonB },

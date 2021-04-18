@@ -37,6 +37,9 @@ Features that _might_ get added in the future:
 **Launcher:**
 - The launcher now tries to fix the broken texture issue automatically.
 
+**Changes:**
+- Made it so that "Restore Mother Penguin's Sad Eyes" enables something else too. I wonder what...
+
 **Fixes:**
 - Fixed issues regarding Linux support, so the game finally compiles on Linux platforms.
 
