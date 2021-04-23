@@ -936,7 +936,9 @@ void update_hud_values(void) {
         if (gHudDisplay.coins < gMarioState->numCoins) {
             if (gGlobalTimer & 0x00000001) {
                 u32 coinSound;
-                if (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
+                if (gXLMode) {
+                    coinSound = SOUND_GENERAL_QUIET_BUBBLE2;
+                } else if (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
                     coinSound = SOUND_GENERAL_COIN_WATER;
                 } else {
                     coinSound = SOUND_GENERAL_COIN;

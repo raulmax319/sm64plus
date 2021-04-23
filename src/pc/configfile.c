@@ -41,6 +41,7 @@ static const struct ConfigOption options[] = {
     { .name = "window_width", .type = CONFIG_TYPE_UINT, .uintValue = &configWindowWidth },
     { .name = "window_height", .type = CONFIG_TYPE_UINT, .uintValue = &configWindowHeight },
 #if defined(_WIN32) || defined(_WIN64)
+    { .name = "default_monitor", .type = CONFIG_TYPE_UINT, .uintValue = &configDefaultMonitor },
     { .name = "custom_internal_resolution", .type = CONFIG_TYPE_BOOL, .boolValue = &configCustomInternalResolution },
     { .name = "internal_resolution_width", .type = CONFIG_TYPE_UINT, .uintValue = &configInternalResolutionWidth },
     { .name = "internal_resolution_height", .type = CONFIG_TYPE_UINT, .uintValue = &configInternalResolutionHeight },
@@ -135,6 +136,7 @@ static const struct ConfigOption options[] = {
     { .name = "infinite_lives_mode", .type = CONFIG_TYPE_UINT, .uintValue = &gLifeMode },
     { .name = "encore_mode", .type = CONFIG_TYPE_UINT, .uintValue = &gEncoreMode },
     { .name = "green_demon_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gGreenDemon },
+    { .name = "no_healing_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gNoHealingMode },
     { .name = "hard_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gHardSave },
     { .name = "daredevil_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gDaredevilSave },
     { .name = "permadeath_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gHardcoreSave },
@@ -148,13 +150,14 @@ static const struct ConfigOption options[] = {
 #endif
     { .name = "disable_lighting", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLighting },
     { .name = "force_use_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly },
+    { .name = "xl_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gXLMode },
 
     { .name = "DEBUG", .type = CONFIG_TYPE_SECTION },
     { .name = "level_select", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugLevelSelect },
     { .name = "show_debug_display", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowDebugText },
     { .name = "debug_movement_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugMovementMode },
     { .name = "debug_cap_changer", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugCapChanger },
-    { .name = "moon_jump", .type = CONFIG_TYPE_BOOL, .boolValue = &gMoonJump },
+    { .name = "moon_jump", .type = CONFIG_TYPE_UINT, .uintValue = &gMoonJump },
     { .name = "show_debug_profiler", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowProfiler },
     { .name = "vertical_analog_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gVerticalCamera },
 

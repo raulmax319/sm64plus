@@ -448,6 +448,10 @@ void update_walking_speed(struct MarioState *m) {
     if (m->quicksandDepth > 10.0f) {
         targetSpeed *= 6.25 / m->quicksandDepth;
     }
+    
+    if (gXLMode) {
+        targetSpeed /= 1.0f + gMarioFatness / 16.0f;
+    }
 
     if (m->forwardVel <= 0.0f) {
         m->forwardVel += 1.1f;

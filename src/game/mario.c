@@ -776,6 +776,10 @@ static void set_mario_y_vel_based_on_fspeed(struct MarioState *m, f32 initialVel
     if (m->squishTimer != 0 || m->quicksandDepth > 1.0f) {
         m->vel[1] *= 0.5f;
     }
+
+    if (gXLMode) {
+        m->vel[1] /= 1.0f + gMarioFatness / 64.0f;
+    }
 }
 
 /**
@@ -1263,9 +1267,13 @@ void squish_mario_model(struct MarioState *m) {
             vec3f_set(m->marioObj->header.gfx.scale, 1.4f, 0.4f, 1.4f);
         }
         if (gPaperMode) {
-            m->marioObj->header.gfx.scale[0] *= 1.0625;
-            m->marioObj->header.gfx.scale[1] *= 1.0625;
-            m->marioObj->header.gfx.scale[2] *= 0.03125;
+            m->marioObj->header.gfx.scale[0] *= 1.0625f;
+            m->marioObj->header.gfx.scale[1] *= 1.0625f;
+            m->marioObj->header.gfx.scale[2] *= 0.03125f;
+        }
+        if (gXLMode) {
+            m->marioObj->header.gfx.scale[0] *= 1.0f + gMarioFatness / 24.0f;
+            m->marioObj->header.gfx.scale[2] *= 1.0f + gMarioFatness / 24.0f;
         }
     }
 }
@@ -1514,7 +1522,7 @@ void update_mario_health(struct MarioState *m) {
                     // when in snow terrains lose 3 health.
                     // If using the debug level select, do not lose any HP to water.
                     if ((m->pos[1] >= (m->waterLevel - 140)) && !terrainIsSnow) {
-                        if (!(save_file_get_flags() & SAVE_FLAG_HARD_MODE)) {
+                        if ((!(save_file_get_flags() & SAVE_FLAG_HARD_MODE)) && (!gNoHealingMode)) {
                             m->health += 0x1A;
                         }
                     } else if (!(save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE)) {
@@ -1772,14 +1780,19 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         debug_update_mario_cap(CONT_RIGHT, MARIO_VANISH_CAP, 600, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP));
     }
 
-    // A very direct port of the famouse GS code using https://github.com/sm64gs2pc/sm64gs2pc#limitations
+    // A very direct port of the famouse GS code using https://github.com/sm64gs2pc/sm64gs2pc
     if (gMoonJump) {
-        if ((gControllers[0].buttonDown & 0xff) == 0x20)
-        *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0x42200000;
-        if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
-        gMarioStates[0].action = (gMarioStates[0].action & 0xffffffff0000ffff) | 0x3000000;
-        if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
-        gMarioStates[0].action = (gMarioStates[0].action & 0xffffffffffff0000) | 0x880;
+        if ((gControllers[0].buttonDown & 0xff) == 0x20) {
+            *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0x42200000;
+            if (gMoonJump > 1 && ((gMarioState->action & ACT_GROUP_MASK) != ACT_GROUP_AIRBORNE))
+                set_mario_action(gMarioState, ACT_JUMP, 0);
+        }
+        if (gMoonJump == 1) {
+            if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
+                gMarioStates[0].action = (gMarioStates[0].action & 0xffffffff0000ffff) | 0x3000000;
+            if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
+                gMarioStates[0].action = (gMarioStates[0].action & 0xffffffffffff0000) | 0x880;
+        }
     }
 
     if (gMarioState->action) {

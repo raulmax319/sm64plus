@@ -615,6 +615,11 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                         play_music(SEQ_PLAYER_ENV, SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_COLLECT_STAR), 0);
                     }
                 }
+                // We will be extending the cap timer artificially for this star.
+                if (gStayInLevel && gCollectedStar == 5 && gCurrLevelNum == LEVEL_DDD) {
+                    m->flags |= MARIO_VANISH_CAP | MARIO_METAL_CAP | MARIO_CAP_ON_HEAD;
+                    m->capTimer = 300;
+                }
                 break;
 
             case 42:

@@ -162,6 +162,7 @@ unsigned int configFullscreenRefreshRate = 60;
 unsigned int configWindowWidth = 1280;
 unsigned int configWindowHeight = 720;
 #if defined(_WIN32) || defined(_WIN64)
+unsigned int configDefaultMonitor = 1;
 s8 configCustomInternalResolution = 0;
 unsigned int configInternalResolutionWidth = 3840;
 unsigned int configInternalResolutionHeight = 2160;
@@ -243,6 +244,7 @@ s8 gReplaceKeysWithStars = 0;
 unsigned int gLifeMode = 0;
 unsigned int gEncoreMode = 0;
 s8 gGreenDemon = 0;
+s8 gNoHealingMode = 0;
 s8 gHardSave = 0;
 s8 gDaredevilSave = 0;
 s8 gHardcoreSave = 0;
@@ -253,12 +255,13 @@ s8 gFXMode = 0;
 #if defined(_WIN32) || defined(_WIN64)
 s8 gWireframeMode = 0;
 #endif
+s8 gXLMode = 0;
 s8 gDisableLighting = 0;
 s8 gForceLowPoly = 0;
 
 s8 gDebugMovementMode = 0;
 s8 gDebugCapChanger = 0;
-s8 gMoonJump = 0;
+unsigned int gMoonJump = 0;
 s8 gVerticalCamera = 0;
 
 unsigned int configButtonA = A_BUTTON;
@@ -296,6 +299,7 @@ unsigned int configKeyWalk = DIK_LSHIFT;
 // TODO (Mors): Move this out to somewhere that fits.
 s16 gCollectedStar = 0;
 s8 gMarioWillDie = 0;
+s16 gMarioFatness = 0;
 
 s8 stay_in_level() {
     if (gStayInLevel == 2 && (

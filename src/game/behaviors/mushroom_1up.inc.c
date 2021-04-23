@@ -9,13 +9,17 @@ void bhv_1up_interact(void) {
             gMarioState->health = 0;
         }
         else if (gLifeMode || save_file_get_flags() & SAVE_FLAG_HARDCORE_MODE) {
-            gMarioState->healCounter += 31.75;
-            if (gMarioState->healCounter > 31.75)
-                gMarioState->healCounter = 31.75;
+            if (!gNoHealingMode) {
+                gMarioState->healCounter += 31.75;
+                if (gMarioState->healCounter > 31.75)
+                    gMarioState->healCounter = 31.75;
+            }
         }
         else {
             gMarioState->numLives++;
         }
+        if (gXLMode)
+            gMarioFatness = 0;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }

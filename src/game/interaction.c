@@ -746,7 +746,13 @@ void reset_mario_pitch(struct MarioState *m) {
 
 u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     m->numCoins += o->oDamageOrCoinValue;
-    m->healCounter += 4 * o->oDamageOrCoinValue;
+    if (!gNoHealingMode)
+        m->healCounter += 4 * o->oDamageOrCoinValue;
+
+    if (gXLMode) {
+        gMarioFatness++;
+        play_sound(SOUND_OBJ2_PIRANHA_PLANT_BITE, o->header.gfx.cameraToObject);
+    }
 
     o->oInteractStatus = INT_STATUS_INTERACTED;
 
@@ -764,7 +770,8 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
 }
 
 u32 interact_water_ring(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    m->healCounter += 4 * o->oDamageOrCoinValue;
+    if (!gNoHealingMode)
+        m->healCounter += 4 * o->oDamageOrCoinValue;
     o->oInteractStatus = INT_STATUS_INTERACTED;
     return FALSE;
 }
@@ -781,6 +788,13 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
     // Don't kick Mario if staying in levels is active
     if (stay_in_level()) {
         noExit = 1;
+
+        // Make the stars heal Mario when this setting is on.
+        if (gNoHealingMode) {
+            gMarioState->healCounter += 31.75;
+            if (gMarioState->healCounter > 31.75)
+                gMarioState->healCounter = 31.75;
+        }
 
         // Increase the act number
         if (gCurrActNum-1 == gCollectedStar && gCurrActNum != 6) {

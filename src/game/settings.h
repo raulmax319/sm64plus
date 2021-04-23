@@ -12,6 +12,7 @@ extern unsigned int configFullscreenRefreshRate;
 extern unsigned int configWindowWidth;
 extern unsigned int configWindowHeight;
 #if defined(_WIN32) || defined(_WIN64)
+extern unsigned int configDefaultMonitor;
 extern s8 configCustomInternalResolution;
 extern unsigned int configInternalResolutionWidth;
 extern unsigned int configInternalResolutionHeight;
@@ -92,6 +93,7 @@ extern s8 gReplaceKeysWithStars;
 extern unsigned int gLifeMode;
 extern unsigned int gEncoreMode;
 extern s8 gGreenDemon;
+extern s8 gNoHealingMode;
 extern s8 gHardSave;
 extern s8 gDaredevilSave;
 extern s8 gHardcoreSave;
@@ -102,12 +104,13 @@ extern s8 gFXMode;
 #if defined(_WIN32) || defined(_WIN64)
 extern s8 gWireframeMode;
 #endif
+extern s8 gXLMode;
 extern s8 gDisableLighting;
 extern s8 gForceLowPoly;
 
 extern s8 gDebugMovementMode;
 extern s8 gDebugCapChanger;
-extern s8 gMoonJump;
+extern unsigned int gMoonJump;
 extern s8 gVerticalCamera;
 
 extern unsigned int configButtonA;
@@ -143,5 +146,6 @@ extern unsigned int configKeyWalk;
 
 extern s16 gCollectedStar;
 extern s8 gMarioWillDie;
+extern s16 gMarioFatness;
 extern s8 stay_in_level();
 extern s8 restart_level_after_star();

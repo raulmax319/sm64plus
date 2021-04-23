@@ -140,6 +140,23 @@ static void run_as_dpi_aware(Fun f) {
     }
 }
 
+struct sMonitorInfo
+{
+    int iIndex;
+    HMONITOR hMonitor;
+};
+
+BOOL CALLBACK GetMonitorByIndex(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
+{
+    sMonitorInfo *info = (sMonitorInfo*) dwData;
+    if (--info->iIndex < 0)
+    {
+        info->hMonitor = hMonitor;
+        return FALSE;
+    }
+    return TRUE;
+}
+
 static void toggle_borderless_window_full_screen(bool enable, bool call_callback) {
     // Windows 7 + flip mode + waitable object can't go to exclusive fullscreen,
     // so do borderless instead. If DWM is enabled, this means we get one monitor
@@ -152,7 +169,17 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
 
     // Get the primary monitor
     POINT zero = { 0, 0 };
-    HMONITOR h_monitor = MonitorFromPoint(zero, MONITOR_DEFAULTTOPRIMARY);
+    HMONITOR h_monitor;
+
+    sMonitorInfo info;
+    info.iIndex = configDefaultMonitor-1;
+    info.hMonitor = NULL;
+
+    EnumDisplayMonitors(NULL, NULL, GetMonitorByIndex, (LPARAM)&info);
+    if (info.hMonitor == NULL)
+        h_monitor = MonitorFromPoint(zero, MONITOR_DEFAULTTOPRIMARY);
+    else
+        h_monitor = info.hMonitor;
 
     // Get info from that monitor
     MONITORINFOEX monitor_info;
