@@ -35,7 +35,7 @@
 #define SCALE_8_3(VAL_) ((VAL_) / 0x24)
 
 #define ENCORE_MAX 255.0f
-#define ENCORE_HALF ENCORE_MAX/2.0f
+#define ENCORE_HALF 127.0f
 #define ENCORE_COLOR(VAL_) MAX(min(VAL_, ENCORE_MAX), 0.0f)
 #define ENCORE_R 4*i+0
 #define ENCORE_G 4*i+1
@@ -587,9 +587,9 @@ static bool import_texture_custom(const char *path) {
                     //  [ENCORE_B]
                 break;
                 case 12: // Wet Dry World
-                    data[ENCORE_R] = ENCORE_COLOR(round(sqrt(r/ENCORE_HALF)*ENCORE_MAX*0.3125)*ENCORE_MAX*0.09375f);
-                    data[ENCORE_G] = ENCORE_COLOR(round(sqrt(g/ENCORE_HALF)*ENCORE_MAX*0.3125)*ENCORE_MAX*0.09375f);
-                    data[ENCORE_B] = ENCORE_COLOR(round(sqrt(b/ENCORE_HALF)*ENCORE_MAX*0.3125)*ENCORE_MAX*0.09375f);
+                    data[ENCORE_R] = ENCORE_COLOR(round(sqrt(r/ENCORE_HALF)*8)*24);
+                    data[ENCORE_G] = ENCORE_COLOR(round(sqrt(g/ENCORE_HALF)*8)*24);
+                    data[ENCORE_B] = ENCORE_COLOR(round(sqrt(b/ENCORE_HALF)*8)*24);
                 break;
                 case 13: // Donkey Slide
                     data[ENCORE_R] = ENCORE_COLOR(min(r+g*1.25f-b*1.5f, ENCORE_MAX*0.9375f));

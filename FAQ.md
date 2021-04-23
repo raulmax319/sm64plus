@@ -66,7 +66,9 @@ As for custom models, you can install those easily using [sm64pcBuilder2](https:
 
 ## **Q:** Can you add *insert feature here\*?
 
-**A:** It depends. Feel free to request anything to me on [Discord](http://discord.mors-games.com/), if I like the idea I might add it in eventually with an update.
+**A:** It depends. I try not to add new assets, like new models, textures etc., and just use the ones provided by the ROM. I also try not to modify the levels just to keep the scope of the project small.
+
+For other things, feel free to request anything to me on [Discord](http://discord.mors-games.com/), if I like the idea I might add it in eventually with an update.
 
 <br>
 

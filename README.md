@@ -33,6 +33,10 @@ Features that _might_ get added in the future:
 
 ## Changelog
 
+### v1.1.3.1 (23/04/2021):
+**Fixes:**
+- Fixed the broken encore palette for Wet Dry World.
+
 ### v1.1.3 (23/04/2021):
 **Launcher:**
 - Added the new settings to the launcher.
