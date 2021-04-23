@@ -36,24 +36,25 @@ Features that _might_ get added in the future:
 ### v1.1.3 (23/04/2021):
 **Launcher:**
 - Added the new settings to the launcher.
-- Replaced "True" and "False" in the launcher with "On" and "Off".
+- Changed some of the descriptions.
+- Replaced "True" and "False" with "On" and "Off".
 - Made it clearer when a setting has multiple options.
 - Made it so that the launcher now tries to fix the broken texture issue automatically.
 - Fixed the debug key combo that didn't work previously.
 
 **Additions:**
 - Added a "Default Monitor" setting for Windows.
-- Added "No Healing Mode", which only lets you heal by getting a Power Star.
+- Added "No Healing Mode", which makes it so that the only way to heal Mario is to collect a Power Star.
 - Added "XL Mode" as a hidden setting, which replaces coins with potato chips.
 
 **Changes:**
 - Made it so that "Restore Mother Penguin's Sad Eyes" enables something else too. :)
-- Added an extra option for the "Moon Jump" setting that fixes the issues with it.
+- Added an extra option for the "Moon Jump" setting that fixes the glitches caused by it.
 - Increased the amount of damage taken from cold water in Hard Mode.
 
 **Fixes:**
 - Fixed broken explosion graphics.
-- Fixed the star inside the cage in Dire Dire Docks getting you stuck when you have "Stay in Level" on.
+- Fixed the star inside the cage in Dire Dire Docks causing you to get stuck when you have "Stay in Level" on.
 - Made it so that the default graphics backend is always D3D11.
 - Fixed issues regarding Linux support, so the game finally compiles under Linux.
 
