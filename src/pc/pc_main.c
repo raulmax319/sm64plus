@@ -194,19 +194,13 @@ void main_func(void) {
 #endif
     gEffectsMemoryPool = mem_pool_init(0x4000, MEMORY_POOL_LEFT);
 
+#if defined(_WIN32) || defined(_WIN64)
     // Set the working directory
     char *workingdir = malloc(128);
-#if defined(__linux__) || defined(__BSD__)
-    if (strcpy(workingdir, getenv("HOME"))[0] == "\0") {
-        strcpy(workingdir, getpwuid(getuid())->pw_dir);
-    }
-    strcat(workingdir, "/.config/SM64Plus/");
-#elif defined(_WIN32) || defined(_WIN64)
     strcpy(workingdir, getenv("LOCALAPPDATA"));
     strcat(workingdir, "\\SM64Plus\\");
-#endif
-
     chdir(workingdir);
+#endif
 
     // Check if the textures exist
 #if defined(_WIN32) || defined(_WIN64)
