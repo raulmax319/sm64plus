@@ -22,9 +22,9 @@ You can also build the game manually if you prefer to do so, or if you're not on
 Features that _might_ get added in the future:
 - Smoother vertical camera movement.
 - Rumble support.
-- Odyssey-like rolling and spin jump.
+- Odyssey-like spin jump.
 - Full OpenGL and SDL support.
-- Full Linux support with launcher.
+- Full Linux support for the launcher.
 - Maybe even N64 support?
 
 ## FAQ
@@ -33,15 +33,29 @@ Features that _might_ get added in the future:
 
 ## Changelog
 
-### v1.1.3 (18/04/2021):
+### v1.1.3 (23/04/2021):
 **Launcher:**
-- The launcher now tries to fix the broken texture issue automatically.
+- Added the new settings to the launcher.
+- Replaced "True" and "False" in the launcher with "On" and "Off".
+- Made it clearer when a setting has multiple options.
+- Made it so that the launcher now tries to fix the broken texture issue automatically.
+- Fixed the debug key combo that didn't work previously.
+
+**Additions:**
+- Added a "Default Monitor" setting for Windows.
+- Added "No Healing Mode", which only lets you heal by getting a Power Star.
+- Added "XL Mode" as a hidden setting, which replaces coins with potato chips.
 
 **Changes:**
-- Made it so that "Restore Mother Penguin's Sad Eyes" enables something else too. I wonder what...
+- Made it so that "Restore Mother Penguin's Sad Eyes" enables something else too. :)
+- Added an extra option for the "Moon Jump" setting that fixes the issues with it.
+- Increased the amount of damage taken from cold water in Hard Mode.
 
 **Fixes:**
-- Fixed issues regarding Linux support, so the game finally compiles on Linux platforms.
+- Fixed broken explosion graphics.
+- Fixed the star inside the cage in Dire Dire Docks getting you stuck when you have "Stay in Level" on.
+- Made it so that the default graphics backend is always D3D11.
+- Fixed issues regarding Linux support, so the game finally compiles under Linux.
 
 ### v1.1.2.1 (14/04/2021):
 **Fixes:**
@@ -50,7 +64,7 @@ Features that _might_ get added in the future:
 
 ### v1.1.2 (14/04/2021):
 **Launcher:**
-- Added new settings.
+- Added the new settings to the launcher.
 - The launcher now deletes the "gfx" folder right before the initial building process.
 
 **Additions:**
@@ -162,7 +176,9 @@ Features that _might_ get added in the future:
 2. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`.
 3. Place a Super Mario 64 ROM called `baserom.us.z64` into the repository folder for asset extraction.
 5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
-5. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
+6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
+
+Please keep in mind that the Linux version of the game is missing some settings, such as "Wireframe Mode" and all mouse related settings.
 
 ## Additional options
 
