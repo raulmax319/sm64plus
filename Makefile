@@ -602,7 +602,7 @@ $(BUILD_DIR)/%.ci4: %.ci4.png
 else
 
 $(BUILD_DIR)/%: %.png
-	printf "%s%b" "$(patsubst %.png,%,$^)" '\x00' > $@
+	printf "%s%b" "$(patsubst %.png,%,$^)" '\0' > $@
 
 $(BUILD_DIR)/%.inc.c: $(BUILD_DIR)/% %.png
 	hexdump -v -e '1/1 "0x%X,"' $< > $@
