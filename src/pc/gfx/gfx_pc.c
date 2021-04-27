@@ -663,6 +663,9 @@ static bool import_texture_custom(const char *path) {
     return TRUE;
 }
 
+// defined in pc_main.c
+extern const char* GFX_DIR_PATH;
+
 static void import_texture(int tile) {
     uint8_t fmt = rdp.texture_tile.fmt;
     uint8_t siz = rdp.texture_tile.siz;
@@ -673,7 +676,8 @@ static void import_texture(int tile) {
 
     // Load the textures
     char path[1024];
-    snprintf(path, sizeof(path), "gfx/%s.png", (const char*)rdp.loaded_texture[tile].addr);
+    const char* gfx_dir = GFX_DIR_PATH == NULL ? "gfx" : GFX_DIR_PATH;
+    snprintf(path, sizeof(path), "%s/%s.png", gfx_dir, (const char*)rdp.loaded_texture[tile].addr);
 
     import_texture_custom(path);
     
