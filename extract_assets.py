@@ -55,6 +55,8 @@ def clean_assets(local_asset_file):
         except FileNotFoundError:
             pass
 
+def get_baserom_path(lang):
+    return os.environ.get("SM64PLUS_BASEROM_" + lang) or "baserom." + lang + ".z64"
 
 def main():
     # In case we ever need to change formats of generated files, we keep a
@@ -132,7 +134,7 @@ def main():
     # Load ROMs
     roms = {}
     for lang in langs:
-        fname = "baserom." + lang + ".z64"
+        fname = get_baserom_path(lang)
         try:
             with open(fname, "rb") as f:
                 roms[lang] = f.read()
@@ -207,7 +209,7 @@ def main():
                     "-d",
                     "-o",
                     str(mio0),
-                    "baserom." + lang + ".z64",
+                    get_baserom_path(lang),
                     "-",
                 ],
                 check=True,
