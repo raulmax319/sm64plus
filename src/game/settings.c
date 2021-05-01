@@ -298,7 +298,6 @@ unsigned int configKeyWalk = DIK_LSHIFT;
 // These probably don't belong here, but I don't have a better place for them at the moment.
 // TODO (Mors): Move this out to somewhere that fits.
 s16 gCollectedStar = 0;
-s8 gMarioWillDie = 0;
 s16 gMarioFatness = 0;
 
 s8 stay_in_level() {

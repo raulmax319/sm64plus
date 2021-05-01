@@ -145,7 +145,6 @@ extern unsigned int configKeyStickRight;
 extern unsigned int configKeyWalk;
 
 extern s16 gCollectedStar;
-extern s8 gMarioWillDie;
 extern s16 gMarioFatness;
 extern s8 stay_in_level();
 extern s8 restart_level_after_star();

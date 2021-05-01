@@ -272,7 +272,6 @@ void load_mario_area(void) {
     load_area(gMarioSpawnInfo->areaIndex);
 
     hide_you_got_a_star();
-    gMarioWillDie = FALSE;
     gMarioFatness = 0;
 
     if (gCurrDemoInput == NULL) 
