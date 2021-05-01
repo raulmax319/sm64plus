@@ -33,6 +33,12 @@ Features that _might_ get added in the future:
 
 ## Changelog
 
+### v1.1.3.2 (01/05/2021):
+**Fixes:**
+- [Fixed the use of non-portable printf, which caused the textures not to load under certain Linux distros.](https://github.com/MorsGames/sm64plus/pull/24)
+- [Allowed passing the gfx directory as a command line argument on Linux.](https://github.com/MorsGames/sm64plus/pull/25)
+- [Fixed the game not properly exiting on Linux.](https://github.com/sm64-port/sm64-port/pull/35)
+
 ### v1.1.3.1 (23/04/2021):
 **Fixes:**
 - Fixed the broken encore palette for Wet Dry World.
@@ -133,7 +139,7 @@ Features that _might_ get added in the future:
 - Made it so that when getting a star in a sub-area with the "Stay in Level After Getting a Star" setting is on, you're now asked if you want to keep playing or not.
 - In addition to above, the lonely mushroom in TTM doesn't kick you out or cause a forced restart anymore.
 - Made the game window be centered on main display at the game start.
-- Added Linux support thanks to [TheEssem](https://github.com/TheEssem). Still needs further testing.
+- [Added basic Linux support.](https://github.com/MorsGames/sm64plus/pull/4) Still needs further testing.
 
 **Fixes:**
 - Fixed the broken audio volume settings.
@@ -187,15 +193,17 @@ Please keep in mind that the Linux version of the game is missing some settings,
 
 ## Additional options
 
-* You can target OpenGL by using `make ENABLE_OPENGL=1`. **CURRENTLY NONFUNCTIONAL DUE TO ISSUES WITH SDL!** Help is needed to fix this!
+* On Windows you can target OpenGL+SDL by using `make ENABLE_OPENGL=1` when compiling. **CURRENTLY NONFUNCTIONAL DUE TO ISSUES WITH SDL!** Help is needed to fix this!
+* On non-Windows platforms, you can passing the path to the `gfx` directory as the first argument to the executable; by default it's generated at `build/us_pc/gfx`.
 
 ## Credits.
 - **Mors:** Most new things you see here.
-- **(Benial)[https://twitter.com/Benial17]:** Logo.
+- **[Benial](https://twitter.com/Benial17):** Logo.
 - **[sm64-port](https://github.com/sm64-port/sm64-port) Team:** The port that was used as a base for this project.
 - **[A bunch of clever folks](https://github.com/n64decomp/sm64):** The original decompilation used for the port.
 - **Emil:** The original 60FPS patch.
 - **Kaze Emanuar:** Providing certain bug fixes.
+- And everyone who sent pull requests or reported issues. :)
 
 Parts of [sm64ex](https://github.com/sm64pc/sm64ex) were also used as a reference for this project.
 

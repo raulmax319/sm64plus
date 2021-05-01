@@ -32,7 +32,7 @@ Also please remember that most of the time these issues are caused by MSYS2, so 
 
 ## **Q:** Some of the textures appear black and purple, how do I fix this?
 
-**A:** Hold "left", "right", and "backspace" keys down for 5 seconds in the title screen. On non-windows platforms, you can also try passing the path to the `gfx` directory as the first argument to the executable; by default it's generated at `build/us_pc/gfx`.
+**A:** Hold "left", "right", and "backspace" keys down for 5 seconds in the title screen of the launcher. On non-Windows platforms, you can also try passing the path to the `gfx` directory as the first argument to the executable; by default it's generated at `build/us_pc/gfx`.
 
 <br>
 
