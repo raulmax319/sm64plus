@@ -184,7 +184,11 @@ static void on_fullscreen_changed(bool is_now_fullscreen) {
     configFullscreen = is_now_fullscreen;
 }
 
-void main_func(void) {
+// used primarily in gfx_pc.c
+const char* GFX_DIR_PATH = NULL;
+
+void main_func(const char* gfx_dir) {
+    GFX_DIR_PATH = gfx_dir;
 #ifdef USE_SYSTEM_MALLOC
     main_pool_init();
     gGfxAllocOnlyPool = alloc_only_pool_init();
@@ -303,12 +307,12 @@ void main_func(void) {
 
 #if defined(_WIN32) || defined(_WIN64)
 int WINAPI WinMain(UNUSED HINSTANCE hInstance, UNUSED HINSTANCE hPrevInstance, UNUSED LPSTR pCmdLine, UNUSED int nCmdShow) {
-    main_func();
+    main_func(NULL);
     return 0;
 }
 #else
-int main(UNUSED int argc, UNUSED char *argv[]) {
-    main_func();
+int main(int argc, const char *argv[]) {
+    main_func(argc > 1 ? argv[1] : NULL);
     return 0;
 }
 #endif
