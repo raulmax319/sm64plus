@@ -150,7 +150,6 @@ static const struct ConfigOption options[] = {
 #endif
     { .name = "disable_lighting", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLighting },
     { .name = "force_use_low_poly_mario", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly },
-    { .name = "xl_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gXLMode },
 
     { .name = "DEBUG", .type = CONFIG_TYPE_SECTION },
     { .name = "level_select", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugLevelSelect },

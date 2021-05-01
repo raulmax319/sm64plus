@@ -749,11 +749,6 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
     if (!gNoHealingMode)
         m->healCounter += 4 * o->oDamageOrCoinValue;
 
-    if (gXLMode) {
-        gMarioFatness++;
-        play_sound(SOUND_OBJ2_PIRANHA_PLANT_BITE, o->header.gfx.cameraToObject);
-    }
-
     o->oInteractStatus = INT_STATUS_INTERACTED;
 
     if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && m->numCoins - o->oDamageOrCoinValue < 100

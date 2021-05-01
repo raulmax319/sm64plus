@@ -31,8 +31,6 @@ void bhv_recovery_heart_loop(void) {
 
     if ((o->oSpinningHeartTotalSpin += o->oAngleVelYaw) >= 0x10000) {
         gMarioStates[0].healCounter += 4;
-        if (gXLMode && gMarioFatness > 0)
-            gMarioFatness--;
         o->oSpinningHeartTotalSpin -= 0x10000;
     }
 

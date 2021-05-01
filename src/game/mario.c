@@ -776,10 +776,6 @@ static void set_mario_y_vel_based_on_fspeed(struct MarioState *m, f32 initialVel
     if (m->squishTimer != 0 || m->quicksandDepth > 1.0f) {
         m->vel[1] *= 0.5f;
     }
-
-    if (gXLMode) {
-        m->vel[1] /= 1.0f + gMarioFatness / 64.0f;
-    }
 }
 
 /**
@@ -1270,10 +1266,6 @@ void squish_mario_model(struct MarioState *m) {
             m->marioObj->header.gfx.scale[0] *= 1.0625f;
             m->marioObj->header.gfx.scale[1] *= 1.0625f;
             m->marioObj->header.gfx.scale[2] *= 0.03125f;
-        }
-        if (gXLMode) {
-            m->marioObj->header.gfx.scale[0] *= 1.0f + gMarioFatness / 24.0f;
-            m->marioObj->header.gfx.scale[2] *= 1.0f + gMarioFatness / 24.0f;
         }
     }
 }

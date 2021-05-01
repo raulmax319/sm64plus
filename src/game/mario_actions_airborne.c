@@ -234,10 +234,6 @@ void update_air_with_turn(struct MarioState *m) {
             m->forwardVel += 2.0f;
         }
 
-        if (gXLMode) {
-            m->forwardVel /= 1.0f + gMarioFatness / 256.0f;
-        }
-
         m->vel[0] = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
         m->vel[2] = m->slideVelZ = m->forwardVel * coss(m->faceAngle[1]);
     }
@@ -297,10 +293,6 @@ void update_air_without_turn(struct MarioState *m, u32 canTurn) {
         }
         if (m->forwardVel < -16.0f) {
             m->forwardVel += 2.0f;
-        }
-
-        if (gXLMode) {
-            m->forwardVel /= 1.0f + gMarioFatness / 256.0f;
         }
 
         m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);

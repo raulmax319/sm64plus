@@ -104,7 +104,6 @@ extern s8 gFXMode;
 #if defined(_WIN32) || defined(_WIN64)
 extern s8 gWireframeMode;
 #endif
-extern s8 gXLMode;
 extern s8 gDisableLighting;
 extern s8 gForceLowPoly;
 
@@ -145,6 +144,5 @@ extern unsigned int configKeyStickRight;
 extern unsigned int configKeyWalk;
 
 extern s16 gCollectedStar;
-extern s16 gMarioFatness;
 extern s8 stay_in_level();
 extern s8 restart_level_after_star();
