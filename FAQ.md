@@ -1,5 +1,11 @@
 # Frequently Asked Questions
 
+Before trying any of these suggestions for the commonly faced issues, please make sure that your launcher and the game itself is at the latest version.
+
+The game's current version is **v1.1.3.2**, and the launcher's current version is **v1.1.3**.
+
+<br>
+
 ## **Q:** I can't build. I'm getting an error!
 
 **A:** It seems like reinstalling [MSYS2](https://www.msys2.org/) and deleting the "sm64plus" folder fixes the issues for most people. Disabling your antivirus could also help in some cases.
@@ -38,7 +44,7 @@ Also please remember that most of the time these issues are caused by MSYS2, so 
 
 ## **Q:** How do I access the hidden settings?
 
-**A:** Press backspace or select on the "press any key" screen.
+**A:** Press backspace or select on the "Press Any Key" screen.
 
 <br>
 
@@ -93,12 +99,6 @@ These fan projects take a ton of effort to make, and are things I make during my
 ## **Q:** Is there Linux or Mac support?
 
 **A:** The game can be manually compiled for Linux, and a Linux version of the launcher is planned. There's no Mac support planned.
-
-<br>
-
-## **Q:** Is your game safe?
-
-**A:** Yeah. If your antivirus is giving you any warnings, it's most likely false. You especially shouldn't trust Chrome on this kind of stuff.
 
 <br>
 
