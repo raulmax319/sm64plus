@@ -2,7 +2,7 @@
 
 Before trying any of these suggestions for the commonly faced issues, please make sure that your launcher and the game itself is at the latest version.
 
-The game's current version is **v1.1.3.2**, and the launcher's current version is **v1.1.3**.
+The game's current version is **v1.1.3.3**, and the launcher's current version is **v1.1.3**.
 
 <br>
 

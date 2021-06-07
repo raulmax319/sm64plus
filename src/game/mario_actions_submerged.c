@@ -782,7 +782,7 @@ static s32 act_water_shell_swimming(struct MarioState *m) {
         return set_mario_action(m, ACT_WATER_THROW, 0);
     }
 
-    if (m->actionTimer++ == gImprovePowerups ? 480 : 240) {
+    if (m->actionTimer++ == (gImprovePowerups ? 480 : 240)) {
         m->heldObj->oInteractStatus = INT_STATUS_STOP_RIDING;
         m->heldObj = NULL;
         stop_shell_music();

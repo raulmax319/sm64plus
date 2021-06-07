@@ -33,6 +33,12 @@ Features that _might_ get added in the future:
 
 ## Changelog
 
+### v1.1.3.3 (07/06/2021):
+**Fixes:**
+- Fixed the underwater shells disappearing after getting grabbed.
+- Made the ground pound behavior same as the base game when "Improved Controls" is disabled.
+- Fixed a potential bug involving collecting a star after dying.
+
 ### v1.1.3.2 (01/05/2021):
 **Fixes:**
 - [Fixed the use of non-portable printf, which caused the textures not to load under certain Linux distros.](https://github.com/MorsGames/sm64plus/pull/24)

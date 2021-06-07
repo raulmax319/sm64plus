@@ -785,29 +785,30 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
     starIndex = (o->oBehParams >> 24) & 0x1F;
     gCollectedStar = starIndex;
     
-    // Don't kick Mario if staying in levels is active
-    if (stay_in_level()) {
-        noExit = 1;
+    if (m->health >= 0x100) {
 
-        // Make the stars heal Mario when this setting is on.
-        if (gNoHealingMode) {
-            gMarioState->healCounter += 31.75;
-            if (gMarioState->healCounter > 31.75)
-                gMarioState->healCounter = 31.75;
-        }
+        // Don't kick Mario if staying in levels is active
+        if (stay_in_level()) {
+            noExit = 1;
 
-        // Increase the act number
-        if (gCurrActNum-1 == gCollectedStar && gCurrActNum != 6) {
-            gCurrActNum++;
-            gDialogCourseActNum++;
-            while ((save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1) & 1 << (gCurrActNum-1)) && gCurrActNum != 6) {
+            // Make the stars heal Mario when this setting is on.
+            if (gNoHealingMode) {
+                gMarioState->healCounter += 31.75;
+                if (gMarioState->healCounter > 31.75)
+                    gMarioState->healCounter = 31.75;
+            }
+
+            // Increase the act number
+            if (gCurrActNum-1 == gCollectedStar && gCurrActNum != 6) {
                 gCurrActNum++;
                 gDialogCourseActNum++;
+                while ((save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1) & 1 << (gCurrActNum-1)) && gCurrActNum != 6) {
+                    gCurrActNum++;
+                    gDialogCourseActNum++;
+                }
             }
         }
-	}
 
-    if (m->health >= 0x100) {
         mario_stop_riding_and_holding(m);
 #ifdef VERSION_SH
         queue_rumble_data(5, 80);
