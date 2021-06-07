@@ -1012,15 +1012,17 @@ s32 act_ground_pound(struct MarioState *m) {
                 m->peakHeight = m->pos[1];
                 vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
             }
+            if (gImprovedControls) {
+                m->vel[1] = -24.0f;
+            }
         }
-
         else if (gImprovedControls) {
             m->vel[1] = -54.0f;
         }
-        else {
+
+        if (!gImprovedControls) {
             m->vel[1] = -50.0f;
         }
-
         mario_set_forward_vel(m, 0.0f);
 
         set_mario_animation(m, m->actionArg == 0 ? MARIO_ANIM_START_GROUND_POUND
