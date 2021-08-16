@@ -15,6 +15,9 @@ void note_set_vel_pan_reverb(struct Note *note, f32 velocity, u8 pan, u8 reverb)
     f32 volRight, volLeft;
     u16 unkMask = ~0x80;
 
+    if (get_mirror())
+        pan *= -1;
+
     pan &= unkMask;
     if (sub->stereoHeadsetEffects && gSoundMode == SOUND_MODE_HEADSET) {
         s32 smallPanIndex = pan >> 3;

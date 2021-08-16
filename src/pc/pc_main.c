@@ -133,7 +133,7 @@ void produce_one_frame(void) {
     gfx_end_frame();
     
     gfx_start_frame();
-    if (g60FPS) {
+    if (config60FPS) {
         patch_interpolations();
     }
     else if (gStayInLevel) {

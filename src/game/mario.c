@@ -813,7 +813,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
         case ACT_WATER_JUMP:
         case ACT_HOLD_WATER_JUMP:
             if (actionArg == 0) {
-                if (gImprovedControls) {
+                if (gImprovedSwimming) {
                     set_mario_y_vel_based_on_fspeed(m, 48.0f, 0.0f);
                 }
                 else {
@@ -1545,7 +1545,10 @@ void update_mario_health(struct MarioState *m) {
             m->hurtCounter--;
         }
 
-        if (save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE) {
+        if (configGodMode) {
+            m->health = 0x880;
+        }
+        else if (save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE) {
             if (m->health > 0x180) {
                 m->health = 0x180;
             }

@@ -990,7 +990,7 @@ void cur_obj_update(void) {
         cur_obj_enable_rendering_if_mario_in_room();
     } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && gCurrentObject->collisionData == NULL) {
         if (!(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)) {
-            if (gDisableDrawDistance) {
+            if (configDisableDrawDistance) {
 				if (distanceFromMario <= gCurrentObject->oDrawingDistance && gCurrentObject->oHeldState == HELD_FREE)
 				{
 					gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
@@ -999,7 +999,7 @@ void cur_obj_update(void) {
             }
             else {
                 // If the object has a render distance, check if it should be shown.
-                if (distanceFromMario > gCurrentObject->oDrawingDistance * gDrawDistanceMultiplier) {
+                if (distanceFromMario > gCurrentObject->oDrawingDistance * configDrawDistanceMultiplier) {
                     // Out of render distance, hide the object.
                     gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
                     gCurrentObject->activeFlags |= ACTIVE_FLAG_FAR_AWAY;

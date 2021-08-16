@@ -61,14 +61,14 @@ static f32 get_buoyancy(struct MarioState *m) {
             buoyancy = -18.0f;
         }
     } else if (swimming_near_surface(m)) {
-        if (gImprovedControls) {
+        if (gImprovedSwimming) {
             buoyancy = 2.0f;
         }
         else {
             buoyancy = 1.25f;
         }
     } else if (!(m->action & ACT_FLAG_MOVING)) {
-        if (gImprovedControls) {
+        if (gImprovedSwimming) {
             buoyancy = -0.5f;
         }
         else {
@@ -509,7 +509,7 @@ static s32 check_water_jump(struct MarioState *m) {
         if (probe >= m->waterLevel - 80 && m->faceAngle[0] >= 0 && m->controller->stickY < -60.0f) {
             vec3s_set(m->angleVel, 0, 0, 0);
 
-            if (gImprovedControls) {
+            if (gImprovedSwimming) {
                 m->vel[1] = 64.0f;
             }
             else {
@@ -549,7 +549,7 @@ static s32 act_breaststroke(struct MarioState *m) {
     }
 
     if (m->actionTimer < 6) {
-        if (gImprovedControls) {
+        if (gImprovedSwimming) {
             m->forwardVel += 1.0f;
         }
         else {
@@ -558,7 +558,7 @@ static s32 act_breaststroke(struct MarioState *m) {
     }
 
     if (m->actionTimer >= 9) {
-        if (gImprovedControls) {
+        if (gImprovedSwimming) {
             m->forwardVel += 3.0f;
         }
         else {

@@ -612,7 +612,7 @@ static void gfx_direct3d12_start_frame(void) {
         d3d.noise_cb_data.noise_frame = 0;
     }
     float aspect_ratio = (float) d3d.current_width / (float) d3d.current_height;
-    if (gNoiseType) {
+    if (configNoiseType) {
         d3d.noise_cb_data.noise_scale_x = d3d.current_width;
         d3d.noise_cb_data.noise_scale_y = d3d.current_height;
     }

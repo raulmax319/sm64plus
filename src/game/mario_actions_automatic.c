@@ -744,11 +744,11 @@ s32 act_in_cannon(struct MarioState *m) {
             }
 
             if (gFlexibleCannons) {
-                if (marioObj->oMarioCannonInputYaw > 0x8000) {
-                    marioObj->oMarioCannonInputYaw = 0x8000;
+                if (marioObj->oMarioCannonInputYaw > 0x10000) {
+                    marioObj->oMarioCannonInputYaw = 0x10000;
                 }
-                if (marioObj->oMarioCannonInputYaw < -0x8000) {
-                    marioObj->oMarioCannonInputYaw = -0x8000;
+                if (marioObj->oMarioCannonInputYaw < -0x10000) {
+                    marioObj->oMarioCannonInputYaw = -0x10000;
                 }
             }
             else {

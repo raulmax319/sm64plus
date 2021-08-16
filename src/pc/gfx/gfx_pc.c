@@ -515,6 +515,7 @@ static bool import_texture_custom(const char *path) {
     || (strstr(path, "manta") != NULL)
     || (strstr(path, "sushi") != NULL)
     || (strstr(path, "water_ring") != NULL)
+    || (strstr(path, "segment2") != NULL)
     || (get_palette() == 19)
     )) {
 
@@ -1022,7 +1023,7 @@ static void gfx_sp_tri1(uint8_t vtx1_idx, uint8_t vtx2_idx, uint8_t vtx3_idx) {
     bool use_alpha = (rdp.other_mode_l & (G_BL_A_MEM << 18)) == 0;
     bool use_fog = (rdp.other_mode_l >> 30) == G_BL_CLR_FOG;
     bool texture_edge = (rdp.other_mode_l & CVG_X_ALPHA) == CVG_X_ALPHA;
-    bool use_noise = (rdp.other_mode_l & G_AC_DITHER) == G_AC_DITHER && gNoiseType != 2;
+    bool use_noise = (rdp.other_mode_l & G_AC_DITHER) == G_AC_DITHER && configNoiseType != 2;
     
     if (texture_edge) {
         use_alpha = true;

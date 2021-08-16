@@ -22,6 +22,8 @@
 #include "save_file.h"
 #include "level_table.h"
 
+
+#include "object_helpers.h"
 #include "settings.h"
 
 struct SpawnInfo gPlayerSpawnInfos[1];
@@ -281,6 +283,10 @@ void load_mario_area(void) {
     if (gCurrentArea->index == gMarioSpawnInfo->areaIndex) {
         gCurrentArea->flags |= 0x01;
         spawn_objects_from_info(0, gMarioSpawnInfo);
+    }
+
+    if (gGreenDemon > 1 && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS) {
+        spawn_object(gMarioObject, MODEL_1UP, bhvHidden1upInPole);
     }
 }
 

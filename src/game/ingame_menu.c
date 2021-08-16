@@ -2443,9 +2443,9 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     u8 textLakituMario[] = { TEXT_LAKITU_MARIO };
     u8 textLakituStop[] = { TEXT_LAKITU_STOP };
 
-    u8 textManualMario[] = { TEXT_MANUAL_MARIO };
-    u8 textManualStop[] = { TEXT_MANUAL_STOP };
-    u8 textLakituManual[] = { TEXT_LAKITU_MANUAL };
+    u8 textCustomMario[] = { TEXT_CUSTOM_MARIO };
+    u8 textCustomStop[] = { TEXT_CUSTOM_STOP };
+    u8 textLakituCustom[] = { TEXT_LAKITU_CUSTOM };
 #ifdef VERSION_EU
     u8 textNormalUpClose[][20] = {
         { TEXT_NORMAL_UPCLOSE },
@@ -2473,10 +2473,10 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
-    print_generic_string(x + 14, y + 2, (gManualCamera == 2) ? textLakituManual : ((gManualCamera == 1) ? textManualMario : textLakituMario));
-    print_generic_string(x + TXT1_X, y - 13, (gManualCamera == 2) ? textNormalCustom : ((gManualCamera == 1) ? textCustomUpClose : textNormalUpClose));
-    print_generic_string(x + 124, y + 2, (gManualCamera == 1) ? textManualStop : textLakituStop);
-    print_generic_string(x + TXT2_X, y - 13, (gManualCamera == 1) ? textCustomFixed : textNormalFixed);
+    print_generic_string(x + 14, y + 2, (configCustomCameraMode == 2) ? textLakituCustom : ((configCustomCameraMode == 1) ? textCustomMario : textLakituMario));
+    print_generic_string(x + TXT1_X, y - 13, (configCustomCameraMode == 2) ? textNormalCustom : ((configCustomCameraMode == 1) ? textCustomUpClose : textNormalUpClose));
+    print_generic_string(x + 124, y + 2, (configCustomCameraMode == 1) ? textCustomStop : textLakituStop);
+    print_generic_string(x + TXT2_X, y - 13, (configCustomCameraMode == 1) ? textCustomFixed : textNormalFixed);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     create_dl_translation_matrix(MENU_MTX_PUSH, ((index[0] - 1) * xIndex) + x, y + Y_VAL7, 0);

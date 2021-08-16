@@ -880,9 +880,9 @@ s32 act_air_throw(struct MarioState *m) {
 }
 
 s32 act_water_jump(struct MarioState *m) {
-    if (gImprovedControls) {
-        if (m->forwardVel < 22.0f) {
-            mario_set_forward_vel(m, 22.0f);
+    if (gImprovedSwimming) {
+        if (m->forwardVel < 25.0f) {
+            mario_set_forward_vel(m, 25.0f);
         }
     }
     else {
@@ -901,8 +901,8 @@ s32 act_water_jump(struct MarioState *m) {
             break;
 
         case AIR_STEP_HIT_WALL:
-            if (gImprovedControls) {
-                mario_set_forward_vel(m, 24.0f);
+            if (gImprovedSwimming) {
+                mario_set_forward_vel(m, 25.0f);
             }
             else {
                 mario_set_forward_vel(m, 15.0f);
@@ -930,7 +930,7 @@ s32 act_hold_water_jump(struct MarioState *m) {
         return drop_and_set_mario_action(m, ACT_FREEFALL, 0);
     }
 
-    if (gImprovedControls) {
+    if (gImprovedSwimming) {
         if (m->forwardVel < 22.0f) {
             mario_set_forward_vel(m, 22.0f);
         }
@@ -951,7 +951,7 @@ s32 act_hold_water_jump(struct MarioState *m) {
             break;
 
         case AIR_STEP_HIT_WALL:
-            if (gImprovedControls) {
+            if (gImprovedSwimming) {
                 mario_set_forward_vel(m, 20.0f);
             }
             else {
@@ -1250,7 +1250,7 @@ u32 common_air_knockback_step(struct MarioState *m, u32 landAction, u32 hardFall
 s32 check_wall_kick(struct MarioState *m) {
     if ((m->input & INPUT_A_PRESSED) && m->wallKickTimer != 0 && m->prevAction == ACT_AIR_HIT_WALL) {
         m->faceAngle[1] += 0x8000;
-        if (gImprovedControls) {
+        if (gWallSliding) {
             m->particleFlags |= PARTICLE_VERTICAL_STAR;
         }
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);

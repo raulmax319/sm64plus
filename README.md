@@ -1,6 +1,6 @@
-# Super Mario 64 Plus
+# SM64 Plus
 
-Super Mario 64 Plus is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that focuses on customizability and aims to add features that not only fix some of the issues found in the base game but also enhance the gameplay overall with extra options.
+SM64 Plus is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that focuses on customizability and aims to add features that not only fix some of the issues found in the base game but also enhance the gameplay overall with extra options.
 
 These features include (but not limited to):
 - More responsive controls
@@ -32,6 +32,22 @@ Features that _might_ get added in the future:
 [You can find the FAQ here.](https://github.com/MorsGames/sm64plus/blob/master/FAQ.md)
 
 ## Changelog
+
+### v2.0.0 (??/??/2021):
+**Launcher:**
+- Now you can enter numbers to number fields directly instead of scrolling for 1000 years.
+
+**Additions:**
+- Added the "Better "Blast Away the Wall"" setting.
+
+**Changes:**
+- The "Fix Various Bugs" setting now fixes more bugs present within the game. Sorry speedrunners.
+- Made "Backward Speed Cap" a part of "Improved Controls".
+- Split "Improved Controls" into "Improved Controls" and "Improved Swimming".
+- Removed "XL Mode".
+- Removed the CCM easter egg.
+- Renamed and relocated certain settings.
+- Fixed various minor bugs and oversights.
 
 ### v1.1.3.3 (07/06/2021):
 **Fixes:**
@@ -180,7 +196,7 @@ Features that _might_ get added in the future:
   * 32-bit (untested, but should also work on 64-bit machines): Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc mingw-w64-i686-SDL2 mingw-w64-i686-glew`
   * Do not install `gcc`.
 3. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`, then enter it with `cd sm64plus`.
-4. Place a *Super Mario 64* ROM called `baserom.us.z64` into the repository folder for asset extraction.
+4. Place a *SM64* ROM called `baserom.us.z64` into the repository folder for asset extraction.
 5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
 6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e.exe`.
 
@@ -191,7 +207,7 @@ Features that _might_ get added in the future:
   * On Arch / Manjaro: `sudo pacman -S base-devel python sdl2 glew`
   * On Fedora: `sudo dnf install make gcc python3 glew-devel SDL2-devel`
 2. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`.
-3. Place a Super Mario 64 ROM called `baserom.us.z64` into the repository folder for asset extraction.
+3. Place a SM64 ROM called `baserom.us.z64` into the repository folder for asset extraction.
 5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
 6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
 

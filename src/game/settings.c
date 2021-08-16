@@ -150,14 +150,13 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
-char* gTitleString = "Super Mario 64 Plus v1.1.3.3";
+char* gTitleString = "Super Mario 64 Plus v2.0.0";
 
 s8 configFullscreen = 1;
 #if defined(_WIN32) || defined(_WIN64)
 unsigned int configCustomFullscreenResolution = 0;
 unsigned int configFullscreenWidth = 1920;
 unsigned int configFullscreenHeight = 1080;
-unsigned int configFullscreenRefreshRate = 60;
 #endif
 unsigned int configWindowWidth = 1280;
 unsigned int configWindowHeight = 720;
@@ -169,49 +168,59 @@ unsigned int configInternalResolutionHeight = 2160;
 #endif
 unsigned int configGraphicsBackend = 0;
 
+float configOverallVolume = 1;
 float configSeqVolume[] = {1, 1, 1};
 
 // TODO (Mors): Rename these with a config prefix.
-s8 g60FPS = 1;
-s8 gDisableDrawDistance = 1;
-float gDrawDistanceMultiplier = 1.0f;
-s8 gDisableLowPoly = 1;
-unsigned int gTextureFiltering = 2;
-unsigned int gNoiseType = 0;
+s8 config60FPS = 1;
+s8 configDisableDrawDistance = 1;
+float configDrawDistanceMultiplier = 1.0f;
+s8 configDisableLowPolyModels = 1;
+unsigned int configTextureFiltering = 2;
+unsigned int configNoiseType = 0;
 s8 configForce4by3 = 0;
 
 s8 gImprovedControls = 1;
-s8 gBackwardSpeedCap = 1;
+s8 gImprovedSwimming = 1;
 s8 gImprovedHanging = 1;
 s8 gDpadControls = 1;
 s8 gFullAirControl = 0;
 s8 gDisableBLJ = 0;
-s8 gDisableFallDamage = 0;
 
 s8 gFixVariousBugs = 1;
 s8 gRespawnBlueCoinSwitch = 1;
 s8 gRemoveAnnoyingWarps = 1;
 s8 gImprovePowerups = 1;
+s8 gBetterBlastAwayTheWall = 1;
 s8 gDisableBooDialogue = 1;
 s8 gTalkEasier = 1;
-s8 gQuitOption = 1;
+s8 gDisableFallDamage = 0;
+s8 gLeaveAnyTime = 0;
+s8 gVisibleSecrets = 0;
+
+s8 configBowsersSub = 1;
 unsigned int gStayInLevel = 0;
 s8 gSkipStarSelect = 0;
 s8 gRestartLevelAfterStar = 0;
-s8 gLeaveAnyTime = 0;
-s8 gVisibleSecrets = 0;
-s8 gFlexibleCannons = 0;
 s8 gSkipCutscenes = 0;
 
-s8 gImprovedCamera = 1;
 s8 gCenterCameraButton = 1;
-unsigned int gManualCamera = 0;
-s8 gSmarterManualCamera = 0;
+s8 gImprovedCamera = 1;
+s8 gVerticalCamera = 1; // PARTIALLY IMPLEMENTED
 s8 gInvertedCamera = 0;
 float gCameraSpeed = 32.0f;
 float gAdditionalCameraDistance = 0.0f;
 float gAdditionalFOV = 0.0f;
 
+unsigned int configCustomCameraMode = 0;
+s8 configCustomCameraRotate = 0;
+s8 configCustomCameraPan = 0;
+s8 configCustomCameraCollisions = 0;
+float configCustomCameraDistanceDefault = 60.0f;
+float configCustomCameraDistanceZoomedOut = 140.0f;
+
+s8 gQuitOption = 1;
+s8 configExitMissionSelectWithB = 1; // NOT IMPLEMENTED
 unsigned int gHudStyle = 2;
 s8 gCenterHud = 0;
 s8 gHUDFiltering = 0;
@@ -232,6 +241,7 @@ s8 gWallSliding = 1;
 s8 gGroundPoundJump = 0;
 s8 gSunshineDive = 0;
 s8 gOdysseyDive = 0;
+s8 configSpinJump = 0; // NOT IMPLEMENTED
 s8 gFlashbackPound = 0;
 
 s8 gPyramidCutscene = 1;
@@ -243,12 +253,19 @@ s8 gReplaceKeysWithStars = 0;
 
 unsigned int gLifeMode = 0;
 unsigned int gEncoreMode = 0;
-s8 gGreenDemon = 0;
+unsigned int gGreenDemon = 0;
 s8 gNoHealingMode = 0;
 s8 gHardSave = 0;
 s8 gDaredevilSave = 0;
 s8 gHardcoreSave = 0;
 s8 gCasualMode = 0;
+
+s8 gDebugMovementMode = 0;
+s8 gDebugCapChanger = 0;
+unsigned int gMoonJump = 0;
+s8 configGodMode = 0;
+s8 configHyperspeedMode = 0;
+s8 gFlexibleCannons = 0;
 
 s8 gPaperMode = 0;
 s8 gFXMode = 0;
@@ -258,15 +275,15 @@ s8 gWireframeMode = 0;
 s8 gDisableLighting = 0;
 s8 gForceLowPoly = 0;
 
-s8 gDebugMovementMode = 0;
-s8 gDebugCapChanger = 0;
-unsigned int gMoonJump = 0;
-s8 gVerticalCamera = 0;
+
+#if defined(_WIN32) || defined(_WIN64)
+unsigned int configFullscreenRefreshRate = 60;
+#endif
 
 unsigned int configButtonA = A_BUTTON;
-unsigned int configButtonB = Z_TRIG;
+unsigned int configButtonB = D_CBUTTONS;
 unsigned int configButtonX = B_BUTTON;
-unsigned int configButtonY = 0;
+unsigned int configButtonY = U_CBUTTONS;
 unsigned int configButtonStart = START_BUTTON;
 unsigned int configButtonSelect = L_TRIG;
 unsigned int configButtonL = Z_TRIG;
@@ -303,9 +320,9 @@ s8 stay_in_level() {
     // If we have collected the first star in the first act in these levels, kick us out.
     (gCurrActNum == 1 && gCollectedStar == 0 &&
     (gCurrLevelNum == LEVEL_BOB || gCurrLevelNum == LEVEL_WF || gCurrLevelNum == LEVEL_JRB || gCurrLevelNum == LEVEL_BBH || 
-    gCurrLevelNum == LEVEL_CCM || gCurrLevelNum == LEVEL_TTM || gCurrLevelNum == LEVEL_SSL || 
+    gCurrLevelNum == LEVEL_CCM || gCurrLevelNum == LEVEL_TTM || gCurrLevelNum == LEVEL_SSL || (configBowsersSub && gCurrLevelNum == LEVEL_DDD) ||
     // In addition to all of above, kick us only if the submarine is there in DDD.
-    ((!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) && gCurrLevelNum == LEVEL_DDD))) ||
+    (!configBowsersSub && (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) && gCurrLevelNum == LEVEL_DDD))) ||
     // Kick us from the wiggler room.
     (gCollectedStar == 5 && gCurrLevelNum == LEVEL_THI) ||
     // Let the bonus levels kick us out too
@@ -324,5 +341,6 @@ s8 restart_level_after_star() {
     gCurrLevelNum != LEVEL_BITDW && gCurrLevelNum != LEVEL_BITFS && gCurrLevelNum != LEVEL_BITS &&
     gCurrLevelNum != LEVEL_PSS && gCurrLevelNum != LEVEL_COTMC && gCurrLevelNum != LEVEL_TOTWC &&
     gCurrLevelNum != LEVEL_VCUTM && gCurrLevelNum != LEVEL_WMOTR && gCurrLevelNum != LEVEL_SA &&
-    ((save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) || gCurrLevelNum != LEVEL_DDD);
+    (configBowsersSub || (save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) || gCurrLevelNum != LEVEL_DDD) &&
+    (!configBowsersSub || gCurrLevelNum != LEVEL_DDD);
 }

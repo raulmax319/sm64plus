@@ -449,7 +449,7 @@ void update_walking_speed(struct MarioState *m) {
         targetSpeed *= 6.25 / m->quicksandDepth;
     }
 
-    if (m->forwardVel <= 0.0f) {
+    if (m->forwardVel <= 0.0f || configHyperspeedMode) {
         m->forwardVel += 1.1f;
     } else if (m->forwardVel <= targetSpeed) {
         m->forwardVel += 1.1f - m->forwardVel / 43.0f;
@@ -457,15 +457,16 @@ void update_walking_speed(struct MarioState *m) {
         m->forwardVel -= 1.0f;
     }
 
-    if (m->forwardVel > 48.0f) {
+    if ((!configHyperspeedMode) && m->forwardVel > 48.0f) {
         m->forwardVel = 48.0f;
     }
 
-    if ((gBackwardSpeedCap) && (m->forwardVel < -8.0f)) {
-        m->forwardVel = -8.0f;
-    }
-
     if (gImprovedControls) {
+
+        if (m->forwardVel < -8.0f) {
+            m->forwardVel = -8.0f;
+        }
+        
         m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x1000, 0x1000);
     }
     else {

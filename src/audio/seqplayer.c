@@ -1863,7 +1863,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer, float se
                             case SEQUENCE_PLAYER_STATE_0:
                                 seqPlayer->fadeTimer = seqPlayer->fadeTimerUnkEu;
                                 if (seqPlayer->fadeTimerUnkEu != 0) {
-                                    seqPlayer->fadeVelocity = (temp32 / 127.0f - seqPlayer->fadeVolume) / FLOAT_CAST(seqPlayer->fadeTimer);
+                                    seqPlayer->fadeVelocity = (temp32 / 127.0f - seqPlayer->fadeVolume * seqVol) / FLOAT_CAST(seqPlayer->fadeTimer);
                                 } else {
                                     seqPlayer->fadeVolume = temp32 / 127.0f * seqVol;
                                 }
@@ -1876,7 +1876,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer, float se
                             case SEQUENCE_PLAYER_STATE_2:
                                 if (seqPlayer->fadeTimer != 0) {
                                     f32 targetVolume = FLOAT_CAST(temp) / US_FLOAT(127.0) * seqVol;
-                                    seqPlayer->fadeVelocity = (targetVolume - seqPlayer->fadeVolume)
+                                    seqPlayer->fadeVelocity = (targetVolume - seqPlayer->fadeVolume * seqVol)
                                                               / FLOAT_CAST(seqPlayer->fadeTimer);
                                     break;
                                 }
@@ -2044,11 +2044,11 @@ void process_sequences(UNUSED s32 iterationsRemaining) {
     for (i = 0; i < SEQUENCE_PLAYERS; i++) {
         if (gSequencePlayers[i].enabled == TRUE) {
 #ifdef VERSION_EU
-            sequence_player_process_sequence(&gSequencePlayers[i], configSeqVolume[i]);
-            sequence_player_process_sound(&gSequencePlayers[i], configSeqVolume[i]);
+            sequence_player_process_sequence(&gSequencePlayers[i], configSeqVolume[i] * configOverallVolume);
+            sequence_player_process_sound(&gSequencePlayers[i], configSeqVolume[i] * configOverallVolume);
 #else
-            sequence_player_process_sequence(gSequencePlayers + i, configSeqVolume[i]);
-            sequence_player_process_sound(gSequencePlayers + i, configSeqVolume[i]);
+            sequence_player_process_sequence(gSequencePlayers + i, configSeqVolume[i] * configOverallVolume);
+            sequence_player_process_sound(gSequencePlayers + i, configSeqVolume[i] * configOverallVolume);
 #endif
         }
     }
