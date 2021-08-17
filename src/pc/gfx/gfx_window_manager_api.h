@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <PR/ultratypes.h>
 
 struct GfxWindowManagerAPI {
     void (*init)(const char *game_name, bool start_in_fullscreen);

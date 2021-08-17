@@ -6,28 +6,20 @@
 #include "controller_recorded_tas.h"
 #include "controller_keyboard.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#include "controller_xinput.h"
+//#if defined(_WIN32) || defined(_WIN64)
+//#include "controller_xinput.h"
 //#include "controller_directinput.h"
-#else
+//#else
 #include "controller_sdl.h"
-#endif
+//#endif
 
-#ifdef __linux__
-#include "controller_wup.h"
-#endif
+//#ifdef __linux__
+//#include "controller_wup.h"
+//#endif
 
 static struct ControllerAPI *controller_implementations[] = {
     &controller_recorded_tas,
-#if defined(_WIN32) || defined(_WIN64)
-    &controller_xinput,
-    //&controller_directinput,
-#else
     &controller_sdl,
-#endif
-/*#ifdef __linux__
-    &controller_wup,
-#endif*/
     &controller_keyboard,
 };
 
