@@ -21,8 +21,6 @@ NON_MATCHING ?= 0
 TARGET_N64 ?= 0
 # Build for Emscripten/WebGL
 TARGET_WEB ?= 0
-# Build for OpenGL ES 2.0 instead of the desktop variant
-USE_OPENGL_ES ?= 0
 # Compiler to use (ido or gcc)
 COMPILER ?= ido
 

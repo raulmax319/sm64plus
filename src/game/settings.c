@@ -183,6 +183,7 @@ s8 configForce4by3 = 0;
 s8 gImprovedControls = 1;
 s8 gImprovedSwimming = 1;
 s8 gImprovedHanging = 1;
+s8 configEnemyBouncing = 1;
 s8 gDpadControls = 1;
 s8 gFullAirControl = 0;
 s8 gDisableBLJ = 0;
@@ -197,6 +198,7 @@ s8 gTalkEasier = 1;
 s8 gDisableFallDamage = 0;
 s8 gLeaveAnyTime = 0;
 s8 gVisibleSecrets = 0;
+s8 configFixBombClip = 0;
 
 s8 configBowsersSub = 1;
 unsigned int gStayInLevel = 0;
@@ -206,27 +208,29 @@ s8 gSkipCutscenes = 0;
 
 s8 gCenterCameraButton = 1;
 s8 gImprovedCamera = 1;
-s8 gVerticalCamera = 1; // PARTIALLY IMPLEMENTED
+s8 gVerticalCamera = 1;
 s8 gInvertedCamera = 0;
+s8 gInvertedVerticalCamera = 0;
 float gCameraSpeed = 32.0f;
 float gAdditionalCameraDistance = 0.0f;
 float gAdditionalFOV = 0.0f;
 
 unsigned int configCustomCameraMode = 0;
-s8 configCustomCameraRotate = 0;
 s8 configCustomCameraPan = 0;
+s8 configCustomCameraTilt = 0;
+s8 configCustomCameraRotation = 0;
 s8 configCustomCameraCollisions = 0;
-float configCustomCameraDistanceDefault = 60.0f;
-float configCustomCameraDistanceZoomedOut = 140.0f;
+float configCustomCameraDistanceDefault = 80.0f;
+float configCustomCameraDistanceZoomedOut = 160.0f;
 
 s8 gQuitOption = 1;
-s8 configExitMissionSelectWithB = 1; // NOT IMPLEMENTED
 unsigned int gHudStyle = 2;
 s8 gCenterHud = 0;
-s8 gHUDFiltering = 0;
 s8 gHudStars = 0;
+s8 configAddZeroes = 0;
 s8 gShow100CoinStar = 0;
 s8 gAlwaysShowHealth = 0;
+s8 gHUDFiltering = 0;
 s8 gHideHud = 0;
 
 s8 gMouseCam = 1;
@@ -241,7 +245,6 @@ s8 gWallSliding = 1;
 s8 gGroundPoundJump = 0;
 s8 gSunshineDive = 0;
 s8 gOdysseyDive = 0;
-s8 configSpinJump = 0; // NOT IMPLEMENTED
 s8 gFlashbackPound = 0;
 
 s8 gPyramidCutscene = 1;
@@ -266,6 +269,7 @@ unsigned int gMoonJump = 0;
 s8 configGodMode = 0;
 s8 configHyperspeedMode = 0;
 s8 gFlexibleCannons = 0;
+unsigned int configCoinStarCoins = 100;
 
 s8 gPaperMode = 0;
 s8 gFXMode = 0;

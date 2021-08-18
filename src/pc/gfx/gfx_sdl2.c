@@ -22,7 +22,7 @@
 
 #include "game/settings.h"
 
-#define GFX_API_NAME "SDL2 - OpenGL"
+#define GFX_API_NAME "OpenGL"
 
 static SDL_Window *wnd;
 static int inverted_scancode_table[512];
@@ -197,12 +197,6 @@ static void gfx_sdl_init(const char *game_name, bool start_in_fullscreen) {
 
     //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-
-    #ifdef USE_OPENGL_ES
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-    #endif
 
     char title[512];
     sprintf(title, "%s (%s)", game_name, GFX_API_NAME);

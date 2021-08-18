@@ -215,7 +215,6 @@ Please keep in mind that the Linux version of the game is missing some settings,
 
 ## Additional options
 
-* You can target OpenGL ES 2.0 instead of regular OpenGL by using `make USE_OPENGL_ES=1` when compiling.
 * On non-Windows platforms, you can passing the path to the `gfx` directory as the first argument to the executable; by default it's generated at `build/us_pc/gfx`.
 
 ## Credits.

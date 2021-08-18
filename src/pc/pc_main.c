@@ -234,16 +234,16 @@ void main_func(const char* gfx_dir) {
 
 #elif defined(_WIN32) || defined(_WIN64)
     case 0:
-        rendering_api = &gfx_opengl_api;
-        wm_api = &gfx_sdl;
-        break;
-    case 1:
         rendering_api = &gfx_direct3d11_api;
         wm_api = &gfx_dxgi_api;
         break;
-    case 2:
+    case 1:
         rendering_api = &gfx_direct3d12_api;
         wm_api = &gfx_dxgi_api;
+        break;
+    case 2:
+        rendering_api = &gfx_opengl_api;
+        wm_api = &gfx_sdl;
         break;
 #endif
     default:

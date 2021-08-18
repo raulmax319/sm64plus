@@ -493,6 +493,7 @@ extern u8 sZoomOutAreaMasks[];
 
 //Define the analog camera speed
 #define ANALOG_AMOUNT 12 * (1 - gInvertedCamera * 2)
+#define ANALOG_AMOUNT_VERTICAL 12 * (1 - gInvertedVerticalCamera * 2)
 #define LROTATE_SPEED 0x400
 
 static void skip_camera_interpolation(void) {
@@ -964,7 +965,7 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
  */
 s32 update_custom_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff) {
     s16 camYaw = sManualModeYawOffset;
-    s16 pitch = configCustomCameraPan ? look_down_slopes(camYaw) : (look_down_slopes(camYaw)/2);
+    s16 pitch = configCustomCameraTilt ? look_down_slopes(camYaw) : 0;
     f32 posY;
     f32 focusY;
 
@@ -1168,17 +1169,22 @@ void lakitu_zoom(f32 rangeDist, s16 rangePitch) {
         }
     }
 
-    if (gCurrLevelArea == AREA_SSL_PYRAMID && gCamera->mode == CAMERA_MODE_OUTWARD_RADIAL) {
-        rangePitch /= 2;
+    if (rangePitch == 0) {
+        sLakituPitch = MIN(MAX(sLakituPitch + ANALOG_AMOUNT_VERTICAL * (gPlayer1Controller->stick2Y / 32.0f) * gCameraSpeed, -1024), 9216);
     }
-
-    if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
-        if ((sLakituPitch += rangePitch / 13) > rangePitch) {
-            sLakituPitch = rangePitch;
+    else {
+        if (gCurrLevelArea == AREA_SSL_PYRAMID && gCamera->mode == CAMERA_MODE_OUTWARD_RADIAL) {
+            rangePitch /= 2;
         }
-    } else {
-        if ((sLakituPitch -= rangePitch / 13) < 0) {
-            sLakituPitch = 0;
+
+        if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
+            if ((sLakituPitch += rangePitch / 13) > rangePitch) {
+                sLakituPitch = rangePitch;
+            }
+        } else {
+            if ((sLakituPitch -= rangePitch / 13) < 0) {
+                sLakituPitch = 0;
+            }
         }
     }
 }
@@ -1286,7 +1292,7 @@ void mode_custom_camera(struct Camera *c, f32 yOff) {
     if (configCustomCameraCollisions && rotate_camera_around_walls(c, c->pos, &avoidYaw, 0x400) == 3) {
 
         camera_approach_s16_symmetric_bool(&sManualModeYawOffset, avoidYaw, 0x200);
-            camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 0x200);
+        camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 0x200);
     }
 
     if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
@@ -1313,21 +1319,19 @@ void mode_custom_camera(struct Camera *c, f32 yOff) {
         }
     }
 
-    if (configCustomCameraRotate) {
+    if (configCustomCameraRotation) {
         camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 
-            ABS(gMarioState->forwardVel * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 12 : 16) ));
+            ABS(gMarioState->forwardVel * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 16 : 24) ));
     }
 
-    lakitu_zoom(max(0, configCustomCameraDistanceZoomedOut-configCustomCameraDistanceDefault) * 10.0f, 0x900);
+    lakitu_zoom(max(0, configCustomCameraDistanceZoomedOut-configCustomCameraDistanceDefault) * 10.0f, gVerticalCamera ? 0 : 0x900);
     
     c->nextYaw = update_custom_camera(c, c->focus, pos, yOff);
     c->pos[0] = pos[0];
     c->pos[1] = pos[1];
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
-    if (configCustomCameraCollisions) {
-        set_camera_height(c, pos[1]);
-    }
+    set_camera_height(c, pos[1]);
 }
 
 /**
@@ -2989,7 +2993,7 @@ void transition_to_camera_mode(struct Camera *c, s16 newMode, s16 numFrames) {
             sCUpCameraPitch = 0;
             sModeOffsetYaw = 0;
             sLakituDist = 0;
-            sLakituPitch = 0;
+            sLakituPitch = gVerticalCamera ? 1024 : 0;
             sAreaYawChange = 0;
             sPanDistance = 0.f;
             sCannonYOffset = 0.f;
@@ -3023,7 +3027,7 @@ void set_camera_mode(struct Camera *c, s16 mode, s16 frames) {
         sCUpCameraPitch = 0;
         sModeOffsetYaw = 0;
         sLakituDist = 0;
-        sLakituPitch = 0;
+        sLakituPitch = gVerticalCamera ? 1024 : 0;
         sAreaYawChange = 0;
 
         sModeInfo.newMode = (mode != -1) ? mode : sModeInfo.lastMode;
@@ -3223,6 +3227,7 @@ void update_camera(struct Camera *c) {
 
     if (c->cutscene != 0) {
         sYawSpeed = 0;
+        sManualModeYawOffset = gLakituState.yaw;
         play_cutscene(c);
         sFramesSinceCutsceneEnded = 0;
     } else {
@@ -3346,6 +3351,7 @@ void update_camera(struct Camera *c) {
                     case CAMERA_MODE_FREE_ROAM:
                         mode_lakitu_camera(c);
                         break;
+
                     case CAMERA_MODE_BOSS_FIGHT:
                         mode_boss_fight_camera(c);
                         break;
@@ -3449,8 +3455,9 @@ void reset_camera(struct Camera *c) {
     sCUpCameraPitch = 0;
     sModeOffsetYaw = 0;
     sSpiralStairsYawOffset = 0;
+    sManualModeYawOffset = 0;
     sLakituDist = 0;
-    sLakituPitch = 0;
+    sLakituPitch = gVerticalCamera ? 1024 : 0;
     sAreaYaw = 0;
     sAreaYawChange = 0.f;
     sPanDistance = 0.f;

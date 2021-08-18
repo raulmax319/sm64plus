@@ -751,8 +751,8 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
 
     o->oInteractStatus = INT_STATUS_INTERACTED;
 
-    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && m->numCoins - o->oDamageOrCoinValue < 100
-        && m->numCoins >= 100) {
+    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && m->numCoins - o->oDamageOrCoinValue < configCoinStarCoins
+        && m->numCoins >= configCoinStarCoins) {
         bhv_spawn_star_no_level_exit(6);
     }
 #ifdef VERSION_SH
@@ -1384,7 +1384,10 @@ u32 interact_hit_from_below(struct MarioState *m, UNUSED u32 interactType, struc
 #endif
                 return drop_and_set_mario_action(m, ACT_TWIRLING, 0);
             } else {
-                bounce_off_object(m, o, 30.0f);
+                if (configEnemyBouncing)
+                    bounce_off_object(m, o, (m->input & INPUT_A_DOWN) ? 48.0f : 22.0f);
+                else
+                    bounce_off_object(m, o, 30.0f);
             }
         }
     } else if (take_damage_and_knock_back(m, o)) {
@@ -1422,7 +1425,10 @@ u32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Ob
 #endif
                 return drop_and_set_mario_action(m, ACT_TWIRLING, 0);
             } else {
-                bounce_off_object(m, o, 30.0f);
+                if (configEnemyBouncing)
+                    bounce_off_object(m, o, (m->input & INPUT_A_DOWN) ? 48.0f : 22.0f);
+                else
+                    bounce_off_object(m, o, 30.0f);
             }
         }
     } else if (take_damage_and_knock_back(m, o)) {
@@ -1711,7 +1717,8 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
         return TRUE;
     }
 
-    if (m->action == ACT_WALKING) {
+    if ((m->action == ACT_WALKING)
+    || (gTalkEasier && ((m->action == ACT_DECELERATING) || (m->action == ACT_BRAKING) || m->action == ACT_BRAKING_STOP) )) {
         if (arg) {
             return TRUE;
         }

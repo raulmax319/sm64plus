@@ -1162,6 +1162,9 @@ s32 act_decelerating(struct MarioState *m) {
         play_step_sound(m, 10, 49);
     }
 
+    if (gImprovedControls)
+        check_ledge_climb_down(m);
+
     return FALSE;
 }
 

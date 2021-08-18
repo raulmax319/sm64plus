@@ -32,6 +32,7 @@ extern s8 configForce4by3;
 extern s8 gImprovedControls;
 extern s8 gImprovedSwimming;
 extern s8 gImprovedHanging;
+extern s8 configEnemyBouncing;
 extern s8 gDpadControls;
 extern s8 gFullAirControl;
 extern s8 gDisableBLJ;
@@ -46,6 +47,7 @@ extern s8 gTalkEasier;
 extern s8 gDisableFallDamage;
 extern s8 gLeaveAnyTime;
 extern s8 gVisibleSecrets;
+extern s8 configFixBombClip;
 
 extern s8 configBowsersSub;
 extern unsigned int gStayInLevel;
@@ -57,25 +59,27 @@ extern s8 gCenterCameraButton;
 extern s8 gImprovedCamera;
 extern s8 gVerticalCamera;
 extern s8 gInvertedCamera;
+extern s8 gInvertedVerticalCamera;
 extern float gCameraSpeed;
 extern float gAdditionalCameraDistance;
 extern float gAdditionalFOV;
 
 extern unsigned int configCustomCameraMode;
-extern s8 configCustomCameraRotate;
 extern s8 configCustomCameraPan;
+extern s8 configCustomCameraTilt;
+extern s8 configCustomCameraRotation;
 extern s8 configCustomCameraCollisions;
 extern float configCustomCameraDistanceDefault;
 extern float configCustomCameraDistanceZoomedOut;
 
 extern s8 gQuitOption;
-extern s8 configExitMissionSelectWithB;
 extern unsigned int gHudStyle;
 extern s8 gCenterHud;
-extern s8 gHUDFiltering;
 extern s8 gHudStars;
+extern s8 configAddZeroes;
 extern s8 gShow100CoinStar;
 extern s8 gAlwaysShowHealth;
+extern s8 gHUDFiltering;
 extern s8 gHideHud;
 
 extern s8 gMouseCam;
@@ -90,7 +94,6 @@ extern s8 gWallSliding;
 extern s8 gGroundPoundJump;
 extern s8 gSunshineDive;
 extern s8 gOdysseyDive;
-extern s8 configSpinJump;
 extern s8 gFlashbackPound;
 
 extern s8 gPyramidCutscene;
@@ -115,6 +118,7 @@ extern unsigned int gMoonJump;
 extern s8 configGodMode;
 extern s8 configHyperspeedMode;
 extern s8 gFlexibleCannons;
+extern unsigned int configCoinStarCoins;
 
 extern s8 gPaperMode;
 extern s8 gFXMode;

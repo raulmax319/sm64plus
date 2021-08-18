@@ -4,18 +4,8 @@
 #include "lib/src/osContInternal.h"
 
 #include "controller_recorded_tas.h"
-#include "controller_keyboard.h"
-
-//#if defined(_WIN32) || defined(_WIN64)
-//#include "controller_xinput.h"
-//#include "controller_directinput.h"
-//#else
 #include "controller_sdl.h"
-//#endif
-
-//#ifdef __linux__
-//#include "controller_wup.h"
-//#endif
+#include "controller_keyboard.h"
 
 static struct ControllerAPI *controller_implementations[] = {
     &controller_recorded_tas,

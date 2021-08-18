@@ -365,7 +365,7 @@ void render_hud_mario_lives(void) {
     print_text(x, y, ","); // 'Mario Head' glyph
     if (gHudStyle > 0) {
         print_text(x+17, y, "*"); // 'X' glyph
-        print_text_fmt_int(x+33, y, "%d", gHudDisplay.lives);
+        print_text_fmt_int(x+33, y, configAddZeroes ? "%02d" : "%d", gHudDisplay.lives);
     }
     else {
         print_text(x+16, y, "*"); // 'X' glyph
@@ -381,13 +381,23 @@ void render_hud_mario_lives(void) {
 void render_hud_coins(void) {
     if (gHudStyle > 0) {
         print_text(get_left(HUD_LEFT_X), HUD_TOP_Y_NEW-18, "+"); // 'Coin' glyph
-        print_text(get_left(HUD_LEFT_X)+17, HUD_TOP_Y_NEW-18, "*"); // 'X' glyph
-        print_text_fmt_int(get_left(HUD_LEFT_X)+33, HUD_TOP_Y_NEW-18, "%d", gHudDisplay.coins);
+        if (configAddZeroes) {
+            print_text_fmt_int(get_left(HUD_LEFT_X)+17, HUD_TOP_Y_NEW-18, "%03d", gHudDisplay.coins);
+        }
+        else {
+            print_text(get_left(HUD_LEFT_X)+17, HUD_TOP_Y_NEW-18, "*"); // 'X' glyph
+            print_text_fmt_int(get_left(HUD_LEFT_X)+33, HUD_TOP_Y_NEW-18, "%d", gHudDisplay.coins);
+        }
     }
     else {
         print_text(HUD_COIN_X, HUD_TOP_Y, "+"); // 'Coin' glyph
-        print_text(HUD_COIN_X+16, HUD_TOP_Y, "*"); // 'X' glyph
-        print_text_fmt_int(HUD_COIN_X+30, HUD_TOP_Y, "%d", gHudDisplay.coins);
+        if (configAddZeroes) {
+            print_text_fmt_int(HUD_COIN_X+16, HUD_TOP_Y, "%03d", gHudDisplay.coins);
+        }
+        else {
+            print_text(HUD_COIN_X+16, HUD_TOP_Y, "*"); // 'X' glyph
+            print_text_fmt_int(HUD_COIN_X+30, HUD_TOP_Y, "%d", gHudDisplay.coins);
+        }
     }
 }
 
@@ -411,39 +421,39 @@ void render_hud_stars(void) {
     }
     
     if (gHudStyle == 2) {
-        if (gHudDisplay.stars < 10) {
+        if (!configAddZeroes && gHudDisplay.stars < 10) {
             print_text(get_left(HUD_LEFT_X), HUD_TOP_Y_NEW, "-"); // 'Star' glyph
             print_text(get_left(HUD_LEFT_X) + 17, HUD_TOP_Y_NEW, "*"); // 'X' glyph
             print_text_fmt_int(get_left(HUD_LEFT_X) + 33, HUD_TOP_Y_NEW, "%d", gHudDisplay.stars);
         }
-        else if (gHudDisplay.stars < 100) {
+        else if (!configAddZeroes && gHudDisplay.stars < 100) {
             print_text(get_left(HUD_LEFT_X), HUD_TOP_Y_NEW, "-"); // 'Star' glyph
             print_text(get_left(HUD_LEFT_X) + 17, HUD_TOP_Y_NEW, "*"); // 'X' glyph
-            print_text_fmt_int(get_left(HUD_LEFT_X) + 31, HUD_TOP_Y_NEW, "%d", gHudDisplay.stars);
+            print_text_fmt_int(get_left(HUD_LEFT_X) + 33, HUD_TOP_Y_NEW, "%d", gHudDisplay.stars);
         }
         else {
             print_text(get_left(HUD_LEFT_X), HUD_TOP_Y_NEW, "-"); // 'Star' glyph
-            print_text_fmt_int(get_left(HUD_LEFT_X) + 15, HUD_TOP_Y_NEW, "%d", gHudDisplay.stars);
+            print_text_fmt_int(get_left(HUD_LEFT_X) + 17, HUD_TOP_Y_NEW, configAddZeroes ? "%03d" : "%d", gHudDisplay.stars);
         }
     }
     else if (gHudStyle == 1) {
-        if (gHudDisplay.stars < 10) {
+        if (!configAddZeroes && gHudDisplay.stars < 10) {
             print_text(get_right(HUD_STARS_X_NEW) + 6, HUD_TOP_Y_NEW, "-"); // 'Star' glyph
             print_text(get_right(HUD_STARS_X_NEW) + 23, HUD_TOP_Y_NEW, "*"); // 'X' glyph
             print_text_fmt_int(get_right(HUD_STARS_X_NEW) + 39, HUD_TOP_Y_NEW, "%d", gHudDisplay.stars);
         }
-        else if (gHudDisplay.stars < 100) {
+        else if (!configAddZeroes && gHudDisplay.stars < 100) {
             print_text(get_right(HUD_STARS_X_NEW) - 4, HUD_TOP_Y_NEW, "-"); // 'Star' glyph
             print_text(get_right(HUD_STARS_X_NEW) + 11, HUD_TOP_Y_NEW, "*"); // 'X' glyph
             print_text_fmt_int(get_right(HUD_STARS_X_NEW) + 27, HUD_TOP_Y_NEW, "%d", gHudDisplay.stars);
         }
         else {
             print_text(get_right(HUD_STARS_X_NEW), HUD_TOP_Y_NEW, "-"); // 'Star' glyph
-            print_text_fmt_int(get_right(HUD_STARS_X_NEW) + 15, HUD_TOP_Y_NEW, "%d", gHudDisplay.stars);
+            print_text_fmt_int(get_right(HUD_STARS_X_NEW) + 15, HUD_TOP_Y_NEW, configAddZeroes ? "%03d" : "%d", gHudDisplay.stars);
         }
     }
     else {
-        if (gHudDisplay.stars < 100) {
+        if (!configAddZeroes && gHudDisplay.stars < 100) {
             showX = 1;
         }
 
@@ -452,7 +462,7 @@ void render_hud_stars(void) {
             print_text(get_right(HUD_STARS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
         }
         print_text_fmt_int((showX * 14) + get_right(HUD_STARS_X - 16),
-                        HUD_TOP_Y, "%d", gHudDisplay.stars);
+                        HUD_TOP_Y, configAddZeroes ? "%03d" : "%d", gHudDisplay.stars);
     }
 }
 
