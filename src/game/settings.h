@@ -3,15 +3,13 @@
 extern char* gTitleString;
 
 extern s8 configFullscreen;
-#if defined(_WIN32) || defined(_WIN64)
 extern s8 configCustomFullscreenResolution;
 extern unsigned int configFullscreenWidth;
 extern unsigned int configFullscreenHeight;
-#endif
 extern unsigned int configWindowWidth;
 extern unsigned int configWindowHeight;
-#if defined(_WIN32) || defined(_WIN64)
 extern unsigned int configDefaultMonitor;
+#if defined(_WIN32) || defined(_WIN64)
 extern s8 configCustomInternalResolution;
 extern unsigned int configInternalResolutionWidth;
 extern unsigned int configInternalResolutionHeight;
@@ -163,10 +161,7 @@ extern unsigned int configColorHairGDark;
 extern unsigned int configColorHairBLight;
 extern unsigned int configColorHairBDark;
 
-
-#if defined(_WIN32) || defined(_WIN64)
 extern unsigned int configFullscreenRefreshRate;
-#endif
 
 extern unsigned int configButtonA;
 extern unsigned int configButtonB;

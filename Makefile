@@ -417,7 +417,7 @@ ifeq ($(TARGET_WINDOWS),1)
   PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -static -lm -no-pie -mwindows -w
 endif
 ifeq ($(TARGET_LINUX),1)
-  SDLCONFIG_LDFLAGS := $(shell sdl2-config --static-libs)
+  SDLCONFIG_LDFLAGS := $(shell sdl2-config --libs)
   PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_LINUX `pkg-config --cflags libusb-1.0`
   PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -lm -lpthread `pkg-config --libs libusb-1.0` -no-pie
 endif
