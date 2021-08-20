@@ -31,6 +31,34 @@ Features that _might_ get added in the future:
 
 [You can find the FAQ here.](https://github.com/MorsGames/sm64plus/blob/master/FAQ.md)
 
+## Manual Building
+
+### Windows
+
+1. Install and update MSYS2, following the directions listed on https://www.msys2.org/.
+2. Launch MSYS2 MinGW and install required packages depending on your machine (do **NOT** launch "MSYS2 MSYS"):
+  * 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 mingw-w64-x86_64-glew`
+  * 32-bit: Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc mingw-w64-i686-SDL2 mingw-w64-i686-glew`
+  * Do not install `gcc`.
+3. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`, then enter it with `cd sm64plus`.
+4. Place a *SM64* ROM called `baserom.us.z64` into the repository folder for asset extraction.
+5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
+  * If you're building for 32-bit, you should also include `TARGET_32BIT=1` after `make`.
+6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e.exe`.
+
+### Linux
+
+1. Install the prerequisites:
+  * On Debian / Ubuntu: `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`
+  * On Arch / Manjaro: `sudo pacman -S base-devel python sdl2 glew`
+  * On Fedora: `sudo dnf install make gcc python3 glew-devel SDL2-devel`
+2. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`.
+3. Place a SM64 ROM called `baserom.us.z64` into the repository folder for asset extraction.
+5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
+6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
+
+Please keep in mind that the Linux version of the game is missing some settings, such as "Wireframe Mode" and all mouse related settings.
+
 ## Changelog
 
 ### v2.0.0 (??/??/2021):
@@ -185,33 +213,6 @@ Features that _might_ get added in the future:
 
 ### v1.0.0 (05/04/2021)
 - Initial release.
-
-## Manual Building
-
-### Windows
-
-1. Install and update MSYS2, following the directions listed on https://www.msys2.org/.
-2. Launch MSYS2 MinGW and install required packages depending on your machine (do **NOT** launch "MSYS2 MSYS"):
-  * 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 mingw-w64-x86_64-glew`
-  * 32-bit (untested, but should also work on 64-bit machines): Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc mingw-w64-i686-SDL2 mingw-w64-i686-glew`
-  * Do not install `gcc`.
-3. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`, then enter it with `cd sm64plus`.
-4. Place a *SM64* ROM called `baserom.us.z64` into the repository folder for asset extraction.
-5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
-6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e.exe`.
-
-### Linux
-
-1. Install the prerequisites:
-  * On Debian / Ubuntu: `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`
-  * On Arch / Manjaro: `sudo pacman -S base-devel python sdl2 glew`
-  * On Fedora: `sudo dnf install make gcc python3 glew-devel SDL2-devel`
-2. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`.
-3. Place a SM64 ROM called `baserom.us.z64` into the repository folder for asset extraction.
-5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
-6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
-
-Please keep in mind that the Linux version of the game is missing some settings, such as "Wireframe Mode" and all mouse related settings.
 
 ## Additional options
 

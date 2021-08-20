@@ -23,6 +23,8 @@ TARGET_N64 ?= 0
 TARGET_WEB ?= 0
 # Compiler to use (ido or gcc)
 COMPILER ?= ido
+# If this build is for 32 bit
+TARGET_32BIT ?= 0
 
 # Automatic settings only for ports
 ifeq ($(TARGET_N64),0)
@@ -388,7 +390,7 @@ else # TARGET_N64
 AS := as
 ifneq ($(TARGET_WEB),1)
   CC := gcc
-  CXX := g++ -o sm64plus icon.res
+  CXX := g++
 else
   CC := emcc
 endif
@@ -407,6 +409,9 @@ SDLCONFIG_CFLAGS := $(shell sdl2-config --cflags)
 
 # Static linking is broken on Windows for some reason so we will roll like this for now
 ifeq ($(TARGET_WINDOWS),1)
+  ifeq ($(TARGET_32BIT),0)
+    PLATFORM_LDFLAGS := -o sm64plus icon.res
+  endif
   SDLCONFIG_LDFLAGS := -Wl,-Bdynamic $(shell sdl2-config --libs) -Wl,-Bstatic -Llib
   PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_WINDOWS
   PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -static -lm -no-pie -mwindows -w
@@ -804,6 +809,10 @@ $(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(
 
   # Probably not the best place for this but I'm lazy!
 	$(shell a=$(PATH); b=$${a%%:*}; cp "$${b}/SDL2.dll" "$(BUILD_DIR)/SDL2.dll")
+  ifeq ($(TARGET_32BIT),1)
+	  $(shell a=$(PATH); b=$${a%%:*}; cp "$${b}/libgcc_s_dw2-1.dll" "$(BUILD_DIR)/libgcc_s_dw2-1.dll")
+	  $(shell a=$(PATH); b=$${a%%:*}; cp "$${b}/libwinpthread-1.dll" "$(BUILD_DIR)/libwinpthread-1.dll")
+  endif
 endif
 
 .PHONY: all clean distclean default diff test load libultra

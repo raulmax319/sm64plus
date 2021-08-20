@@ -128,6 +128,41 @@ extern s8 gWireframeMode;
 extern s8 gDisableLighting;
 extern s8 gForceLowPoly;
 
+extern unsigned int configColorHatRLight;
+extern unsigned int configColorHatRDark;
+extern unsigned int configColorHatGLight;
+extern unsigned int configColorHatGDark;
+extern unsigned int configColorHatBLight;
+extern unsigned int configColorHatBDark;
+
+extern unsigned int configColorOverallsRLight;
+extern unsigned int configColorOverallsRDark;
+extern unsigned int configColorOverallsGLight;
+extern unsigned int configColorOverallsGDark;
+extern unsigned int configColorOverallsBLight;
+extern unsigned int configColorOverallsBDark;
+
+extern unsigned int configColorShoesRLight;
+extern unsigned int configColorShoesRDark;
+extern unsigned int configColorShoesGLight;
+extern unsigned int configColorShoesGDark;
+extern unsigned int configColorShoesBLight;
+extern unsigned int configColorShoesBDark;
+
+extern unsigned int configColorSkinRLight;
+extern unsigned int configColorSkinRDark;
+extern unsigned int configColorSkinGLight;
+extern unsigned int configColorSkinGDark;
+extern unsigned int configColorSkinBLight;
+extern unsigned int configColorSkinBDark;
+
+extern unsigned int configColorHairRLight;
+extern unsigned int configColorHairRDark;
+extern unsigned int configColorHairGLight;
+extern unsigned int configColorHairGDark;
+extern unsigned int configColorHairBLight;
+extern unsigned int configColorHairBDark;
+
 
 #if defined(_WIN32) || defined(_WIN64)
 extern unsigned int configFullscreenRefreshRate;

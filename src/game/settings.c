@@ -279,6 +279,40 @@ s8 gWireframeMode = 0;
 s8 gDisableLighting = 0;
 s8 gForceLowPoly = 0;
 
+unsigned int configColorHatRLight = 255;
+unsigned int configColorHatRDark = 127;
+unsigned int configColorHatGLight = 0;
+unsigned int configColorHatGDark = 0;
+unsigned int configColorHatBLight = 0;
+unsigned int configColorHatBDark = 0;
+
+unsigned int configColorOverallsRLight = 0;
+unsigned int configColorOverallsRDark = 0;
+unsigned int configColorOverallsGLight = 0;
+unsigned int configColorOverallsGDark = 0;
+unsigned int configColorOverallsBLight = 255;
+unsigned int configColorOverallsBDark = 127;
+
+unsigned int configColorShoesRLight = 114;
+unsigned int configColorShoesRDark = 57;
+unsigned int configColorShoesGLight = 28;
+unsigned int configColorShoesGDark = 14;
+unsigned int configColorShoesBLight = 14;
+unsigned int configColorShoesBDark = 7;
+
+unsigned int configColorSkinRLight = 254;
+unsigned int configColorSkinRDark = 127;
+unsigned int configColorSkinGLight = 193;
+unsigned int configColorSkinGDark = 96;
+unsigned int configColorSkinBLight = 121;
+unsigned int configColorSkinBDark = 60;
+
+unsigned int configColorHairRLight = 115;
+unsigned int configColorHairRDark = 57;
+unsigned int configColorHairGLight = 6;
+unsigned int configColorHairGDark = 3;
+unsigned int configColorHairBLight = 0;
+unsigned int configColorHairBDark = 0;
 
 #if defined(_WIN32) || defined(_WIN64)
 unsigned int configFullscreenRefreshRate = 60;
