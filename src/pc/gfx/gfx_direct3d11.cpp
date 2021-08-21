@@ -345,7 +345,7 @@ static struct ShaderProgram *gfx_d3d11_create_and_load_new_shader(uint32_t shade
     char buf[4096];
     size_t len, num_floats;
 
-    gfx_direct3d_common_build_shader(buf, len, num_floats, cc_features, false, gTextureFiltering == 1);
+    gfx_direct3d_common_build_shader(buf, len, num_floats, cc_features, false, configTextureFiltering == 1);
 
     ComPtr<ID3DBlob> vs, ps;
     ComPtr<ID3DBlob> error_blob;
@@ -512,7 +512,7 @@ static void gfx_d3d11_set_sampler_parameters(int tile, bool linear_filter, uint3
     ZeroMemory(&sampler_desc, sizeof(D3D11_SAMPLER_DESC));
 
 
-    if (gTextureFiltering == 1)
+    if (configTextureFiltering == 1)
         sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
     else
         sampler_desc.Filter = linear_filter ? D3D11_FILTER_MIN_MAG_MIP_LINEAR : D3D11_FILTER_MIN_MAG_MIP_POINT;
@@ -623,7 +623,7 @@ static void gfx_d3d11_draw_triangles(float buf_vbo[], size_t buf_vbo_len, size_t
                 d3d.last_resource_views[i] = d3d.textures[d3d.current_texture_ids[i]].resource_view.Get();
                 d3d.context->PSSetShaderResources(i, 1, d3d.textures[d3d.current_texture_ids[i]].resource_view.GetAddressOf());
 
-                if (gTextureFiltering == 1) {
+                if (configTextureFiltering == 1) {
                     d3d.per_draw_cb_data.textures[i].width = d3d.textures[d3d.current_texture_ids[i]].width;
                     d3d.per_draw_cb_data.textures[i].height = d3d.textures[d3d.current_texture_ids[i]].height;
                     d3d.per_draw_cb_data.textures[i].linear_filtering = d3d.textures[d3d.current_texture_ids[i]].linear_filtering;
@@ -707,7 +707,7 @@ static void gfx_d3d11_start_frame(void) {
         d3d.per_frame_cb_data.noise_frame = 0;
     }
     float aspect_ratio = (float) d3d.current_width / (float) d3d.current_height;
-    if (gNoiseType) {
+    if (configNoiseType) {
         d3d.per_frame_cb_data.noise_scale_x = d3d.current_width;
         d3d.per_frame_cb_data.noise_scale_y = d3d.current_height;
     }

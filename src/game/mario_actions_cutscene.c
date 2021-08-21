@@ -238,7 +238,7 @@ s32 get_star_collection_dialog(struct MarioState *m) {
     s32 dialogID = 0;
     s32 numStarsRequired;
 
-    if (gSkipCutscenes)
+    if (configSkipCutscenes)
         return 0;
 
     for (i = 0; i < ARRAY_COUNT(sStarsNeededForDialog); i++) {
@@ -263,7 +263,7 @@ void handle_save_menu(struct MarioState *m) {
             save_file_do_save(gCurrSaveFileNum - 1);
 
             if (gSaveOptSelectIndex == SAVE_OPT_SAVE_AND_QUIT) {
-                if (gQuitOption)
+                if (configQuitOption)
                     exit(0);
                 else
                     fade_into_special_warp(-2, 0); // reset game
@@ -616,7 +616,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                     }
                 }
                 // We will be extending the cap timer artificially for this star.
-                if (gStayInLevel && gCollectedStar == 5 && gCurrLevelNum == LEVEL_DDD) {
+                if (configStayInCourse && gCollectedStar == 5 && gCurrLevelNum == LEVEL_DDD) {
                     m->flags |= MARIO_VANISH_CAP | MARIO_METAL_CAP | MARIO_CAP_ON_HEAD;
                     m->capTimer = 300;
                 }
@@ -624,7 +624,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
 
             case 42:
                 play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
-                if (gStayInLevel) {
+                if (configStayInCourse) {
                     gHudDisplay.starGet = 1;
                     if (!sTimerRunning)
                         level_control_timer(TIMER_CONTROL_HIDE);
@@ -635,9 +635,9 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 if ((m->actionArg & 1) == 0) {
                     level_trigger_warp(m, WARP_OP_STAR_EXIT);
                 } else {
-                    if (gStayInLevel >= 2) {
+                    if (configStayInCourse >= 2) {
                         // Ask if we wanna stay in certain subareas
-                        if (gStayInLevel == 2 && gCurrAreaIndex > 1 && 
+                        if (configStayInCourse == 2 && gCurrAreaIndex > 1 && 
                         (gCurrLevelNum == LEVEL_SSL || gCurrLevelNum == LEVEL_LLL || gCurrLevelNum == LEVEL_WDW)) {
                             create_dialog_box_with_response(DIALOG_170);
                             m->actionState = 1;
@@ -1002,7 +1002,7 @@ s32 act_warp_door_spawn(struct MarioState *m) {
         }
     } else if (m->usedObj->oAction == 0) {
         if (gNeverEnteredCastle == TRUE && gCurrLevelNum == LEVEL_CASTLE) {
-            if (gSkipCutscenes) {
+            if (configSkipCutscenes) {
                 set_mario_action(m, ACT_IDLE, 0);
                 play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
                 gNeverEnteredCastle = FALSE;
@@ -1161,22 +1161,22 @@ s32 act_exit_land_save_dialog(struct MarioState *m) {
                 case -1:
                     spawn_obj_at_mario_rel_yaw(m, MODEL_BOWSER_KEY_CUTSCENE, bhvBowserKeyCourseExit, -32768);
                     //! fall through
-                    if (gUnusedSounds)
+                    if (configRestoreUnusedSounds)
                         break;
                 case 67:
                     play_sound(SOUND_ACTION_KEY_SWISH, m->marioObj->header.gfx.cameraToObject);
                     //! fall through
-                    if (gUnusedSounds)
+                    if (configRestoreUnusedSounds)
                         break;
                 case 83:
                     play_sound(SOUND_ACTION_PAT_BACK, m->marioObj->header.gfx.cameraToObject);
                     //! fall through
-                    if (gUnusedSounds)
+                    if (configRestoreUnusedSounds)
                         break;
                 case 111:
                     play_sound(SOUND_ACTION_UNKNOWN45C, m->marioObj->header.gfx.cameraToObject);
                     // no break
-                    if (gUnusedSounds)
+                    if (configRestoreUnusedSounds)
                         break;
             }
             handle_save_menu(m);

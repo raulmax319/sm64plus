@@ -27,7 +27,7 @@ void water_ring_init(void) {
 
     o->oWaterRingMarioDistInFront = water_ring_calc_mario_dist();
 
-    if (gFixVariousBugs) {
+    if (configFixVariousBugs) {
         o->oFaceAngleYaw = 0;
         o->oFaceAngleRoll *= -1;
     }

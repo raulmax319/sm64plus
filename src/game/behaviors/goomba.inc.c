@@ -79,7 +79,7 @@ void bhv_goomba_triplet_spawner_update(void) {
     // If mario is close enough and the goombas aren't currently loaded, then
     // spawn them
     if (o->oAction == GOOMBA_TRIPLET_SPAWNER_ACT_UNLOADED) {
-        if (o->oDistanceToMario < 3000.0f * gDrawDistanceMultiplier || gDisableDrawDistance) {
+        if (o->oDistanceToMario < 3000.0f * configDrawDistanceMultiplier || configDisableDrawDistance) {
             // The spawner is capable of spawning more than 3 goombas, but this
             // is not used in the game
             dAngle =
@@ -100,7 +100,7 @@ void bhv_goomba_triplet_spawner_update(void) {
 
             o->oAction += 1;
         }
-    } else if (o->oDistanceToMario > 4000.0f * gDrawDistanceMultiplier && !gDisableDrawDistance) {
+    } else if (o->oDistanceToMario > 4000.0f * configDrawDistanceMultiplier && !configDisableDrawDistance) {
         // If mario is too far away, enter the unloaded action. The goombas
         // will detect this and unload themselves
         o->oAction = GOOMBA_TRIPLET_SPAWNER_ACT_UNLOADED;

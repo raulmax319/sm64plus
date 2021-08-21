@@ -104,7 +104,7 @@ void my_rdp_init(void) {
     gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
     gDPSetTextureDetail(gDisplayListHead++, G_TD_CLAMP);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
-    if (gTextureFiltering) {
+    if (configTextureFiltering) {
         gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
     }
     else {
@@ -581,7 +581,7 @@ void read_controller_inputs(void) {
             controller->rawStickX = controller->controllerData->stick_x;
             controller->rawStickY = controller->controllerData->stick_y;
 
-            if (gDpadControls) {
+            if (configDpadControls) {
                 controller->rawStickX += (((controller->buttonDown & R_JPAD) > 0) - ((controller->buttonDown & L_JPAD) > 0))*80;
                 controller->rawStickY += (((controller->buttonDown & U_JPAD) > 0) - ((controller->buttonDown & D_JPAD) > 0))*80;
             }

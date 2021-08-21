@@ -1,7 +1,5 @@
 #include "../compat.h"
 
-#if !defined(__linux__) && !defined(__BSD__) && defined(ENABLE_OPENGL)
-
 #ifdef __MINGW32__
 #define FOR_WINDOWS 1
 #else
@@ -24,7 +22,7 @@
 
 #include "game/settings.h"
 
-#define GFX_API_NAME "SDL2 - OpenGL"
+#define GFX_API_NAME "OpenGL"
 
 static SDL_Window *wnd;
 static int inverted_scancode_table[512];
@@ -35,8 +33,8 @@ static void (*on_fullscreen_changed_callback)(bool is_now_fullscreen);
 static bool (*on_key_down_callback)(int scancode);
 static bool (*on_key_up_callback)(int scancode);
 static void (*on_all_keys_up_callback)(void);
-static void (*on_mouse_move)(long x, long y);
-static void (*on_mouse_press)(s8 left, s8 right, s8 middle, s8 wheel);
+static void (*on_mouse_move_callback)(long x, long y);
+static void (*on_mouse_press_callback)(s8 left, s8 right, s8 middle, s8 wheel);
 
 static Uint32 last_time;
 
@@ -115,8 +113,8 @@ static void set_fullscreen(bool on, bool call_callback) {
         }
         window_width = mode.w;
         window_height = mode.h;
-
-        SDL_ShowCursor(false);
+        if (!gMouseCam)
+            SDL_ShowCursor(false);
     } else {
         if (configCustomFullscreenResolution) {
             SDL_DisplayMode mode;
@@ -125,8 +123,8 @@ static void set_fullscreen(bool on, bool call_callback) {
         }
         window_width = DESIRED_SCREEN_WIDTH;
         window_height = DESIRED_SCREEN_HEIGHT;
-
-        SDL_ShowCursor(true);
+        if (!gMouseCam)
+            SDL_ShowCursor(true);
     }
     SDL_SetWindowSize(wnd, window_width, window_height);
     if (configCustomFullscreenResolution) {
@@ -203,11 +201,18 @@ static void gfx_sdl_init(const char *game_name, bool start_in_fullscreen) {
     char title[512];
     sprintf(title, "%s (%s)", game_name, GFX_API_NAME);
 
-    wnd = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    wnd = SDL_CreateWindow(title,
+            SDL_WINDOWPOS_UNDEFINED_DISPLAY(configDefaultMonitor-1),
+            SDL_WINDOWPOS_UNDEFINED_DISPLAY(configDefaultMonitor-1),
             DESIRED_SCREEN_WIDTH, DESIRED_SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
     if (start_in_fullscreen) {
         set_fullscreen(true, false);
+    }
+
+    if (gMouseCam) {
+        SDL_ShowCursor(false);
+        SDL_SetRelativeMouseMode(true);
     }
 
     SDL_GL_CreateContext(wnd);
@@ -243,6 +248,8 @@ static void gfx_sdl_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bo
     on_key_down_callback = on_key_down;
     on_key_up_callback = on_key_up;
     on_all_keys_up_callback = on_all_keys_up;
+    on_mouse_move_callback = on_mouse_move;
+    on_mouse_press_callback = on_mouse_press;
 }
 
 static void gfx_sdl_main_loop(void (*run_one_game_iter)(void)) {
@@ -283,6 +290,7 @@ static void gfx_sdl_onkeyup(int scancode) {
 static void gfx_sdl_handle_events(void) {
     SDL_Event event;
     Uint8 *state = SDL_GetKeyboardState(NULL);
+    on_mouse_move_callback(0, 0);
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
 #ifndef TARGET_WEB
@@ -301,6 +309,43 @@ static void gfx_sdl_handle_events(void) {
 #endif
             case SDL_QUIT:
                 exit(0);
+                break;
+
+            case SDL_MOUSEMOTION:
+                on_mouse_move_callback(event.motion.xrel*10, event.motion.yrel*10);
+                break;
+
+            case SDL_MOUSEBUTTONDOWN:
+                switch (event.button.button) {
+                    case SDL_BUTTON_LEFT:
+                        on_mouse_press_callback(1, 0, 0, 0);
+                        break;
+                    case SDL_BUTTON_RIGHT:
+                        on_mouse_press_callback(0, 1, 0, 0);
+                        break;
+                    case SDL_BUTTON_MIDDLE:
+                        on_mouse_press_callback(0, 0, 1, 0);
+                        break;
+                }
+                break;
+
+            case SDL_MOUSEBUTTONUP:
+                switch (event.button.button) {
+                    case SDL_BUTTON_LEFT:
+                        on_mouse_press_callback(-1, 0, 0, 0);
+                        break;
+                    case SDL_BUTTON_RIGHT:
+                        on_mouse_press_callback(0, -1, 0, 0);
+                        break;
+                    case SDL_BUTTON_MIDDLE:
+                        on_mouse_press_callback(0, 0, -1, 0);
+                        break;
+                }
+                break;
+
+            case SDL_MOUSEWHEEL:
+                on_mouse_press_callback(0, 0, 0, event.wheel.y);
+                break;
         }
     }
 }
@@ -347,5 +392,3 @@ struct GfxWindowManagerAPI gfx_sdl = {
     gfx_sdl_swap_buffers_end,
     gfx_sdl_get_time
 };
-
-#endif

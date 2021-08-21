@@ -515,6 +515,7 @@ static bool import_texture_custom(const char *path) {
     || (strstr(path, "manta") != NULL)
     || (strstr(path, "sushi") != NULL)
     || (strstr(path, "water_ring") != NULL)
+    || (strstr(path, "segment2") != NULL)
     || (get_palette() == 19)
     )) {
 
@@ -845,10 +846,45 @@ static void gfx_sp_vertex(size_t n_vertices, size_t dest_index, const Vtx *verti
                 rsp.lights_changed = false;
             }
             
+            // Shadow colors
             int r = rsp.current_lights[rsp.current_num_lights - 1].col[0];
             int g = rsp.current_lights[rsp.current_num_lights - 1].col[1];
             int b = rsp.current_lights[rsp.current_num_lights - 1].col[2];
             
+            // Detect if these are one of Mario's colors
+            bool mario_hat = (r == 0x7f && g == 0x00 && b == 0x00);
+            bool mario_overalls = (r == 0x00 && g == 0x00 && b == 0x7f);
+            bool mario_shoes = (r == 0x39 && g == 0x0e && b == 0x07);
+            bool mario_skin = (r == 0x7f && g == 0x60 && b == 0x3c);
+            bool mario_hair = (r == 0x39 && g == 0x03 && b == 0x00);
+
+            // Override them lazily
+            if (mario_hat) {
+                r = configColorHatRDark;
+                g = configColorHatGDark;
+                b = configColorHatBDark;
+            }
+            if (mario_overalls) {
+                r = configColorOverallsRDark;
+                g = configColorOverallsGDark;
+                b = configColorOverallsBDark;
+            }
+            if (mario_shoes) {
+                r = configColorShoesRDark;
+                g = configColorShoesGDark;
+                b = configColorShoesBDark;
+            }
+            if (mario_skin) {
+                r = configColorSkinRDark;
+                g = configColorSkinGDark;
+                b = configColorSkinBDark;
+            }
+            if (mario_hair) {
+                r = configColorHairRDark;
+                g = configColorHairGDark;
+                b = configColorHairBDark;
+            }
+
             for (int i = 0; i < rsp.current_num_lights - 1; i++) {
                 float intensity = 0;
                 if (gDisableLighting) {
@@ -861,9 +897,42 @@ static void gfx_sp_vertex(size_t n_vertices, size_t dest_index, const Vtx *verti
                     intensity /= 127.0f;
                 }
                 if (intensity > 0.0f) {
-                    r += intensity * rsp.current_lights[i].col[0];
-                    g += intensity * rsp.current_lights[i].col[1];
-                    b += intensity * rsp.current_lights[i].col[2];
+                    // Light colors
+                    int lightr = rsp.current_lights[i].col[0];
+                    int lightg = rsp.current_lights[i].col[1];
+                    int lightb = rsp.current_lights[i].col[2];
+
+                    // Override these too
+                    if (mario_hat) {
+                        r += intensity * configColorHatRLight;
+                        g += intensity * configColorHatGLight;
+                        b += intensity * configColorHatBLight;
+                    }
+                    else if (mario_overalls) {
+                        r += intensity * configColorOverallsRLight;
+                        g += intensity * configColorOverallsGLight;
+                        b += intensity * configColorOverallsBLight;
+                    }
+                    else if (mario_shoes) {
+                        r += intensity * configColorShoesRLight;
+                        g += intensity * configColorShoesGLight;
+                        b += intensity * configColorShoesBLight;
+                    }
+                    else if (mario_skin) {
+                        r += intensity * configColorSkinRLight;
+                        g += intensity * configColorSkinGLight;
+                        b += intensity * configColorSkinBLight;
+                    }
+                    else if (mario_hair) {
+                        r += intensity * configColorHairRLight;
+                        g += intensity * configColorHairGLight;
+                        b += intensity * configColorHairBLight;
+                    }
+                    else {
+                        r += intensity * lightr;
+                        g += intensity * lightg;
+                        b += intensity * lightb;
+                    }
                 }
             }
             
@@ -1022,7 +1091,7 @@ static void gfx_sp_tri1(uint8_t vtx1_idx, uint8_t vtx2_idx, uint8_t vtx3_idx) {
     bool use_alpha = (rdp.other_mode_l & (G_BL_A_MEM << 18)) == 0;
     bool use_fog = (rdp.other_mode_l >> 30) == G_BL_CLR_FOG;
     bool texture_edge = (rdp.other_mode_l & CVG_X_ALPHA) == CVG_X_ALPHA;
-    bool use_noise = (rdp.other_mode_l & G_AC_DITHER) == G_AC_DITHER && gNoiseType != 2;
+    bool use_noise = (rdp.other_mode_l & G_AC_DITHER) == G_AC_DITHER && configNoiseType != 2;
     
     if (texture_edge) {
         use_alpha = true;

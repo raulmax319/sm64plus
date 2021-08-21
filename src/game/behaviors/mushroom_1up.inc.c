@@ -18,8 +18,6 @@ void bhv_1up_interact(void) {
         else {
             gMarioState->numLives++;
         }
-        if (gXLMode)
-            gMarioFatness = 0;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }

@@ -147,6 +147,7 @@ extern s16 sModeOffsetYaw;
 extern s16 sSpiralStairsYawOffset;
 extern s16 s8DirModeBaseYaw;
 extern s16 s8DirModeYawOffset;
+extern s16 sManualModeYawOffset;
 extern f32 sPanDistance;
 extern f32 sCannonYOffset;
 extern struct ModeTransitionInfo sModeInfo;
@@ -339,7 +340,7 @@ s16 s8DirModeBaseYaw;
 s16 s8DirModeYawOffset;
 
 /**
- * Player-controlled yaw offset in manual, a multiple of 22.5 degrees.
+ * Player-controlled yaw offset in manual mode, a multiple of 22.5 degrees.
  */
 s16 sManualModeYawOffset;
 
@@ -492,6 +493,7 @@ extern u8 sZoomOutAreaMasks[];
 
 //Define the analog camera speed
 #define ANALOG_AMOUNT 12 * (1 - gInvertedCamera * 2)
+#define ANALOG_AMOUNT_VERTICAL 12 * (1 - gInvertedVerticalCamera * 2)
 #define LROTATE_SPEED 0x400
 
 static void skip_camera_interpolation(void) {
@@ -921,7 +923,7 @@ s32 update_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     UNUSED f32 unused2;
     UNUSED f32 unused3;
     f32 yOff = 125.f;
-    f32 baseDist = 1000.f+gAdditionalCameraDistance;
+    f32 baseDist = 1000.f + gAdditionalCameraDistance * 10.0f;
 
     sAreaYaw = camYaw - sModeOffsetYaw;
     calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
@@ -945,7 +947,7 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     UNUSED f32 unused2;
     UNUSED f32 unused3;
     f32 yOff = 125.f;
-    f32 baseDist = 1000.f+gAdditionalCameraDistance;
+    f32 baseDist = 1000.f + gAdditionalCameraDistance * 10.0f;
 
     sAreaYaw = camYaw;
     calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
@@ -959,25 +961,22 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 }
 
 /**
- * Update the camera during manual mode
+ * Update the camera during custom camera mode
  */
-s32 update_manual_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff) {
-    UNUSED f32 cenDistX = sMarioCamState->pos[0] - c->areaCenX;
-    UNUSED f32 cenDistZ = sMarioCamState->pos[2] - c->areaCenZ;
-    s16 camYaw = s8DirModeBaseYaw + sManualModeYawOffset;
-    s16 pitch = look_down_slopes(camYaw)/2;
+s32 update_custom_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff) {
+    s16 camYaw = sManualModeYawOffset;
+    s16 pitch = configCustomCameraTilt ? look_down_slopes(camYaw) : 0;
     f32 posY;
     f32 focusY;
-    UNUSED f32 unused1;
-    UNUSED f32 unused2;
-    UNUSED f32 unused3;
-    f32 baseDist = 700.f+gAdditionalCameraDistance;
+
+    f32 dist = sLakituDist + (configCustomCameraDistanceDefault + gAdditionalCameraDistance) * 10.0f;
 
     sAreaYaw = camYaw;
-    calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
-    focus_on_mario(focus, pos, posY + yOff, focusY + yOff, sLakituDist + baseDist, pitch, camYaw);
 
-    if (gSmarterManualCamera) {
+    calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
+    focus_on_mario(focus, pos, posY + yOff, focusY + yOff, dist, pitch, camYaw);
+
+    if (configCustomCameraPan) {
         pan_ahead_of_player(c);
     }
 
@@ -1170,17 +1169,22 @@ void lakitu_zoom(f32 rangeDist, s16 rangePitch) {
         }
     }
 
-    if (gCurrLevelArea == AREA_SSL_PYRAMID && gCamera->mode == CAMERA_MODE_OUTWARD_RADIAL) {
-        rangePitch /= 2;
+    if (rangePitch == 0) {
+        sLakituPitch = MIN(MAX(sLakituPitch + ANALOG_AMOUNT_VERTICAL * (gPlayer1Controller->stick2Y / 32.0f) * gCameraSpeed, -1024), 9216);
     }
-
-    if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
-        if ((sLakituPitch += rangePitch / 13) > rangePitch) {
-            sLakituPitch = rangePitch;
+    else {
+        if (gCurrLevelArea == AREA_SSL_PYRAMID && gCamera->mode == CAMERA_MODE_OUTWARD_RADIAL) {
+            rangePitch /= 2;
         }
-    } else {
-        if ((sLakituPitch -= rangePitch / 13) < 0) {
-            sLakituPitch = 0;
+
+        if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
+            if ((sLakituPitch += rangePitch / 13) > rangePitch) {
+                sLakituPitch = rangePitch;
+            }
+        } else {
+            if ((sLakituPitch -= rangePitch / 13) < 0) {
+                sLakituPitch = 0;
+            }
         }
     }
 }
@@ -1253,12 +1257,6 @@ void mode_8_directions_camera(struct Camera *c) {
 
     // Analog camera code
     if (gPlayer1Controller->stick2X != 0) {
-        if (gPlayer1Controller->stick2X > 0) {
-            gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
-        }
-        else {
-            gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_LEFT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
-        }
         s8DirModeYawOffset -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
     }
 
@@ -1284,12 +1282,18 @@ void mode_8_directions_camera(struct Camera *c) {
 /**
  * A custom mode that gives you more control with the camera
  */
-void mode_manual_camera(struct Camera *c, f32 yOff) {
+void mode_custom_camera(struct Camera *c, f32 yOff) {
     Vec3f pos;
-    UNUSED u8 unused[8];
     s16 oldAreaYaw = sAreaYaw;
+    s16 avoidYaw;
 
     radial_camera_input(c, 0.f);
+    
+    if (configCustomCameraCollisions && rotate_camera_around_walls(c, c->pos, &avoidYaw, 0x400) == 3) {
+
+        camera_approach_s16_symmetric_bool(&sManualModeYawOffset, avoidYaw, 0x200);
+        camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 0x200);
+    }
 
     if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
         sManualModeYawOffset += DEGREES(22.5);
@@ -1302,12 +1306,6 @@ void mode_manual_camera(struct Camera *c, f32 yOff) {
 
     // Analog camera code
     if (gPlayer1Controller->stick2X != 0) {
-        if (gPlayer1Controller->stick2X > 0) {
-            gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
-        }
-        else {
-            gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_LEFT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
-        }
         sManualModeYawOffset -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
     }
 
@@ -1321,17 +1319,19 @@ void mode_manual_camera(struct Camera *c, f32 yOff) {
         }
     }
 
-    if (gSmarterManualCamera) {
+    if (configCustomCameraRotation) {
         camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 
-            ABS(gMarioState->forwardVel * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 8 : 12) ));
+            ABS(gMarioState->forwardVel * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 4 : 8) ));
     }
 
-    lakitu_zoom(800.f, 0x900);
-    c->nextYaw = update_manual_camera(c, c->focus, pos, yOff);
+    lakitu_zoom(max(0, configCustomCameraDistanceZoomedOut-configCustomCameraDistanceDefault) * 10.0f, gVerticalCamera ? 0 : 0x900);
+    
+    c->nextYaw = update_custom_camera(c, c->focus, pos, yOff);
     c->pos[0] = pos[0];
     c->pos[1] = pos[1];
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
+    set_camera_height(c, pos[1]);
 }
 
 /**
@@ -1343,7 +1343,7 @@ s32 update_outward_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     f32 zDistFocToMario = sMarioCamState->pos[2] - c->areaCenZ;
     s16 camYaw = atan2s(zDistFocToMario, xDistFocToMario) + sModeOffsetYaw + DEGREES(180);
     s16 pitch = look_down_slopes(camYaw);
-    f32 baseDist = 1000.f+gAdditionalCameraDistance;
+    f32 baseDist = 1000.f + gAdditionalCameraDistance * 10.0f;
     // A base offset of 125.f is ~= Mario's eye height
     f32 yOff = 125.f;
     f32 posY;
@@ -2243,7 +2243,7 @@ s16 update_default_camera(struct Camera *c) {
     handle_c_button_movement(c);
     vec3f_get_dist_and_angle(sMarioCamState->pos, c->pos, &dist, &pitch, &yaw);
 
-    gCameraZoomDist += gAdditionalCameraDistance;
+    gCameraZoomDist += gAdditionalCameraDistance * 10.0f;
 
     // If C-Down is active, determine what distance the camera should be from Mario
     if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
@@ -2993,7 +2993,7 @@ void transition_to_camera_mode(struct Camera *c, s16 newMode, s16 numFrames) {
             sCUpCameraPitch = 0;
             sModeOffsetYaw = 0;
             sLakituDist = 0;
-            sLakituPitch = 0;
+            sLakituPitch = gVerticalCamera ? 1024 : 0;
             sAreaYawChange = 0;
             sPanDistance = 0.f;
             sCannonYOffset = 0.f;
@@ -3027,7 +3027,7 @@ void set_camera_mode(struct Camera *c, s16 mode, s16 frames) {
         sCUpCameraPitch = 0;
         sModeOffsetYaw = 0;
         sLakituDist = 0;
-        sLakituPitch = 0;
+        sLakituPitch = gVerticalCamera ? 1024 : 0;
         sAreaYawChange = 0;
 
         sModeInfo.newMode = (mode != -1) ? mode : sModeInfo.lastMode;
@@ -3180,12 +3180,12 @@ void update_camera(struct Camera *c) {
             if (gPlayer1Controller->buttonPressed & R_TRIG) {
                 if (set_cam_angle(0) == CAM_ANGLE_LAKITU) {
                     set_cam_angle(CAM_ANGLE_MARIO);
-                    if (gManualCamera == 2) {
+                    if (configCustomCameraMode == 2) {
                         sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
                     }
                 } else {
                     set_cam_angle(CAM_ANGLE_LAKITU);
-                    if (gManualCamera == 1) {
+                    if (configCustomCameraMode == 1) {
                         sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
                     }
                 }
@@ -3227,6 +3227,7 @@ void update_camera(struct Camera *c) {
 
     if (c->cutscene != 0) {
         sYawSpeed = 0;
+        sManualModeYawOffset = gLakituState.yaw;
         play_cutscene(c);
         sFramesSinceCutsceneEnded = 0;
     } else {
@@ -3244,10 +3245,10 @@ void update_camera(struct Camera *c) {
         sYawSpeed = 0x400;
 
         if (sSelectionFlags & CAM_MODE_MARIO_ACTIVE) {
-            if (gManualCamera == 2) {
+            if (configCustomCameraMode == 2) {
                 switch (c->mode) {
                     case CAMERA_MODE_BEHIND_MARIO:
-                        mode_manual_camera(c, -75.0f);
+                        mode_custom_camera(c, -75.0f);
                         break;
 
                     case CAMERA_MODE_C_UP:
@@ -3255,7 +3256,7 @@ void update_camera(struct Camera *c) {
                         break;
         
                     case CAMERA_MODE_WATER_SURFACE:
-                        mode_manual_camera(c, 75.0f);
+                        mode_custom_camera(c, 75.0f);
                         break;
 
                     case CAMERA_MODE_INSIDE_CANNON:
@@ -3263,7 +3264,7 @@ void update_camera(struct Camera *c) {
                         break;
 
                     default:
-                        mode_manual_camera(c, 150.0f);
+                        mode_custom_camera(c, 150.0f);
                         break;
                 }
             }
@@ -3291,10 +3292,10 @@ void update_camera(struct Camera *c) {
                 }
             }
         } else {
-            if (gManualCamera == 1) {
+            if (configCustomCameraMode == 1) {
                 switch (c->mode) {
                     case CAMERA_MODE_BEHIND_MARIO:
-                        mode_manual_camera(c, -75.0f);
+                        mode_custom_camera(c, -75.0f);
                         break;
 
                     case CAMERA_MODE_C_UP:
@@ -3302,7 +3303,7 @@ void update_camera(struct Camera *c) {
                         break;
 
                     case CAMERA_MODE_WATER_SURFACE:
-                        mode_manual_camera(c, 75.0f);
+                        mode_custom_camera(c, 75.0f);
                         break;
 
                     case CAMERA_MODE_INSIDE_CANNON:
@@ -3310,7 +3311,7 @@ void update_camera(struct Camera *c) {
                         break;
 
                     default:
-                        mode_manual_camera(c, 150.0f);
+                        mode_custom_camera(c, 150.0f);
                 }
             }
             else {
@@ -3350,6 +3351,7 @@ void update_camera(struct Camera *c) {
                     case CAMERA_MODE_FREE_ROAM:
                         mode_lakitu_camera(c);
                         break;
+
                     case CAMERA_MODE_BOSS_FIGHT:
                         mode_boss_fight_camera(c);
                         break;
@@ -3453,8 +3455,9 @@ void reset_camera(struct Camera *c) {
     sCUpCameraPitch = 0;
     sModeOffsetYaw = 0;
     sSpiralStairsYawOffset = 0;
+    sManualModeYawOffset = 0;
     sLakituDist = 0;
-    sLakituPitch = 0;
+    sLakituPitch = gVerticalCamera ? 1024 : 0;
     sAreaYaw = 0;
     sAreaYawChange = 0.f;
     sPanDistance = 0.f;

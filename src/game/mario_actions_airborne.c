@@ -85,7 +85,7 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
     if (m->action != ACT_TWIRLING && m->floor->type != SURFACE_BURNING) {
         if (m->vel[1] < -55.0f) {
             if (fallHeight > 3000.0f) {
-                if (!gDisableFallDamage) {
+                if (!configDisableFallDamage) {
                     m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 16 : 24;
                 }
 #ifdef VERSION_SH
@@ -95,7 +95,7 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
                 play_sound(SOUND_MARIO_ATTACKED, m->marioObj->header.gfx.cameraToObject);
                 return drop_and_set_mario_action(m, hardFallAction, 4);
             } else if (fallHeight > damageHeight && !mario_floor_is_slippery(m)) {
-                if ((!gDisableFallDamage) && (!mario_has_improved_metal_cap(m))) {
+                if ((!configDisableFallDamage) && (!mario_has_improved_metal_cap(m))) {
                     m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 8 : 12;
                 }
                 m->squishTimer = 30;
@@ -113,7 +113,7 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
 
 s32 check_kick_or_dive_in_air(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) {
-        if (gImprovedControls) {
+        if (configImprovedControls) {
             if (m->forwardVel >= 28.0f && m->controller->stickMag > 48.0f) {
                 return set_mario_action(m, ACT_DIVE, 1);
             }
@@ -210,7 +210,7 @@ void update_air_with_turn(struct MarioState *m) {
             intendedDYaw = m->intendedYaw - m->faceAngle[1];
             intendedMag = m->intendedMag / 32.0f;
 
-            if (gImprovedControls) {
+            if (configImprovedControls) {
                 if ((m->forwardVel > 0 && intendedMag * coss(intendedDYaw) > 0) || (m->forwardVel < 0 && intendedMag * coss(intendedDYaw) < 0)) {
                     if (m->action != ACT_WALL_KICK_AIR)
                         m->forwardVel += intendedMag * coss(intendedDYaw) * 1.5f;
@@ -234,10 +234,6 @@ void update_air_with_turn(struct MarioState *m) {
             m->forwardVel += 2.0f;
         }
 
-        if (gXLMode) {
-            m->forwardVel /= 1.0f + gMarioFatness / 256.0f;
-        }
-
         m->vel[0] = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
         m->vel[2] = m->slideVelZ = m->forwardVel * coss(m->faceAngle[1]);
     }
@@ -257,7 +253,7 @@ void update_air_without_turn(struct MarioState *m, u32 canTurn) {
             intendedDYaw = m->intendedYaw - m->faceAngle[1];
             intendedMag = m->intendedMag / 32.0f;
 
-            if (gImprovedControls) {
+            if (configImprovedControls) {
                 if ((m->forwardVel > 0 && intendedMag * coss(intendedDYaw) > 0) || (m->forwardVel < 0 && intendedMag * coss(intendedDYaw) < 0)) {
                     if (m->action != ACT_WALL_KICK_AIR)
                         m->forwardVel += intendedMag * coss(intendedDYaw) * 1.5f;
@@ -265,7 +261,7 @@ void update_air_without_turn(struct MarioState *m, u32 canTurn) {
                 else {
                     m->forwardVel += intendedMag * coss(intendedDYaw) * 3.5f;
                 }
-                if (gFullAirControl && canTurn) {
+                if (configFullAirControl && canTurn) {
                     sidewaysSpeed = intendedMag * sins(intendedDYaw) * 7.5f;
                     m->faceAngle[1] += 768.0f * sins(intendedDYaw) * intendedMag;
                 }
@@ -281,7 +277,7 @@ void update_air_without_turn(struct MarioState *m, u32 canTurn) {
             }
             else {
                 m->forwardVel += intendedMag * coss(intendedDYaw) * 1.5f;
-                if (gFullAirControl && canTurn) {
+                if (configFullAirControl && canTurn) {
                     sidewaysSpeed = intendedMag * sins(intendedDYaw) * 5.0f;
                     m->faceAngle[1] += 768.0f * sins(intendedDYaw) * intendedMag;
                 }
@@ -297,10 +293,6 @@ void update_air_without_turn(struct MarioState *m, u32 canTurn) {
         }
         if (m->forwardVel < -16.0f) {
             m->forwardVel += 2.0f;
-        }
-
-        if (gXLMode) {
-            m->forwardVel /= 1.0f + gMarioFatness / 256.0f;
         }
 
         m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
@@ -888,9 +880,9 @@ s32 act_air_throw(struct MarioState *m) {
 }
 
 s32 act_water_jump(struct MarioState *m) {
-    if (gImprovedControls) {
-        if (m->forwardVel < 22.0f) {
-            mario_set_forward_vel(m, 22.0f);
+    if (configImprovedSwimming) {
+        if (m->forwardVel < 25.0f) {
+            mario_set_forward_vel(m, 25.0f);
         }
     }
     else {
@@ -909,8 +901,8 @@ s32 act_water_jump(struct MarioState *m) {
             break;
 
         case AIR_STEP_HIT_WALL:
-            if (gImprovedControls) {
-                mario_set_forward_vel(m, 24.0f);
+            if (configImprovedSwimming) {
+                mario_set_forward_vel(m, 25.0f);
             }
             else {
                 mario_set_forward_vel(m, 15.0f);
@@ -938,7 +930,7 @@ s32 act_hold_water_jump(struct MarioState *m) {
         return drop_and_set_mario_action(m, ACT_FREEFALL, 0);
     }
 
-    if (gImprovedControls) {
+    if (configImprovedSwimming) {
         if (m->forwardVel < 22.0f) {
             mario_set_forward_vel(m, 22.0f);
         }
@@ -959,7 +951,7 @@ s32 act_hold_water_jump(struct MarioState *m) {
             break;
 
         case AIR_STEP_HIT_WALL:
-            if (gImprovedControls) {
+            if (configImprovedSwimming) {
                 mario_set_forward_vel(m, 20.0f);
             }
             else {
@@ -1020,15 +1012,15 @@ s32 act_ground_pound(struct MarioState *m) {
                 m->peakHeight = m->pos[1];
                 vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
             }
-            if (gImprovedControls) {
+            if (configImprovedControls) {
                 m->vel[1] = -24.0f;
             }
         }
-        else if (gImprovedControls) {
+        else if (configImprovedControls) {
             m->vel[1] = -54.0f;
         }
 
-        if (!gImprovedControls) {
+        if (!configImprovedControls) {
             m->vel[1] = -50.0f;
         }
         mario_set_forward_vel(m, 0.0f);
@@ -1040,7 +1032,7 @@ s32 act_ground_pound(struct MarioState *m) {
         }
 
         m->actionTimer++;
-        if (gImprovedControls) {
+        if (configImprovedControls) {
             lagTime = 2;
         }
         else {
@@ -1258,7 +1250,7 @@ u32 common_air_knockback_step(struct MarioState *m, u32 landAction, u32 hardFall
 s32 check_wall_kick(struct MarioState *m) {
     if ((m->input & INPUT_A_PRESSED) && m->wallKickTimer != 0 && m->prevAction == ACT_AIR_HIT_WALL) {
         m->faceAngle[1] += 0x8000;
-        if (gImprovedControls) {
+        if (gWallSliding) {
             m->particleFlags |= PARTICLE_VERTICAL_STAR;
         }
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
@@ -1421,7 +1413,7 @@ s32 act_getting_blown(struct MarioState *m) {
         }
     }
 
-    if (++(m->actionTimer) == 20 && (!gPenguinSadEyes || gCurrCourseNum != COURSE_CCM)) {
+    if (++(m->actionTimer) == 20) {
         mario_blow_off_cap(m, 50.0f);
     }
 
@@ -2013,7 +2005,7 @@ s32 act_flying(struct MarioState *m) {
 }
 
 s32 act_riding_hoot(struct MarioState *m) {
-    if (((!(m->input & INPUT_A_DOWN) && !gImprovedHanging) || ((m->input & INPUT_A_PRESSED) && gImprovedHanging))
+    if (((!(m->input & INPUT_A_DOWN) && !configImprovedHanging) || ((m->input & INPUT_A_PRESSED) && configImprovedHanging))
     || (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK7)) {
         m->usedObj->oInteractStatus = 0;
         m->usedObj->oHootMarioReleaseTime = gGlobalTimer;

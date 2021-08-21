@@ -1,6 +1,6 @@
-# Super Mario 64 Plus
+# SM64 Plus
 
-Super Mario 64 Plus is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that focuses on customizability and aims to add features that not only fix some of the issues found in the base game but also enhance the gameplay overall with extra options.
+SM64 Plus is a fork of [sm64-port](https://github.com/sm64-port/sm64-port) that focuses on customizability and aims to add features that not only fix some of the issues found in the base game but also enhance the gameplay overall with extra options.
 
 These features include (but not limited to):
 - More responsive controls
@@ -19,19 +19,74 @@ This repo does **not** include all the assets necessary for compiling the game. 
 
 You can also build the game manually if you prefer to do so, or if you're not on a Windows platform. To do that, follow the instructions below.
 
-Features that _might_ get added in the future:
-- Smoother vertical camera movement.
-- Rumble support.
-- Odyssey-like spin jump.
-- Full OpenGL and SDL support.
-- Full Linux support for the launcher.
-- Maybe even N64 support?
-
 ## FAQ
 
 [You can find the FAQ here.](https://github.com/MorsGames/sm64plus/blob/master/FAQ.md)
 
+## Manual Building
+
+### Windows
+
+1. Install and update MSYS2, following the directions listed on https://www.msys2.org/.
+2. Launch MSYS2 MinGW and install required packages depending on your machine (do **NOT** launch "MSYS2 MSYS"):
+  * 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 mingw-w64-x86_64-glew`
+  * 32-bit: Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc mingw-w64-i686-SDL2 mingw-w64-i686-glew`
+  * Do not install `gcc`.
+3. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`, then enter it with `cd sm64plus`.
+4. Place a SM64 ROM with the filename `baserom.us.z64` into the newly created `sm64plus` folder, so the assets can get extracted.
+5. Run `make` inside that sm64plus folder to build the game itself. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
+  * If you're building for 32-bit, you should also include `TARGET_32BIT=1` after `make`.
+6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e.exe`.
+
+### Linux
+
+1. If you want to use the launcher, open terminal in the same folder as the launcher, otherwise just do it where you want to install the game.
+  * The launcher is currently not available on Linux yet.
+2. Install the prerequisites:
+  * On Debian / Ubuntu: `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`
+  * On Arch / Manjaro: `sudo pacman -S base-devel python sdl2 glew`
+  * On Fedora: `sudo dnf install make gcc python3 glew-devel SDL2-devel`
+3. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`.
+4. Place a SM64 ROM with the filename `baserom.us.z64` into the newly created `sm64plus` folder, so the assets can get extracted.
+5. Run `make` inside that sm64plus folder to build the game itself. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
+  * Please note that 32-bit linux builds are not tested.
+6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
+
 ## Changelog
+
+### v2.0.0 (21/08/2021):
+**Launcher:**
+- Added a brand new music track and sound effects by [Catonator](https://www.catonator.net/)!
+- The launcher does not close after launching the game anymore, instead it waits in the background until the game is closed.
+- You can now make the launcher go fullscreen by pressing Alt+Enter. Pressing Alt+M also mutes the launcher completely.
+- Made it so that you can enter numbers to number fields directly instead of scrolling for 1000 years.
+- Rewrote the scrolling code to make it feel better.
+- Allowed scaling the launcher window without messing up the contents.
+- Added some extra animations.
+- Added new backgrounds too.
+- Added all the new settings to the launcher.
+- Many more smaller tweaks were made.
+
+**Additions:**
+A TON of new settings and features were added in this update. All of them won't be listed here, but some of the more notable ones are:
+- Added OpenGL as a new graphics backend.
+- Added an "Overall Volume" setting.
+- Added a "Custom Camera" system that can be fully customized.
+- Added color settings that will let you change Mario's colors.
+- Added a bunch of cheats, some new, some moved from old debug settings.
+- Added an extra option for the "Green Demon Mode" that makes it extra challenging!
+- Added a ton of missing features from the Windows version to the Linux version, making it almost on par with the exception of the launcher and Direct3D backends.
+
+**Changes:**
+- Switched to SDL2 for input and audio handling (as well as windowing under OpenGL). What this means is that more controllers are now natively supported.
+- Made it so that "Fix Various Bugs" setting now fixes more bugs present within the game. Sorry speedrunners.
+- Made the "Improved Controls" setting also even more improved.
+- Made the "Backward Speed Cap" setting a part of "Improved Controls".
+- Split "Improved Controls" into "Improved Controls" and "Improved Swimming".
+- Removed "XL Mode".
+- Removed the CCM easter egg.
+- Fixed various minor bugs and oversights.
+- Renamed, relocated, and tweaked a bunch of other settings.
 
 ### v1.1.3.3 (07/06/2021):
 **Fixes:**
@@ -170,41 +225,14 @@ Features that _might_ get added in the future:
 ### v1.0.0 (05/04/2021)
 - Initial release.
 
-## Manual Building
-
-### Windows
-
-1. Install and update MSYS2, following the directions listed on https://www.msys2.org/.
-2. Launch MSYS2 MinGW and install required packages depending on your machine (do **NOT** launch "MSYS2 MSYS"):
-  * 64-bit: Launch "MSYS2 MinGW 64-bit" and install: `pacman -S git make python3 mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 mingw-w64-x86_64-glew`
-  * 32-bit (untested, but should also work on 64-bit machines): Launch "MSYS2 MinGW 32-bit" and install: `pacman -S git make python3 mingw-w64-i686-gcc mingw-w64-i686-SDL2 mingw-w64-i686-glew`
-  * Do not install `gcc`.
-3. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`, then enter it with `cd sm64plus`.
-4. Place a *Super Mario 64* ROM called `baserom.us.z64` into the repository folder for asset extraction.
-5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
-6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e.exe`.
-
-### Linux
-
-1. Install the prerequisites:
-  * On Debian / Ubuntu: `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`
-  * On Arch / Manjaro: `sudo pacman -S base-devel python sdl2 glew`
-  * On Fedora: `sudo dnf install make gcc python3 glew-devel SDL2-devel`
-2. Clone the repo with `git clone https://github.com/MorsGames/sm64plus.git`.
-3. Place a Super Mario 64 ROM called `baserom.us.z64` into the repository folder for asset extraction.
-5. Run `make` to build. You can add `-j4` to improve build speed (hardware dependent based on the amount of CPU cores available).
-6. The executable binary will be located at `build/us_pc/sm64.us.f3dex2e`.
-
-Please keep in mind that the Linux version of the game is missing some settings, such as "Wireframe Mode" and all mouse related settings.
-
 ## Additional options
 
-* On Windows you can target OpenGL+SDL by using `make ENABLE_OPENGL=1` when compiling. **CURRENTLY NONFUNCTIONAL DUE TO ISSUES WITH SDL!** Help is needed to fix this!
 * On non-Windows platforms, you can passing the path to the `gfx` directory as the first argument to the executable; by default it's generated at `build/us_pc/gfx`.
 
 ## Credits.
 - **Mors:** Most new things you see here.
 - **[Benial](https://twitter.com/Benial17):** Logo.
+- **[Catonator](https://www.catonator.net/):** Launcher music and sfx.
 - **[sm64-port](https://github.com/sm64-port/sm64-port) Team:** The port that was used as a base for this project.
 - **[A bunch of clever folks](https://github.com/n64decomp/sm64):** The original decompilation used for the port.
 - **Emil:** The original 60FPS patch.
@@ -213,6 +241,6 @@ Please keep in mind that the Linux version of the game is missing some settings,
 
 Parts of [sm64ex](https://github.com/sm64pc/sm64ex) were also used as a reference for this project.
 
-Special thanks to Superstarxalien, Benial, Triforce141, MrMovie, and Shubs for testing and feedback.
+Special thanks to Superstarxalien, Benial, Triforce141, MrMovie, and Shubs for pre-release testing and feedback.
 
-Please let me know if I'm forgetting to credit you.
+If I'm forgetting to credit you, please reach out so I can fix that!

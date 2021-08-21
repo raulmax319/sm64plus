@@ -749,15 +749,10 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
     if (!gNoHealingMode)
         m->healCounter += 4 * o->oDamageOrCoinValue;
 
-    if (gXLMode) {
-        gMarioFatness++;
-        play_sound(SOUND_OBJ2_PIRANHA_PLANT_BITE, o->header.gfx.cameraToObject);
-    }
-
     o->oInteractStatus = INT_STATUS_INTERACTED;
 
-    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && m->numCoins - o->oDamageOrCoinValue < 100
-        && m->numCoins >= 100) {
+    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && m->numCoins - o->oDamageOrCoinValue < configCoinStarCoins
+        && m->numCoins >= configCoinStarCoins) {
         bhv_spawn_star_no_level_exit(6);
     }
 #ifdef VERSION_SH
@@ -1055,7 +1050,7 @@ u32 interact_door(struct MarioState *m, UNUSED u32 interactType, struct Object *
                 enterDoorAction = ACT_ENTERING_STAR_DOOR;
             }
 
-            if (!gSkipCutscenes && doorSaveFileFlag != 0 && !(save_file_get_flags() & doorSaveFileFlag)) {
+            if (!configSkipCutscenes && doorSaveFileFlag != 0 && !(save_file_get_flags() & doorSaveFileFlag)) {
                 enterDoorAction = ACT_UNLOCKING_STAR_DOOR;
             }
 
@@ -1389,7 +1384,10 @@ u32 interact_hit_from_below(struct MarioState *m, UNUSED u32 interactType, struc
 #endif
                 return drop_and_set_mario_action(m, ACT_TWIRLING, 0);
             } else {
-                bounce_off_object(m, o, 30.0f);
+                if (configEnemyBouncing)
+                    bounce_off_object(m, o, (m->input & INPUT_A_DOWN) ? 48.0f : 22.0f);
+                else
+                    bounce_off_object(m, o, 30.0f);
             }
         }
     } else if (take_damage_and_knock_back(m, o)) {
@@ -1427,7 +1425,10 @@ u32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Ob
 #endif
                 return drop_and_set_mario_action(m, ACT_TWIRLING, 0);
             } else {
-                bounce_off_object(m, o, 30.0f);
+                if (configEnemyBouncing)
+                    bounce_off_object(m, o, (m->input & INPUT_A_DOWN) ? 48.0f : 22.0f);
+                else
+                    bounce_off_object(m, o, 30.0f);
             }
         }
     } else if (take_damage_and_knock_back(m, o)) {
@@ -1572,7 +1573,12 @@ u32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Object *
 
             marioObj->oMarioPoleUnk108 = 0;
             marioObj->oMarioPoleYawVel = 0;
-            marioObj->oMarioPolePos = m->pos[1] - o->oPosY;
+            if ((configFixVariousBugs) && ((m->pos[1] - o->oPosY) < 0)) {
+                marioObj->oMarioPolePos = -o->hitboxDownOffset;
+            }
+            else {
+                marioObj->oMarioPolePos = m->pos[1] - o->oPosY;
+            }
 
             if (lowSpeed) {
                 return set_mario_action(m, ACT_GRAB_POLE_SLOW, 0);
@@ -1711,7 +1717,8 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
         return TRUE;
     }
 
-    if (m->action == ACT_WALKING) {
+    if ((m->action == ACT_WALKING)
+    || (configTalkEasier && ((m->action == ACT_DECELERATING) || (m->action == ACT_BRAKING) || m->action == ACT_BRAKING_STOP) )) {
         if (arg) {
             return TRUE;
         }
@@ -1739,10 +1746,10 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
 #endif
 
 u32 check_read_sign(struct MarioState *m, struct Object *o) {
-    if (((m->input & READ_MASK && !gTalkEasier) || (gTalkEasier && m->input & INPUT_B_PRESSED)) 
+    if (((m->input & READ_MASK && !configTalkEasier) || (configTalkEasier && m->input & INPUT_B_PRESSED)) 
     && mario_can_talk(m, 0) && object_facing_mario(m, o, SIGN_RANGE)) {
         s16 facingDYaw = (s16)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1];
-        if ((facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) || (gTalkEasier)) {
+        if ((facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) || (configTalkEasier)) {
             f32 targetX = o->oPosX + 105.0f * sins(o->oMoveAngleYaw);
             f32 targetZ = o->oPosZ + 105.0f * coss(o->oMoveAngleYaw);
 
@@ -1760,10 +1767,10 @@ u32 check_read_sign(struct MarioState *m, struct Object *o) {
 }
 
 u32 check_npc_talk(struct MarioState *m, struct Object *o) {
-    if (((m->input & READ_MASK && !gTalkEasier) || (gTalkEasier && m->input & INPUT_B_PRESSED))
+    if (((m->input & READ_MASK && !configTalkEasier) || (configTalkEasier && m->input & INPUT_B_PRESSED))
     && mario_can_talk(m, 1)) {
         s16 facingDYaw = mario_obj_angle_to_object(m, o) - m->faceAngle[1];
-        if ((facingDYaw >= -0x4000 && facingDYaw <= 0x4000) || (gTalkEasier)) {
+        if ((facingDYaw >= -0x4000 && facingDYaw <= 0x4000) || (configTalkEasier)) {
             o->oInteractStatus = INT_STATUS_INTERACTED;
 
             m->interactObj = o;

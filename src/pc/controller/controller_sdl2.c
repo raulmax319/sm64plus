@@ -1,5 +1,3 @@
-#if !defined(_WIN32) && !defined(_WIN64)
-
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -20,6 +18,8 @@ static bool init_ok;
 static SDL_GameController *sdl_cntrl;
 
 static void controller_sdl_init(void) {
+    
+    SDL_GameControllerAddMappingsFromFile("gamecontrollerdb.txt");
     if (SDL_Init(SDL_INIT_GAMECONTROLLER) != 0) {
         fprintf(stderr, "SDL init error: %s\n", SDL_GetError());
         return;
@@ -129,5 +129,3 @@ struct ControllerAPI controller_sdl = {
     controller_sdl_init,
     controller_sdl_read
 };
-
-#endif

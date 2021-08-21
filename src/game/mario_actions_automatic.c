@@ -310,7 +310,7 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
 
     m->wall = resolve_and_return_wall_collisions(nextPos, 50.0f, 50.0f);
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-    if (gFixVariousBugs)
+    if (configFixVariousBugs)
         ceilHeight = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
     else
         ceilHeight = vec3f_find_ceil(nextPos, floorHeight, &ceil);
@@ -352,7 +352,7 @@ s32 update_hang_moving(struct MarioState *m) {
     Vec3f nextPos;
     f32 maxSpeed;
 
-    if (gImprovedHanging)
+    if (configImprovedHanging)
         maxSpeed = 8.0f;
     else
         maxSpeed = 4.0f;
@@ -407,8 +407,8 @@ s32 act_start_hanging(struct MarioState *m) {
         return set_mario_action(m, ACT_HANGING, 0);
     }
 
-    if ((!(m->input & INPUT_A_DOWN) && !gImprovedHanging)
-    || ((m->input & INPUT_A_PRESSED) && gImprovedHanging)) {
+    if ((!(m->input & INPUT_A_DOWN) && !configImprovedHanging)
+    || ((m->input & INPUT_A_PRESSED) && configImprovedHanging)) {
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
@@ -437,8 +437,8 @@ s32 act_hanging(struct MarioState *m) {
         return set_mario_action(m, ACT_HANG_MOVING, m->actionArg);
     }
 
-    if ((!(m->input & INPUT_A_DOWN) && !gImprovedHanging)
-    || ((m->input & INPUT_A_PRESSED) && gImprovedHanging)) {
+    if ((!(m->input & INPUT_A_DOWN) && !configImprovedHanging)
+    || ((m->input & INPUT_A_PRESSED) && configImprovedHanging)) {
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
@@ -462,8 +462,8 @@ s32 act_hanging(struct MarioState *m) {
 }
 
 s32 act_hang_moving(struct MarioState *m) {
-    if ((!(m->input & INPUT_A_DOWN) && !gImprovedHanging)
-    || ((m->input & INPUT_A_PRESSED) && gImprovedHanging)) {
+    if ((!(m->input & INPUT_A_DOWN) && !configImprovedHanging)
+    || ((m->input & INPUT_A_PRESSED) && configImprovedHanging)) {
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
@@ -494,7 +494,7 @@ s32 act_hang_moving(struct MarioState *m) {
             return set_mario_action(m, ACT_HANGING, m->actionArg);
         }
     }
-    if (gImprovedHanging)  
+    if (configImprovedHanging)  
         update_hang_moving(m);
     else {
         if (update_hang_moving(m) == HANG_LEFT_CEIL) {
@@ -727,7 +727,7 @@ s32 act_in_cannon(struct MarioState *m) {
             break;
 
         case 2:
-            if (gImprovedControls) {
+            if (configImprovedControls) {
                 m->faceAngle[0] -= (s16)((m->controller->stickY + m->controller->stick2Y) * 6.0f);
                 marioObj->oMarioCannonInputYaw -= (s16)((m->controller->stickX + m->controller->stick2X) * 6.0f);
             }
@@ -744,11 +744,11 @@ s32 act_in_cannon(struct MarioState *m) {
             }
 
             if (gFlexibleCannons) {
-                if (marioObj->oMarioCannonInputYaw > 0x8000) {
-                    marioObj->oMarioCannonInputYaw = 0x8000;
+                if (marioObj->oMarioCannonInputYaw > 0x10000) {
+                    marioObj->oMarioCannonInputYaw = 0x10000;
                 }
-                if (marioObj->oMarioCannonInputYaw < -0x8000) {
-                    marioObj->oMarioCannonInputYaw = -0x8000;
+                if (marioObj->oMarioCannonInputYaw < -0x10000) {
+                    marioObj->oMarioCannonInputYaw = -0x10000;
                 }
             }
             else {

@@ -22,6 +22,8 @@
 #include "save_file.h"
 #include "level_table.h"
 
+
+#include "object_helpers.h"
 #include "settings.h"
 
 struct SpawnInfo gPlayerSpawnInfos[1];
@@ -118,7 +120,7 @@ void print_intro_text(void) {
             print_text_centered(SCREEN_WIDTH / 2, 20, "NO CONTROLLER");
 #endif
         } else {
-            if (gCenterHud || configForce4by3) {
+            if (config4by3Hud || configForce4by3) {
 #ifdef VERSION_EU
                 print_text(20, 20, "START");
 #else
@@ -272,8 +274,6 @@ void load_mario_area(void) {
     load_area(gMarioSpawnInfo->areaIndex);
 
     hide_you_got_a_star();
-    gMarioWillDie = FALSE;
-    gMarioFatness = 0;
 
     if (gCurrDemoInput == NULL) 
         gCanMirror = 1;
@@ -283,6 +283,10 @@ void load_mario_area(void) {
     if (gCurrentArea->index == gMarioSpawnInfo->areaIndex) {
         gCurrentArea->flags |= 0x01;
         spawn_objects_from_info(0, gMarioSpawnInfo);
+    }
+
+    if (gGreenDemon > 1 && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS) {
+        spawn_object(gMarioObject, MODEL_1UP, bhvHidden1upInPole);
     }
 }
 

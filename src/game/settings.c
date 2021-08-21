@@ -150,74 +150,85 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
-char* gTitleString = "Super Mario 64 Plus v1.1.3.3";
+char* gTitleString = "Super Mario 64 Plus v2.0.0";
 
 s8 configFullscreen = 1;
-#if defined(_WIN32) || defined(_WIN64)
 unsigned int configCustomFullscreenResolution = 0;
 unsigned int configFullscreenWidth = 1920;
 unsigned int configFullscreenHeight = 1080;
-unsigned int configFullscreenRefreshRate = 60;
-#endif
 unsigned int configWindowWidth = 1280;
 unsigned int configWindowHeight = 720;
-#if defined(_WIN32) || defined(_WIN64)
 unsigned int configDefaultMonitor = 1;
+#if defined(_WIN32) || defined(_WIN64)
 s8 configCustomInternalResolution = 0;
 unsigned int configInternalResolutionWidth = 3840;
 unsigned int configInternalResolutionHeight = 2160;
 #endif
 unsigned int configGraphicsBackend = 0;
 
+float configOverallVolume = 1;
 float configSeqVolume[] = {1, 1, 1};
 
 // TODO (Mors): Rename these with a config prefix.
-s8 g60FPS = 1;
-s8 gDisableDrawDistance = 1;
-float gDrawDistanceMultiplier = 1.0f;
-s8 gDisableLowPoly = 1;
-unsigned int gTextureFiltering = 2;
-unsigned int gNoiseType = 0;
+s8 config60FPS = 1;
+s8 configDisableDrawDistance = 1;
+float configDrawDistanceMultiplier = 1.0f;
+s8 configDisableLowPolyModels = 1;
+unsigned int configTextureFiltering = 2;
+unsigned int configNoiseType = 0;
 s8 configForce4by3 = 0;
 
-s8 gImprovedControls = 1;
-s8 gBackwardSpeedCap = 1;
-s8 gImprovedHanging = 1;
-s8 gDpadControls = 1;
-s8 gFullAirControl = 0;
-s8 gDisableBLJ = 0;
-s8 gDisableFallDamage = 0;
+s8 configImprovedControls = 1;
+s8 configImprovedSwimming = 1;
+s8 configImprovedHanging = 1;
+s8 configEnemyBouncing = 1;
+s8 configDpadControls = 1;
+s8 configFullAirControl = 0;
+s8 configDisableBLJ = 0;
 
-s8 gFixVariousBugs = 1;
-s8 gRespawnBlueCoinSwitch = 1;
-s8 gRemoveAnnoyingWarps = 1;
-s8 gImprovePowerups = 1;
-s8 gDisableBooDialogue = 1;
-s8 gTalkEasier = 1;
-s8 gQuitOption = 1;
-unsigned int gStayInLevel = 0;
-s8 gSkipStarSelect = 0;
-s8 gRestartLevelAfterStar = 0;
-s8 gLeaveAnyTime = 0;
-s8 gVisibleSecrets = 0;
-s8 gFlexibleCannons = 0;
-s8 gSkipCutscenes = 0;
+s8 configFixVariousBugs = 1;
+s8 configRespawnCertainItems = 1;
+s8 configRemoveAnnoyingWarps = 1;
+s8 configImprovePowerups = 1;
+s8 configBetterBlastAwayTheWall = 1;
+s8 configDisableBooDialogue = 1;
+s8 configTalkEasier = 1;
+s8 configDisableFallDamage = 0;
+s8 configLeaveAnyTime = 0;
+s8 configVisibleSecrets = 0;
+s8 configFixBombClip = 0;
 
-s8 gImprovedCamera = 1;
+s8 configBowsersSub = 1;
+unsigned int configStayInCourse = 0;
+s8 configSkipMissionSelect = 0;
+s8 configSwitchToNextMission = 0;
+s8 configSkipCutscenes = 0;
+
 s8 gCenterCameraButton = 1;
-unsigned int gManualCamera = 0;
-s8 gSmarterManualCamera = 0;
+s8 gImprovedCamera = 1;
+s8 gVerticalCamera = 1;
 s8 gInvertedCamera = 0;
+s8 gInvertedVerticalCamera = 0;
 float gCameraSpeed = 32.0f;
 float gAdditionalCameraDistance = 0.0f;
 float gAdditionalFOV = 0.0f;
 
-unsigned int gHudStyle = 2;
-s8 gCenterHud = 0;
-s8 gHUDFiltering = 0;
+unsigned int configCustomCameraMode = 0;
+s8 configCustomCameraPan = 0;
+s8 configCustomCameraTilt = 0;
+s8 configCustomCameraRotation = 0;
+s8 configCustomCameraCollisions = 0;
+float configCustomCameraDistanceDefault = 80.0f;
+float configCustomCameraDistanceZoomedOut = 160.0f;
+
+s8 configQuitOption = 1;
+unsigned int configHudLayout = 2;
+s8 config4by3Hud = 0;
 s8 gHudStars = 0;
+s8 configAddZeroes = 0;
 s8 gShow100CoinStar = 0;
 s8 gAlwaysShowHealth = 0;
+s8 gHUDFiltering = 0;
 s8 gHideHud = 0;
 
 s8 gMouseCam = 1;
@@ -235,7 +246,7 @@ s8 gOdysseyDive = 0;
 s8 gFlashbackPound = 0;
 
 s8 gPyramidCutscene = 1;
-s8 gUnusedSounds = 1;
+s8 configRestoreUnusedSounds = 1;
 s8 gPenguinSadEyes = 1;
 s8 gTwirlTripleJump = 0;
 s8 gSpawnSparkles = 0;
@@ -243,31 +254,70 @@ s8 gReplaceKeysWithStars = 0;
 
 unsigned int gLifeMode = 0;
 unsigned int gEncoreMode = 0;
-s8 gGreenDemon = 0;
+unsigned int gGreenDemon = 0;
 s8 gNoHealingMode = 0;
 s8 gHardSave = 0;
 s8 gDaredevilSave = 0;
 s8 gHardcoreSave = 0;
 s8 gCasualMode = 0;
 
+s8 gDebugMovementMode = 0;
+s8 gDebugCapChanger = 0;
+unsigned int gMoonJump = 0;
+s8 configGodMode = 0;
+s8 configHyperspeedMode = 0;
+s8 gFlexibleCannons = 0;
+unsigned int configCoinStarCoins = 100;
+
 s8 gPaperMode = 0;
 s8 gFXMode = 0;
 #if defined(_WIN32) || defined(_WIN64)
 s8 gWireframeMode = 0;
 #endif
-s8 gXLMode = 0;
 s8 gDisableLighting = 0;
 s8 gForceLowPoly = 0;
 
-s8 gDebugMovementMode = 0;
-s8 gDebugCapChanger = 0;
-unsigned int gMoonJump = 0;
-s8 gVerticalCamera = 0;
+unsigned int configColorHatRLight = 255;
+unsigned int configColorHatRDark = 127;
+unsigned int configColorHatGLight = 0;
+unsigned int configColorHatGDark = 0;
+unsigned int configColorHatBLight = 0;
+unsigned int configColorHatBDark = 0;
+
+unsigned int configColorOverallsRLight = 0;
+unsigned int configColorOverallsRDark = 0;
+unsigned int configColorOverallsGLight = 0;
+unsigned int configColorOverallsGDark = 0;
+unsigned int configColorOverallsBLight = 255;
+unsigned int configColorOverallsBDark = 127;
+
+unsigned int configColorShoesRLight = 114;
+unsigned int configColorShoesRDark = 57;
+unsigned int configColorShoesGLight = 28;
+unsigned int configColorShoesGDark = 14;
+unsigned int configColorShoesBLight = 14;
+unsigned int configColorShoesBDark = 7;
+
+unsigned int configColorSkinRLight = 254;
+unsigned int configColorSkinRDark = 127;
+unsigned int configColorSkinGLight = 193;
+unsigned int configColorSkinGDark = 96;
+unsigned int configColorSkinBLight = 121;
+unsigned int configColorSkinBDark = 60;
+
+unsigned int configColorHairRLight = 115;
+unsigned int configColorHairRDark = 57;
+unsigned int configColorHairGLight = 6;
+unsigned int configColorHairGDark = 3;
+unsigned int configColorHairBLight = 0;
+unsigned int configColorHairBDark = 0;
+
+unsigned int configFullscreenRefreshRate = 60;
 
 unsigned int configButtonA = A_BUTTON;
-unsigned int configButtonB = Z_TRIG;
+unsigned int configButtonB = D_CBUTTONS;
 unsigned int configButtonX = B_BUTTON;
-unsigned int configButtonY = 0;
+unsigned int configButtonY = U_CBUTTONS;
 unsigned int configButtonStart = START_BUTTON;
 unsigned int configButtonSelect = L_TRIG;
 unsigned int configButtonL = Z_TRIG;
@@ -298,17 +348,15 @@ unsigned int configKeyWalk = DIK_LSHIFT;
 // These probably don't belong here, but I don't have a better place for them at the moment.
 // TODO (Mors): Move this out to somewhere that fits.
 s16 gCollectedStar = 0;
-s8 gMarioWillDie = 0;
-s16 gMarioFatness = 0;
 
 s8 stay_in_level() {
-    if (gStayInLevel == 2 && (
+    if (configStayInCourse == 2 && (
     // If we have collected the first star in the first act in these levels, kick us out.
     (gCurrActNum == 1 && gCollectedStar == 0 &&
     (gCurrLevelNum == LEVEL_BOB || gCurrLevelNum == LEVEL_WF || gCurrLevelNum == LEVEL_JRB || gCurrLevelNum == LEVEL_BBH || 
-    gCurrLevelNum == LEVEL_CCM || gCurrLevelNum == LEVEL_TTM || gCurrLevelNum == LEVEL_SSL || 
+    gCurrLevelNum == LEVEL_CCM || gCurrLevelNum == LEVEL_TTM || gCurrLevelNum == LEVEL_SSL || (configBowsersSub && gCurrLevelNum == LEVEL_DDD) ||
     // In addition to all of above, kick us only if the submarine is there in DDD.
-    ((!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) && gCurrLevelNum == LEVEL_DDD))) ||
+    (!configBowsersSub && (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) && gCurrLevelNum == LEVEL_DDD))) ||
     // Kick us from the wiggler room.
     (gCollectedStar == 5 && gCurrLevelNum == LEVEL_THI) ||
     // Let the bonus levels kick us out too
@@ -316,16 +364,17 @@ s8 stay_in_level() {
     gCurrLevelNum == LEVEL_VCUTM || gCurrLevelNum == LEVEL_WMOTR || gCurrLevelNum == LEVEL_SA))
     ))
         return FALSE;
-    return gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3
+    return configStayInCourse && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3
     && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS;
 }
 
 s8 restart_level_after_star() {
-    return gRestartLevelAfterStar &&
+    return configSwitchToNextMission &&
     gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3 &&
     gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS &&
     gCurrLevelNum != LEVEL_BITDW && gCurrLevelNum != LEVEL_BITFS && gCurrLevelNum != LEVEL_BITS &&
     gCurrLevelNum != LEVEL_PSS && gCurrLevelNum != LEVEL_COTMC && gCurrLevelNum != LEVEL_TOTWC &&
     gCurrLevelNum != LEVEL_VCUTM && gCurrLevelNum != LEVEL_WMOTR && gCurrLevelNum != LEVEL_SA &&
-    ((save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) || gCurrLevelNum != LEVEL_DDD);
+    (configBowsersSub || (save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) || gCurrLevelNum != LEVEL_DDD) &&
+    (!configBowsersSub || gCurrLevelNum != LEVEL_DDD);
 }

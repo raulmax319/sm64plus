@@ -23,14 +23,10 @@
 #include "gfx/gfx_direct3d11.h"
 #include "gfx/gfx_direct3d12.h"
 #include "gfx/gfx_dxgi.h"
-#include "gfx/gfx_glx.h"
 #include "gfx/gfx_sdl.h"
 #include "gfx/gfx_dummy.h"
 
 #include "audio/audio_api.h"
-#include "audio/audio_wasapi.h"
-#include "audio/audio_pulse.h"
-#include "audio/audio_alsa.h"
 #include "audio/audio_sdl.h"
 #include "audio/audio_null.h"
 
@@ -104,7 +100,7 @@ static void patch_interpolations(void) {
     patch_interpolated_dialog();
     patch_interpolated_hud();
 
-    if (gStayInLevel)
+    if (configStayInCourse)
         render_you_got_a_star(1);
 
     patch_interpolated_paintings();
@@ -133,10 +129,10 @@ void produce_one_frame(void) {
     gfx_end_frame();
     
     gfx_start_frame();
-    if (g60FPS) {
+    if (config60FPS) {
         patch_interpolations();
     }
-    else if (gStayInLevel) {
+    else if (configStayInCourse) {
         render_you_got_a_star(3);
     }
     send_display_list(gGfxSPTask);
@@ -233,7 +229,7 @@ void main_func(const char* gfx_dir) {
 #if defined(__linux__) || defined(__BSD__)
     case 0:
         rendering_api = &gfx_opengl_api;
-        wm_api = &gfx_glx;
+        wm_api = &gfx_sdl;
         break;
 
 #elif defined(_WIN32) || defined(_WIN64)
@@ -241,18 +237,14 @@ void main_func(const char* gfx_dir) {
         rendering_api = &gfx_direct3d11_api;
         wm_api = &gfx_dxgi_api;
         break;
-
     case 1:
         rendering_api = &gfx_direct3d12_api;
         wm_api = &gfx_dxgi_api;
         break;
-
-#if defined(ENABLE_OPENGL)
     case 2:
         rendering_api = &gfx_opengl_api;
         wm_api = &gfx_sdl;
         break;
-#endif
 #endif
     default:
         rendering_api = &gfx_dummy_renderer_api;
@@ -264,27 +256,10 @@ void main_func(const char* gfx_dir) {
     wm_api->set_fullscreen_changed_callback(on_fullscreen_changed);
     wm_api->set_keyboard_callbacks(keyboard_on_key_down, keyboard_on_key_up, keyboard_on_all_keys_up, keyboard_on_mouse_move, keyboard_on_mouse_press);
     
-#if HAVE_WASAPI
-    if (audio_api == NULL && audio_wasapi.init()) {
-        audio_api = &audio_wasapi;
-    }
-#endif
-#if HAVE_PULSE_AUDIO
-    if (audio_api == NULL && audio_pulse.init()) {
-        audio_api = &audio_pulse;
-    }
-#endif
-#if HAVE_ALSA
-    if (audio_api == NULL && audio_alsa.init()) {
-        audio_api = &audio_alsa;
-    }
-#endif
-#ifdef TARGET_WEB
-    if (audio_api == NULL && audio_sdl.init()) {
+    if (audio_sdl.init()) {
         audio_api = &audio_sdl;
     }
-#endif
-    if (audio_api == NULL) {
+    else {
         audio_api = &audio_null;
     }
 

@@ -61,14 +61,14 @@ static f32 get_buoyancy(struct MarioState *m) {
             buoyancy = -18.0f;
         }
     } else if (swimming_near_surface(m)) {
-        if (gImprovedControls) {
+        if (configImprovedSwimming) {
             buoyancy = 2.0f;
         }
         else {
             buoyancy = 1.25f;
         }
     } else if (!(m->action & ACT_FLAG_MOVING)) {
-        if (gImprovedControls) {
+        if (configImprovedSwimming) {
             buoyancy = -0.5f;
         }
         else {
@@ -89,7 +89,7 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
     wall = resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f);
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
 
-    if (gFixVariousBugs)
+    if (configFixVariousBugs)
         ceilHeight = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
     else
         ceilHeight = vec3f_find_ceil(nextPos, floorHeight, &ceil);
@@ -461,7 +461,10 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
         case WATER_STEP_HIT_FLOOR:
             floorPitch = -find_floor_slope(m, -0x8000);
             if (m->faceAngle[0] < floorPitch) {
-                m->faceAngle[0] = floorPitch;
+                if (configImprovedSwimming)
+                    m->faceAngle[0] = approach_s32(m->faceAngle[0], floorPitch, 0x400, 0x400);
+                else
+                    m->faceAngle[0] = floorPitch;
             }
             break;
 
@@ -509,7 +512,7 @@ static s32 check_water_jump(struct MarioState *m) {
         if (probe >= m->waterLevel - 80 && m->faceAngle[0] >= 0 && m->controller->stickY < -60.0f) {
             vec3s_set(m->angleVel, 0, 0, 0);
 
-            if (gImprovedControls) {
+            if (configImprovedSwimming) {
                 m->vel[1] = 64.0f;
             }
             else {
@@ -549,7 +552,7 @@ static s32 act_breaststroke(struct MarioState *m) {
     }
 
     if (m->actionTimer < 6) {
-        if (gImprovedControls) {
+        if (configImprovedSwimming) {
             m->forwardVel += 1.0f;
         }
         else {
@@ -558,7 +561,7 @@ static s32 act_breaststroke(struct MarioState *m) {
     }
 
     if (m->actionTimer >= 9) {
-        if (gImprovedControls) {
+        if (configImprovedSwimming) {
             m->forwardVel += 3.0f;
         }
         else {
@@ -782,7 +785,7 @@ static s32 act_water_shell_swimming(struct MarioState *m) {
         return set_mario_action(m, ACT_WATER_THROW, 0);
     }
 
-    if (m->actionTimer++ == (gImprovePowerups ? 480 : 240)) {
+    if (m->actionTimer++ == (configImprovePowerups ? 480 : 240)) {
         m->heldObj->oInteractStatus = INT_STATUS_STOP_RIDING;
         m->heldObj = NULL;
         stop_shell_music();

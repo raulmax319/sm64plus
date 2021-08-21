@@ -23,6 +23,8 @@ TARGET_N64 ?= 0
 TARGET_WEB ?= 0
 # Compiler to use (ido or gcc)
 COMPILER ?= ido
+# If this build is for 32 bit
+TARGET_32BIT ?= 0
 
 # Automatic settings only for ports
 ifeq ($(TARGET_N64),0)
@@ -37,11 +39,6 @@ ifeq ($(TARGET_N64),0)
       # TODO: Detect Mac OS X, BSD, etc. For now, assume Linux
       TARGET_LINUX := 1
     endif
-  endif
-
-  ifeq ($(TARGET_WINDOWS),0)
-    # Enable OpenGL on non-Windows systems
-    ENABLE_OPENGL ?= 1
   endif
 
 endif
@@ -168,6 +165,7 @@ endif
 endif
 
 LIBULTRA := $(BUILD_DIR)/libultra.a
+
 ifeq ($(TARGET_WEB),1)
 EXE := $(BUILD_DIR)/$(TARGET).html
 else
@@ -195,6 +193,7 @@ else
   SRC_DIRS := $(SRC_DIRS) src/pc src/pc/gfx src/pc/audio src/pc/controller
   ASM_DIRS :=
 endif
+
 BIN_DIRS := bin bin/$(VERSION)
 
 ULTRA_SRC_DIRS := lib/src lib/src/math
@@ -391,7 +390,7 @@ else # TARGET_N64
 AS := as
 ifneq ($(TARGET_WEB),1)
   CC := gcc
-  CXX := g++ -o sm64plus icon.res
+  CXX := g++
 else
   CC := emcc
 endif
@@ -405,14 +404,22 @@ OBJDUMP := objdump
 OBJCOPY := objcopy
 PYTHON := python3
 
-# Platform-specific compiler and linker flags
+# Platform-specific compiler and linker flags, including SDL stuff
+SDLCONFIG_CFLAGS := $(shell sdl2-config --cflags)
+
+# Static linking is broken on Windows for some reason so we will roll like this for now
 ifeq ($(TARGET_WINDOWS),1)
-  PLATFORM_CFLAGS  := -DTARGET_WINDOWS
-  PLATFORM_LDFLAGS := -lm -lxinput9_1_0 -lole32 -no-pie -mwindows
+  ifeq ($(TARGET_32BIT),0)
+    PLATFORM_LDFLAGS := -o sm64plus icon.res
+  endif
+  SDLCONFIG_LDFLAGS := -Wl,-Bdynamic $(shell sdl2-config --libs) -Wl,-Bstatic -Llib
+  PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_WINDOWS
+  PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -static -lm -no-pie -mwindows -w
 endif
 ifeq ($(TARGET_LINUX),1)
-  PLATFORM_CFLAGS  := -DTARGET_LINUX `pkg-config --cflags libusb-1.0`
-  PLATFORM_LDFLAGS := -lm -lpthread `pkg-config --libs libusb-1.0` -lasound -lpulse -no-pie
+  SDLCONFIG_LDFLAGS := $(shell sdl2-config --libs)
+  PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_LINUX `pkg-config --cflags libusb-1.0`
+  PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -lm -lpthread `pkg-config --libs libusb-1.0` -no-pie
 endif
 ifeq ($(TARGET_WEB),1)
   PLATFORM_CFLAGS  := -DTARGET_WEB
@@ -422,25 +429,17 @@ endif
 PLATFORM_CFLAGS += -DNO_SEGMENTED_MEMORY -DUSE_SYSTEM_MALLOC
 
 # Compiler and linker flags for graphics backend
-ifeq ($(ENABLE_OPENGL),1)
-  GFX_CFLAGS  := -DENABLE_OPENGL
-  GFX_LDFLAGS :=
-  ifeq ($(TARGET_WINDOWS),1)
-    GFX_CFLAGS  += $(shell sdl2-config --cflags) -DGLEW_STATIC
-    GFX_LDFLAGS += $(shell sdl2-config --libs) -Llib -lpthread -lglew32 -lm -lglu32 -lsetupapi -ldinput8 -luser32 -limm32 -lole32 -loleaut32 -lshell32 -lwinmm -lversion -luuid -lopengl32 -static
-  endif
-  ifeq ($(TARGET_LINUX),1)
-    GFX_CFLAGS  += $(shell sdl2-config --cflags)
-    GFX_LDFLAGS += -lGL $(shell sdl2-config --libs) -lX11 -lXrandr
-  endif
-  ifeq ($(TARGET_WEB),1)
-    GFX_CFLAGS  += -s USE_SDL=2
-    GFX_LDFLAGS += -lGL -lSDL2
-  endif
-endif
 ifeq ($(TARGET_WINDOWS),1)
-  GFX_CFLAGS :=
-  PLATFORM_LDFLAGS += -lgdi32 -static
+  GFX_CFLAGS  += -DGLEW_STATIC
+  GFX_LDFLAGS += -lpthread -lglew32 -lglu32 -lopengl32
+endif
+ifeq ($(TARGET_LINUX),1)
+  GFX_CFLAGS  += 
+  GFX_LDFLAGS += -lGL -lX11 -lXrandr
+endif
+ifeq ($(TARGET_WEB),1)
+  GFX_CFLAGS  += -s
+  GFX_LDFLAGS += -lGL -lSDL2
 endif
 
 GFX_CFLAGS += -DWIDESCREEN
@@ -807,9 +806,14 @@ $(BUILD_DIR)/$(TARGET).objdump: $(ELF)
 else
 $(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES)
 	$(LD) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS)
+
+  # Probably not the best place for this but I'm lazy!
+	$(shell a=$(PATH); b=$${a%%:*}; cp "$${b}/SDL2.dll" "$(BUILD_DIR)/SDL2.dll")
+  ifeq ($(TARGET_32BIT),1)
+	  $(shell a=$(PATH); b=$${a%%:*}; cp "$${b}/libgcc_s_dw2-1.dll" "$(BUILD_DIR)/libgcc_s_dw2-1.dll")
+	  $(shell a=$(PATH); b=$${a%%:*}; cp "$${b}/libwinpthread-1.dll" "$(BUILD_DIR)/libwinpthread-1.dll")
+  endif
 endif
-
-
 
 .PHONY: all clean distclean default diff test load libultra
 # with no prerequisites, .SECONDARY causes no intermediate target to be removed

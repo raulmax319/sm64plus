@@ -1,5 +1,3 @@
-#ifdef ENABLE_OPENGL
-
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -270,7 +268,12 @@ static struct ShaderProgram *gfx_opengl_create_and_load_new_shader(uint32_t shad
     }
 
     if (cc_features.opt_alpha && cc_features.opt_noise) {
-        append_line(fs_buf, &fs_len, "texel.a *= floor(random(vec3(floor(gl_FragCoord.xy * (240.0 / float(window_height))), float(frame_count))) + 0.5);");
+        if (configNoiseType) {
+            append_line(fs_buf, &fs_len, "texel.a *= floor(clamp(random(vec3(floor(gl_FragCoord.xy), float(frame_count)) + texel.a - 0.5), 0.0, 1.0) + 0.5);");
+        }
+        else {
+            append_line(fs_buf, &fs_len, "texel.a *= floor(clamp(random(vec3(floor(gl_FragCoord.xy * (240.0 / float(window_height))), float(frame_count)) + texel.a - 0.5), 0.0, 1.0) + 0.5);");
+        }
     }
 
     if (cc_features.opt_alpha) {
@@ -529,5 +532,3 @@ struct GfxRenderingAPI gfx_opengl_api = {
     gfx_opengl_end_frame,
     gfx_opengl_finish_render
 };
-
-#endif

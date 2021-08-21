@@ -1,19 +1,5 @@
 // tuxie.c.inc
 
-struct Object *dababy;
-
-static struct ObjectHitbox sAngryMomHitbox = {
-    /* interactType:      */ INTERACT_STRONG_WIND,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
-    /* radius:            */ 48,
-    /* height:            */ 64,
-    /* hurtboxRadius:     */ 48,
-    /* hurtboxHeight:     */ 64,
-};
-
 void play_penguin_walking_sound(s32 walk) {
     s32 sound;
     if (o->oSoundStateID == 0) {
@@ -30,17 +16,7 @@ void tuxies_mother_act_2(void) {
     UNUSED s32 unused;
     struct Object *sp1C = cur_obj_find_nearest_object_with_behavior(bhvSmallPenguin, &sp24);
 
-    // She's out for blood
-    if (gMarioWillDie) {
-        cur_obj_init_animation_with_sound(0);
-        o->oForwardVel = 50.0f;
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x1000);
-    }
-    else if (dababy != NULL && dababy->oPosY < -5000 && gPenguinSadEyes) {
-        obj_set_hitbox(o, &sAngryMomHitbox);
-        gMarioWillDie = TRUE;
-    }
-    else if (cur_obj_find_nearby_held_actor(bhvUnused20E0, 1000.0f) != NULL) {
+    if (cur_obj_find_nearby_held_actor(bhvUnused20E0, 1000.0f) != NULL) {
         if (o->oSubAction == 0) {
             cur_obj_init_animation_with_sound(0);
             o->oForwardVel = 10.0f;
@@ -53,7 +29,6 @@ void tuxies_mother_act_2(void) {
             if (cur_obj_lateral_dist_from_mario_to_home() < 700.0f)
                 o->oSubAction = 0;
         }
-        dababy = cur_obj_find_nearby_held_actor(bhvUnused20E0, 1000.0f);
     } else {
         o->oForwardVel = 0.0f;
         cur_obj_init_animation_with_sound(3);

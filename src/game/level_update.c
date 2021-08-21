@@ -247,7 +247,7 @@ void load_level_init_text(u32 arg) {
     s32 gotAchievement;
     u32 dialogID = gCurrentArea->dialog[arg];
 
-    if (gSkipCutscenes)
+    if (configSkipCutscenes)
         return;
 
     switch (dialogID) {
@@ -903,7 +903,7 @@ void initiate_delayed_warp(void) {
                     break;
 
                 default:
-                    if (gRemoveAnnoyingWarps && (sDelayedWarpOp & WARP_OP_TRIGGERS_LEVEL_SELECT) && (area_get_warp_node(sSourceWarpNodeId)->node.destLevel & 0x7F) == LEVEL_CASTLE_GROUNDS && gCurrCourseNum != COURSE_VCUTM) {
+                    if (configRemoveAnnoyingWarps && (sDelayedWarpOp & WARP_OP_TRIGGERS_LEVEL_SELECT) && (area_get_warp_node(sSourceWarpNodeId)->node.destLevel & 0x7F) == LEVEL_CASTLE_GROUNDS && gCurrCourseNum != COURSE_VCUTM) {
                         warpNode = area_get_warp_node(WARP_NODE_DEATH);
                     }
                     else {
@@ -936,9 +936,7 @@ void update_hud_values(void) {
         if (gHudDisplay.coins < gMarioState->numCoins) {
             if (gGlobalTimer & 0x00000001) {
                 u32 coinSound;
-                if (gXLMode) {
-                    coinSound = SOUND_GENERAL_QUIET_BUBBLE2;
-                } else if (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
+                if (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
                     coinSound = SOUND_GENERAL_COIN_WATER;
                 } else {
                     coinSound = SOUND_GENERAL_COIN;
@@ -1055,7 +1053,7 @@ s32 play_mode_paused(void) {
         raise_background_noise(1);
         gCameraMovementFlags &= ~CAM_MOVE_PAUSE_SCREEN;
         set_play_mode(PLAY_MODE_NORMAL);
-    } else if (gQuitOption && gPauseScreenMode == 3) {
+    } else if (configQuitOption && gPauseScreenMode == 3) {
         exit(0);
     } else {
         // Exit level
@@ -1240,7 +1238,7 @@ s32 init_level(void) {
                         if (gPlayer1Controller->buttonDown & U_CBUTTONS && gPlayer1Controller->buttonDown & R_TRIG) {
                             level_trigger_warp(gMarioState, WARP_OP_CREDITS_START);
                         }
-                        else if (gSkipCutscenes) {
+                        else if (configSkipCutscenes) {
                             set_mario_action(gMarioState, ACT_IDLE, 0);
                         } else {
                             set_mario_action(gMarioState, ACT_INTRO_CUTSCENE, 0);
@@ -1371,7 +1369,7 @@ s32 lvl_set_current_level(UNUSED s16 arg0, s32 levelNum) {
         return 0;
     }
 
-    if (gSkipStarSelect) {
+    if (configSkipMissionSelect) {
         s32 i;
         u8 level;
         u8 flag = 1;

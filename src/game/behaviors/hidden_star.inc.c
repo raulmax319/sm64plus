@@ -55,7 +55,7 @@ void bhv_hidden_star_trigger_loop(void) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
         
-    if (gVisibleSecrets) {
+    if (configVisibleSecrets) {
         spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
     }
 }

@@ -43,7 +43,7 @@ void fish_act_spawn(void) {
      * If the current level is Secret Aquarium, ignore this requirement.
      * Fish moves at random with a max-range of 700.0f.
      */
-    if(!gDisableDrawDistance)
+    if(!configDisableDrawDistance)
 	{
         if (o->oDistanceToMario < minDistToMario || gCurrLevelNum == LEVEL_SA) {
             for (i = 0; i < schoolQuantity; i++) {
