@@ -70,7 +70,7 @@ void bhv_koopa_shell_loop(void) {
             o->oFaceAngleYaw += 0x1000;
             cur_obj_move_standard(-20);
             koopa_shell_spawn_sparkles(10.0f);
-            if (gRespawnBlueCoinSwitch)
+            if (configRespawnCertainItems)
                 shell_despawn();
             break;
         case 1:

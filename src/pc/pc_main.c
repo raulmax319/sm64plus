@@ -100,7 +100,7 @@ static void patch_interpolations(void) {
     patch_interpolated_dialog();
     patch_interpolated_hud();
 
-    if (gStayInLevel)
+    if (configStayInCourse)
         render_you_got_a_star(1);
 
     patch_interpolated_paintings();
@@ -132,7 +132,7 @@ void produce_one_frame(void) {
     if (config60FPS) {
         patch_interpolations();
     }
-    else if (gStayInLevel) {
+    else if (configStayInCourse) {
         render_you_got_a_star(3);
     }
     send_display_list(gGfxSPTask);

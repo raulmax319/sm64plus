@@ -479,7 +479,7 @@ static void level_cmd_place_object(void) {
     ( gCurrLevelNum == LEVEL_JRB && ((gCurrActNum == 1 && (CMD_GET(u8, 2) & (1 << 0))) || (gCurrActNum >= 2 && (CMD_GET(u8, 2) & (1 << 1)))) );
 
     if (sCurrAreaIndex != -1 &&
-    (((!gStayInLevel || gCurrLevelNum != LEVEL_JRB) && (CMD_GET(u8, 2) & val7)) || CMD_GET(u8, 2) == 0x1F || (gStayInLevel && canLoad))) {
+    (((!configStayInCourse || gCurrLevelNum != LEVEL_JRB) && (CMD_GET(u8, 2) & val7)) || CMD_GET(u8, 2) == 0x1F || (configStayInCourse && canLoad))) {
         model = CMD_GET(u8, 3);
         spawnInfo = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
 

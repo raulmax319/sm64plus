@@ -120,7 +120,7 @@ void print_intro_text(void) {
             print_text_centered(SCREEN_WIDTH / 2, 20, "NO CONTROLLER");
 #endif
         } else {
-            if (gCenterHud || configForce4by3) {
+            if (config4by3Hud || configForce4by3) {
 #ifdef VERSION_EU
                 print_text(20, 20, "START");
 #else

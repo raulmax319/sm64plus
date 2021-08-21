@@ -1636,7 +1636,7 @@ void handle_controller_cursor_input(void) {
     sCursorPos[1] += (rawStickY - (gMouseCam ? gPlayer1Controller->rawStick2Y : 0)) / 8;
 
     // Stop cursor from going offscreen
-    if (gCenterHud || configForce4by3) {
+    if (config4by3Hud || configForce4by3) {
         if (sCursorPos[0] > 132.0f) {
             sCursorPos[0] = 132.0f;
         }

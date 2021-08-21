@@ -461,7 +461,7 @@ void update_walking_speed(struct MarioState *m) {
         m->forwardVel = 48.0f;
     }
 
-    if (gImprovedControls) {
+    if (configImprovedControls) {
 
         if (m->forwardVel < -8.0f) {
             m->forwardVel = -8.0f;
@@ -815,7 +815,7 @@ s32 act_walking(struct MarioState *m) {
         return begin_braking_action(m);
     }
 
-    if (gImprovedControls) {
+    if (configImprovedControls) {
         if (analog_stick_held_back(m)) {
             if (m->forwardVel >= 12.0f){
                 return set_mario_action(m, ACT_TURNING_AROUND, 0);
@@ -1068,7 +1068,7 @@ s32 act_braking(struct MarioState *m) {
         return check_common_action_exits(m);
     }
 
-    if (gImprovedControls) {
+    if (configImprovedControls) {
         if (apply_slope_decel(m, 2.5f)) {
             return set_mario_action(m, ACT_BRAKING_STOP, 0);
         }
@@ -1162,7 +1162,7 @@ s32 act_decelerating(struct MarioState *m) {
         play_step_sound(m, 10, 49);
     }
 
-    if (gImprovedControls)
+    if (configImprovedControls)
         check_ledge_climb_down(m);
 
     return FALSE;
@@ -1359,7 +1359,7 @@ s32 act_burning_ground(struct MarioState *m) {
     m->forwardVel = approach_f32(m->forwardVel, 32.0f, 4.0f, 1.0f);
 
     if (m->input & INPUT_NONZERO_ANALOG) {
-        if (gImprovedControls) {
+        if (configImprovedControls) {
             m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
         }
         else {
@@ -1907,7 +1907,7 @@ s32 act_long_jump_land(struct MarioState *m) {
 #endif
 
     // Sorry daddy...
-    if (gDisableBLJ && m->forwardVel < 0.0f) {
+    if (configDisableBLJ && m->forwardVel < 0.0f) {
         m->forwardVel = 0.0f;
     }
 

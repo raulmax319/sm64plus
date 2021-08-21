@@ -552,7 +552,7 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
 f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
     UNUSED f32 unused;
 
-    if (gFixVariousBugs)
+    if (configFixVariousBugs)
         return find_ceil(pos[0], height + 4.0f, pos[2], ceil);
     else
         return find_ceil(pos[0], height + 80.0f, pos[2], ceil);
@@ -813,7 +813,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
         case ACT_WATER_JUMP:
         case ACT_HOLD_WATER_JUMP:
             if (actionArg == 0) {
-                if (gImprovedSwimming) {
+                if (configImprovedSwimming) {
                     set_mario_y_vel_based_on_fspeed(m, 48.0f, 0.0f);
                 }
                 else {
@@ -840,7 +840,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
 
         case ACT_WALL_KICK_AIR:
         set_mario_y_vel_based_on_fspeed(m, 62.0f, 0.0f);
-            if (gImprovedControls) {
+            if (configImprovedControls) {
                 if (m->forwardVel < 28.0f) {
                     m->forwardVel = 28.0f;
                 }
@@ -899,7 +899,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             break;
 
         case ACT_SLIDE_KICK:
-            if (gImprovedControls) {
+            if (configImprovedControls) {
                 m->vel[1] = 14.0f;
                 if (m->forwardVel < 36.0f) {
                     m->forwardVel = 36.0f;
@@ -1372,7 +1372,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
         vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
         m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
     }
-    if (gFixVariousBugs)
+    if (configFixVariousBugs)
         m->ceilHeight = vec3f_find_ceil(m->pos, m->pos[1], &m->ceil);
     else
         m->ceilHeight = vec3f_find_ceil(&m->pos[0], m->floorHeight, &m->ceil);
@@ -1873,7 +1873,7 @@ s32 execute_mario_action(UNUSED struct Object *o) {
 }
 
 u32 mario_has_improved_metal_cap(struct MarioState *m) {
-    return (gImprovePowerups) && (m->flags & MARIO_METAL_CAP);
+    return (configImprovePowerups) && (m->flags & MARIO_METAL_CAP);
 }
 
 /**************************************************

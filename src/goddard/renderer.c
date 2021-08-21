@@ -2480,7 +2480,7 @@ void parse_p1_controller(void) {
         gdctrl->csrY -= gdctrl->stickY * 0.1; //? 0.1f
     }
     // border checks? is this for the cursor finger movement?
-    if (gCenterHud || configForce4by3) {
+    if (config4by3Hud || configForce4by3) {
 
         if ((f32) gdctrl->csrX < (sScreenView2->parent->upperLeft.x + 16.0f)) {
             gdctrl->csrX = (s32)(sScreenView2->parent->upperLeft.x + 16.0f);

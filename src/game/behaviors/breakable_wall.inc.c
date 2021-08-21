@@ -6,11 +6,11 @@ void bhv_wf_breakable_wall_loop(void) {
         if (obj_check_if_collided_with_object(o, gMarioObject)) {
             if (cur_obj_has_behavior(bhvWfBreakableWallRight))
                 play_puzzle_jingle();
-            if (gBetterBlastAwayTheWall && cur_obj_has_behavior(bhvWfBreakableWallLeft))
+            if (configBetterBlastAwayTheWall && cur_obj_has_behavior(bhvWfBreakableWallLeft))
                 play_sound(SOUND_MARIO_DOH, gMarioState->marioObj->header.gfx.cameraToObject);
             create_sound_spawner(SOUND_GENERAL_WALL_EXPLOSION);
             o->oInteractType = 8;
-            if (gBetterBlastAwayTheWall && cur_obj_has_behavior(bhvWfBreakableWallRight)) {
+            if (configBetterBlastAwayTheWall && cur_obj_has_behavior(bhvWfBreakableWallRight)) {
                 set_mario_action(gMarioState, ACT_SPAWN_SPIN_AIRBORNE, 0);
                 set_camera_mode(gMarioState->area->camera, gMarioState->area->camera->defMode, 1);
                 gMarioState->vel[1] = 32.0f;

@@ -282,7 +282,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     upperWall = resolve_and_return_wall_collisions(nextPos, 60.0f, 50.0f);
 
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-    if (gFixVariousBugs)
+    if (configFixVariousBugs)
         ceilHeight = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
     else
         ceilHeight = vec3f_find_ceil(nextPos, floorHeight, &ceil);
@@ -419,7 +419,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
     lowerWall = resolve_and_return_wall_collisions(nextPos, 30.0f, 50.0f);
 
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-    if (gFixVariousBugs)
+    if (configFixVariousBugs)
         ceilHeight = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
     else
         ceilHeight = vec3f_find_ceil(nextPos, floorHeight, &ceil);
@@ -449,7 +449,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
 
     //! This check uses f32, but findFloor uses short (overflow jumps)
     if (nextPos[1] <= floorHeight) {
-        if ((!gFixVariousBugs) || (gMarioObject->platform == NULL | (m->vel[1]<=0))) {
+        if ((!configFixVariousBugs) || (gMarioObject->platform == NULL | (m->vel[1]<=0))) {
             if (ceilHeight - floorHeight > 160.0f) {
                 m->pos[0] = nextPos[0];
                 m->pos[2] = nextPos[2];
@@ -470,7 +470,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
             m->vel[1] = 0.0f;
 
             //! Uses referenced ceiling instead of ceil (ceiling hang upwarp)
-            if (((stepArg & AIR_STEP_CHECK_HANG) || gImprovedHanging) && m->ceil != NULL && m->ceil->type == SURFACE_HANGABLE) {
+            if (((stepArg & AIR_STEP_CHECK_HANG) || configImprovedHanging) && m->ceil != NULL && m->ceil->type == SURFACE_HANGABLE) {
                 return AIR_STEP_GRABBED_CEILING;
             }
 
@@ -581,7 +581,7 @@ void apply_gravity(struct MarioState *m) {
         m->vel[1] /= 4.0f;
     } else if (m->action & ACT_FLAG_METAL_WATER) {
         m->vel[1] -= 1.6f;
-        if (gImprovePowerups) {
+        if (configImprovePowerups) {
             if (m->vel[1] < -24.0f) {
                 m->vel[1] = -24.0f;
             }

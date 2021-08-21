@@ -19,14 +19,6 @@ This repo does **not** include all the assets necessary for compiling the game. 
 
 You can also build the game manually if you prefer to do so, or if you're not on a Windows platform. To do that, follow the instructions below.
 
-Features that _might_ get added in the future:
-- Smoother vertical camera movement.
-- Rumble support.
-- Odyssey-like spin jump.
-- Full OpenGL and SDL support.
-- Full Linux support for the launcher.
-- Maybe even N64 support?
-
 ## FAQ
 
 [You can find the FAQ here.](https://github.com/MorsGames/sm64plus/blob/master/FAQ.md)
@@ -49,6 +41,7 @@ Features that _might_ get added in the future:
 ### Linux
 
 1. If you want to use the launcher, open terminal in the same folder as the launcher, otherwise just do it where you want to install the game.
+  * The launcher is currently not available on Linux yet.
 2. Install the prerequisites:
   * On Debian / Ubuntu: `sudo apt install -y git build-essential pkg-config libusb-1.0-0-dev libsdl2-dev`
   * On Arch / Manjaro: `sudo pacman -S base-devel python sdl2 glew`
@@ -61,21 +54,39 @@ Features that _might_ get added in the future:
 
 ## Changelog
 
-### v2.0.0 (??/??/2021):
+### v2.0.0 (21/08/2021):
 **Launcher:**
-- Now you can enter numbers to number fields directly instead of scrolling for 1000 years.
+- Added a brand new music track and sound effects by [Catonator](https://www.catonator.net/)!
+- The launcher does not close after launching the game anymore, instead it waits in the background until the game is closed.
+- You can now make the launcher go fullscreen by pressing Alt+Enter. Pressing Alt+M also mutes the launcher completely.
+- Made it so that you can enter numbers to number fields directly instead of scrolling for 1000 years.
+- Rewrote the scrolling code to make it feel better.
+- Allowed scaling the launcher window without messing up the contents.
+- Added some extra animations.
+- Added new backgrounds too.
+- Added all the new settings to the launcher.
+- Many more smaller tweaks were made.
 
 **Additions:**
-- Added the "Better "Blast Away the Wall"" setting.
+A TON of new settings and features were added in this update. All of them won't be listed here, but some of the more notable ones are:
+- Added OpenGL as a new graphics backend.
+- Added an "Overall Volume" setting.
+- Added a "Custom Camera" system that can be fully customized.
+- Added color settings that will let you change Mario's colors.
+- Added a bunch of cheats, some new, some moved from old debug settings.
+- Added an extra option for the "Green Demon Mode" that makes it extra challenging!
+- Added a ton of missing features from the Windows version to the Linux version, making it almost on par with the exception of the launcher and Direct3D backends.
 
 **Changes:**
-- The "Fix Various Bugs" setting now fixes more bugs present within the game. Sorry speedrunners.
-- Made "Backward Speed Cap" a part of "Improved Controls".
+- Switched to SDL2 for input and audio handling (as well as windowing under OpenGL). What this means is that more controllers are now natively supported.
+- Made it so that "Fix Various Bugs" setting now fixes more bugs present within the game. Sorry speedrunners.
+- Made the "Improved Controls" setting also even more improved.
+- Made the "Backward Speed Cap" setting a part of "Improved Controls".
 - Split "Improved Controls" into "Improved Controls" and "Improved Swimming".
 - Removed "XL Mode".
 - Removed the CCM easter egg.
-- Renamed and relocated certain settings.
 - Fixed various minor bugs and oversights.
+- Renamed, relocated, and tweaked a bunch of other settings.
 
 ### v1.1.3.3 (07/06/2021):
 **Fixes:**
@@ -221,6 +232,7 @@ Features that _might_ get added in the future:
 ## Credits.
 - **Mors:** Most new things you see here.
 - **[Benial](https://twitter.com/Benial17):** Logo.
+- **[Catonator](https://www.catonator.net/):** Launcher music and sfx.
 - **[sm64-port](https://github.com/sm64-port/sm64-port) Team:** The port that was used as a base for this project.
 - **[A bunch of clever folks](https://github.com/n64decomp/sm64):** The original decompilation used for the port.
 - **Emil:** The original 60FPS patch.
@@ -229,6 +241,6 @@ Features that _might_ get added in the future:
 
 Parts of [sm64ex](https://github.com/sm64pc/sm64ex) were also used as a reference for this project.
 
-Special thanks to Superstarxalien, Benial, Triforce141, MrMovie, and Shubs for testing and feedback.
+Special thanks to Superstarxalien, Benial, Triforce141, MrMovie, and Shubs for pre-release testing and feedback.
 
-Please let me know if I'm forgetting to credit you.
+If I'm forgetting to credit you, please reach out so I can fix that!

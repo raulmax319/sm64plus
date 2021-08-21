@@ -111,7 +111,7 @@ static void toad_message_faded(void) {
 }
 
 static void toad_message_opaque(void) {
-    if (!gTalkEasier && gCurrentObject->oDistanceToMario > 700.0f) {
+    if (!configTalkEasier && gCurrentObject->oDistanceToMario > 700.0f) {
         gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADING;
     } else if (!gCurrentObject->oToadMessageRecentlyTalked) {
         gCurrentObject->oInteractionSubtype = INT_SUBTYPE_NPC;
@@ -127,7 +127,7 @@ static void toad_message_talking(void) {
     if (cur_obj_update_dialog_with_cutscene(3, 1, CUTSCENE_DIALOG, gCurrentObject->oToadMessageDialogId)
         != 0) {
         gCurrentObject->oToadMessageRecentlyTalked = TRUE;
-        if (gTalkEasier) {
+        if (configTalkEasier) {
             gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
             gCurrentObject->oOpacity = 249;
         }
@@ -215,7 +215,7 @@ void bhv_toad_message_init(void) {
     if (enoughStars) {
         gCurrentObject->oToadMessageDialogId = dialogId;
         gCurrentObject->oToadMessageRecentlyTalked = FALSE;
-        if (gTalkEasier) {
+        if (configTalkEasier) {
             gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPAQUE;
             gCurrentObject->oOpacity = 255;
         }

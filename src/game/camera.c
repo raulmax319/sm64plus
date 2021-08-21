@@ -1321,7 +1321,7 @@ void mode_custom_camera(struct Camera *c, f32 yOff) {
 
     if (configCustomCameraRotation) {
         camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 
-            ABS(gMarioState->forwardVel * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 16 : 24) ));
+            ABS(gMarioState->forwardVel * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 4 : 8) ));
     }
 
     lakitu_zoom(max(0, configCustomCameraDistanceZoomedOut-configCustomCameraDistanceDefault) * 10.0f, gVerticalCamera ? 0 : 0x900);

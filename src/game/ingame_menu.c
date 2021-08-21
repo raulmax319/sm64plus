@@ -856,7 +856,7 @@ void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8
         }
     }
 
-    if (gQuitOption && gMenuHoldKeyTimer == 14) {
+    if (configQuitOption && gMenuHoldKeyTimer == 14) {
         gMenuHoldKeyTimer = 12;
         gMenuHoldKeyIndex = 0;
     }
@@ -2529,7 +2529,7 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     u8 textExitGame[] = { TEXT_EXIT_GAME };
 #endif
 
-    if (gQuitOption)
+    if (configQuitOption)
         handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 4);
     else
         handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
@@ -2540,8 +2540,8 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     print_generic_string(x + 10, y - 2, textContinue);
     print_generic_string(x + 10, y - 17, textExitCourse);
 
-    if ((gQuitOption && index[0] != 4) || (!gQuitOption && index[0] != 3)) {
-        if (gQuitOption) {
+    if ((configQuitOption && index[0] != 4) || (!configQuitOption && index[0] != 3)) {
+        if (configQuitOption) {
             print_generic_string(x + 10, y - 33, textExitGame);
             print_generic_string(x + 10, y - 49, textCameraAngleR);
         }
@@ -2559,10 +2559,10 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
         gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
     }
 
-    if (!gQuitOption && index[0] == 3) {
+    if (!configQuitOption && index[0] == 3) {
         render_pause_camera_options(x - 42, y - 42, &gDialogCameraAngleIndex, 110);
     }
-    if (gQuitOption && index[0] == 4) {
+    if (configQuitOption && index[0] == 4) {
         print_generic_string(x + 10, y - 33, textExitGame);
         render_pause_camera_options(x - 42, y - 50, &gDialogCameraAngleIndex, 110);
     }
@@ -2786,7 +2786,7 @@ s16 render_pause_courses_and_castle(void) {
             render_pause_my_score_coins();
             render_pause_red_coins();
 
-            if (gLeaveAnyTime || gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT) {
+            if (configLeaveAnyTime || gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT) {
                 render_pause_course_options(99, 93, &gDialogLineNum, 15);
             }
 
@@ -2802,7 +2802,7 @@ s16 render_pause_courses_and_castle(void) {
                 gDialogBoxState = DIALOG_STATE_OPENING;
                 gMenuMode = -1;
 
-                if ((gQuitOption && gDialogLineNum == 3) || (gDialogLineNum == 2)) {
+                if ((configQuitOption && gDialogLineNum == 3) || (gDialogLineNum == 2)) {
                     num = gDialogLineNum;
                 } else {
                     num = 1;
@@ -2816,7 +2816,7 @@ s16 render_pause_courses_and_castle(void) {
             print_hud_pause_colorful_str();
             render_pause_castle_menu_box(160, 143);
             render_pause_castle_main_strings(104, 60);
-            if (gQuitOption) {
+            if (configQuitOption) {
                 u8 textExitGameR[] = { TEXT_EXIT_GAME_ZR };
                 gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
                 gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);

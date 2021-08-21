@@ -178,31 +178,31 @@ unsigned int configTextureFiltering = 2;
 unsigned int configNoiseType = 0;
 s8 configForce4by3 = 0;
 
-s8 gImprovedControls = 1;
-s8 gImprovedSwimming = 1;
-s8 gImprovedHanging = 1;
+s8 configImprovedControls = 1;
+s8 configImprovedSwimming = 1;
+s8 configImprovedHanging = 1;
 s8 configEnemyBouncing = 1;
-s8 gDpadControls = 1;
-s8 gFullAirControl = 0;
-s8 gDisableBLJ = 0;
+s8 configDpadControls = 1;
+s8 configFullAirControl = 0;
+s8 configDisableBLJ = 0;
 
-s8 gFixVariousBugs = 1;
-s8 gRespawnBlueCoinSwitch = 1;
-s8 gRemoveAnnoyingWarps = 1;
-s8 gImprovePowerups = 1;
-s8 gBetterBlastAwayTheWall = 1;
-s8 gDisableBooDialogue = 1;
-s8 gTalkEasier = 1;
-s8 gDisableFallDamage = 0;
-s8 gLeaveAnyTime = 0;
-s8 gVisibleSecrets = 0;
+s8 configFixVariousBugs = 1;
+s8 configRespawnCertainItems = 1;
+s8 configRemoveAnnoyingWarps = 1;
+s8 configImprovePowerups = 1;
+s8 configBetterBlastAwayTheWall = 1;
+s8 configDisableBooDialogue = 1;
+s8 configTalkEasier = 1;
+s8 configDisableFallDamage = 0;
+s8 configLeaveAnyTime = 0;
+s8 configVisibleSecrets = 0;
 s8 configFixBombClip = 0;
 
 s8 configBowsersSub = 1;
-unsigned int gStayInLevel = 0;
-s8 gSkipStarSelect = 0;
-s8 gRestartLevelAfterStar = 0;
-s8 gSkipCutscenes = 0;
+unsigned int configStayInCourse = 0;
+s8 configSkipMissionSelect = 0;
+s8 configSwitchToNextMission = 0;
+s8 configSkipCutscenes = 0;
 
 s8 gCenterCameraButton = 1;
 s8 gImprovedCamera = 1;
@@ -221,9 +221,9 @@ s8 configCustomCameraCollisions = 0;
 float configCustomCameraDistanceDefault = 80.0f;
 float configCustomCameraDistanceZoomedOut = 160.0f;
 
-s8 gQuitOption = 1;
-unsigned int gHudStyle = 2;
-s8 gCenterHud = 0;
+s8 configQuitOption = 1;
+unsigned int configHudLayout = 2;
+s8 config4by3Hud = 0;
 s8 gHudStars = 0;
 s8 configAddZeroes = 0;
 s8 gShow100CoinStar = 0;
@@ -246,7 +246,7 @@ s8 gOdysseyDive = 0;
 s8 gFlashbackPound = 0;
 
 s8 gPyramidCutscene = 1;
-s8 gUnusedSounds = 1;
+s8 configRestoreUnusedSounds = 1;
 s8 gPenguinSadEyes = 1;
 s8 gTwirlTripleJump = 0;
 s8 gSpawnSparkles = 0;
@@ -350,7 +350,7 @@ unsigned int configKeyWalk = DIK_LSHIFT;
 s16 gCollectedStar = 0;
 
 s8 stay_in_level() {
-    if (gStayInLevel == 2 && (
+    if (configStayInCourse == 2 && (
     // If we have collected the first star in the first act in these levels, kick us out.
     (gCurrActNum == 1 && gCollectedStar == 0 &&
     (gCurrLevelNum == LEVEL_BOB || gCurrLevelNum == LEVEL_WF || gCurrLevelNum == LEVEL_JRB || gCurrLevelNum == LEVEL_BBH || 
@@ -364,12 +364,12 @@ s8 stay_in_level() {
     gCurrLevelNum == LEVEL_VCUTM || gCurrLevelNum == LEVEL_WMOTR || gCurrLevelNum == LEVEL_SA))
     ))
         return FALSE;
-    return gStayInLevel && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3
+    return configStayInCourse && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3
     && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS;
 }
 
 s8 restart_level_after_star() {
-    return gRestartLevelAfterStar &&
+    return configSwitchToNextMission &&
     gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3 &&
     gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS &&
     gCurrLevelNum != LEVEL_BITDW && gCurrLevelNum != LEVEL_BITFS && gCurrLevelNum != LEVEL_BITS &&
