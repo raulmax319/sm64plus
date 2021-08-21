@@ -32,19 +32,23 @@ Also please remember that most of the time these issues are caused by MSYS2, so 
 
 ## **Q:** My controller doesn't work in the game. What do I do?
 
-**A:** The game itself only has support for XInput controllers. You can add the game to your Steam library, which seems to make most controllers work. You can also use tools like DS4Windows, BetterJoyForCemu, or 360ce depending on your controller.
+**A:** The game supports many different types of controllers, but it's impossible to have 100% compatibility with all of them. Here are a few things you can try:
+
+- You can download [gamecontrollerdb.txt](https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/master/gamecontrollerdb.txt) and put it in `sm64plus/build/us_pc/` folder without changing its name. It includes mappings for most game controllers out there and the game is configured to load it automatically.
+- You can add the game to your Steam library, which seems to make most controllers work. 
+- You can use tools like DS4Windows, BetterJoyForCemu, or 360ce to map them to Xinput, which does work.
 
 <br>
 
 ## **Q:** Some of the textures appear black and purple, how do I fix this?
 
-**A:** Hold "left", "right", and "backspace" keys down for 5 seconds in the title screen of the launcher. On non-Windows platforms, you can also try passing the path to the `gfx` directory as the first argument to the executable; by default it's generated at `build/us_pc/gfx`.
+**A:** Hold "left", "right", and "backspace" keys down for 5 seconds in the title screen of the launcher. On non-Windows platforms, you can also try passing the path to the `gfx` directory as the first argument to the executable; by default it's generated at `sm64plus/build/us_pc/gfx`.
 
 <br>
 
 ## **Q:** How do I access the hidden settings?
 
-**A:** Press backspace or select on the "Press Any Key" screen.
+**A:** Hold down backspace or select on the "Press Any Key" screen until the screen goes white.
 
 <br>
 
@@ -70,7 +74,7 @@ As for custom models, you can install those easily using [sm64pcBuilder2](https:
 
 <br>
 
-## **Q:** Can you add *insert feature here\*?
+## **Q:** Can you add \*insert feature here\*?
 
 **A:** It depends. I try not to add new assets, like new models, textures etc., and just use the ones provided by the ROM. I also try not to modify the levels just to keep the scope of the project small.
 
@@ -88,7 +92,7 @@ There's also [another fork](https://github.com/djoslin0/sm64ex-coop) of the PC p
 
 <br>
 
-## **Q:** Can you make a Mario Sunshine Plus / *insert game here\* Plus?
+## **Q:** Can you make a Mario Sunshine Plus / \*insert game here\* Plus?
 
 **A:** Also no.
 
@@ -104,7 +108,7 @@ These fan projects take a ton of effort to make, and are things I make during my
 
 ## **Q:** Is your game safe?
 
-**A:** Yeah. If your antivirus is giving you any warnings, it's most likely false. You especially shouldn't trust Chrome on this kind of stuff.
+**A:** Yeah. If your antivirus is giving you any warnings, it's most likely false. You especially shouldn't trust Chrome as it tends to mark things as suspicious very often.
 
 <br>
 
