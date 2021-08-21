@@ -54,6 +54,10 @@ You can also build the game manually if you prefer to do so, or if you're not on
 
 ## Changelog
 
+### v2.0.1.1 (21/08/2021):
+**Launcher:**
+- Fixed the launcher crashing when you enter a letter to a number field.
+
 ### v2.0.1 (21/08/2021):
 **Launcher:**
 - Made the version number of the executable correct.
