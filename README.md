@@ -54,6 +54,17 @@ You can also build the game manually if you prefer to do so, or if you're not on
 
 ## Changelog
 
+### v2.0.1 (21/08/2021):
+**Launcher:**
+- Made the version number of the executable correct.
+- Made improvements to the appearance of the color editor.
+- Added a way to load the original colors in the color editor.
+
+**Fixes:**
+- Fixed an issue where building would fail if the path contained the game had a space in it.
+- Fixed "Overall Volume" setting not changing the volume of certain sounds.
+- Fixed weird sound volume issues from happening when the "Overall Volume" setting is set to a low number.
+
 ### v2.0.0 (21/08/2021):
 **Launcher:**
 - Added a brand new music track and sound effects by [Catonator](https://www.catonator.net/)!

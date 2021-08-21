@@ -6,6 +6,8 @@
 
 #include "audio_api.h"
 
+#include "../../game/settings.h"
+
 static SDL_AudioDeviceID dev;
 
 static bool audio_sdl_init(void) {
@@ -38,9 +40,11 @@ static int audio_sdl_get_desired_buffered(void) {
 }
 
 static void audio_sdl_play(const uint8_t *buf, size_t len) {
-    if (audio_sdl_buffered() < 6000) {
-        // Don't fill the audio buffer too much in case this happens
-        SDL_QueueAudio(dev, buf, len);
+    if (configOverallVolume > 0 && audio_sdl_buffered() < 6000) {
+        uint8_t *mix_buf[len];
+        SDL_memset(mix_buf, 0, len);
+        SDL_MixAudioFormat(mix_buf, buf, AUDIO_S16, len, SDL_MIX_MAXVOLUME * configOverallVolume);
+        SDL_QueueAudio(dev, mix_buf, len);
     }
 }
 
