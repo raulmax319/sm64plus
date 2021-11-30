@@ -203,8 +203,7 @@ void main_func(const char* gfx_dir) {
 #endif
 
     // Check if the textures exist
-#if defined(_WIN32) || defined(_WIN64)
-
+#if CUSTOM_TEXTURES && (defined(_WIN32) || defined(_WIN64))
     DIR* dir = opendir("gfx");
     if (dir) {
         closedir(dir);
