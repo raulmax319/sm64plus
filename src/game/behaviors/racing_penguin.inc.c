@@ -7,8 +7,8 @@ struct RacingPenguinData {
 static struct RacingPenguinData sRacingPenguinData[] = {
     { DIALOG_055, 200.0f, 200.0f },
     { DIALOG_164, 350.0f, 250.0f },
-    { DIALOG_171, 0.0f, 0.0f },
     { DIALOG_172, 0.0f, 0.0f },
+    { DIALOG_173, 0.0f, 0.0f },
 };
 
 void bhv_racing_penguin_init(void) {

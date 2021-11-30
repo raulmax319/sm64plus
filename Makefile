@@ -25,6 +25,8 @@ TARGET_WEB ?= 0
 COMPILER ?= ido
 # If this build is for 32 bit
 TARGET_32BIT ?= 0
+# If custom textures are supported
+CUSTOM_TEXTURES ?= 0
 
 # Automatic settings only for ports
 ifeq ($(TARGET_N64),0)
@@ -447,7 +449,11 @@ GFX_CFLAGS += -DWIDESCREEN
 CC_CHECK := $(CC) -fsyntax-only -fsigned-char $(INCLUDE_CFLAGS) -Wall -Wextra -Wno-format-security -D_LANGUAGE_C $(VERSION_CFLAGS) $(MATCH_CFLAGS) $(PLATFORM_CFLAGS) $(GFX_CFLAGS) $(GRUCODE_CFLAGS)
 CFLAGS := $(OPT_FLAGS) $(INCLUDE_CFLAGS) -D_LANGUAGE_C $(VERSION_CFLAGS) $(MATCH_CFLAGS) $(PLATFORM_CFLAGS) $(GFX_CFLAGS) $(GRUCODE_CFLAGS) -fno-strict-aliasing -fwrapv -march=native
 
-SKYCONV_ARGS := --store-names --write-tiles "$(BUILD_DIR)/textures/skybox_tiles"
+ifeq ($(CUSTOM_TEXTURES),1)
+  SKYCONV_ARGS := --store-names --write-tiles "$(BUILD_DIR)/textures/skybox_tiles"
+else
+  SKYCONV_ARGS := 
+endif
 
 ASFLAGS := -I include -I $(BUILD_DIR) $(VERSION_ASFLAGS)
 
@@ -494,12 +500,13 @@ ifeq ($(COMPARE),1)
 endif
 else
 all: $(EXE)
+ifeq ($(CUSTOM_TEXTURES),1)
 	@mkdir -p $(BUILD_DIR)/gfx
 	@cp -r -f textures/ $(BUILD_DIR)/gfx/
 	@cp -r -f $(BUILD_DIR)/textures/skybox_tiles/ $(BUILD_DIR)/gfx/textures/
 	@find actors -name \*.png -exec cp --parents {} $(BUILD_DIR)/gfx/ \;
 	@find levels -name \*.png -exec cp --parents {} $(BUILD_DIR)/gfx/ \;
-
+endif
 endif
 
 clean:
@@ -580,7 +587,16 @@ $(BUILD_DIR)/src/game/hud.o: $(BUILD_DIR)/include/text_strings.h
 ################################################################
 
 
-ifeq ($(TARGET_N64),1)
+ifeq ($(CUSTOM_TEXTURES),1)
+
+$(BUILD_DIR)/%: %.png
+	printf "%s%b" "$(patsubst %.png,%,$^)" '\0' > $@
+
+$(BUILD_DIR)/%.inc.c: $(BUILD_DIR)/% %.png
+	hexdump -v -e '1/1 "0x%X,"' $< > $@
+	echo >> $@
+
+else
 
 # RGBA32, RGBA16, IA16, IA8, IA4, IA1, I8, I4
 $(BUILD_DIR)/%: %.png
@@ -597,15 +613,6 @@ $(BUILD_DIR)/%.ci8: %.ci8.png
 # Color Index CI4
 $(BUILD_DIR)/%.ci4: %.ci4.png
 	$(N64GRAPHICS_CI) -i $@ -g $< -f ci4
-
-else
-
-$(BUILD_DIR)/%: %.png
-	printf "%s%b" "$(patsubst %.png,%,$^)" '\0' > $@
-
-$(BUILD_DIR)/%.inc.c: $(BUILD_DIR)/% %.png
-	hexdump -v -e '1/1 "0x%X,"' $< > $@
-	echo >> $@
 
 endif
 

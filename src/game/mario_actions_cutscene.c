@@ -635,11 +635,22 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 if ((m->actionArg & 1) == 0) {
                     level_trigger_warp(m, WARP_OP_STAR_EXIT);
                 } else {
-                    if (configStayInCourse >= 2) {
-                        // Ask if we wanna stay in certain subareas
-                        if (configStayInCourse == 2 && gCurrAreaIndex > 1 && 
-                        (gCurrLevelNum == LEVEL_SSL || gCurrLevelNum == LEVEL_LLL || gCurrLevelNum == LEVEL_WDW)) {
-                            create_dialog_box_with_response(DIALOG_170);
+
+                    // Ugly code ahead!
+                    // This is the most readable I could make the code without overcomplicating it 
+
+                    // If we set it to ask
+                    if (configStayInCourse == 1) {
+                        enable_time_stop();
+                        create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_171 : DIALOG_170);
+                        m->actionState = 1;
+                    }
+                    // If it's automatic
+                    else if (configStayInCourse == 2) {
+                        if ((gLastCompletedStarNum == 7) ||
+                            (gCurrAreaIndex > 1 && (gCurrLevelNum == LEVEL_SSL || gCurrLevelNum == LEVEL_LLL || gCurrLevelNum == LEVEL_WDW))) {
+                            enable_time_stop();
+                            create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_171 : DIALOG_170);
                             m->actionState = 1;
                         }
                         else {
@@ -647,14 +658,15 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                             m->actionState = 2;
                         }
                     }
+                    // If it's set to always
+                    else if (configStayInCourse == 3) {
+                        save_file_do_save(gCurrSaveFileNum - 1);
+                        m->actionState = 2;
+                    }
+                    // By default
                     else {
                         enable_time_stop();
-                        if (stay_in_level()) {
-                            create_dialog_box_with_response(DIALOG_170);
-                        }
-                        else {
-                            create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_013 : DIALOG_014);
-                        }
+                        create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_013 : DIALOG_014);
                         m->actionState = 1;
                     }
                 }
@@ -664,7 +676,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
         if (gDialogResponse == 1) {
             save_file_do_save(gCurrSaveFileNum - 1);
         }
-        else if (stay_in_level() && gLastCompletedStarNum < 7) {
+        else if (configStayInCourse > 0) {
             level_trigger_warp(m, WARP_OP_STAR_EXIT);
         }
         m->actionState = 2;
@@ -1047,6 +1059,8 @@ s32 act_emerge_from_pipe(struct MarioState *m) {
 }
 
 s32 act_spawn_spin_airborne(struct MarioState *m) {
+    s32 tempActionState;
+
     // entered water, exit action
     if (m->pos[1] < m->waterLevel - 100) {
         load_level_init_text(0);
@@ -1059,7 +1073,11 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
     // landed on floor, play spawn land animation
     if (perform_air_step(m, 0.0) == AIR_STEP_LANDED) {
         play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
+        if (gSpawnSparkles)
+            tempActionState = m->actionState;
         set_mario_action(m, ACT_SPAWN_SPIN_LANDING, 0);
+        if (gSpawnSparkles)
+            m->actionState = tempActionState;
     }
 
     // is 300 units above floor, spin and play woosh sounds
@@ -1070,7 +1088,7 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
     }
 
     // under 300 units above floor, enter freefall animation
-    else {
+    else if (!gSpawnSparkles || m->actionState == 1) {
         m->actionState = 1;
         set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
     }
@@ -1082,14 +1100,21 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
 }
 
 s32 act_spawn_spin_landing(struct MarioState *m) {
-    stop_and_set_height_to_floor(m);
-    set_mario_animation(m, MARIO_ANIM_GENERAL_LAND);
-    if (is_anim_at_end(m)) {
-        load_level_init_text(0);
-        set_mario_action(m, ACT_IDLE, 0);
+    
+    if (!gSpawnSparkles || m->actionState == 1) {
+        stop_and_set_height_to_floor(m);
+        set_mario_animation(m, MARIO_ANIM_GENERAL_LAND);
+        if (is_anim_at_end(m)) {
+            load_level_init_text(0);
+            set_mario_action(m, ACT_IDLE, 0);
+        }
     }
-    if (gSpawnSparkles)
+    else if (gSpawnSparkles) {
+        m->vel[1] = 32.0f;
+        set_mario_action(m, ACT_SPAWN_SPIN_AIRBORNE, 1);
+        m->actionState = 1;
         m->particleFlags |= PARTICLE_SPARKLES;
+    }
     return FALSE;
 }
 

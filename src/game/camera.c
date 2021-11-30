@@ -492,8 +492,8 @@ extern u8 sDanceCutsceneIndexTable[][4];
 extern u8 sZoomOutAreaMasks[];
 
 //Define the analog camera speed
-#define ANALOG_AMOUNT 12 * (1 - gInvertedCamera * 2)
-#define ANALOG_AMOUNT_VERTICAL 12 * (1 - gInvertedVerticalCamera * 2)
+#define ANALOG_AMOUNT (12 * (1 - gInvertedCamera * 2))
+#define ANALOG_AMOUNT_VERTICAL (12 * (1 - gInvertedVerticalCamera * 2))
 #define LROTATE_SPEED 0x400
 
 static void skip_camera_interpolation(void) {
@@ -856,6 +856,10 @@ void pan_ahead_of_player(struct Camera *c) {
     s16 pitch;
     s16 yaw;
     Vec3f pan = { 0, 0, 0 };
+
+    // The beta doesn't seem to do this?
+    if (configBetaLikeCamera)
+        return;
 
     // Get distance and angle from camera to Mario.
     vec3f_get_dist_and_angle(c->pos, sMarioCamState->pos, &dist, &pitch, &yaw);
@@ -5387,7 +5391,7 @@ u8 get_cutscene_from_mario_status(struct Camera *c) {
         }
         switch (sMarioCamState->action) {
             case ACT_DEATH_EXIT:
-                cutscene = CUTSCENE_DEATH_EXIT;
+                cutscene = configBetaLikeCamera ? CUTSCENE_UNUSED_EXIT : CUTSCENE_DEATH_EXIT;
                 break;
             case ACT_EXIT_AIRBORNE:
                 cutscene = CUTSCENE_EXIT_PAINTING_SUCC;
@@ -10239,48 +10243,54 @@ BAD_RETURN(s32) cutscene_enter_painting(struct Camera *c) {
     f32 floorHeight;
 
     cutscene_event(cutscene_enter_painting_stub, c, 0, 0);
-    // Zoom in
-    set_fov_function(CAM_FOV_APP_20);
-    sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
 
-    if (gRipplingPainting != NULL) {
-        paintingAngle[0] = 0;
-        paintingAngle[1] = (s32)((gRipplingPainting->yaw / 360.f) * 65536.f); // convert degrees to IAU
-        paintingAngle[2] = 0;
-
-        focusOffset[0] = gRipplingPainting->size / 2;
-        focusOffset[1] = focusOffset[0];
-        focusOffset[2] = 0;
-
-        paintingPos[0] = gRipplingPainting->posX;
-        paintingPos[1] = gRipplingPainting->posY;
-        paintingPos[2] = gRipplingPainting->posZ;
-
-        offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
-        approach_vec3f_asymptotic(c->focus, focus, 0.1f, 0.1f, 0.1f);
-        focusOffset[2] = -(((gRipplingPainting->size * 1000.f) / 2) / 307.f);
-        offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
-        floorHeight = find_floor(focus[0], focus[1] + 500.f, focus[2], &highFloor) + 125.f;
-
-        if (focus[1] < floorHeight) {
-            focus[1] = floorHeight;
-        }
-
-        if (c->cutscene == CUTSCENE_ENTER_PAINTING) {
-            approach_vec3f_asymptotic(c->pos, focus, 0.2f, 0.1f, 0.2f);
-        } else {
-            approach_vec3f_asymptotic(c->pos, focus, 0.9f, 0.9f, 0.9f);
-        }
-
-        find_floor(sMarioCamState->pos[0], sMarioCamState->pos[1] + 50.f, sMarioCamState->pos[2], &floor);
-
-        if ((floor->type < SURFACE_PAINTING_WOBBLE_A6) || (floor->type > SURFACE_PAINTING_WARP_F9)) {
-            c->cutscene = 0;
-            gCutsceneTimer = CUTSCENE_STOP;
-            sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
-        }
+    if (configBetaLikeCamera) {
+        sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
     }
-    c->mode = CAMERA_MODE_CLOSE;
+    else {
+        // Zoom in
+        set_fov_function(CAM_FOV_APP_20);
+        sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
+
+        if (gRipplingPainting != NULL) {
+            paintingAngle[0] = 0;
+            paintingAngle[1] = (s32)((gRipplingPainting->yaw / 360.f) * 65536.f); // convert degrees to IAU
+            paintingAngle[2] = 0;
+
+            focusOffset[0] = gRipplingPainting->size / 2;
+            focusOffset[1] = focusOffset[0];
+            focusOffset[2] = 0;
+
+            paintingPos[0] = gRipplingPainting->posX;
+            paintingPos[1] = gRipplingPainting->posY;
+            paintingPos[2] = gRipplingPainting->posZ;
+
+            offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
+            approach_vec3f_asymptotic(c->focus, focus, 0.1f, 0.1f, 0.1f);
+            focusOffset[2] = -(((gRipplingPainting->size * 1000.f) / 2) / 307.f);
+            offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
+            floorHeight = find_floor(focus[0], focus[1] + 500.f, focus[2], &highFloor) + 125.f;
+
+            if (focus[1] < floorHeight) {
+                focus[1] = floorHeight;
+            }
+
+            if (c->cutscene == CUTSCENE_ENTER_PAINTING) {
+                approach_vec3f_asymptotic(c->pos, focus, 0.2f, 0.1f, 0.2f);
+            } else {
+                approach_vec3f_asymptotic(c->pos, focus, 0.9f, 0.9f, 0.9f);
+            }
+
+            find_floor(sMarioCamState->pos[0], sMarioCamState->pos[1] + 50.f, sMarioCamState->pos[2], &floor);
+
+            if ((floor->type < SURFACE_PAINTING_WOBBLE_A6) || (floor->type > SURFACE_PAINTING_WARP_F9)) {
+                c->cutscene = 0;
+                gCutsceneTimer = CUTSCENE_STOP;
+                sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
+            }
+        }
+        c->mode = CAMERA_MODE_CLOSE;
+    }
 }
 
 /**
@@ -10382,7 +10392,12 @@ BAD_RETURN(s32) cutscene_unused_exit_start(struct Camera *c) {
     Vec3f offset;
     Vec3s marioAngle;
 
-    vec3f_set(offset, 200.f, 300.f, 200.f);
+    // Fixes clipping
+    if (configBetaLikeCamera)
+        vec3f_set(offset, 10.f, 0.f, 1200.f);
+    else
+        vec3f_set(offset, 200.f, 300.f, 200.f);
+
     vec3s_set(marioAngle, 0, sMarioCamState->faceAngle[1], 0);
     offset_rotated(c->pos, sMarioCamState->pos, offset, marioAngle);
     set_focus_rel_mario(c, 0.f, 125.f, 0.f, 0);

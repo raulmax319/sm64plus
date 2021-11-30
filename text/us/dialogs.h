@@ -2109,6 +2109,16 @@ playing this level?\n\
 //You Bet//Not Now"))
 
 DEFINE_DIALOG(DIALOG_171, 1, 4, 30, 200, _("\
+You've collected 100\n\
+coins! Mario gains more\n\
+power from the castle.\n\
+\n\
+Do you want to keep\n\
+playing this level?\n\
+\n\
+//You Bet//Not Now"))
+
+DEFINE_DIALOG(DIALOG_172, 1, 4, 30, 200, _("\
 Hey-ey, Mario, buddy,\n\
 howzit goin'?\n\
 Ok, so, basically, I am\n\
@@ -2118,7 +2128,7 @@ Ready...\n\
 \n\
 //Go//// Don't Go"))
 
-DEFINE_DIALOG(DIALOG_172, 1, 4, 30, 200, _("\
+DEFINE_DIALOG(DIALOG_173, 1, 4, 30, 200, _("\
 Mario! What's up, pal?\n\
 Ok, so, basically, I am\n\
 even smoller.\n\

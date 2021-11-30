@@ -150,15 +150,15 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
-char* gTitleString = "Super Mario 64 Plus v2.0.1";
+char* gTitleString = "Super Mario 64 Plus v2.1.0";
 
 s8 configFullscreen = 1;
+unsigned int configDefaultMonitor = 1;
+unsigned int configWindowWidth = 1280;
+unsigned int configWindowHeight = 720;
 unsigned int configCustomFullscreenResolution = 0;
 unsigned int configFullscreenWidth = 1920;
 unsigned int configFullscreenHeight = 1080;
-unsigned int configWindowWidth = 1280;
-unsigned int configWindowHeight = 720;
-unsigned int configDefaultMonitor = 1;
 #if defined(_WIN32) || defined(_WIN64)
 s8 configCustomInternalResolution = 0;
 unsigned int configInternalResolutionWidth = 3840;
@@ -186,6 +186,7 @@ s8 configDpadControls = 1;
 s8 configFullAirControl = 0;
 s8 configDisableBLJ = 0;
 
+s8 configFixCollisionBugs = 1;
 s8 configFixVariousBugs = 1;
 s8 configRespawnCertainItems = 1;
 s8 configRemoveAnnoyingWarps = 1;
@@ -245,10 +246,11 @@ s8 gSunshineDive = 0;
 s8 gOdysseyDive = 0;
 s8 gFlashbackPound = 0;
 
-s8 gPyramidCutscene = 1;
+s8 configUnusedPyramidCutscene = 1;
 s8 configRestoreUnusedSounds = 1;
 s8 gPenguinSadEyes = 1;
 s8 gTwirlTripleJump = 0;
+s8 configBetaLikeCamera = 0;
 s8 gSpawnSparkles = 0;
 s8 gReplaceKeysWithStars = 0;
 
@@ -263,7 +265,8 @@ s8 gCasualMode = 0;
 
 s8 gDebugMovementMode = 0;
 s8 gDebugCapChanger = 0;
-unsigned int gMoonJump = 0;
+unsigned int configMoonJump = 0;
+unsigned int configBLJEverywhere = 0;
 s8 configGodMode = 0;
 s8 configHyperspeedMode = 0;
 s8 gFlexibleCannons = 0;

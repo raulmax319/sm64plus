@@ -311,7 +311,183 @@ static bool gfx_texture_cache_lookup(int tile, struct TextureHashmapNode **n, co
     return false;
 }
 
-/*static void import_texture_rgba16(int tile) {
+#ifdef CUSTOM_TEXTURES
+
+static bool import_texture_custom(const char *path) {
+    int w, h;
+    u8 *data = stbi_load(path, &w, &h, NULL, 4);
+
+    if (data == NULL)
+    {
+        gfx_rapi->upload_texture(missing_texture, MISSING_W, MISSING_H);
+        return TRUE;
+    }
+
+    // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
+    // TODO (Mors): Have a more proper implementation. Maybe implement a sort of scripting system with palette files?
+    if (((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT)
+    && (rdp.texture_tile.fmt == G_IM_FMT_RGBA) && (rdp.texture_tile.siz == G_IM_SIZ_16b)
+    && ((strstr(path, "actors") == NULL)
+    || (strstr(path, "door") != NULL)
+    || (strstr(path, "leaves") != NULL)
+    || (strstr(path, "tree") != NULL)
+    || (strstr(path, "star") != NULL)
+    || (strstr(path, "wooden_signpost") != NULL)
+    || (strstr(path, "manta") != NULL)
+    || (strstr(path, "sushi") != NULL)
+    || (strstr(path, "water_ring") != NULL)
+    || (strstr(path, "segment2") != NULL)
+    || (get_palette() == 19)
+    )) {
+
+        for (int i = 0; i < w*h; i++) {
+            int r = data[ENCORE_R];
+            int g = data[ENCORE_G];
+            int b = data[ENCORE_B];
+            // Return different palettes.
+            switch (get_palette()) {
+
+                case 1: // Castle grounds
+                    //  [ENCORE_R]
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b + r*0.1875f + g*0.375f);
+                break;
+                case 2: //Bob Omb Battlefield
+                    data[ENCORE_R] = ENCORE_COLOR(r*1.125f + g*0.625f - b*0.625f);
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b*1.0625f - (r+g)*0.03125f);
+                break;
+                case 3: // Whomp's Fortress
+                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.5f);
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.0625f+g*0.0625f);
+                break;
+                case 21: // Metal Cave
+                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.625f+b*0.0625f);
+                    data[ENCORE_G] = ENCORE_COLOR(g+r*0.25f+b*0.03125f);
+                    //  [ENCORE_B]
+                break;
+                case 4: // Jolly Roger Bay
+                case 15: // Tick Tock Clock
+                case 22: // Wing Mario Over the Rainbows
+                    data[ENCORE_R] = ENCORE_COLOR(r*0.75f)*0.75f;
+                    data[ENCORE_G] = ENCORE_COLOR(g*0.5f+r*0.0625f+b*0.0625f)*0.75f;
+                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.5f+g*0.5f)*0.75f;
+                break;
+                case 5: // Cool Cool Mountain
+                    //  [ENCORE_R]
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b*0.96875f+r*0.5f+g*0.5f);
+                break;
+                case 6: // Big Boo's Haunt
+                case 19: // Sky
+                    data[ENCORE_R] = ((r+g+b)/3.0f);
+                    data[ENCORE_G] = ((r+g+b)/3.0f);
+                    data[ENCORE_B] = ((r+g+b)/3.0f);
+                break;
+                case 7: // Hazy Maze Cave
+                    data[ENCORE_R] = ENCORE_COLOR(r-g*0.5f+b*0.5f);
+                    data[ENCORE_G] = ENCORE_COLOR((g-r*0.5f+b*0.5f)*1.5f-(r-g*0.5f+b*0.5f+b*0.75f+g*0.25f)*0.25f);
+                    data[ENCORE_B] = ENCORE_COLOR(b*0.75f+g*0.25f);
+                break;
+                case 8: // Lethal Lava Land
+                case 23: // Vanish Cap area
+                case 10: // Dire Dire Docks
+                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.5f+b*0.5f);
+                    data[ENCORE_G] = ENCORE_COLOR(g+r*0.0625f+b*0.0625f);
+                    data[ENCORE_B] = (b*0.875);
+                break;
+                case 9: // Shitting Sand Land
+                    //  [ENCORE_R]
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b*0.5+r*0.25+g*0.25f);
+                break;
+                case 11: // Snowman
+                case 24: // Poopoo level
+                    data[ENCORE_R] = ENCORE_COLOR(r+b*0.25f);
+                    //  [ENCORE_G]
+                    //  [ENCORE_B]
+                break;
+                case 12: // Wet Dry World
+                    data[ENCORE_R] = ENCORE_COLOR(round(sqrt(r/ENCORE_HALF)*8)*24);
+                    data[ENCORE_G] = ENCORE_COLOR(round(sqrt(g/ENCORE_HALF)*8)*24);
+                    data[ENCORE_B] = ENCORE_COLOR(round(sqrt(b/ENCORE_HALF)*8)*24);
+                break;
+                case 13: // Donkey Slide
+                    data[ENCORE_R] = ENCORE_COLOR(min(r+g*1.25f-b*1.5f, ENCORE_MAX*0.9375f));
+                    //  [ENCORE_G]
+                    //  [ENCORE_B]
+                break;
+                case 14: // Tiny Huge Island
+                    if (g > r+b) {
+                        //  [ENCORE_R]
+                        //  [ENCORE_G]
+                        data[ENCORE_B] = ENCORE_COLOR(b+r*0.5f+g*0.5f);
+                    }
+                    else if (r+g+b < 95)
+                    {
+                        data[ENCORE_R] = r/2;
+                        data[ENCORE_G] = ENCORE_COLOR((g+r*1.0625)/2);
+                        data[ENCORE_B] = ENCORE_COLOR((b+r*1.03125)/2);
+                    }
+                    else
+                    {
+                        //  [ENCORE_R]
+                        //  [ENCORE_G]
+                        data[ENCORE_B] = ENCORE_COLOR(b+r*0.125f+g*0.25f);
+                    }
+                break;
+                case 16: // Rainbow Ride
+                    //  [ENCORE_R]
+                    //  [ENCORE_G]
+                    data[ENCORE_B] = ENCORE_COLOR(b+g*1.25f-r*0.5f);
+                break;
+                case 17: // Dank world
+                    //  [ENCORE_R]
+                    data[ENCORE_G] = b;
+                    data[ENCORE_B] = g;
+                break;
+                case 18: // Bowser in the Fire Sea
+                    if (r > (g+b)*2) {
+                        //  [ENCORE_R]
+                        data[ENCORE_G] = ENCORE_COLOR((g*0.875f+r*0.0625f+b*0.0625f)*0.3125f+g*0.5f);
+                        data[ENCORE_B] = ENCORE_COLOR((b+r*0.75f+g*0.75f)*0.625f);
+                    }
+                    else
+                    {
+                        //  [ENCORE_R]
+                        data[ENCORE_G] = ENCORE_COLOR((g*0.875f+r*0.0625f+b*0.0625f)*0.875f);
+                        data[ENCORE_B] = ENCORE_COLOR((b+r*0.75f+g*0.75f)*0.875f);
+                    }
+                break;
+                case 20: // Secret Slide
+                    //  [ENCORE_R]
+                    data[ENCORE_G] = (r+g+b)/3.0f;
+                    data[ENCORE_B] = (r+g+b)/3.0f;
+                break;
+                case 25: // Secret Aquarium
+                    data[ENCORE_R] = ENCORE_COLOR(r*0.875f);
+                    data[ENCORE_G] = ENCORE_COLOR(g*0.875f+r*0.0625f+b*0.0625f);
+                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.75f+g*0.75f);
+                break;
+                case 26: // Ending (doesn't work? i think? cant be bothered to watch the credits again to see)
+                    data[ENCORE_R] = ENCORE_COLOR((r+g+b)/2.0f);
+                    data[ENCORE_G] = ENCORE_COLOR((r+g+b)/2.5f);
+                    data[ENCORE_B] = ENCORE_COLOR((r+g+b)/3.0f);
+                break;
+            }
+        }
+    }
+
+    gfx_rapi->upload_texture(data, w, h);
+    stbi_image_free(data);
+
+    return TRUE;
+}
+
+#else
+
+static void import_texture_rgba16(int tile) {
     uint8_t rgba32_buf[8192];
     uint8_t rgba32_buf_out[8192*4*4];
     
@@ -490,179 +666,9 @@ static void import_texture_ci8(int tile) {
     uint32_t height = rdp.loaded_texture[tile].size_bytes / rdp.texture_tile.line_size_bytes;
     
     gfx_rapi->upload_texture(rgba32_buf, width, height);
-}*/
-
-static bool import_texture_custom(const char *path) {
-    int w, h;
-    u8 *data = stbi_load(path, &w, &h, NULL, 4);
-
-    if (data == NULL)
-    {
-        gfx_rapi->upload_texture(missing_texture, MISSING_W, MISSING_H);
-        return TRUE;
-    }
-
-    // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
-    // TODO (Mors): Have a more proper implementation. Maybe implement a sort of scripting system with palette files?
-    if (((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT)
-    && (rdp.texture_tile.fmt == G_IM_FMT_RGBA) && (rdp.texture_tile.siz == G_IM_SIZ_16b)
-    && ((strstr(path, "actors") == NULL)
-    || (strstr(path, "door") != NULL)
-    || (strstr(path, "leaves") != NULL)
-    || (strstr(path, "tree") != NULL)
-    || (strstr(path, "star") != NULL)
-    || (strstr(path, "wooden_signpost") != NULL)
-    || (strstr(path, "manta") != NULL)
-    || (strstr(path, "sushi") != NULL)
-    || (strstr(path, "water_ring") != NULL)
-    || (strstr(path, "segment2") != NULL)
-    || (get_palette() == 19)
-    )) {
-
-        for (int i = 0; i < w*h; i++) {
-            int r = data[ENCORE_R];
-            int g = data[ENCORE_G];
-            int b = data[ENCORE_B];
-            // Return different palettes.
-            switch (get_palette()) {
-
-                case 1: // Castle grounds
-                    //  [ENCORE_R]
-                    //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b + r*0.1875f + g*0.375f);
-                break;
-                case 2: //Bob Omb Battlefield
-                    data[ENCORE_R] = ENCORE_COLOR(r*1.125f + g*0.625f - b*0.625f);
-                    //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b*1.0625f - (r+g)*0.03125f);
-                break;
-                case 3: // Whomp's Fortress
-                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.5f);
-                    //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.0625f+g*0.0625f);
-                break;
-                case 21: // Metal Cave
-                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.625f+b*0.0625f);
-                    data[ENCORE_G] = ENCORE_COLOR(g+r*0.25f+b*0.03125f);
-                    //  [ENCORE_B]
-                break;
-                case 4: // Jolly Roger Bay
-                case 15: // Tick Tock Clock
-                case 22: // Wing Mario Over the Rainbows
-                    data[ENCORE_R] = ENCORE_COLOR(r*0.75f)*0.75f;
-                    data[ENCORE_G] = ENCORE_COLOR(g*0.5f+r*0.0625f+b*0.0625f)*0.75f;
-                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.5f+g*0.5f)*0.75f;
-                break;
-                case 5: // Cool Cool Mountain
-                    //  [ENCORE_R]
-                    //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b*0.96875f+r*0.5f+g*0.5f);
-                break;
-                case 6: // Big Boo's Haunt
-                case 19: // Sky
-                    data[ENCORE_R] = ((r+g+b)/3.0f);
-                    data[ENCORE_G] = ((r+g+b)/3.0f);
-                    data[ENCORE_B] = ((r+g+b)/3.0f);
-                break;
-                case 7: // Hazy Maze Cave
-                    data[ENCORE_R] = ENCORE_COLOR(r-g*0.5f+b*0.5f);
-                    data[ENCORE_G] = ENCORE_COLOR((g-r*0.5f+b*0.5f)*1.5f-(r-g*0.5f+b*0.5f+b*0.75f+g*0.25f)*0.25f);
-                    data[ENCORE_B] = ENCORE_COLOR(b*0.75f+g*0.25f);
-                break;
-                case 8: // Lethal Lava Land
-                case 23: // Vanish Cap area
-                case 10: // Dire Dire Docks
-                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.5f+b*0.5f);
-                    data[ENCORE_G] = ENCORE_COLOR(g+r*0.0625f+b*0.0625f);
-                    data[ENCORE_B] = (b*0.875);
-                break;
-                case 9: // Shitting Sand Land
-                    //  [ENCORE_R]
-                    //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b*0.5+r*0.25+g*0.25f);
-                break;
-                case 11: // Snowman
-                case 24: // Poopoo level
-                    data[ENCORE_R] = ENCORE_COLOR(r+b*0.25f);
-                    //  [ENCORE_G]
-                    //  [ENCORE_B]
-                break;
-                case 12: // Wet Dry World
-                    data[ENCORE_R] = ENCORE_COLOR(round(sqrt(r/ENCORE_HALF)*8)*24);
-                    data[ENCORE_G] = ENCORE_COLOR(round(sqrt(g/ENCORE_HALF)*8)*24);
-                    data[ENCORE_B] = ENCORE_COLOR(round(sqrt(b/ENCORE_HALF)*8)*24);
-                break;
-                case 13: // Donkey Slide
-                    data[ENCORE_R] = ENCORE_COLOR(min(r+g*1.25f-b*1.5f, ENCORE_MAX*0.9375f));
-                    //  [ENCORE_G]
-                    //  [ENCORE_B]
-                break;
-                case 14: // Tiny Huge Island
-                    if (g > r+b) {
-                        //  [ENCORE_R]
-                        //  [ENCORE_G]
-                        data[ENCORE_B] = ENCORE_COLOR(b+r*0.5f+g*0.5f);
-                    }
-                    else if (r+g+b < 95)
-                    {
-                        data[ENCORE_R] = r/2;
-                        data[ENCORE_G] = ENCORE_COLOR((g+r*1.0625)/2);
-                        data[ENCORE_B] = ENCORE_COLOR((b+r*1.03125)/2);
-                    }
-                    else
-                    {
-                        //  [ENCORE_R]
-                        //  [ENCORE_G]
-                        data[ENCORE_B] = ENCORE_COLOR(b+r*0.125f+g*0.25f);
-                    }
-                break;
-                case 16: // Rainbow Ride
-                    //  [ENCORE_R]
-                    //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b+g*1.25f-r*0.5f);
-                break;
-                case 17: // Dank world
-                    //  [ENCORE_R]
-                    data[ENCORE_G] = b;
-                    data[ENCORE_B] = g;
-                break;
-                case 18: // Bowser in the Fire Sea
-                    if (r > (g+b)*2) {
-                        //  [ENCORE_R]
-                        data[ENCORE_G] = ENCORE_COLOR((g*0.875f+r*0.0625f+b*0.0625f)*0.3125f+g*0.5f);
-                        data[ENCORE_B] = ENCORE_COLOR((b+r*0.75f+g*0.75f)*0.625f);
-                    }
-                    else
-                    {
-                        //  [ENCORE_R]
-                        data[ENCORE_G] = ENCORE_COLOR((g*0.875f+r*0.0625f+b*0.0625f)*0.875f);
-                        data[ENCORE_B] = ENCORE_COLOR((b+r*0.75f+g*0.75f)*0.875f);
-                    }
-                break;
-                case 20: // Secret Slide
-                    //  [ENCORE_R]
-                    data[ENCORE_G] = (r+g+b)/3.0f;
-                    data[ENCORE_B] = (r+g+b)/3.0f;
-                break;
-                case 25: // Secret Aquarium
-                    data[ENCORE_R] = ENCORE_COLOR(r*0.875f);
-                    data[ENCORE_G] = ENCORE_COLOR(g*0.875f+r*0.0625f+b*0.0625f);
-                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.75f+g*0.75f);
-                break;
-                case 26: // Ending (doesn't work? i think? cant be bothered to watch the credits again to see)
-                    data[ENCORE_R] = ENCORE_COLOR((r+g+b)/2.0f);
-                    data[ENCORE_G] = ENCORE_COLOR((r+g+b)/2.5f);
-                    data[ENCORE_B] = ENCORE_COLOR((r+g+b)/3.0f);
-                break;
-            }
-        }
-    }
-
-    gfx_rapi->upload_texture(data, w, h);
-    stbi_image_free(data);
-
-    return TRUE;
 }
+
+#endif
 
 // defined in pc_main.c
 extern const char* GFX_DIR_PATH;
@@ -676,13 +682,14 @@ static void import_texture(int tile) {
     }
 
     // Load the textures
+#ifdef CUSTOM_TEXTURES
     char path[1024];
     const char* gfx_dir = GFX_DIR_PATH == NULL ? "gfx" : GFX_DIR_PATH;
     snprintf(path, sizeof(path), "%s/%s.png", gfx_dir, (const char*)rdp.loaded_texture[tile].addr);
 
     import_texture_custom(path);
-    
-    /*if (fmt == G_IM_FMT_RGBA) {
+#else
+    if (fmt == G_IM_FMT_RGBA) {
         if (siz == G_IM_SIZ_16b) {
             import_texture_rgba16(tile);
         } else if (siz == G_IM_SIZ_32b) {
@@ -718,7 +725,8 @@ static void import_texture(int tile) {
         }
     } else {
         abort();
-    }*/
+    }
+#endif
 }
 
 static void gfx_normalize_vector(float v[3]) {

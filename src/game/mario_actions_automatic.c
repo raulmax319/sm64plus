@@ -310,7 +310,7 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
 
     m->wall = resolve_and_return_wall_collisions(nextPos, 50.0f, 50.0f);
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-    if (configFixVariousBugs)
+    if (configFixCollisionBugs)
         ceilHeight = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
     else
         ceilHeight = vec3f_find_ceil(nextPos, floorHeight, &ceil);

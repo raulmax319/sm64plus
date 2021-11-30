@@ -552,7 +552,7 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
 f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
     UNUSED f32 unused;
 
-    if (configFixVariousBugs)
+    if (configFixCollisionBugs)
         return find_ceil(pos[0], height + 4.0f, pos[2], ceil);
     else
         return find_ceil(pos[0], height + 80.0f, pos[2], ceil);
@@ -1372,7 +1372,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
         vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
         m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
     }
-    if (configFixVariousBugs)
+    if (configFixCollisionBugs)
         m->ceilHeight = vec3f_find_ceil(m->pos, m->pos[1], &m->ceil);
     else
         m->ceilHeight = vec3f_find_ceil(&m->pos[0], m->floorHeight, &m->ceil);
@@ -1715,7 +1715,8 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
     }
 
     // Short hitbox for crouching/crawling/etc.
-    if (m->action & ACT_FLAG_SHORT_HITBOX) {
+    if (m->action & ACT_FLAG_SHORT_HITBOX
+    || (configFixCollisionBugs && m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)) {
         m->marioObj->hitboxHeight = 100.0f;
     } else {
         m->marioObj->hitboxHeight = 160.0f;
@@ -1773,21 +1774,6 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         debug_update_mario_cap(CONT_LEFT, MARIO_WING_CAP, 1800, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP));
         debug_update_mario_cap(CONT_UP, MARIO_METAL_CAP, 600, SEQUENCE_ARGS(4, SEQ_EVENT_METAL_CAP));
         debug_update_mario_cap(CONT_RIGHT, MARIO_VANISH_CAP, 600, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP));
-    }
-
-    // A very direct port of the famouse GS code using https://github.com/sm64gs2pc/sm64gs2pc
-    if (gMoonJump) {
-        if ((gControllers[0].buttonDown & 0xff) == 0x20) {
-            *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0x42200000;
-            if (gMoonJump > 1 && ((gMarioState->action & ACT_GROUP_MASK) != ACT_GROUP_AIRBORNE))
-                set_mario_action(gMarioState, ACT_JUMP, 0);
-        }
-        if (gMoonJump == 1) {
-            if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
-                gMarioStates[0].action = (gMarioStates[0].action & 0xffffffff0000ffff) | 0x3000000;
-            if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
-                gMarioStates[0].action = (gMarioStates[0].action & 0xffffffffffff0000) | 0x880;
-        }
     }
 
     if (gMarioState->action) {
@@ -1866,10 +1852,56 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         func_sh_8025574C();
 #endif
 
+        handle_cheats();
+
         return gMarioState->particleFlags;
     }
 
     return 0;
+}
+
+void handle_cheats() {
+    
+    // A very direct port of the famous GS code
+    // Used https://github.com/sm64gs2pc/sm64gs2pc, later cleaned up by hand
+    if (configMoonJump) {
+        if ((gControllers[0].buttonDown & 0xff) == 0x20) {
+            *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0x42200000;
+            if (configMoonJump > 1 && ((gMarioState->action & ACT_GROUP_MASK) != ACT_GROUP_AIRBORNE))
+                set_mario_action(gMarioState, ACT_JUMP, 0);
+        }
+        if (configMoonJump == 1) {
+            if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
+                gMarioStates[0].action = (gMarioStates[0].action & 0xffffffff0000ffff) | 0x3000000;
+            if ((*(uint32_t *) &gMarioStates[0].vel[1] & 0xff0000) == 0x200000)
+                gMarioStates[0].action = (gMarioStates[0].action & 0xffffffffffff0000) | 0x880;
+        }
+    }
+
+    // Also a very direct port of Kaze's thing
+    if (configBLJEverywhere) {
+        /* D033AFA0 00A0 */ if ((gControllers[0].buttonDown & 0xff00) == 0xa000)
+        /* D033B1C4 00C1 */ if ((*(uint32_t *) &gMarioStates[0].forwardVel & 0xff000000) == 0xc1000000)
+        /* 8133B1BC C220 */ *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0xc2200000;
+        /* D033AFA0 00A0 */ if ((gControllers[0].buttonDown & 0xff00) == 0xa000)
+        /* D033B1C4 00C2 */ if ((*(uint32_t *) &gMarioStates[0].forwardVel & 0xff000000) == 0xc2000000)
+        /* 8133B1BC C220 */ *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0xc2200000;
+
+        // Grounded longer
+        if (configBLJEverywhere == 2) {
+            /* D033B1C4 00C3 */ if ((*(uint32_t *) &gMarioStates[0].forwardVel & 0xff000000) == 0xc3000000)
+            /* 8133B1BC C220 */ *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0xc2200000;
+            /* 8033B21D 0004 */ gMarioStates[0].numLives = (gMarioStates[0].numLives & 0xffffffffffffff00) | 0x4;
+            /* D033B1C4 00C4 */ if ((*(uint32_t *) &gMarioStates[0].forwardVel & 0xff000000) == 0xc4000000)
+            /* 8133B1BC C220 */ *(uint32_t *) &gMarioStates[0].vel[1] = (*(uint32_t *) &gMarioStates[0].vel[1] & 0xffffffff0000ffff) | 0xc2200000;
+            /* 8033B21D 0004 */ gMarioStates[0].numLives = (gMarioStates[0].numLives & 0xffffffffffffff00) | 0x4;
+        }
+        // Rapidfire mode
+        if (configBLJEverywhere == 3) {
+            /* D033AFA0 00A0 */ if ((gControllers[0].buttonDown & 0xff00) == 0xa000)
+            /* 8133AFA0 0000 */ gControllers[0].buttonDown = (gControllers[0].buttonDown & 0xffffffffffff0000) | 0x0;
+        }
+    }
 }
 
 u32 mario_has_improved_metal_cap(struct MarioState *m) {

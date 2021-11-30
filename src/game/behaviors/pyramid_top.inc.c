@@ -95,8 +95,13 @@ void bhv_pyramid_top_loop(void) {
         case PYRAMID_TOP_ACT_CHECK_IF_SOLVED:
             if (o->oPyramidTopPillarsTouched == 4) {
                 play_puzzle_jingle();
-                if (gPyramidCutscene)
-                    gCamera->cutscene = CUTSCENE_SSL_PYRAMID_EXPLODE;
+                if (configUnusedPyramidCutscene) {
+                    mario_stop_riding_object(gMarioState);
+                    gMarioState->forwardVel = 0;
+                    gMarioState->vel[1] = 16;
+                    set_mario_action(gMarioState, ACT_FREEFALL, 0);
+                    start_cutscene(gCamera, CUTSCENE_SSL_PYRAMID_EXPLODE);
+                }
                 o->oAction = PYRAMID_TOP_ACT_SPINNING;
             }
             break;

@@ -3,12 +3,12 @@
 extern char* gTitleString;
 
 extern s8 configFullscreen;
+extern unsigned int configDefaultMonitor;
+extern unsigned int configWindowWidth;
+extern unsigned int configWindowHeight;
 extern s8 configCustomFullscreenResolution;
 extern unsigned int configFullscreenWidth;
 extern unsigned int configFullscreenHeight;
-extern unsigned int configWindowWidth;
-extern unsigned int configWindowHeight;
-extern unsigned int configDefaultMonitor;
 #if defined(_WIN32) || defined(_WIN64)
 extern s8 configCustomInternalResolution;
 extern unsigned int configInternalResolutionWidth;
@@ -35,6 +35,7 @@ extern s8 configDpadControls;
 extern s8 configFullAirControl;
 extern s8 configDisableBLJ;
 
+extern s8 configFixCollisionBugs;
 extern s8 configFixVariousBugs;
 extern s8 configRespawnCertainItems;
 extern s8 configRemoveAnnoyingWarps;
@@ -94,10 +95,11 @@ extern s8 gSunshineDive;
 extern s8 gOdysseyDive;
 extern s8 gFlashbackPound;
 
-extern s8 gPyramidCutscene;
+extern s8 configUnusedPyramidCutscene;
 extern s8 configRestoreUnusedSounds;
 extern s8 gPenguinSadEyes;
 extern s8 gTwirlTripleJump;
+extern s8 configBetaLikeCamera;
 extern s8 gSpawnSparkles;
 extern s8 gReplaceKeysWithStars;
 
@@ -112,7 +114,8 @@ extern s8 gCasualMode;
 
 extern s8 gDebugMovementMode;
 extern s8 gDebugCapChanger;
-extern unsigned int gMoonJump;
+extern unsigned int configMoonJump;
+extern unsigned int configBLJEverywhere;
 extern s8 configGodMode;
 extern s8 configHyperspeedMode;
 extern s8 gFlexibleCannons;
