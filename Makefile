@@ -361,10 +361,6 @@ ifeq ($(TARGET_N64),1)
   CC_CFLAGS := -fno-builtin
 endif
 
-ifeq ($(TARGET_MACOS),1)
-  TARGET_CFLAGS := -DTARGET_MACOS -DTIMER_ABSTIME=1
-endif
-
 INCLUDE_CFLAGS := -I include -I $(BUILD_DIR) -I $(BUILD_DIR)/include -I src -I .
 
 # Check code syntax with host compiler
@@ -433,7 +429,7 @@ ifeq ($(TARGET_LINUX),1)
 endif
 ifeq ($(TARGET_MACOS),1)
   SDLCONFIG_LDFLAGS := $(shell sdl2-config --libs)
-  PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_MACOS `pkg-config --cflags libusb-1.0`
+  PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_MACOS -DTIMER_ABSTIME=1 `pkg-config --cflags libusb-1.0`
   PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -lm -lpthread `pkg-config --libs libusb-1.0` -no-pie
 endif
 ifeq ($(TARGET_WEB),1)
