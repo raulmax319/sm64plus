@@ -1,4 +1,4 @@
-#if !defined(__linux__) && !defined(__BSD__)
+#if !defined(__linux__) && !defined(__BSD__) && !defined(TARGET_MACOS)
 
 #include <cstdio>
 

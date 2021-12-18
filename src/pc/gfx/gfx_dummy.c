@@ -5,6 +5,10 @@
 #include "gfx_window_manager_api.h"
 #include "gfx_rendering_api.h"
 
+#include <assert.h>
+#include <errno.h>
+#include <time.h>
+
 static void gfx_dummy_wm_init(const char *game_name, bool start_in_fullscreen) {
 }
 
@@ -66,16 +70,54 @@ static void gfx_dummy_wm_swap_buffers_end(void) {
     if (diff.tv_sec == 0 && diff.tv_nsec < 1000000000 / 30) {
         struct timespec add = {0, 1000000000 / 30};
         struct timespec next = gfx_dummy_wm_timeadd(prev, add);
-#ifndef TARGET_MACOS
-        while (clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, NULL) == EINTR) {
-#else
-        while (nanosleep(&next, NULL) == EINTR) {
-#endif
-        }
+        /*while (clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, NULL) == EINTR) {
+        }*/
         prev = next;
     } else {
         prev = t;
     }
+}
+
+int clock_nanosleep (clockid_t clock_id, int flags, const struct timespec *req,
+                  struct timespec *rem)
+{
+    struct timespec now;
+    if (__builtin_expect (req->tv_nsec, 0) < 0
+        || __builtin_expect (req->tv_nsec, 0) >= 1000000000)
+        return EINVAL;
+    if (clock_id == CLOCK_THREAD_CPUTIME_ID)
+        return EINVAL;                /* POSIX specifies EINVAL for this case.  */
+    if (clock_id < CLOCK_REALTIME || clock_id > CLOCK_THREAD_CPUTIME_ID)
+        return EINVAL;
+    /* If we got an absolute time, remap it.  */
+    if (flags == TIMER_ABSTIME)
+    {
+        long int nsec;
+        long int sec;
+        /* Make sure we use safe data types.  */
+        assert (sizeof (sec) >= sizeof (now.tv_sec));
+        /* Get the current time for this clock.  */
+        if (clock_gettime (clock_id, &now) != 0)
+            return errno;
+        /* Compute the difference.  */
+        nsec = req->tv_nsec - now.tv_nsec;
+        sec = req->tv_sec - now.tv_sec - (nsec < 0);
+        if (sec < 0)
+            /* The time has already elapsed.  */
+            return 0;
+        now.tv_sec = sec;
+        now.tv_nsec = nsec + (nsec < 0 ? 1000000000 : 0);
+        /* From now on this is our time.  */
+        req = &now;
+        /* Make sure we are not modifying the struct pointed to by REM.  */
+        rem = NULL;
+    }
+    else if (flags != 0)
+        return EINVAL;
+    else if (clock_id != CLOCK_REALTIME)
+        /* Not supported.  */
+        return ENOTSUP;
+    return nanosleep (req, rem), 0 ? errno : 0;
 }
 
 static double gfx_dummy_wm_get_time(void) {
