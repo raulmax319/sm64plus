@@ -66,7 +66,11 @@ static void gfx_dummy_wm_swap_buffers_end(void) {
     if (diff.tv_sec == 0 && diff.tv_nsec < 1000000000 / 30) {
         struct timespec add = {0, 1000000000 / 30};
         struct timespec next = gfx_dummy_wm_timeadd(prev, add);
+#ifndef TARGET_MACOS
         while (clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, NULL) == EINTR) {
+#else
+        while (nanosleep(&next, NULL) == EINTR) {
+#endif
         }
         prev = next;
     } else {
