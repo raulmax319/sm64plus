@@ -362,7 +362,7 @@ ifeq ($(TARGET_N64),1)
 endif
 
 ifeq ($(TARGET_MACOS),1)
-  TARGET_CFLAGS := -DTARGET_MACOS
+  TARGET_CFLAGS := -DTARGET_MACOS -DTIMER_ABSTIME=1
 endif
 
 INCLUDE_CFLAGS := -I include -I $(BUILD_DIR) -I $(BUILD_DIR)/include -I src -I .
