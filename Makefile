@@ -30,6 +30,11 @@ TARGET_32BIT ?= 0
 # If custom textures are supported
 CUSTOM_TEXTURES ?= 0
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  TARGET_MACOS := 1
+endif
+
 # Automatic settings only for ports
 ifeq ($(TARGET_N64),0)
 
