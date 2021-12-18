@@ -410,6 +410,12 @@ OBJDUMP := objdump
 OBJCOPY := objcopy
 PYTHON := python3
 
+ifeq ($(TARGET_MACOS),1)
+  AS := i686-w64-mingw32-as
+  OBJDUMP := i686-w64-mingw32-objdump
+  OBJCOPY := i686-w64-mingw32-objcopy
+endif
+
 # Platform-specific compiler and linker flags, including SDL stuff
 SDLCONFIG_CFLAGS := $(shell sdl2-config --cflags)
 
