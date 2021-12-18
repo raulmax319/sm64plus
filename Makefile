@@ -19,6 +19,8 @@ COMPARE ?= 1
 NON_MATCHING ?= 0
 # Build for the N64 (turn this off for ports)
 TARGET_N64 ?= 0
+# Build for the MacOS
+TARGET_MACOS ?= 0
 # Build for Emscripten/WebGL
 TARGET_WEB ?= 0
 # Compiler to use (ido or gcc)
@@ -34,12 +36,14 @@ ifeq ($(TARGET_N64),0)
   NON_MATCHING := 1
   GRUCODE := f3dex2e
   TARGET_WINDOWS := 0
-  ifeq ($(TARGET_WEB),0)
-    ifeq ($(OS),Windows_NT)
-      TARGET_WINDOWS := 1
-    else
-      # TODO: Detect Mac OS X, BSD, etc. For now, assume Linux
-      TARGET_LINUX := 1
+  ifeq ($(TARGET_MACOS), 0)
+    ifeq ($(TARGET_WEB),0)
+      ifeq ($(OS),Windows_NT)
+        TARGET_WINDOWS := 1
+      else
+        # TODO: Detect Mac OS X, BSD, etc. For now, assume Linux
+        TARGET_LINUX := 1
+      endif
     endif
   endif
 
@@ -357,6 +361,10 @@ ifeq ($(TARGET_N64),1)
   CC_CFLAGS := -fno-builtin
 endif
 
+ifeq ($(TARGET_MACOS),1)
+  TARGET_CFLAGS := -DTARGET_MACOS
+endif
+
 INCLUDE_CFLAGS := -I include -I $(BUILD_DIR) -I $(BUILD_DIR)/include -I src -I .
 
 # Check code syntax with host compiler
@@ -421,6 +429,11 @@ endif
 ifeq ($(TARGET_LINUX),1)
   SDLCONFIG_LDFLAGS := $(shell sdl2-config --libs)
   PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_LINUX `pkg-config --cflags libusb-1.0`
+  PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -lm -lpthread `pkg-config --libs libusb-1.0` -no-pie
+endif
+ifeq ($(TARGET_MACOS),1)
+  SDLCONFIG_LDFLAGS := $(shell sdl2-config --libs)
+  PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_MACOS `pkg-config --cflags libusb-1.0`
   PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -lm -lpthread `pkg-config --libs libusb-1.0` -no-pie
 endif
 ifeq ($(TARGET_WEB),1)
