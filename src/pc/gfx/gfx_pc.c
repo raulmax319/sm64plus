@@ -4,6 +4,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+#ifdef TARGET_MACOS
+#include <libgen.h>
+#endif
 
 #include <stdio.h>
 #define STB_IMAGE_IMPLEMENTATION
@@ -684,7 +687,18 @@ static void import_texture(int tile) {
     // Load the textures
 #ifdef CUSTOM_TEXTURES
     char path[1024];
+#ifdef TARGET_MACOS
+    char exec_path[1024];
+    char* dir;
+    uint32_t size = sizeof(exec_path);
+    _NSGetExecutablePath(exec_path, &size);
+    dir = dirname(exec_path);
+    const char gfx_path[1024];
+    snprintf(gfx_path, sizeof(gfx_path), "%s/gfx", dir);
+    const char* gfx_dir = GFX_DIR_PATH == NULL ? gfx_path : GFX_DIR_PATH;
+#else
     const char* gfx_dir = GFX_DIR_PATH == NULL ? "gfx" : GFX_DIR_PATH;
+#endif
     snprintf(path, sizeof(path), "%s/%s.png", gfx_dir, (const char*)rdp.loaded_texture[tile].addr);
 
     import_texture_custom(path);
