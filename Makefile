@@ -461,7 +461,7 @@ ifeq ($(TARGET_LINUX),1)
 endif
 ifeq ($(TARGET_MACOS),1)
   GFX_CFLAGS  +=
-  GFX_LDFLAGS += -lGL -lX11
+  GFX_LDFLAGS += -framework OpenGL -lX11 -lSDL2
 endif
 ifeq ($(TARGET_WEB),1)
   GFX_CFLAGS  += -s
