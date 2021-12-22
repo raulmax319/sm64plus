@@ -527,10 +527,15 @@ else
 all: $(EXE)
 ifeq ($(CUSTOM_TEXTURES),1)
 	@mkdir -p $(BUILD_DIR)/gfx
-	@cp -r -f textures/ $(BUILD_DIR)/gfx/
-	@cp -r -f $(BUILD_DIR)/textures/skybox_tiles/ $(BUILD_DIR)/gfx/textures/
-	@find actors -name \*.png -exec cp {} $(BUILD_DIR)/gfx/ \;
-	@find levels -name \*.png -exec cp {} $(BUILD_DIR)/gfx/ \;
+	@cp -r -f textures $(BUILD_DIR)/gfx/
+	@cp -r -f $(BUILD_DIR)/textures/skybox_tiles $(BUILD_DIR)/gfx/textures/
+ifeq ($(TARGET_MACOS),1)
+	@find actors -name \*.png -exec rsync -R {} $(BUILD_DIR)/gfx/ \;
+	@find levels -name \*.png -exec rsync -R {} $(BUILD_DIR)/gfx/ \;
+else
+	@find actors -name \*.png -exec cp --parents {} $(BUILD_DIR)/gfx/ \;
+	@find levels -name \*.png -exec cp --parents {} $(BUILD_DIR)/gfx/ \;
+endif
 endif
 endif
 
