@@ -475,6 +475,7 @@ CFLAGS := $(OPT_FLAGS) $(INCLUDE_CFLAGS) -D_LANGUAGE_C $(VERSION_CFLAGS) $(MATCH
 
 ifeq ($(CUSTOM_TEXTURES),1)
   SKYCONV_ARGS := --store-names --write-tiles "$(BUILD_DIR)/textures/skybox_tiles"
+  CFLAGS += -DCUSTOM_TEXTURES
 else
   SKYCONV_ARGS := 
 endif
@@ -528,8 +529,8 @@ ifeq ($(CUSTOM_TEXTURES),1)
 	@mkdir -p $(BUILD_DIR)/gfx
 	@cp -r -f textures/ $(BUILD_DIR)/gfx/
 	@cp -r -f $(BUILD_DIR)/textures/skybox_tiles/ $(BUILD_DIR)/gfx/textures/
-	@find actors -name \*.png -exec cp --parents {} $(BUILD_DIR)/gfx/ \;
-	@find levels -name \*.png -exec cp --parents {} $(BUILD_DIR)/gfx/ \;
+	@find actors -name \*.png -exec cp {} $(BUILD_DIR)/gfx/ \;
+	@find levels -name \*.png -exec cp {} $(BUILD_DIR)/gfx/ \;
 endif
 endif
 
