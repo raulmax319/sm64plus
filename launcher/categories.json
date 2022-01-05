@@ -435,7 +435,7 @@
         "description": "Inverts horizontal camera controls when the \"Horizontal Analog Camera\" setting is enabled.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
-        "enabled_by": 2,
+        "enabled_by": 1,
         "disabled_by": -1,
         "name": "Invert Horizontal Camera Controls"
     }, {
@@ -443,7 +443,7 @@
         "description": "Inverts vertical camera controls when the \"Verical Analog Camera\" setting is enabled.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
-        "enabled_by": 3,
+        "enabled_by": 2,
         "disabled_by": -1,
         "name": "Invert Vertical Camera Controls"
     }, {

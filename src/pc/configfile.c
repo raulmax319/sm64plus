@@ -91,7 +91,7 @@ static const struct ConfigOption options[] = {
     { .name = "skip_cutscenes", .type = CONFIG_TYPE_BOOL, .boolValue = &configSkipCutscenes },
 
     { .name = "CAMERA", .type = CONFIG_TYPE_SECTION },
-    { .name = "center_camera_button", .type = CONFIG_TYPE_BOOL, .boolValue = &gCenterCameraButton },
+    { .name = "center_camera_button", .type = CONFIG_TYPE_BOOL, .boolValue = &configCenterCameraButton },
     { .name = "horizontal_analog_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gImprovedCamera },
     { .name = "vertical_analog_camera", .type = CONFIG_TYPE_BOOL, .boolValue = &gVerticalCamera },
     { .name = "invert_horizontal_camera_controls", .type = CONFIG_TYPE_BOOL, .boolValue = &gInvertedCamera },

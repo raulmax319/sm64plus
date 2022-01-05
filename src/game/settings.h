@@ -54,7 +54,7 @@ extern s8 configSkipMissionSelect;
 extern s8 configSwitchToNextMission;
 extern s8 configSkipCutscenes;
 
-extern s8 gCenterCameraButton;
+extern s8 configCenterCameraButton;
 extern s8 gImprovedCamera;
 extern s8 gVerticalCamera;
 extern s8 gInvertedCamera;

@@ -34,9 +34,8 @@
 #define SCALE_3_8(VAL_) ((VAL_) * 0x24)
 #define SCALE_8_3(VAL_) ((VAL_) / 0x24)
 
-#define ENCORE_MAX 255.0f
-#define ENCORE_HALF 127.0f
-#define ENCORE_COLOR(VAL_) MAX(min(VAL_, ENCORE_MAX), 0.0f)
+#define ENCORE_COLOR(VAL_) MAX(min(VAL_, 31.0f), 0.0f)
+#define ENCORE_COLOR_EXT(VAL_) MAX(min(VAL_, 255.0f), 0.0f)
 #define ENCORE_R 4*i+0
 #define ENCORE_G 4*i+1
 #define ENCORE_B 4*i+2
@@ -350,34 +349,34 @@ static bool import_texture_custom(const char *path) {
                 case 1: // Castle grounds
                     //  [ENCORE_R]
                     //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b + r*0.1875f + g*0.375f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b + r*0.1875f + g*0.375f);
                 break;
                 case 2: //Bob Omb Battlefield
-                    data[ENCORE_R] = ENCORE_COLOR(r*1.125f + g*0.625f - b*0.625f);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(r*1.125f + g*0.625f - b*0.625f);
                     //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b*1.0625f - (r+g)*0.03125f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b*1.0625f - (r+g)*0.03125f);
                 break;
                 case 3: // Whomp's Fortress
-                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.5f);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(r+g*0.5f);
                     //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.0625f+g*0.0625f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b+r*0.0625f+g*0.0625f);
                 break;
                 case 21: // Metal Cave
-                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.625f+b*0.0625f);
-                    data[ENCORE_G] = ENCORE_COLOR(g+r*0.25f+b*0.03125f);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(r+g*0.625f+b*0.0625f);
+                    data[ENCORE_G] = ENCORE_COLOR_EXT(g+r*0.25f+b*0.03125f);
                     //  [ENCORE_B]
                 break;
                 case 4: // Jolly Roger Bay
                 case 15: // Tick Tock Clock
                 case 22: // Wing Mario Over the Rainbows
-                    data[ENCORE_R] = ENCORE_COLOR(r*0.75f)*0.75f;
-                    data[ENCORE_G] = ENCORE_COLOR(g*0.5f+r*0.0625f+b*0.0625f)*0.75f;
-                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.5f+g*0.5f)*0.75f;
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(r*0.75f)*0.75f;
+                    data[ENCORE_G] = ENCORE_COLOR_EXT(g*0.5f+r*0.0625f+b*0.0625f)*0.75f;
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b+r*0.5f+g*0.5f)*0.75f;
                 break;
                 case 5: // Cool Cool Mountain
                     //  [ENCORE_R]
                     //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b*0.96875f+r*0.5f+g*0.5f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b*0.96875f+r*0.5f+g*0.5f);
                 break;
                 case 6: // Big Boo's Haunt
                 case 19: // Sky
@@ -386,35 +385,35 @@ static bool import_texture_custom(const char *path) {
                     data[ENCORE_B] = ((r+g+b)/3.0f);
                 break;
                 case 7: // Hazy Maze Cave
-                    data[ENCORE_R] = ENCORE_COLOR(r-g*0.5f+b*0.5f);
-                    data[ENCORE_G] = ENCORE_COLOR((g-r*0.5f+b*0.5f)*1.5f-(r-g*0.5f+b*0.5f+b*0.75f+g*0.25f)*0.25f);
-                    data[ENCORE_B] = ENCORE_COLOR(b*0.75f+g*0.25f);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(r-g*0.5f+b*0.5f);
+                    data[ENCORE_G] = ENCORE_COLOR_EXT((g-r*0.5f+b*0.5f)*1.5f-(r-g*0.5f+b*0.5f+b*0.75f+g*0.25f)*0.25f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b*0.75f+g*0.25f);
                 break;
                 case 8: // Lethal Lava Land
                 case 23: // Vanish Cap area
                 case 10: // Dire Dire Docks
-                    data[ENCORE_R] = ENCORE_COLOR(r+g*0.5f+b*0.5f);
-                    data[ENCORE_G] = ENCORE_COLOR(g+r*0.0625f+b*0.0625f);
-                    data[ENCORE_B] = (b*0.875);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(r+g*0.5f+b*0.5f);
+                    data[ENCORE_G] = ENCORE_COLOR_EXT(g+r*0.0625f+b*0.0625f);
+                    data[ENCORE_B] = (b*0.875f);
                 break;
                 case 9: // Shitting Sand Land
                     //  [ENCORE_R]
                     //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b*0.5+r*0.25+g*0.25f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b*0.5+r*0.25+g*0.25f);
                 break;
                 case 11: // Snowman
                 case 24: // Poopoo level
-                    data[ENCORE_R] = ENCORE_COLOR(r+b*0.25f);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(r+b*0.25f);
                     //  [ENCORE_G]
                     //  [ENCORE_B]
                 break;
                 case 12: // Wet Dry World
-                    data[ENCORE_R] = ENCORE_COLOR(round(sqrt(r/ENCORE_HALF)*8)*24);
-                    data[ENCORE_G] = ENCORE_COLOR(round(sqrt(g/ENCORE_HALF)*8)*24);
-                    data[ENCORE_B] = ENCORE_COLOR(round(sqrt(b/ENCORE_HALF)*8)*24);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(round(sqrt(r/127.0f)*8)*24);
+                    data[ENCORE_G] = ENCORE_COLOR_EXT(round(sqrt(g/127.0f)*8)*24);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(round(sqrt(b/127.0f)*8)*24);
                 break;
                 case 13: // Donkey Slide
-                    data[ENCORE_R] = ENCORE_COLOR(min(r+g*1.25f-b*1.5f, ENCORE_MAX*0.9375f));
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(min(r+g*1.25f-b*1.5f, 255.0f*0.9375f));
                     //  [ENCORE_G]
                     //  [ENCORE_B]
                 break;
@@ -422,25 +421,25 @@ static bool import_texture_custom(const char *path) {
                     if (g > r+b) {
                         //  [ENCORE_R]
                         //  [ENCORE_G]
-                        data[ENCORE_B] = ENCORE_COLOR(b+r*0.5f+g*0.5f);
+                        data[ENCORE_B] = ENCORE_COLOR_EXT(b+r*0.5f+g*0.5f);
                     }
                     else if (r+g+b < 95)
                     {
-                        data[ENCORE_R] = r/2;
-                        data[ENCORE_G] = ENCORE_COLOR((g+r*1.0625)/2);
-                        data[ENCORE_B] = ENCORE_COLOR((b+r*1.03125)/2);
+                        data[ENCORE_R] = r/2.0f;
+                        data[ENCORE_G] = ENCORE_COLOR_EXT((g+r*1.0625)/2.0f);
+                        data[ENCORE_B] = ENCORE_COLOR_EXT((b+r*1.03125)/2.0f);
                     }
                     else
                     {
                         //  [ENCORE_R]
                         //  [ENCORE_G]
-                        data[ENCORE_B] = ENCORE_COLOR(b+r*0.125f+g*0.25f);
+                        data[ENCORE_B] = ENCORE_COLOR_EXT(b+r*0.125f+g*0.25f);
                     }
                 break;
                 case 16: // Rainbow Ride
                     //  [ENCORE_R]
                     //  [ENCORE_G]
-                    data[ENCORE_B] = ENCORE_COLOR(b+g*1.25f-r*0.5f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b+g*1.25f-r*0.5f);
                 break;
                 case 17: // Dank world
                     //  [ENCORE_R]
@@ -450,14 +449,14 @@ static bool import_texture_custom(const char *path) {
                 case 18: // Bowser in the Fire Sea
                     if (r > (g+b)*2) {
                         //  [ENCORE_R]
-                        data[ENCORE_G] = ENCORE_COLOR((g*0.875f+r*0.0625f+b*0.0625f)*0.3125f+g*0.5f);
-                        data[ENCORE_B] = ENCORE_COLOR((b+r*0.75f+g*0.75f)*0.625f);
+                        data[ENCORE_G] = ENCORE_COLOR_EXT((g*0.875f+r*0.0625f+b*0.0625f)*0.3125f+g*0.5f);
+                        data[ENCORE_B] = ENCORE_COLOR_EXT((b+r*0.75f+g*0.75f)*0.625f);
                     }
                     else
                     {
                         //  [ENCORE_R]
-                        data[ENCORE_G] = ENCORE_COLOR((g*0.875f+r*0.0625f+b*0.0625f)*0.875f);
-                        data[ENCORE_B] = ENCORE_COLOR((b+r*0.75f+g*0.75f)*0.875f);
+                        data[ENCORE_G] = ENCORE_COLOR_EXT((g*0.875f+r*0.0625f+b*0.0625f)*0.875f);
+                        data[ENCORE_B] = ENCORE_COLOR_EXT((b+r*0.75f+g*0.75f)*0.875f);
                     }
                 break;
                 case 20: // Secret Slide
@@ -466,14 +465,14 @@ static bool import_texture_custom(const char *path) {
                     data[ENCORE_B] = (r+g+b)/3.0f;
                 break;
                 case 25: // Secret Aquarium
-                    data[ENCORE_R] = ENCORE_COLOR(r*0.875f);
-                    data[ENCORE_G] = ENCORE_COLOR(g*0.875f+r*0.0625f+b*0.0625f);
-                    data[ENCORE_B] = ENCORE_COLOR(b+r*0.75f+g*0.75f);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT(r*0.875f);
+                    data[ENCORE_G] = ENCORE_COLOR_EXT(g*0.875f+r*0.0625f+b*0.0625f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT(b+r*0.75f+g*0.75f);
                 break;
                 case 26: // Ending (doesn't work? i think? cant be bothered to watch the credits again to see)
-                    data[ENCORE_R] = ENCORE_COLOR((r+g+b)/2.0f);
-                    data[ENCORE_G] = ENCORE_COLOR((r+g+b)/2.5f);
-                    data[ENCORE_B] = ENCORE_COLOR((r+g+b)/3.0f);
+                    data[ENCORE_R] = ENCORE_COLOR_EXT((r+g+b)/2.0f);
+                    data[ENCORE_G] = ENCORE_COLOR_EXT((r+g+b)/2.5f);
+                    data[ENCORE_B] = ENCORE_COLOR_EXT((r+g+b)/3.0f);
                 break;
             }
         }
@@ -497,10 +496,164 @@ static void import_texture_rgba16(int tile) {
         uint8_t r = col16 >> 11;
         uint8_t g = (col16 >> 6) & 0x1f;
         uint8_t b = (col16 >> 1) & 0x1f;
-        rgba32_buf[4*i + 0] = SCALE_5_8(r);
-        rgba32_buf[4*i + 1] = SCALE_5_8(g);
-        rgba32_buf[4*i + 2] = SCALE_5_8(b);
-        rgba32_buf[4*i + 3] = a ? 255 : 0;
+        char *path = rdp.loaded_texture[tile].path;
+        if (((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT)
+        && (rdp.texture_tile.fmt == G_IM_FMT_RGBA) && (rdp.texture_tile.siz == G_IM_SIZ_16b)
+        && ((strstr(path, "actors") == NULL)
+        || (strstr(path, "door") != NULL)
+        || (strstr(path, "leaves") != NULL)
+        || (strstr(path, "tree") != NULL)
+        || (strstr(path, "star") != NULL)
+        || (strstr(path, "wooden_signpost") != NULL)
+        || (strstr(path, "manta") != NULL)
+        || (strstr(path, "sushi") != NULL)
+        || (strstr(path, "water_ring") != NULL)
+        || (strstr(path, "segment2") != NULL)
+        || (get_palette() == 19)
+        )) {
+            // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
+            // TODO (Mors): Have a more proper implementation. Maybe implement a sort of scripting system with palette files?
+            rgba32_buf[ENCORE_R] = SCALE_5_8(r);
+            rgba32_buf[ENCORE_G] = SCALE_5_8(g);
+            rgba32_buf[ENCORE_B] = SCALE_5_8(b);
+            switch (get_palette()) {
+                case 1: // Castle grounds
+                    //        [ENCORE_R]
+                    //        [ENCORE_G]
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b + r*0.1875f + g*0.375f));
+                break;
+                case 2: //Bob Omb Battlefield
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(r*1.125f + g*0.625f - b*0.625f));
+                    //        [ENCORE_G]
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b*1.0625f - (r+g)*0.03125f));
+                break;
+                case 3: // Whomp's Fortress
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(r+g*0.5f));
+                    //        [ENCORE_G]
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b+r*0.0625f+g*0.0625f));
+                break;
+                case 21: // Metal Cave
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(r+g*0.625f+b*0.0625f));
+                    rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR(g+r*0.25f+b*0.03125));
+                    //        [ENCORE_B]
+                break;
+                case 4: // Jolly Roger Bay
+                case 15: // Tick Tock Clock
+                case 22: // Wing Mario Over the Rainbows
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(r*0.75f)*0.75f);
+                    rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR(g*0.5f+r*0.0625f+b*0.0625f)*0.75f);
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b+r*0.5f+g*0.5f)*0.75f);
+                break;
+                case 5: // Cool Cool Mountain
+                    //        [ENCORE_R]
+                    //        [ENCORE_G]
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b*0.96875f+r*0.5f+g*0.5f));
+                break;
+                case 6: // Big Boo's Haunt
+                case 19: // Sky
+                    rgba32_buf[ENCORE_R] = SCALE_5_8((r+g+b)/3.0f);
+                    rgba32_buf[ENCORE_G] = SCALE_5_8((r+g+b)/3.0f);
+                    rgba32_buf[ENCORE_B] = SCALE_5_8((r+g+b)/3.0f);
+                break;
+                case 7: // Hazy Maze Cave
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(r-g*0.5f+b*0.5f));
+                    rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR((g-r*0.5f+b*0.5f)*1.5f-(r-g*0.5f+b*0.5f+b*0.75f+g*0.25f)*0.25f));
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b*0.75+g*0.25));
+                break;
+                case 8: // Lethal Lava Land
+                case 23: // Vanish Cap area
+                case 10: // Dire Dire Docks
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(r+g*0.5f+b*0.5f));
+                    rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR(g+r*0.0625f+b*0.0625f));
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(b*0.875f);
+                break;
+                case 9: // Shitting Sand Land
+                    //        [ENCORE_R]
+                    //        [ENCORE_G]
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b*0.5+r*0.25+g*0.25f));
+                break;
+                case 11: // Snowman
+                case 24: // Poopoo level
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(r+b*0.25f));
+                    //        [ENCORE_G]
+                    //        [ENCORE_B]
+                break;
+                case 12: // Wet Dry World
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(round(sqrt(r/31.0f)*8)*4));
+                    rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR(round(sqrt(g/31.0f)*8)*4));
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(round(sqrt(b/31.0f)*8)*4));
+                break;
+                case 13: // Donkey Slide
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR(min(r+g*1.25f-b*1.5f, 31.0f*0.9375f)));
+                    //        [ENCORE_G]
+                    //        [ENCORE_B]
+                break;
+                case 14: // Tiny Huge Island
+                    if (g > r+b) {
+                        //        [ENCORE_R]
+                        //        [ENCORE_G]
+                        rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b+r*0.5+g*0.5));
+                    }
+                    else if (r+g+b < 23)
+                    {
+                        rgba32_buf[ENCORE_R] = SCALE_5_8(r/2.0f);
+                        rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR((g+r*1.0625, 31)/2.0f));
+                        rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR((b+r*1.03125, 31)/2.0f));
+                    }
+                    else
+                    {
+                        //        [ENCORE_R]
+                        //        [ENCORE_G]
+                        rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b+r*0.125+g*0.25f));
+                    }
+                break;
+                case 16: // Rainbow Ride
+                    //        [ENCORE_R]
+                    //        [ENCORE_G]
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b+g*1.25f-r*0.5f));
+                break;
+                case 17: // Dank world
+                    //        [ENCORE_R]
+                    rgba32_buf[ENCORE_G] = SCALE_5_8(b);
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(g);
+                break;
+                case 18: // Bowser in the Fire Sea
+                    if (r > (g+b)*2) {
+                        //        [ENCORE_R]
+                        rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR((g*0.875f+r*0.0625f+b*0.0625f)*0.3125f+g*0.5f));
+                        rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR((b+r*0.75f+g*0.75f)*0.625f));
+                    }
+                    else
+                    {
+                        //        [ENCORE_R]
+                        rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR((g*0.875f+r*0.0625f+b*0.0625f)*0.875f));
+                        rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR((b+r*0.75f+g*0.75f)*0.875f));
+                    }
+                break;
+                case 20: // Secret Slide
+                    //        [ENCORE_R]
+                    rgba32_buf[ENCORE_G] = SCALE_5_8((r+g+b)/3.0f);
+                    rgba32_buf[ENCORE_B] = SCALE_5_8((r+g+b)/3.0f);
+                break;
+                case 25: // Secret Aquarium
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(r*0.875);
+                    rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR(g*0.875f+r*0.0625f+b*0.0625f));
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR(b+r*0.75+g*0.75));
+                break;
+                case 26: // Ending
+                    rgba32_buf[ENCORE_R] = SCALE_5_8(ENCORE_COLOR((r+g+b)/2.0f));
+                    rgba32_buf[ENCORE_G] = SCALE_5_8(ENCORE_COLOR((r+g+b)/2.5f));
+                    rgba32_buf[ENCORE_B] = SCALE_5_8(ENCORE_COLOR((r+g+b)/3.0f));
+                break;
+            }
+
+        }
+        else {
+            rgba32_buf[ENCORE_R] = SCALE_5_8(r);
+            rgba32_buf[ENCORE_G] = SCALE_5_8(g);
+            rgba32_buf[ENCORE_B] = SCALE_5_8(b);
+        }
+        rgba32_buf[ENCORE_A] = a ? 255 : 0;
     }
     
     uint32_t width = rdp.texture_tile.line_size_bytes / 2;
@@ -526,10 +679,10 @@ static void import_texture_ia4(int tile) {
         uint8_t r = intensity;
         uint8_t g = intensity;
         uint8_t b = intensity;
-        rgba32_buf[4*i + 0] = SCALE_3_8(r);
-        rgba32_buf[4*i + 1] = SCALE_3_8(g);
-        rgba32_buf[4*i + 2] = SCALE_3_8(b);
-        rgba32_buf[4*i + 3] = alpha ? 255 : 0;
+        rgba32_buf[ENCORE_R] = SCALE_3_8(r);
+        rgba32_buf[ENCORE_G] = SCALE_3_8(g);
+        rgba32_buf[ENCORE_B] = SCALE_3_8(b);
+        rgba32_buf[ENCORE_A] = alpha ? 255 : 0;
     }
     
     uint32_t width = rdp.texture_tile.line_size_bytes * 2;
@@ -547,10 +700,10 @@ static void import_texture_ia8(int tile) {
         uint8_t r = intensity;
         uint8_t g = intensity;
         uint8_t b = intensity;
-        rgba32_buf[4*i + 0] = SCALE_4_8(r);
-        rgba32_buf[4*i + 1] = SCALE_4_8(g);
-        rgba32_buf[4*i + 2] = SCALE_4_8(b);
-        rgba32_buf[4*i + 3] = SCALE_4_8(alpha);
+        rgba32_buf[ENCORE_R] = SCALE_4_8(r);
+        rgba32_buf[ENCORE_G] = SCALE_4_8(g);
+        rgba32_buf[ENCORE_B] = SCALE_4_8(b);
+        rgba32_buf[ENCORE_A] = SCALE_4_8(alpha);
     }
     
     uint32_t width = rdp.texture_tile.line_size_bytes;
@@ -568,10 +721,10 @@ static void import_texture_ia16(int tile) {
         uint8_t r = intensity;
         uint8_t g = intensity;
         uint8_t b = intensity;
-        rgba32_buf[4*i + 0] = r;
-        rgba32_buf[4*i + 1] = g;
-        rgba32_buf[4*i + 2] = b;
-        rgba32_buf[4*i + 3] = alpha;
+        rgba32_buf[ENCORE_R] = r;
+        rgba32_buf[ENCORE_G] = g;
+        rgba32_buf[ENCORE_B] = b;
+        rgba32_buf[ENCORE_A] = alpha;
     }
     
     uint32_t width = rdp.texture_tile.line_size_bytes / 2;
@@ -590,10 +743,10 @@ static void import_texture_i4(int tile) {
         uint8_t r = intensity;
         uint8_t g = intensity;
         uint8_t b = intensity;
-        rgba32_buf[4*i + 0] = SCALE_4_8(r);
-        rgba32_buf[4*i + 1] = SCALE_4_8(g);
-        rgba32_buf[4*i + 2] = SCALE_4_8(b);
-        rgba32_buf[4*i + 3] = 255;
+        rgba32_buf[ENCORE_R] = SCALE_4_8(r);
+        rgba32_buf[ENCORE_G] = SCALE_4_8(g);
+        rgba32_buf[ENCORE_B] = SCALE_4_8(b);
+        rgba32_buf[ENCORE_A] = 255;
     }
 
     uint32_t width = rdp.texture_tile.line_size_bytes * 2;
@@ -610,10 +763,10 @@ static void import_texture_i8(int tile) {
         uint8_t r = intensity;
         uint8_t g = intensity;
         uint8_t b = intensity;
-        rgba32_buf[4*i + 0] = r;
-        rgba32_buf[4*i + 1] = g;
-        rgba32_buf[4*i + 2] = b;
-        rgba32_buf[4*i + 3] = 255;
+        rgba32_buf[ENCORE_R] = r;
+        rgba32_buf[ENCORE_G] = g;
+        rgba32_buf[ENCORE_B] = b;
+        rgba32_buf[ENCORE_A] = 255;
     }
 
     uint32_t width = rdp.texture_tile.line_size_bytes;
@@ -634,10 +787,10 @@ static void import_texture_ci4(int tile) {
         uint8_t r = col16 >> 11;
         uint8_t g = (col16 >> 6) & 0x1f;
         uint8_t b = (col16 >> 1) & 0x1f;
-        rgba32_buf[4*i + 0] = SCALE_5_8(r);
-        rgba32_buf[4*i + 1] = SCALE_5_8(g);
-        rgba32_buf[4*i + 2] = SCALE_5_8(b);
-        rgba32_buf[4*i + 3] = a ? 255 : 0;
+        rgba32_buf[ENCORE_R] = SCALE_5_8(r);
+        rgba32_buf[ENCORE_G] = SCALE_5_8(g);
+        rgba32_buf[ENCORE_B] = SCALE_5_8(b);
+        rgba32_buf[ENCORE_A] = a ? 255 : 0;
     }
     
     uint32_t width = rdp.texture_tile.line_size_bytes * 2;
@@ -656,10 +809,10 @@ static void import_texture_ci8(int tile) {
         uint8_t r = col16 >> 11;
         uint8_t g = (col16 >> 6) & 0x1f;
         uint8_t b = (col16 >> 1) & 0x1f;
-        rgba32_buf[4*i + 0] = SCALE_5_8(r);
-        rgba32_buf[4*i + 1] = SCALE_5_8(g);
-        rgba32_buf[4*i + 2] = SCALE_5_8(b);
-        rgba32_buf[4*i + 3] = a ? 255 : 0;
+        rgba32_buf[ENCORE_R] = SCALE_5_8(r);
+        rgba32_buf[ENCORE_G] = SCALE_5_8(g);
+        rgba32_buf[ENCORE_B] = SCALE_5_8(b);
+        rgba32_buf[ENCORE_A] = a ? 255 : 0;
     }
     
     uint32_t width = rdp.texture_tile.line_size_bytes;
@@ -1343,7 +1496,8 @@ static void gfx_dp_set_scissor(uint32_t mode, uint32_t ulx, uint32_t uly, uint32
     rdp.viewport_or_scissor_changed = true;
 }
 
-static void gfx_dp_set_texture_image(uint32_t format, uint32_t size, uint32_t width, const void* addr) {
+static void gfx_dp_set_texture_image(uint32_t format, uint32_t size, uint32_t width, const char* path, const void* addr) {
+    rdp.texture_to_load.path = path;
     rdp.texture_to_load.addr = addr;
     rdp.texture_to_load.siz = size;
 }
@@ -1502,13 +1656,13 @@ static void gfx_dp_set_fog_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
             rdp.fog_color.g = g;
             rdp.fog_color.b = b;
         break;
-        case 2: // bobomb
+        case 2: // Bob-omb Battlefield
             rdp.fog_color.r = 195;
             rdp.fog_color.g = 229;
             rdp.fog_color.b = 255;
         break;
-        case 4: // jollyy
-        case 15: // clock
+        case 4: // Jolly Roger Bay
+        case 15: // Tick Tock Clock
             rdp.fog_color.r = 11;
             rdp.fog_color.g = 3;
             rdp.fog_color.b = 63;

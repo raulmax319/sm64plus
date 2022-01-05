@@ -1111,7 +1111,7 @@ void radial_camera_move(struct Camera *c) {
             sModeOffsetYaw -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
         }
 
-        if (gCenterCameraButton) {
+        if (configCenterCameraButton) {
             if (c->mode == CAMERA_MODE_OUTWARD_RADIAL) {
                 lCamRotation = 0;
             }
@@ -1264,7 +1264,7 @@ void mode_8_directions_camera(struct Camera *c) {
         s8DirModeYawOffset -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
     }
 
-    if (gCenterCameraButton) {
+    if (configCenterCameraButton) {
         if (gPlayer1Controller->buttonPressed & L_TRIG) {
             s8DirModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
             play_sound_rbutton_changed();
@@ -1313,7 +1313,7 @@ void mode_custom_camera(struct Camera *c, f32 yOff) {
         sManualModeYawOffset -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
     }
 
-    if (gCenterCameraButton) {
+    if (configCenterCameraButton) {
         if (gPlayer1Controller->buttonPressed & L_TRIG) {
             sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
             play_sound_rbutton_changed();
@@ -2530,7 +2530,7 @@ s16 update_default_camera(struct Camera *c) {
         yaw = clamp_positions_and_find_yaw(c->pos, c->focus, 2254.f, -3789.f, 3790.f, -2253.f);
     }
 
-    if (gCenterCameraButton) {
+    if (configCenterCameraButton) {
         if (gPlayer1Controller->buttonPressed & L_TRIG) {
             if (yaw != sMarioCamState->faceAngle[1] + DEGREES(180)) {
                 yaw = sMarioCamState->faceAngle[1] + DEGREES(180);
