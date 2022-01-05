@@ -3,7 +3,11 @@
 #include <stdbool.h>
 #include <math.h>
 
+#ifdef TARGET_MACOS
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 
 #include <ultra64.h>
 

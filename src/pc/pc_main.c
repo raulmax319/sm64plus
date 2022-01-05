@@ -225,7 +225,7 @@ void main_func(const char* gfx_dir) {
 
     switch (configGraphicsBackend)
     {
-#if defined(__linux__) || defined(__BSD__)
+#if defined(__linux__) || defined(__BSD__) || defined(TARGET_MACOS)
     case 0:
         rendering_api = &gfx_opengl_api;
         wm_api = &gfx_sdl;

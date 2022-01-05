@@ -4,7 +4,12 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-
+#if defined(TARGET_MACOS) || defined(TARGET_LINUX)
+#include <libgen.h>
+#endif
+#ifdef TARGET_LINUXgit
+#include <unistd.h>
+#endif
 #include <stdio.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -837,7 +842,22 @@ static void import_texture(int tile) {
     // Load the textures
 #ifdef CUSTOM_TEXTURES
     char path[1024];
+#if defined(TARGET_MACOS) || defined(TARGET_LINUX)
+    char exec_path[1024];
+    char* dir;
+    uint32_t size = sizeof(exec_path);
+#ifdef TARGET_MACOS
+    _NSGetExecutablePath(exec_path, &size);
+#else
+    readlink("/proc/self/exe", exec_path, size);
+#endif
+    dir = dirname(exec_path);
+    const char gfx_path[1024];
+    snprintf(gfx_path, sizeof(gfx_path), "%s/gfx", dir);
+    const char* gfx_dir = GFX_DIR_PATH == NULL ? gfx_path : GFX_DIR_PATH;
+#else
     const char* gfx_dir = GFX_DIR_PATH == NULL ? "gfx" : GFX_DIR_PATH;
+#endif
     snprintf(path, sizeof(path), "%s/%s.png", gfx_dir, (const char*)rdp.loaded_texture[tile].addr);
 
     import_texture_custom(path);

@@ -19,6 +19,8 @@ COMPARE ?= 1
 NON_MATCHING ?= 0
 # Build for the N64 (turn this off for ports)
 TARGET_N64 ?= 0
+# Build for the MacOS
+TARGET_MACOS ?= 0
 # Build for Emscripten/WebGL
 TARGET_WEB ?= 0
 # Compiler to use (ido or gcc)
@@ -28,18 +30,25 @@ TARGET_32BIT ?= 0
 # If custom textures are supported
 CUSTOM_TEXTURES ?= 0
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  TARGET_MACOS := 1
+endif
+
 # Automatic settings only for ports
 ifeq ($(TARGET_N64),0)
 
   NON_MATCHING := 1
   GRUCODE := f3dex2e
   TARGET_WINDOWS := 0
-  ifeq ($(TARGET_WEB),0)
-    ifeq ($(OS),Windows_NT)
-      TARGET_WINDOWS := 1
-    else
-      # TODO: Detect Mac OS X, BSD, etc. For now, assume Linux
-      TARGET_LINUX := 1
+  ifeq ($(TARGET_MACOS), 0)
+    ifeq ($(TARGET_WEB),0)
+      ifeq ($(OS),Windows_NT)
+        TARGET_WINDOWS := 1
+      else
+        # TODO: Detect Mac OS X, BSD, etc. For now, assume Linux
+        TARGET_LINUX := 1
+      endif
     endif
   endif
 
@@ -406,6 +415,12 @@ OBJDUMP := objdump
 OBJCOPY := objcopy
 PYTHON := python3
 
+ifeq ($(TARGET_MACOS),1)
+  AS := i686-w64-mingw32-as
+  OBJDUMP := i686-w64-mingw32-objdump
+  OBJCOPY := i686-w64-mingw32-objcopy
+endif
+
 # Platform-specific compiler and linker flags, including SDL stuff
 SDLCONFIG_CFLAGS := $(shell sdl2-config --cflags)
 
@@ -421,6 +436,11 @@ endif
 ifeq ($(TARGET_LINUX),1)
   SDLCONFIG_LDFLAGS := $(shell sdl2-config --libs)
   PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_LINUX `pkg-config --cflags libusb-1.0`
+  PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -lm -lpthread `pkg-config --libs libusb-1.0` -no-pie
+endif
+ifeq ($(TARGET_MACOS),1)
+  SDLCONFIG_LDFLAGS := $(shell sdl2-config --libs)
+  PLATFORM_CFLAGS  := $(SDLCONFIG_CFLAGS) -DTARGET_MACOS -DTIMER_ABSTIME=1 `pkg-config --cflags libusb-1.0`
   PLATFORM_LDFLAGS := $(SDLCONFIG_LDFLAGS) -lm -lpthread `pkg-config --libs libusb-1.0` -no-pie
 endif
 ifeq ($(TARGET_WEB),1)
@@ -439,6 +459,10 @@ ifeq ($(TARGET_LINUX),1)
   GFX_CFLAGS  += 
   GFX_LDFLAGS += -lGL -lX11 -lXrandr
 endif
+ifeq ($(TARGET_MACOS),1)
+  GFX_CFLAGS  +=
+  GFX_LDFLAGS += -framework OpenGL -lX11 -lSDL2
+endif
 ifeq ($(TARGET_WEB),1)
   GFX_CFLAGS  += -s
   GFX_LDFLAGS += -lGL -lSDL2
@@ -451,6 +475,7 @@ CFLAGS := $(OPT_FLAGS) $(INCLUDE_CFLAGS) -D_LANGUAGE_C $(VERSION_CFLAGS) $(MATCH
 
 ifeq ($(CUSTOM_TEXTURES),1)
   SKYCONV_ARGS := --store-names --write-tiles "$(BUILD_DIR)/textures/skybox_tiles"
+  CFLAGS += -DCUSTOM_TEXTURES
 else
   SKYCONV_ARGS := 
 endif
@@ -502,10 +527,15 @@ else
 all: $(EXE)
 ifeq ($(CUSTOM_TEXTURES),1)
 	@mkdir -p $(BUILD_DIR)/gfx
-	@cp -r -f textures/ $(BUILD_DIR)/gfx/
-	@cp -r -f $(BUILD_DIR)/textures/skybox_tiles/ $(BUILD_DIR)/gfx/textures/
+	@cp -r -f textures $(BUILD_DIR)/gfx/
+	@cp -r -f $(BUILD_DIR)/textures/skybox_tiles $(BUILD_DIR)/gfx/textures/
+ifeq ($(TARGET_MACOS),1)
+	@find actors -name \*.png -exec rsync -R {} $(BUILD_DIR)/gfx/ \;
+	@find levels -name \*.png -exec rsync -R {} $(BUILD_DIR)/gfx/ \;
+else
 	@find actors -name \*.png -exec cp --parents {} $(BUILD_DIR)/gfx/ \;
 	@find levels -name \*.png -exec cp --parents {} $(BUILD_DIR)/gfx/ \;
+endif
 endif
 endif
 

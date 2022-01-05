@@ -1,6 +1,8 @@
 #include <PR/ultratypes.h>
 #ifndef TARGET_N64
+#ifndef TARGET_MACOS
 #include <string.h>
+#endif
 #endif
 #ifdef USE_SYSTEM_MALLOC
 #include <stdlib.h>
