@@ -19,8 +19,6 @@ COMPARE ?= 1
 NON_MATCHING ?= 0
 # Build for the N64 (turn this off for ports)
 TARGET_N64 ?= 0
-# Build for the MacOS
-TARGET_MACOS ?= 0
 # Build for Emscripten/WebGL
 TARGET_WEB ?= 0
 # Compiler to use (ido or gcc)
@@ -28,12 +26,7 @@ COMPILER ?= ido
 # If this build is for 32 bit
 TARGET_32BIT ?= 0
 # If custom textures are supported
-CUSTOM_TEXTURES ?= 0
-
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Darwin)
-  TARGET_MACOS := 1
-endif
+CUSTOM_TEXTURES ?= 1
 
 # Automatic settings only for ports
 ifeq ($(TARGET_N64),0)
@@ -41,12 +34,13 @@ ifeq ($(TARGET_N64),0)
   NON_MATCHING := 1
   GRUCODE := f3dex2e
   TARGET_WINDOWS := 0
-  ifeq ($(TARGET_MACOS), 0)
-    ifeq ($(TARGET_WEB),0)
+  ifeq ($(TARGET_WEB),0)
+    ifeq ($(shell uname -s),Darwin)
+      TARGET_MACOS := 1
+    else
       ifeq ($(OS),Windows_NT)
         TARGET_WINDOWS := 1
       else
-        # TODO: Detect Mac OS X, BSD, etc. For now, assume Linux
         TARGET_LINUX := 1
       endif
     endif

@@ -4,10 +4,11 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+
 #if defined(TARGET_MACOS) || defined(TARGET_LINUX)
 #include <libgen.h>
 #endif
-#ifdef TARGET_LINUXgit
+#ifdef TARGET_LINUX
 #include <unistd.h>
 #endif
 #include <stdio.h>
@@ -501,21 +502,9 @@ static void import_texture_rgba16(int tile) {
         uint8_t r = col16 >> 11;
         uint8_t g = (col16 >> 6) & 0x1f;
         uint8_t b = (col16 >> 1) & 0x1f;
-        char *path = rdp.loaded_texture[tile].path;
+        char *path = rdp.loaded_texture[tile].addr;
         if (((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT)
-        && (rdp.texture_tile.fmt == G_IM_FMT_RGBA) && (rdp.texture_tile.siz == G_IM_SIZ_16b)
-        && ((strstr(path, "actors") == NULL)
-        || (strstr(path, "door") != NULL)
-        || (strstr(path, "leaves") != NULL)
-        || (strstr(path, "tree") != NULL)
-        || (strstr(path, "star") != NULL)
-        || (strstr(path, "wooden_signpost") != NULL)
-        || (strstr(path, "manta") != NULL)
-        || (strstr(path, "sushi") != NULL)
-        || (strstr(path, "water_ring") != NULL)
-        || (strstr(path, "segment2") != NULL)
-        || (get_palette() == 19)
-        )) {
+        && (rdp.texture_tile.fmt == G_IM_FMT_RGBA) && (rdp.texture_tile.siz == G_IM_SIZ_16b) {
             // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
             // TODO (Mors): Have a more proper implementation. Maybe implement a sort of scripting system with palette files?
             rgba32_buf[ENCORE_R] = SCALE_5_8(r);
@@ -1516,8 +1505,7 @@ static void gfx_dp_set_scissor(uint32_t mode, uint32_t ulx, uint32_t uly, uint32
     rdp.viewport_or_scissor_changed = true;
 }
 
-static void gfx_dp_set_texture_image(uint32_t format, uint32_t size, uint32_t width, const char* path, const void* addr) {
-    rdp.texture_to_load.path = path;
+static void gfx_dp_set_texture_image(uint32_t format, uint32_t size, uint32_t width, const void* addr) {
     rdp.texture_to_load.addr = addr;
     rdp.texture_to_load.siz = size;
 }
