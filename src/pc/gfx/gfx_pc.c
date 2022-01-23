@@ -504,7 +504,7 @@ static void import_texture_rgba16(int tile) {
         uint8_t b = (col16 >> 1) & 0x1f;
         char *path = rdp.loaded_texture[tile].addr;
         if (((rdp.other_mode_h & (3U << G_MDSFT_TEXTFILT)) != G_TF_POINT)
-        && (rdp.texture_tile.fmt == G_IM_FMT_RGBA) && (rdp.texture_tile.siz == G_IM_SIZ_16b) {
+        && (rdp.texture_tile.fmt == G_IM_FMT_RGBA) && (rdp.texture_tile.siz == G_IM_SIZ_16b)) {
             // I'm so sorry for the mess you're about to witness. It was supposed to be a temporary thing but...
             // TODO (Mors): Have a more proper implementation. Maybe implement a sort of scripting system with palette files?
             rgba32_buf[ENCORE_R] = SCALE_5_8(r);
