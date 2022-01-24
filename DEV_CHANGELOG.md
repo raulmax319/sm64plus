@@ -13,7 +13,13 @@ This is the changelog for the current development commit of the game. For the ch
 - Fixed the encore mode color changes not working. This reverts the behavior of the encore mode back to how it worked in earlier versions of the game if custom textures are disabled.
 - Fixed a minor visual issue with the "Invert Horizontal Camera Controls" and "Invert Vertical Camera Controls" settings in the launcher.
 
+
+# v2.1.1 (25/01/2022) (Installer):
+
+### Changes:
+- Custom textures are now enabled by default. You can disable them the same way you'd enable them before.
+- Made many small technical changes overall to make the installer work better under Linux. Please note that the Linux version of the launcher is still under development and there is no public release yet.
 ### Installer:
-- Tweaked the visuals slightly.
+- Changed the installer visuals slightly.
 - Added more options to the uninstaller.
-- Prevented the uninstaller from deleting the entire folder the game is contained in.
+- Made the uninstaller only delete the game files and not the entire folder the game is contained in.
