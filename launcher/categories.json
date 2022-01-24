@@ -707,6 +707,14 @@
         "disabled_by": -1,
         "name": "Odyssey Ground Pound Dive"
     }, {
+        "internal_name": "odyssey_rolling",
+        "description": "Keep on rollin' baby, you know what time it is.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Odyssey Rolling"
+    }, {
         "internal_name": "flashback_ground_pound",
         "description": "Gives Mario a little bounce after landing from a ground pound. You can cancel the bounce by holding Z, or perform a slide by holding a direction. Borrowed from Super Mario Flashback.",
         "os": OS_ANY,

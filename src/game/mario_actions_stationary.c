@@ -558,7 +558,7 @@ s32 act_crouching(struct MarioState *m) {
     }
 
     if (m->input & INPUT_B_PRESSED) {
-        return set_mario_action(m, ACT_PUNCHING, 9);
+        return set_mario_action(m, configRolling ? ACT_ROLL : ACT_PUNCHING, configRolling ? 0 : 9);
     }
 
     stationary_ground_step(m);

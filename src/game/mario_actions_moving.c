@@ -1397,11 +1397,12 @@ void tilt_body_butt_slide(struct MarioState *m) {
     m->marioBodyState->torsoAngle[2] = (s32)(-(5461.3335f * m->intendedMag / 32.0f * sins(intendedDYaw)));
 }
 
-void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32 animation) {
+void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32 animation, u32 sound) {
     Vec3f pos;
 
     vec3f_copy(pos, m->pos);
-    play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
+    if (sound)
+        play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
 
 #ifdef VERSION_SH
     reset_rumble_timers();
@@ -1453,7 +1454,7 @@ void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32
 }
 
 s32 common_slide_action_with_jump(struct MarioState *m, u32 stopAction, u32 jumpAction, u32 airAction,
-                                  s32 animation) {
+                                  s32 animation, u32 sound) {
     if (m->actionTimer == 5) {
         if (m->input & INPUT_A_PRESSED) {
             return set_jumping_action(m, jumpAction, 0);
@@ -1466,13 +1467,13 @@ s32 common_slide_action_with_jump(struct MarioState *m, u32 stopAction, u32 jump
         return set_mario_action(m, stopAction, 0);
     }
 
-    common_slide_action(m, stopAction, airAction, animation);
+    common_slide_action(m, stopAction, airAction, animation, sound);
     return FALSE;
 }
 
 s32 act_butt_slide(struct MarioState *m) {
     s32 cancel = common_slide_action_with_jump(m, ACT_BUTT_SLIDE_STOP, ACT_JUMP, ACT_BUTT_SLIDE_AIR,
-                                               MARIO_ANIM_SLIDE);
+                                               MARIO_ANIM_SLIDE, TRUE);
     tilt_body_butt_slide(m);
     return cancel;
 }
@@ -1485,7 +1486,7 @@ s32 act_hold_butt_slide(struct MarioState *m) {
     }
 
     cancel = common_slide_action_with_jump(m, ACT_HOLD_BUTT_SLIDE_STOP, ACT_HOLD_JUMP, ACT_HOLD_BUTT_SLIDE_AIR,
-                                           MARIO_ANIM_SLIDING_ON_BOTTOM_WITH_LIGHT_OBJ);
+                                           MARIO_ANIM_SLIDING_ON_BOTTOM_WITH_LIGHT_OBJ, TRUE);
     tilt_body_butt_slide(m);
     return cancel;
 }
@@ -1507,7 +1508,10 @@ s32 act_crouch_slide(struct MarioState *m) {
     }
 
     if (m->input & INPUT_B_PRESSED) {
-        if (m->forwardVel >= 10.0f) {
+        if (configRolling) {
+            return set_mario_action(m, ACT_ROLL, 0);
+        }
+        else if (m->forwardVel >= 10.0f) {
             return set_mario_action(m, ACT_SLIDE_KICK, 0);
         } else {
             return set_mario_action(m, ACT_MOVE_PUNCHING, 0x0009);
@@ -1523,7 +1527,7 @@ s32 act_crouch_slide(struct MarioState *m) {
     }
 
     cancel = common_slide_action_with_jump(m, ACT_CROUCHING, ACT_JUMP, ACT_FREEFALL,
-                                           MARIO_ANIM_START_CROUCHING);
+                                           MARIO_ANIM_START_CROUCHING, TRUE);
     return cancel;
 }
 
@@ -1579,7 +1583,7 @@ s32 stomach_slide_action(struct MarioState *m, u32 stopAction, u32 airAction, s3
         return set_mario_action(m, stopAction, 0);
     }
 
-    common_slide_action(m, stopAction, airAction, animation);
+    common_slide_action(m, stopAction, airAction, animation, TRUE);
     return FALSE;
 }
 
@@ -1635,8 +1639,38 @@ s32 act_dive_slide(struct MarioState *m) {
         return TRUE;
     }
 
-    common_slide_action(m, ACT_STOMACH_SLIDE_STOP, ACT_FREEFALL, MARIO_ANIM_DIVE);
+    common_slide_action(m, ACT_STOMACH_SLIDE_STOP, ACT_FREEFALL, MARIO_ANIM_DIVE, TRUE);
     return FALSE;
+}
+
+s32 act_roll(struct MarioState *m) {
+    s32 cancel;
+
+    // Boosting
+    if ((m->input & INPUT_Z_DOWN) && (m->input & INPUT_B_PRESSED) && m->forwardVel < 48.0f) {
+        mario_set_forward_vel(m, 96.0f);
+        m->particleFlags |= PARTICLE_VERTICAL_STAR;
+        play_sound(SOUND_MARIO_HOOHOO, m->marioObj->header.gfx.cameraToObject);
+    }
+
+    // Stop rolling after letting go of the trigger
+    if ((!(m->input & INPUT_Z_DOWN) && m->forwardVel < 16.0f)
+    || (m->input & INPUT_Z_DOWN && m->forwardVel < 4.0f)) {
+        return set_mario_action(m, ACT_BRAKING, 0);
+    }
+
+    if (m->input & INPUT_A_PRESSED) {
+        return set_jumping_action(m, ACT_LONG_JUMP, 0);
+    }
+
+    if (m->marioObj->header.gfx.animInfo.animFrame == 7) {
+        play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
+    }
+
+    cancel = common_slide_action_with_jump(m, ACT_CROUCHING, ACT_LONG_JUMP, ACT_ROLL_FALL,
+                                           MARIO_ANIM_FORWARD_SPINNING, FALSE);
+
+    return cancel;
 }
 
 s32 common_ground_knockback_action(struct MarioState *m, s32 animation, s32 arg2, s32 arg3, s32 arg4) {
@@ -2063,6 +2097,7 @@ s32 mario_execute_moving_action(struct MarioState *m) {
         case ACT_MOVE_PUNCHING:            cancel = act_move_punching(m);            break;
         case ACT_CROUCH_SLIDE:             cancel = act_crouch_slide(m);             break;
         case ACT_SLIDE_KICK_SLIDE:         cancel = act_slide_kick_slide(m);         break;
+        case ACT_ROLL:                     cancel = act_roll(m);                     break;
         case ACT_HARD_BACKWARD_GROUND_KB:  cancel = act_hard_backward_ground_kb(m);  break;
         case ACT_HARD_FORWARD_GROUND_KB:   cancel = act_hard_forward_ground_kb(m);   break;
         case ACT_BACKWARD_GROUND_KB:       cancel = act_backward_ground_kb(m);       break;

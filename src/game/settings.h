@@ -93,6 +93,7 @@ extern s8 gWallSliding;
 extern s8 gGroundPoundJump;
 extern s8 gSunshineDive;
 extern s8 gOdysseyDive;
+extern s8 configRolling;
 extern s8 gFlashbackPound;
 
 extern s8 configUnusedPyramidCutscene;

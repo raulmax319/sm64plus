@@ -244,6 +244,7 @@ s8 gWallSliding = 1;
 s8 gGroundPoundJump = 0;
 s8 gSunshineDive = 0;
 s8 gOdysseyDive = 0;
+s8 configRolling = 0;
 s8 gFlashbackPound = 0;
 
 s8 configUnusedPyramidCutscene = 1;

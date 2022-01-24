@@ -825,7 +825,12 @@ s32 act_dive(struct MarioState *m) {
                 drop_and_set_mario_action(m, ACT_HEAD_STUCK_IN_GROUND, 0);
             } else if (!check_fall_damage(m, ACT_HARD_FORWARD_GROUND_KB)) {
                 if (m->heldObj == NULL) {
-                    set_mario_action(m, ACT_DIVE_SLIDE, 0);
+                    if (configRolling && m->input & INPUT_Z_DOWN) {
+                        play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
+                        set_mario_action(m, ACT_ROLL, 0);
+                    }
+                    else
+                        set_mario_action(m, ACT_DIVE_SLIDE, 0);
                 } else {
                     set_mario_action(m, ACT_DIVE_PICKING_UP, 0);
                 }
@@ -2220,6 +2225,22 @@ s32 check_common_airborne_cancels(struct MarioState *m) {
     return FALSE;
 }
 
+
+s32 act_roll_fall(struct MarioState *m) {
+
+    // Stop rolling after letting go of the trigger
+    if (!(m->input & INPUT_Z_DOWN) && m->forwardVel < 32.0f) {
+        return set_mario_action(m, ACT_BRAKING, 0);
+    }
+
+    if (m->marioObj->header.gfx.animInfo.animFrame == 7) {
+        play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
+    }
+
+    common_air_action_step(m, ACT_ROLL, MARIO_ANIM_FORWARD_SPINNING, 0);
+    return FALSE;
+}
+
 s32 mario_execute_airborne_action(struct MarioState *m) {
     u32 cancel;
 
@@ -2233,6 +2254,7 @@ s32 mario_execute_airborne_action(struct MarioState *m) {
     switch (m->action) {
         case ACT_JUMP:                 cancel = act_jump(m);                 break;
         case ACT_DOUBLE_JUMP:          cancel = act_double_jump(m);          break;
+        case ACT_ROLL_FALL:            cancel = act_roll_fall(m);            break;
         case ACT_FREEFALL:             cancel = act_freefall(m);             break;
         case ACT_HOLD_JUMP:            cancel = act_hold_jump(m);            break;
         case ACT_HOLD_FREEFALL:        cancel = act_hold_freefall(m);        break;

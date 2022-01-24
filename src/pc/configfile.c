@@ -134,6 +134,7 @@ static const struct ConfigOption options[] = {
     { .name = "ground_pound_jump", .type = CONFIG_TYPE_BOOL, .boolValue = &gGroundPoundJump },
     { .name = "sunshine_dive_hop", .type = CONFIG_TYPE_BOOL, .boolValue = &gSunshineDive },
     { .name = "odyssey_ground_pound_dive", .type = CONFIG_TYPE_BOOL, .boolValue = &gOdysseyDive },
+    { .name = "odyssey_rolling", .type = CONFIG_TYPE_BOOL, .boolValue = &configRolling },
     { .name = "flashback_ground_pound", .type = CONFIG_TYPE_BOOL, .boolValue = &gFlashbackPound },
 
     { .name = "RESTORATIONS", .type = CONFIG_TYPE_SECTION },
