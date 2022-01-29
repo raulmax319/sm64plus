@@ -851,7 +851,7 @@ s16 look_down_slopes(s16 camYaw) {
  *
  * Since this function only affects the camera's focus, Mario's movement direction isn't affected.
  */
-void pan_ahead_of_player(struct Camera *c) {
+void pan_ahead_of_player(struct Camera *c, u32 panLess) {
     f32 dist;
     s16 pitch;
     s16 yaw;
@@ -865,7 +865,7 @@ void pan_ahead_of_player(struct Camera *c) {
     vec3f_get_dist_and_angle(c->pos, sMarioCamState->pos, &dist, &pitch, &yaw);
 
     // The camera will pan ahead up to about 30% of the camera's distance to Mario.
-    pan[2] = sins(0xC00) * dist;
+    pan[2] = sins(panLess ? 0x600 : 0xC00) * dist;
 
     rotate_in_xz(pan, pan, sMarioCamState->faceAngle[1]);
     // rotate in the opposite direction
@@ -956,7 +956,7 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     sAreaYaw = camYaw;
     calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
     focus_on_mario(focus, pos, posY + yOff, focusY + yOff, sLakituDist + baseDist, pitch, camYaw);
-    pan_ahead_of_player(c);
+    pan_ahead_of_player(c, FALSE);
     if (gCurrLevelArea == AREA_DDD_SUB) {
         camYaw = clamp_positions_and_find_yaw(pos, focus, 6839.f, 995.f, 5994.f, -3945.f);
     }
@@ -969,11 +969,11 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
  */
 s32 update_custom_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff) {
     s16 camYaw = sManualModeYawOffset;
-    s16 pitch = configCustomCameraTilt ? look_down_slopes(camYaw) : 0;
+    s16 pitch = configCustomCameraTilt ? (look_down_slopes(camYaw) / 2.0f) : 0.0f;
     f32 posY;
     f32 focusY;
 
-    f32 dist = sLakituDist + (configCustomCameraDistanceDefault + gAdditionalCameraDistance) * 10.0f;
+    f32 dist = sLakituDist + (configCustomCameraDistanceDefault + gAdditionalCameraDistance) * 10.0f + (MIN(sLakituPitch, 9216.0f) - 2048.0f) / 12.0f;
 
     sAreaYaw = camYaw;
 
@@ -981,7 +981,7 @@ s32 update_custom_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff) {
     focus_on_mario(focus, pos, posY + yOff, focusY + yOff, dist, pitch, camYaw);
 
     if (configCustomCameraPan) {
-        pan_ahead_of_player(c);
+        pan_ahead_of_player(c, TRUE);
     }
 
     return camYaw;
@@ -1174,7 +1174,7 @@ void lakitu_zoom(f32 rangeDist, s16 rangePitch) {
     }
 
     if (rangePitch == 0) {
-        sLakituPitch = MIN(MAX(sLakituPitch + ANALOG_AMOUNT_VERTICAL * (gPlayer1Controller->stick2Y / 32.0f) * gCameraSpeed, -1024), 9216);
+        sLakituPitch = MIN(MAX(sLakituPitch + ANALOG_AMOUNT_VERTICAL * (gPlayer1Controller->stick2Y / 64.0f) * gCameraSpeed, -6144), 12288);
     }
     else {
         if (gCurrLevelArea == AREA_SSL_PYRAMID && gCamera->mode == CAMERA_MODE_OUTWARD_RADIAL) {
@@ -1237,7 +1237,7 @@ void mode_radial_camera(struct Camera *c) {
         pos[1] += 500.f;
     }
     set_camera_height(c, pos[1]);
-    pan_ahead_of_player(c);
+    pan_ahead_of_player(c, FALSE);
 }
 
 /**
@@ -1381,7 +1381,7 @@ void mode_outward_radial_camera(struct Camera *c) {
         pos[1] += 500.f;
     }
     set_camera_height(c, pos[1]);
-    pan_ahead_of_player(c);
+    pan_ahead_of_player(c, FALSE);
 }
 
 /**
@@ -1885,7 +1885,7 @@ void mode_fixed_camera(struct Camera *c) {
     }
     c->nextYaw = update_fixed_camera(c, c->focus, c->pos);
     c->yaw = c->nextYaw;
-    pan_ahead_of_player(c);
+    pan_ahead_of_player(c, FALSE);
     vec3f_set(sCastleEntranceOffset, 0.f, 0.f, 0.f);
 }
 
@@ -2092,7 +2092,7 @@ s32 mode_behind_mario(struct Camera *c) {
         distCamToFocus = 800.f;
         vec3f_set_dist_and_angle(c->focus, c->pos, distCamToFocus, camPitch, camYaw);
     }
-    pan_ahead_of_player(c);
+    pan_ahead_of_player(c, FALSE);
 
     return yaw;
 }
@@ -2550,7 +2550,7 @@ s16 update_default_camera(struct Camera *c) {
 void mode_default_camera(struct Camera *c) {
     set_fov_function(CAM_FOV_DEFAULT);
     c->nextYaw = update_default_camera(c);
-    pan_ahead_of_player(c);
+    pan_ahead_of_player(c, FALSE);
 }
 
 /**

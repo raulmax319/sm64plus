@@ -786,13 +786,6 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         if (stay_in_level()) {
             noExit = 1;
 
-            // Make the stars heal Mario when this setting is on.
-            if (gNoHealingMode) {
-                gMarioState->healCounter += 31.75;
-                if (gMarioState->healCounter > 31.75)
-                    gMarioState->healCounter = 31.75;
-            }
-
             // Increase the act number
             if (gCurrActNum-1 == gCollectedStar && gCurrActNum != 6) {
                 gCurrActNum++;
@@ -815,6 +808,13 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
             if (m->capTimer > 1) {
                 m->capTimer = 1;
             }
+        }
+
+        // Make the stars heal Mario when this setting is on.
+        if (configStayInCourse) {
+            gMarioState->healCounter += 31.75;
+            if (gMarioState->healCounter > 31.75)
+                gMarioState->healCounter = 31.75;
         }
 
         if (noExit) {

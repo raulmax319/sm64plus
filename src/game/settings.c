@@ -150,7 +150,7 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
-char* gTitleString = "Super Mario 64 Plus v2.1.1";
+char* gTitleString = "Super Mario 64 Plus v2.2.0";
 
 s8 configFullscreen = 1;
 unsigned int configDefaultMonitor = 1;
