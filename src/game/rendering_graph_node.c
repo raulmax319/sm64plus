@@ -351,11 +351,11 @@ static void geo_process_level_of_detail(struct GraphNodeLevelOfDetail *node) {
 #endif
 
     // You know what they say, if it works, it works.
-    if (configDisableLowPolyModels) {
+    if (configLevelOfDetail == 1) {
         distanceFromCam = 0;
     }
-    if (gForceLowPoly) {
-        distanceFromCam = 10000;
+    if (configLevelOfDetail == 2) {
+        distanceFromCam = 30000;
     }
 
     if (node->minDistance <= distanceFromCam && distanceFromCam < node->maxDistance) {

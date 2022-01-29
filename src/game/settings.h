@@ -22,7 +22,7 @@ extern float configSeqVolume[];
 extern s8 config60FPS;
 extern s8 configDisableDrawDistance;
 extern float configDrawDistanceMultiplier;
-extern s8 configDisableLowPolyModels;
+extern s8 configLevelOfDetail;
 extern unsigned int configTextureFiltering;
 extern unsigned int configNoiseType;
 extern s8 configForce4by3;
@@ -128,7 +128,6 @@ extern s8 gFXMode;
 extern s8 gWireframeMode;
 #endif
 extern s8 gDisableLighting;
-extern s8 gForceLowPoly;
 
 extern unsigned int configColorHatRLight;
 extern unsigned int configColorHatRDark;

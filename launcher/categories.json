@@ -2,7 +2,7 @@
     "title": "DISPLAY",
     "items": [{
         "internal_name": "fullscreen",
-        "description": "Makes the game run at fullscreen. Can be toggled in-game via Alt+Enter.",
+        "description": "Makes the game run at fullscreen. Can be toggled in-game via Alt + Enter key combo.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -10,7 +10,7 @@
         "name": "Fullscreen"
     }, {
         "internal_name": "default_monitor",
-        "description": "Index of the monitor the game uses.",
+        "description": "The display the game renders on.",
         "os": OS_ANY,
         "type": TYPE_MONITOR,
         "enabled_by": -1,
@@ -148,7 +148,7 @@
         "name": "60FPS"
     }, {
         "internal_name": "disable_draw_distance",
-        "description": "Prevents distant objects from disappearing like in the original game. May affect the gameplay slightly, and make certain objects stand out unnaturally at a distance.",
+        "description": "Prevents distant objects from disappearing like in the original game. May affect the gameplay slightly, and can look odd at times.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -163,16 +163,16 @@
         "disabled_by": 1,
         "name": "Draw Distance Multiplier"
     }, {
-        "internal_name": "disable_low_poly_models",
-        "description": "Disables the low-poly LoD model for Mario and a few other objects, originally used to save processing power.",
+        "internal_name": "level_of_detail",
+        "description": "Sets the level of detail for the in-game models. \"High\" is recommended.",
         "os": OS_ANY,
-        "type": TYPE_BOOL,
+        "type": TYPE_LOD,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Disable Low-Poly Models"
+        "name": "Level of Detail"
     }, {
         "internal_name": "texture_filtering",
-        "description": "Changes the way the textures are filtered. 3 point filtering (which is the one that's most accurate to the original game) only works with the Direct3D 11 backend.",
+        "description": "Changes the way the textures are filtered. \"3 Point\" filtering is the one that's most accurate to the original game, but it only works with the Direct3D 11 backend.",
         "os": OS_ANY,
         "type": TYPE_TEXTURE_FILTERING,
         "enabled_by": -1,
@@ -180,7 +180,7 @@
         "name": "Texture Filtering"
     }, {
         "internal_name": "noise_type",
-        "description": "Changes the type of noise used for transparency effects.",
+        "description": "Changes the type of noise used for transparency effects. \"Chunky\" is the option that looks most accurate to the original game.",
         "os": OS_ANY,
         "type": TYPE_NOISE_TYPE,
         "enabled_by": -1,
@@ -1051,14 +1051,6 @@
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Disable Lighting"
-    }, {
-        "internal_name": "force_use_low_poly_models",
-        "description": "Forces the game to use the Low Poly LoD model for Mario and a few other objects.\nLooks funny!",
-        "os": OS_ANY,
-        "type": TYPE_BOOL,
-        "enabled_by": -1,
-        "disabled_by": -1,
-        "name": "Force Use Low Poly Models"
     }],
     "hidden": true,
     "os": OS_ANY

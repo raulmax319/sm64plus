@@ -173,7 +173,7 @@ float configSeqVolume[] = {1, 1, 1};
 s8 config60FPS = 1;
 s8 configDisableDrawDistance = 1;
 float configDrawDistanceMultiplier = 1.0f;
-s8 configDisableLowPolyModels = 1;
+unsigned int configLevelOfDetail = 1;
 unsigned int configTextureFiltering = 2;
 unsigned int configNoiseType = 0;
 s8 configForce4by3 = 0;
@@ -279,7 +279,6 @@ s8 gFXMode = 0;
 s8 gWireframeMode = 0;
 #endif
 s8 gDisableLighting = 0;
-s8 gForceLowPoly = 0;
 
 unsigned int configColorHatRLight = 255;
 unsigned int configColorHatRDark = 127;

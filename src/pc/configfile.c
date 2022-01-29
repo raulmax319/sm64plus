@@ -55,7 +55,7 @@ static const struct ConfigOption options[] = {
     { .name = "60fps", .type = CONFIG_TYPE_BOOL, .boolValue = &config60FPS },
     { .name = "disable_draw_distance", .type = CONFIG_TYPE_BOOL, .boolValue = &configDisableDrawDistance },
     { .name = "draw_distance_multiplier", .type = CONFIG_TYPE_FLOAT, .floatValue = &configDrawDistanceMultiplier },
-    { .name = "disable_low_poly_models", .type = CONFIG_TYPE_BOOL, .boolValue = &configDisableLowPolyModels },
+    { .name = "level_of_detail", .type = CONFIG_TYPE_UINT, .uintValue = &configLevelOfDetail },
     { .name = "texture_filtering", .type = CONFIG_TYPE_UINT, .uintValue = &configTextureFiltering },
     { .name = "noise_type", .type = CONFIG_TYPE_UINT, .uintValue = &configNoiseType },
     { .name = "force_4by3", .type = CONFIG_TYPE_BOOL, .boolValue = &configForce4by3 },
@@ -206,7 +206,6 @@ static const struct ConfigOption options[] = {
     { .name = "wireframe_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gWireframeMode },
 #endif
     { .name = "disable_lighting", .type = CONFIG_TYPE_BOOL, .boolValue = &gDisableLighting },
-    { .name = "force_use_low_poly_models", .type = CONFIG_TYPE_BOOL, .boolValue = &gForceLowPoly },
 
     { .name = "ADVANCED", .type = CONFIG_TYPE_SECTION },
     { .name = "show_debug_display", .type = CONFIG_TYPE_BOOL, .boolValue = &gShowDebugText },

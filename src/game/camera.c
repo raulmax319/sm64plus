@@ -973,7 +973,7 @@ s32 update_custom_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff) {
     f32 posY;
     f32 focusY;
 
-    f32 dist = sLakituDist + (configCustomCameraDistanceDefault + gAdditionalCameraDistance) * 10.0f + (MIN(sLakituPitch, 9216.0f) - 2048.0f) / 12.0f;
+    f32 dist = sLakituDist + (configCustomCameraDistanceDefault + gAdditionalCameraDistance) * 10.0f + (MIN(sLakituPitch, 9216.0f) - 2560.0f) / 12.0f;
 
     sAreaYaw = camYaw;
 
@@ -1174,7 +1174,7 @@ void lakitu_zoom(f32 rangeDist, s16 rangePitch) {
     }
 
     if (rangePitch == 0) {
-        sLakituPitch = MIN(MAX(sLakituPitch + ANALOG_AMOUNT_VERTICAL * (gPlayer1Controller->stick2Y / 64.0f) * gCameraSpeed, -6144), 12288);
+        sLakituPitch = MIN(MAX(sLakituPitch + ANALOG_AMOUNT_VERTICAL * (gPlayer1Controller->stick2Y / 48.0f) * gCameraSpeed, -6144), 12288);
     }
     else {
         if (gCurrLevelArea == AREA_SSL_PYRAMID && gCamera->mode == CAMERA_MODE_OUTWARD_RADIAL) {

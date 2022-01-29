@@ -359,7 +359,7 @@ Gfx *geo_switch_mario_stand_run(s32 callContext, struct GraphNode *node, UNUSED 
 
     if (callContext == GEO_CONTEXT_RENDER) {
         // assign result. 0 if moving, 1 if stationary.
-        switchCase->selectedCase = ((bodyState->action & ACT_FLAG_STATIONARY) == 0);
+        switchCase->selectedCase = (configLevelOfDetail == 2) ? 1 : ((bodyState->action & ACT_FLAG_STATIONARY) == FALSE);
     }
     return NULL;
 }

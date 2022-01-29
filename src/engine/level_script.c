@@ -26,7 +26,6 @@
 #include "surface_load.h"
 
 #include "game/settings.h"
-#include "game/randomizer.h"
 
 #define CMD_GET(type, offset) (*(type *) (CMD_PROCESS_OFFSET(offset) + (u8 *) sCurrentCmd))
 
