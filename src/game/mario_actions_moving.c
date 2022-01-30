@@ -11,7 +11,7 @@
 #include "mario_actions_object.h"
 #include "memory.h"
 #include "behavior_data.h"
-#include "thread6.h"
+#include "rumble_init.h"
 
 #include "settings.h"
 
@@ -723,16 +723,13 @@ void tilt_body_walking(struct MarioState *m, s16 startYaw) {
     struct MarioBodyState *val0C = m->marioBodyState;
     UNUSED struct Object *marioObj = m->marioObj;
     s16 animID = m->marioObj->header.gfx.animInfo.animID;
-    s16 dYaw;
-    s16 val02;
-    s16 val00;
 
     if (animID == MARIO_ANIM_WALKING || animID == MARIO_ANIM_RUNNING) {
-        dYaw = m->faceAngle[1] - startYaw;
+        s16 dYaw = m->faceAngle[1] - startYaw;
         //! (Speed Crash) These casts can cause a crash if (dYaw * forwardVel / 12) or
         //! (forwardVel * 170) exceed or equal 2^31.
-        val02 = -(s16)(dYaw * m->forwardVel / 12.0f);
-        val00 = (s16)(m->forwardVel * 170.0f);
+        s16 val02 = -(s16)(dYaw * m->forwardVel / 12.0f);
+        s16 val00 = (s16)(m->forwardVel * 170.0f);
 
         if (val02 > 0x1555) {
             val02 = 0x1555;
@@ -750,7 +747,6 @@ void tilt_body_walking(struct MarioState *m, s16 startYaw) {
 
         val0C->torsoAngle[2] = approach_s32(val0C->torsoAngle[2], val02, 0x400, 0x400);
         val0C->torsoAngle[0] = approach_s32(val0C->torsoAngle[0], val00, 0x400, 0x400);
-        ;
     } else {
         val0C->torsoAngle[2] = 0;
         val0C->torsoAngle[0] = 0;
@@ -1275,7 +1271,7 @@ s32 act_riding_shell_ground(struct MarioState *m) {
     }
 
     adjust_sound_for_speed(m);
-#ifdef VERSION_SH
+#if ENABLE_RUMBLE
     reset_rumble_timers();
 #endif
     return FALSE;
@@ -1385,7 +1381,7 @@ s32 act_burning_ground(struct MarioState *m) {
     }
 
     m->marioBodyState->eyeState = MARIO_EYES_DEAD;
-#ifdef VERSION_SH
+#if ENABLE_RUMBLE
     reset_rumble_timers();
 #endif
     return FALSE;
@@ -1404,7 +1400,7 @@ void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32
     if (sound)
         play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
 
-#ifdef VERSION_SH
+#if ENABLE_RUMBLE
     reset_rumble_timers();
 #endif
 
@@ -1533,7 +1529,7 @@ s32 act_crouch_slide(struct MarioState *m) {
 
 s32 act_slide_kick_slide(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED) {
-#ifdef VERSION_SH
+#if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
         if (gFlashbackPound)
@@ -1567,7 +1563,7 @@ s32 act_slide_kick_slide(struct MarioState *m) {
 s32 stomach_slide_action(struct MarioState *m, u32 stopAction, u32 airAction, s32 animation) {
     if (m->actionTimer == 5) {
         if (!(m->input & INPUT_ABOVE_SLIDE) && (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED))) {
-#ifdef VERSION_SH
+#if ENABLE_RUMBLE
             queue_rumble_data(5, 80);
 #endif
             if (gFlashbackPound)
@@ -1605,7 +1601,7 @@ s32 act_hold_stomach_slide(struct MarioState *m) {
 
 s32 act_dive_slide(struct MarioState *m) {
     if (!(m->input & INPUT_ABOVE_SLIDE) && (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED))) {
-#ifdef VERSION_SH
+#if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
         if (gSunshineDive && m->input & INPUT_B_PRESSED) {
@@ -2048,7 +2044,7 @@ s32 check_common_moving_cancels(struct MarioState *m) {
         return set_water_plunge_action(m);
     }
 
-    if (!(m->action & ACT_FLAG_INVULNERABLE) && (m->input & INPUT_UNKNOWN_10)) {
+    if (!(m->action & ACT_FLAG_INVULNERABLE) && (m->input & INPUT_STOMPED)) {
         return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     }
 

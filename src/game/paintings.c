@@ -280,6 +280,9 @@ f32 painting_ripple_y(struct Painting *painting, s8 ySource) {
             return painting->size / 2.0; // some concentric ripples don't care about Mario
             break;
     }
+#ifdef AVOID_UB
+    return 0.0f;
+#endif
 }
 
 /**
@@ -305,6 +308,9 @@ f32 painting_nearest_4th(struct Painting *painting) {
     } else if (painting->floorEntered & ENTER_RIGHT) {
         return thirdQuarter;
     }
+#ifdef AVOID_UB
+    return 0.0f;
+#endif
 }
 
 /**
@@ -336,6 +342,9 @@ f32 painting_ripple_x(struct Painting *painting, s8 xSource) {
             return painting->size / 2.0;
             break;
     }
+#ifdef AVOID_UB
+    return 0.0f;
+#endif
 }
 
 /**

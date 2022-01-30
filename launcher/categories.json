@@ -2,7 +2,7 @@
     "title": "DISPLAY",
     "items": [{
         "internal_name": "fullscreen",
-        "description": "Makes the game run at fullscreen. Can be toggled in-game via Alt + Enter key combo.",
+        "description": "Makes the game run at fullscreen.\nCan be toggled in-game via Alt + Enter key combo.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -18,7 +18,7 @@
         "name": "Default Monitor"
     }, {
         "internal_name": "window_width",
-        "description": "Default width of the game window.",
+        "description": "Default width of the game window in pixels.",
         "os": OS_ANY,
         "type": TYPE_UINT,
         "enabled_by": -1,
@@ -26,7 +26,7 @@
         "name": "Default Window Width"
     }, {
         "internal_name": "window_height",
-        "description": "Default height of the game window.",
+        "description": "Default height of the game window in pixels.",
         "os": OS_ANY,
         "type": TYPE_UINT,
         "enabled_by": -1,
@@ -34,7 +34,7 @@
         "name": "Default Window Height"
     }, {
         "internal_name": "custom_fullscreen_resolution",
-        "description": "Lets you set a custom screen resolution for the fullscreen mode.",
+        "description": "Allows you to set a custom screen resolution for the fullscreen mode.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -42,7 +42,7 @@
         "name": "Custom Fullscreen Resolution"
     }, {
         "internal_name": "fullscreen_width",
-        "description": "Width of the custom fullscreen resolution.",
+        "description": "Width of the custom fullscreen resolution in pixels.",
         "os": OS_ANY,
         "type": TYPE_UINT,
         "enabled_by": 4,
@@ -50,7 +50,7 @@
         "name": "Fullscreen Resolution Width"
     }, {
         "internal_name": "fullscreen_height",
-        "description": "Height of the custom fullscreen resolution.",
+        "description": "Height of the custom fullscreen resolution in pixels.",
         "os": OS_ANY,
         "type": TYPE_UINT,
         "enabled_by": 4,
@@ -66,7 +66,7 @@
         "name": "Custom Internal Resolution"
     }, {
         "internal_name": "internal_resolution_width",
-        "description": "Width of the custom internal resolution.",
+        "description": "Width of the custom internal resolution in pixels.",
         "os": OS_WINDOWS,
         "type": TYPE_UINT,
         "enabled_by": 7,
@@ -74,7 +74,7 @@
         "name": "Internal Resolution Width"
     }, {
         "internal_name": "internal_resolution_height",
-        "description": "Height of the custom internal resolution.",
+        "description": "Height of the custom internal resolution in pixels.",
         "os": OS_WINDOWS,
         "type": TYPE_UINT,
         "enabled_by": 7,
@@ -1197,6 +1197,14 @@
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Right Analog Stick Deadzone"
+    }, {
+        "internal_name": "rumble_strength",
+        "description": "Enables and sets the strenght of the controller rumble effect.\nWorks the same way as the Super Mario 3D All-Stars and the Shindou Edition.",
+        "os": OS_ANY,
+        "type": TYPE_PERCENTAGE,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Rumble Strength"
     }],
     "hidden": false,
     "os": OS_ANY

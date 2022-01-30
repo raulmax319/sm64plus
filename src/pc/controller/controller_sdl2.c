@@ -20,6 +20,8 @@
 
 static bool init_ok;
 static SDL_GameController *sdl_cntrl;
+static bool haptics_enabled;
+static SDL_Haptic *sdl_haptic;
 
 static void controller_sdl_init(void) {
     
@@ -29,7 +31,29 @@ static void controller_sdl_init(void) {
         return;
     }
 
+    haptics_enabled = (SDL_InitSubSystem(SDL_INIT_HAPTIC) == 0);
+
     init_ok = true;
+}
+
+static SDL_Haptic *controller_sdl_init_haptics(const int joy) {
+    if (!haptics_enabled) return NULL;
+
+    SDL_Haptic *hap = SDL_HapticOpen(joy);
+    if (!hap) return NULL;
+
+    if (SDL_HapticRumbleSupported(hap) != SDL_TRUE) {
+        SDL_HapticClose(hap);
+        return NULL;
+    }
+
+    if (SDL_HapticRumbleInit(hap) != 0) {
+        SDL_HapticClose(hap);
+        return NULL;
+    }
+
+    printf("controller %s has haptics support, rumble enabled\n", SDL_JoystickNameForIndex(joy));
+    return hap;
 }
 
 static void controller_sdl_read(OSContPad *pad) {
@@ -40,14 +64,18 @@ static void controller_sdl_read(OSContPad *pad) {
     SDL_GameControllerUpdate();
 
     if (sdl_cntrl != NULL && !SDL_GameControllerGetAttached(sdl_cntrl)) {
+        SDL_HapticClose(sdl_haptic);
         SDL_GameControllerClose(sdl_cntrl);
         sdl_cntrl = NULL;
+        sdl_haptic = NULL;
     }
+
     if (sdl_cntrl == NULL) {
         for (int i = 0; i < SDL_NumJoysticks(); i++) {
             if (SDL_IsGameController(i)) {
                 sdl_cntrl = SDL_GameControllerOpen(i);
                 if (sdl_cntrl != NULL) {
+                    sdl_haptic = controller_sdl_init_haptics(i);
                     break;
                 }
             }
@@ -129,7 +157,19 @@ static void controller_sdl_read(OSContPad *pad) {
     }
 }
 
+static void controller_sdl_rumble_play(f32 strength, f32 length) {
+    if (sdl_haptic)
+        SDL_HapticRumblePlay(sdl_haptic, strength, (u32)(length * 1000.0f));
+}
+
+static void controller_sdl_rumble_stop(void) {
+    if (sdl_haptic)
+        SDL_HapticRumbleStop(sdl_haptic);
+}
+
 struct ControllerAPI controller_sdl = {
     controller_sdl_init,
-    controller_sdl_read
+    controller_sdl_read,
+    controller_sdl_rumble_play,
+    controller_sdl_rumble_stop
 };

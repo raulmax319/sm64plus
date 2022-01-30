@@ -331,6 +331,7 @@ unsigned int configButtonThumbLeft = 0;
 unsigned int configButtonThumbRight = L_TRIG;
 unsigned int gControllerLeftDeadzone = 512;
 unsigned int gControllerRightDeadzone = 512;
+float configRumbleStrength = 0.5f;
 
 unsigned int configKeyA = DIK_L;
 unsigned int configKeyB = DIK_COMMA;

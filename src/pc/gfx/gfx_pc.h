@@ -23,6 +23,8 @@ void gfx_start_frame(void);
 void gfx_run(Gfx *commands);
 void gfx_end_frame(void);
 
+uint16_t *get_framebuffer();
+
 #ifdef __cplusplus
 }
 #endif

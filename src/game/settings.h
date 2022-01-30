@@ -180,6 +180,7 @@ extern unsigned int configButtonThumbLeft;
 extern unsigned int configButtonThumbRight;
 extern unsigned int gControllerLeftDeadzone;
 extern unsigned int gControllerRightDeadzone;
+extern float configRumbleStrength;
 
 extern unsigned int configKeyA;
 extern unsigned int configKeyB;

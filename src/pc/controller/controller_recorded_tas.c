@@ -25,5 +25,7 @@ static void tas_read(OSContPad *pad) {
 
 struct ControllerAPI controller_recorded_tas = {
     tas_init,
-    tas_read
+    tas_read,
+    NULL,
+    NULL
 };

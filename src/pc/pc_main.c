@@ -35,17 +35,18 @@
 #include "game/hud.h"
 #include "configfile.h"
 
+#include "game/rumble_init.h"
 #include "game/settings.h"
 
 #include "compat.h"
 
 #define CONFIG_FILE "settings.ini"
 
-OSMesg D_80339BEC;
+OSMesg gMainReceivedMesg;
 OSMesgQueue gSIEventMesgQueue;
 
 s8 gResetTimer;
-s8 D_8032C648;
+s8 gNmiResetBarsTimer;
 s8 gDebugLevelSelect;
 s8 gShowProfiler;
 s8 gShowDebugText;
@@ -68,7 +69,7 @@ void set_vblank_handler(UNUSED s32 index, UNUSED struct VblankHandler *handler, 
 static uint8_t inited = 0;
 
 #include "game/game_init.h" // for gGlobalTimer
-void send_display_list(struct SPTask *spTask) {
+void exec_display_list(struct SPTask *spTask) {
     if (!inited) {
         return;
     }
@@ -111,6 +112,10 @@ static void patch_interpolations(void) {
 void produce_one_frame(void) {
     gfx_start_frame();
     game_loop_one_iteration();
+
+#if ENABLE_RUMBLE
+    thread6_rumble_loop(NULL);
+#endif
     
     int samples_left = audio_api->buffered();
     u32 num_audio_samples = samples_left < audio_api->get_desired_buffered() ? SAMPLES_HIGH : SAMPLES_LOW;
@@ -135,7 +140,7 @@ void produce_one_frame(void) {
     else if (configStayInCourse) {
         render_you_got_a_star(3);
     }
-    send_display_list(gGfxSPTask);
+    exec_display_list(gGfxSPTask);
     gfx_end_frame();
 }
 

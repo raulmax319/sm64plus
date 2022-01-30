@@ -227,6 +227,7 @@ static const struct ConfigOption options[] = {
     { .name = "button_thumbright", .type = CONFIG_TYPE_UINT, .uintValue = &configButtonThumbRight },
     { .name = "left_analog_stick_deadzone", .type = CONFIG_TYPE_UINT, .uintValue = &gControllerLeftDeadzone },
     { .name = "right_analog_stick_deadzone", .type = CONFIG_TYPE_UINT, .uintValue = &gControllerRightDeadzone },
+    { .name = "rumble_strength", .type = CONFIG_TYPE_FLOAT, .floatValue = &configRumbleStrength },
 
     { .name = "KEY MAPPING", .type = CONFIG_TYPE_SECTION },
     { .name = "key_a", .type = CONFIG_TYPE_UINT, .uintValue = &configKeyA },

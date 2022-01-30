@@ -162,5 +162,7 @@ static void keyboard_read(OSContPad *pad) {
 
 struct ControllerAPI controller_keyboard = {
     keyboard_init,
-    keyboard_read
+    keyboard_read,
+    NULL,
+    NULL
 };
