@@ -495,10 +495,13 @@ CameraTransition sModeTransitions[] = {
 extern u8 sDanceCutsceneIndexTable[][4];
 extern u8 sZoomOutAreaMasks[];
 
-//Define the analog camera speed
+// Define the analog camera speed
 #define ANALOG_AMOUNT (12 * (1 - gInvertedCamera * 2))
 #define ANALOG_AMOUNT_VERTICAL (12 * (1 - gInvertedVerticalCamera * 2))
 #define LROTATE_SPEED 0x400
+
+#define VERTICAL_MIN 6144.0f
+#define VERTICAL_MAX 12288.0f
 
 static void skip_camera_interpolation(void) {
     gLakituState.skipCameraInterpolationTimestamp = gGlobalTimer;
@@ -1178,7 +1181,7 @@ void lakitu_zoom(f32 rangeDist, s16 rangePitch) {
     }
 
     if (rangePitch == 0) {
-        sLakituPitch = MIN(MAX(sLakituPitch + ANALOG_AMOUNT_VERTICAL * (gPlayer1Controller->stick2Y / 48.0f) * gCameraSpeed, -6144), 12288);
+        sLakituPitch = MIN(MAX(sLakituPitch + ANALOG_AMOUNT_VERTICAL * (gPlayer1Controller->stick2Y / 48.0f) * gCameraSpeed, -VERTICAL_MIN), VERTICAL_MAX);
     }
     else {
         if (gCurrLevelArea == AREA_SSL_PYRAMID && gCamera->mode == CAMERA_MODE_OUTWARD_RADIAL) {
@@ -1329,7 +1332,11 @@ void mode_custom_camera(struct Camera *c, f32 yOff) {
 
     if (configCustomCameraRotation) {
         camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 
-            ABS(gMarioState->forwardVel * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 4 : 8) ));
+            ABS(gMarioState->forwardVel 
+                * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 12.0f : 16.0f)
+                * (1.0f - MIN(MAX(sqrt((sLakituPitch + VERTICAL_MIN) / (VERTICAL_MAX+VERTICAL_MIN)), 0.0f), 0.75f))
+                * (MIN(MAX(sqr(abs_angle_diff(sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180)) / 180), 0.0f), 1.0f))
+                ));
     }
 
     lakitu_zoom(max(0, configCustomCameraDistanceZoomedOut-configCustomCameraDistanceDefault) * 10.0f, gVerticalCamera ? 0 : 0x900);

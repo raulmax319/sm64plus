@@ -711,7 +711,11 @@ s32 act_start_crouching(struct MarioState *m) {
     }
 
     stationary_ground_step(m);
-    set_mario_animation(m, MARIO_ANIM_START_CROUCHING);
+    if (configImprovedControls)
+        set_mario_anim_with_accel(m, MARIO_ANIM_START_CROUCHING, 0x25000);
+    else
+        set_mario_animation(m, MARIO_ANIM_START_CROUCHING);
+
     if (is_anim_past_end(m)) {
         set_mario_action(m, ACT_CROUCHING, 0);
     }
@@ -736,7 +740,10 @@ s32 act_stop_crouching(struct MarioState *m) {
     }
 
     stationary_ground_step(m);
-    set_mario_animation(m, MARIO_ANIM_STOP_CROUCHING);
+    if (configImprovedControls)
+        set_mario_anim_with_accel(m, MARIO_ANIM_STOP_CROUCHING, 0x25000);
+    else
+        set_mario_animation(m, MARIO_ANIM_STOP_CROUCHING);
     if (is_anim_past_end(m)) {
         set_mario_action(m, ACT_IDLE, 0);
     }
