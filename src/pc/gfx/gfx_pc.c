@@ -320,6 +320,12 @@ static bool gfx_texture_cache_lookup(int tile, struct TextureHashmapNode **n, co
 
 static bool import_texture_custom(const char *path) {
     int w, h;
+
+    if (strstr(path, "mario_logo") != NULL) {
+        if (!configShowCapLogo)
+            return FALSE;
+    }
+
     u8 *data = stbi_load(path, &w, &h, NULL, 4);
 
     if (data == NULL)
@@ -1022,37 +1028,49 @@ static void gfx_sp_vertex(size_t n_vertices, size_t dest_index, const Vtx *verti
             int b = rsp.current_lights[rsp.current_num_lights - 1].col[2];
             
             // Detect if these are one of Mario's colors
-            bool mario_hat = (r == 0x7f && g == 0x00 && b == 0x00);
-            bool mario_overalls = (r == 0x00 && g == 0x00 && b == 0x7f);
-            bool mario_shoes = (r == 0x39 && g == 0x0e && b == 0x07);
-            bool mario_skin = (r == 0x7f && g == 0x60 && b == 0x3c);
-            bool mario_hair = (r == 0x39 && g == 0x03 && b == 0x00);
+            bool mario_hat = (r == 0x02);
+            bool mario_shirt = (r == 0x03);
+            bool mario_overalls = (r == 0x04);
+            bool mario_gloves = (r == 0x05);
+            bool mario_shoes = (r == 0x06);
+            bool mario_skin = (r == 0x07);
+            bool mario_hair = (r == 0x08);
 
             // Override them lazily
             if (mario_hat) {
-                r = configColorHatRDark;
-                g = configColorHatGDark;
-                b = configColorHatBDark;
+                r = configColorCap[1][0];
+                g = configColorCap[1][1];
+                b = configColorCap[1][2];
+            }
+            if (mario_shirt) {
+                r = configColorShirt[1][0];
+                g = configColorShirt[1][1];
+                b = configColorShirt[1][2];
             }
             if (mario_overalls) {
-                r = configColorOverallsRDark;
-                g = configColorOverallsGDark;
-                b = configColorOverallsBDark;
+                r = configColorOveralls[1][0];
+                g = configColorOveralls[1][1];
+                b = configColorOveralls[1][2];
+            }
+            if (mario_gloves) {
+                r = configColorGloves[1][0];
+                g = configColorGloves[1][1];
+                b = configColorGloves[1][2];
             }
             if (mario_shoes) {
-                r = configColorShoesRDark;
-                g = configColorShoesGDark;
-                b = configColorShoesBDark;
+                r = configColorShoes[1][0];
+                g = configColorShoes[1][1];
+                b = configColorShoes[1][2];
             }
             if (mario_skin) {
-                r = configColorSkinRDark;
-                g = configColorSkinGDark;
-                b = configColorSkinBDark;
+                r = configColorSkin[1][0];
+                g = configColorSkin[1][1];
+                b = configColorSkin[1][2];
             }
             if (mario_hair) {
-                r = configColorHairRDark;
-                g = configColorHairGDark;
-                b = configColorHairBDark;
+                r = configColorHair[1][0];
+                g = configColorHair[1][1];
+                b = configColorHair[1][2];
             }
 
             for (int i = 0; i < rsp.current_num_lights - 1; i++) {
@@ -1074,29 +1092,39 @@ static void gfx_sp_vertex(size_t n_vertices, size_t dest_index, const Vtx *verti
 
                     // Override these too
                     if (mario_hat) {
-                        r += intensity * configColorHatRLight;
-                        g += intensity * configColorHatGLight;
-                        b += intensity * configColorHatBLight;
+                        r += intensity * configColorCap[0][0];
+                        g += intensity * configColorCap[0][1];
+                        b += intensity * configColorCap[0][2];
+                    }
+                    else if (mario_shirt) {
+                        r += intensity * configColorShirt[0][0];
+                        g += intensity * configColorShirt[0][1];
+                        b += intensity * configColorShirt[0][2];
                     }
                     else if (mario_overalls) {
-                        r += intensity * configColorOverallsRLight;
-                        g += intensity * configColorOverallsGLight;
-                        b += intensity * configColorOverallsBLight;
+                        r += intensity * configColorOveralls[0][0];
+                        g += intensity * configColorOveralls[0][1];
+                        b += intensity * configColorOveralls[0][2];
+                    }
+                    else if (mario_gloves) {
+                        r += intensity * configColorGloves[0][0];
+                        g += intensity * configColorGloves[0][1];
+                        b += intensity * configColorGloves[0][2];
                     }
                     else if (mario_shoes) {
-                        r += intensity * configColorShoesRLight;
-                        g += intensity * configColorShoesGLight;
-                        b += intensity * configColorShoesBLight;
+                        r += intensity * configColorShoes[0][0];
+                        g += intensity * configColorShoes[0][1];
+                        b += intensity * configColorShoes[0][2];
                     }
                     else if (mario_skin) {
-                        r += intensity * configColorSkinRLight;
-                        g += intensity * configColorSkinGLight;
-                        b += intensity * configColorSkinBLight;
+                        r += intensity * configColorSkin[0][0];
+                        g += intensity * configColorSkin[0][1];
+                        b += intensity * configColorSkin[0][2];
                     }
                     else if (mario_hair) {
-                        r += intensity * configColorHairRLight;
-                        g += intensity * configColorHairGLight;
-                        b += intensity * configColorHairBLight;
+                        r += intensity * configColorHair[0][0];
+                        g += intensity * configColorHair[0][1];
+                        b += intensity * configColorHair[0][2];
                     }
                     else {
                         r += intensity * lightr;

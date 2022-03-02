@@ -11,6 +11,8 @@
 
 #include "object_list_processor.h"
 
+#include "object_helpers.h"
+
 #include "settings.h"
 
 static s16 sMovingSandSpeeds[] = { 12, 8, 4, 0 };
@@ -302,6 +304,16 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     }
 
     if (nextPos[1] > floorHeight + 100.0f) {
+
+        if ((configImprovedControls)
+            && (m->input & INPUT_NONZERO_ANALOG)
+            && !(m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)
+            && !(m->action & ACT_FLAG_SHORT_HITBOX)
+            && (m->pos[1] <= m->floorHeight)
+            && (abs_angle_diff(m->intendedYaw, m->faceAngle[1]) > 0x471C)
+            && (mario_get_floor_class(m) != SURFACE_CLASS_VERY_SLIPPERY))
+            return GROUND_STEP_NONE;
+
         if (nextPos[1] + 160.0f >= ceilHeight) {
             return GROUND_STEP_HIT_WALL_STOP_QSTEPS;
         }
@@ -581,7 +593,7 @@ void apply_gravity(struct MarioState *m) {
         m->vel[1] /= 4.0f;
     } else if (m->action & ACT_FLAG_METAL_WATER) {
         m->vel[1] -= 1.6f;
-        if (configImprovePowerups) {
+        if (configBetterPowerups) {
             if (m->vel[1] < -24.0f) {
                 m->vel[1] = -24.0f;
             }

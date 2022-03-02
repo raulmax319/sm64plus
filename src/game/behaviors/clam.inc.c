@@ -13,10 +13,16 @@ struct ObjectHitbox sClamShellHitbox = {
 };
 
 void clam_act_0(void) {
+    if (configBetterEnemies)
+        o->oDamageOrCoinValue = 0;
+
     if (cur_obj_init_anim_check_frame(0, 25)) {
         cur_obj_play_sound_2(SOUND_GENERAL_CLAM_SHELL3);
         spawn_mist_from_global();
         cur_obj_become_tangible();
+
+        if (configBetterEnemies)
+            o->oDamageOrCoinValue = 2;
 
         o->oClamUnkF4 = 10;
         o->oTimer = 0;
@@ -33,6 +39,9 @@ void clam_act_1(void) {
     s16 val06;
     s16 val04;
     s16 val02;
+
+    if (configBetterEnemies)
+        o->oDamageOrCoinValue = 0;
 
     if (o->oTimer > 150) {
         o->oAction = 0;

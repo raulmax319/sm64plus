@@ -473,7 +473,7 @@ static void boo_act_4(void) {
             if (dialogID == DIALOG_108) { // If the Big Boo should spawn, play the jingle
                 play_puzzle_jingle();
             }
-            else if (configDisableBooDialogue)
+            else if (configBetterEnemies)
                 gBooDialogueWasSaid = 1;
         }
     }

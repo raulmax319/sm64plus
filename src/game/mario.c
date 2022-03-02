@@ -1906,7 +1906,7 @@ void handle_cheats() {
 }
 
 u32 mario_has_improved_metal_cap(struct MarioState *m) {
-    return (configImprovePowerups) && (m->flags & MARIO_METAL_CAP);
+    return (configBetterPowerups) && (m->flags & MARIO_METAL_CAP);
 }
 
 /**************************************************
@@ -1986,9 +1986,11 @@ void init_mario(void) {
     if (save_file_get_cap_pos(capPos)) {
         capObject = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
 
-        capObject->oPosX = capPos[0];
-        capObject->oPosY = capPos[1];
-        capObject->oPosZ = capPos[2];
+        if (!configSaveLives) {
+            capObject->oPosX = capPos[0];
+            capObject->oPosY = capPos[1];
+            capObject->oPosZ = capPos[2];
+        }
 
         capObject->oForwardVelS32 = 0;
 
@@ -2011,12 +2013,9 @@ void init_mario_from_save_file(void) {
         save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
     gMarioState->numKeys = 0;
 
-    if (gLifeMode) {
-        gMarioState->numLives = 0;
-    }
-    else {
-        gMarioState->numLives = 4;
-    }
+    s8 savedLives = save_file_get_num_lives();
+    gMarioState->numLives = ((savedLives > 0) ? savedLives : (gLifeMode ? 0 : 4));
+    
     if (save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE) {
         gMarioState->health = 0x180;
     }

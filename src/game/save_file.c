@@ -12,6 +12,8 @@
 #include "course_table.h"
 #include "rumble_init.h"
 
+#include "settings.h"
+
 #define MENU_DATA_MAGIC 0x4849
 #define SAVE_FILE_MAGIC 0x4441
 
@@ -547,7 +549,11 @@ void save_file_set_cap_pos(s16 x, s16 y, s16 z) {
 
     saveFile->capLevel = gCurrLevelNum;
     saveFile->capArea = gCurrAreaIndex;
-    vec3s_set(saveFile->capPos, x, y, z);
+
+    if (!configSaveLives) {
+        vec3s_set(saveFile->capPos, x, y, z);
+    }
+
     save_file_set_flags(SAVE_FLAG_CAP_ON_GROUND);
 }
 
@@ -589,6 +595,28 @@ void save_file_move_cap_to_default_location(void) {
                 break;
         }
         save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
+    }
+}
+
+void save_file_set_num_lives(s8 numLives) {
+    if (configSaveLives) {
+        struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
+        saveFile->capPos[0] = numLives;
+        saveFile->flags |= SAVE_FLAG_FILE_EXISTS;
+        gSaveFileModified = TRUE;
+    }
+}
+
+s8 save_file_get_num_lives() {
+    if (configSaveLives) {
+        struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
+        if (saveFile->capPos[0] > 100)
+            return 0;
+        else
+            return saveFile->capPos[0];
+    }
+    else {
+        return 0;
     }
 }
 

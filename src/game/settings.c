@@ -170,10 +170,10 @@ float configOverallVolume = 1;
 float configSeqVolume[] = {1, 1, 1};
 
 // TODO (Mors): Rename these with a config prefix.
-s8 config60FPS = 1;
+unsigned int configFrameRate = 1;
 s8 configDisableDrawDistance = 1;
 float configDrawDistanceMultiplier = 1.0f;
-unsigned int configLevelOfDetail = 1;
+unsigned int configLevelOfDetail = 2;
 unsigned int configTextureFiltering = 2;
 unsigned int configNoiseType = 0;
 s8 configForce4by3 = 0;
@@ -184,20 +184,20 @@ s8 configImprovedHanging = 1;
 s8 configEnemyBouncing = 1;
 s8 configDpadControls = 1;
 s8 configFullAirControl = 0;
-s8 configDisableBLJ = 0;
 
-s8 configFixCollisionBugs = 1;
 s8 configFixVariousBugs = 1;
+s8 configFixCollisionBugs = 1;
+s8 configSaveLives = 1;
 s8 configRespawnCertainItems = 1;
 s8 configRemoveAnnoyingWarps = 1;
-s8 configImprovePowerups = 1;
+s8 configBetterPowerups = 1;
+s8 configBetterEnemies = 1;
 s8 configBetterBlastAwayTheWall = 1;
-s8 configDisableBooDialogue = 1;
-s8 configTalkEasier = 1;
+s8 configTalkNPCs = 1;
 s8 configDisableFallDamage = 0;
 s8 configLeaveAnyTime = 0;
 s8 configVisibleSecrets = 0;
-s8 configFixBombClip = 0;
+s8 configFixExploits = 0;
 
 s8 configBowsersSub = 1;
 unsigned int configStayInCourse = 0;
@@ -280,40 +280,17 @@ s8 gWireframeMode = 0;
 #endif
 s8 gDisableLighting = 0;
 
-unsigned int configColorHatRLight = 255;
-unsigned int configColorHatRDark = 127;
-unsigned int configColorHatGLight = 0;
-unsigned int configColorHatGDark = 0;
-unsigned int configColorHatBLight = 0;
-unsigned int configColorHatBDark = 0;
+unsigned int configColorPalette = 2;
 
-unsigned int configColorOverallsRLight = 0;
-unsigned int configColorOverallsRDark = 0;
-unsigned int configColorOverallsGLight = 0;
-unsigned int configColorOverallsGDark = 0;
-unsigned int configColorOverallsBLight = 255;
-unsigned int configColorOverallsBDark = 127;
+unsigned int configColorCap[2][3];
+unsigned int configColorShirt[2][3];
+unsigned int configColorOveralls[2][3];
+unsigned int configColorGloves[2][3];
+unsigned int configColorShoes[2][3];
+unsigned int configColorSkin[2][3];
+unsigned int configColorHair[2][3];
 
-unsigned int configColorShoesRLight = 114;
-unsigned int configColorShoesRDark = 57;
-unsigned int configColorShoesGLight = 28;
-unsigned int configColorShoesGDark = 14;
-unsigned int configColorShoesBLight = 14;
-unsigned int configColorShoesBDark = 7;
-
-unsigned int configColorSkinRLight = 254;
-unsigned int configColorSkinRDark = 127;
-unsigned int configColorSkinGLight = 193;
-unsigned int configColorSkinGDark = 96;
-unsigned int configColorSkinBLight = 121;
-unsigned int configColorSkinBDark = 60;
-
-unsigned int configColorHairRLight = 115;
-unsigned int configColorHairRDark = 57;
-unsigned int configColorHairGLight = 6;
-unsigned int configColorHairGDark = 3;
-unsigned int configColorHairBLight = 0;
-unsigned int configColorHairBDark = 0;
+s8 configShowCapLogo = 1;
 
 unsigned int configFullscreenRefreshRate = 60;
 

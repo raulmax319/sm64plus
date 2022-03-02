@@ -19,10 +19,10 @@ extern unsigned int configGraphicsBackend;
 extern float configOverallVolume;
 extern float configSeqVolume[];
 
-extern s8 config60FPS;
+extern unsigned int configFrameRate;
 extern s8 configDisableDrawDistance;
 extern float configDrawDistanceMultiplier;
-extern s8 configLevelOfDetail;
+extern unsigned int configLevelOfDetail;
 extern unsigned int configTextureFiltering;
 extern unsigned int configNoiseType;
 extern s8 configForce4by3;
@@ -33,20 +33,20 @@ extern s8 configImprovedHanging;
 extern s8 configEnemyBouncing;
 extern s8 configDpadControls;
 extern s8 configFullAirControl;
-extern s8 configDisableBLJ;
 
-extern s8 configFixCollisionBugs;
 extern s8 configFixVariousBugs;
+extern s8 configFixCollisionBugs;
+extern s8 configSaveLives;
 extern s8 configRespawnCertainItems;
 extern s8 configRemoveAnnoyingWarps;
-extern s8 configImprovePowerups;
+extern s8 configBetterPowerups;
+extern s8 configBetterEnemies;
 extern s8 configBetterBlastAwayTheWall;
-extern s8 configDisableBooDialogue;
-extern s8 configTalkEasier;
+extern s8 configTalkNPCs;
 extern s8 configDisableFallDamage;
 extern s8 configLeaveAnyTime;
 extern s8 configVisibleSecrets;
-extern s8 configFixBombClip;
+extern s8 configFixExploits;
 
 extern s8 configBowsersSub;
 extern unsigned int configStayInCourse;
@@ -129,40 +129,17 @@ extern s8 gWireframeMode;
 #endif
 extern s8 gDisableLighting;
 
-extern unsigned int configColorHatRLight;
-extern unsigned int configColorHatRDark;
-extern unsigned int configColorHatGLight;
-extern unsigned int configColorHatGDark;
-extern unsigned int configColorHatBLight;
-extern unsigned int configColorHatBDark;
+extern unsigned int configColorPalette;
 
-extern unsigned int configColorOverallsRLight;
-extern unsigned int configColorOverallsRDark;
-extern unsigned int configColorOverallsGLight;
-extern unsigned int configColorOverallsGDark;
-extern unsigned int configColorOverallsBLight;
-extern unsigned int configColorOverallsBDark;
+extern unsigned int configColorCap[2][3];
+extern unsigned int configColorShirt[2][3];
+extern unsigned int configColorOveralls[2][3];
+extern unsigned int configColorGloves[2][3];
+extern unsigned int configColorShoes[2][3];
+extern unsigned int configColorSkin[2][3];
+extern unsigned int configColorHair[2][3];
 
-extern unsigned int configColorShoesRLight;
-extern unsigned int configColorShoesRDark;
-extern unsigned int configColorShoesGLight;
-extern unsigned int configColorShoesGDark;
-extern unsigned int configColorShoesBLight;
-extern unsigned int configColorShoesBDark;
-
-extern unsigned int configColorSkinRLight;
-extern unsigned int configColorSkinRDark;
-extern unsigned int configColorSkinGLight;
-extern unsigned int configColorSkinGDark;
-extern unsigned int configColorSkinBLight;
-extern unsigned int configColorSkinBDark;
-
-extern unsigned int configColorHairRLight;
-extern unsigned int configColorHairRDark;
-extern unsigned int configColorHairGLight;
-extern unsigned int configColorHairGDark;
-extern unsigned int configColorHairBLight;
-extern unsigned int configColorHairBDark;
+extern s8 configShowCapLogo;
 
 extern unsigned int configFullscreenRefreshRate;
 

@@ -112,7 +112,7 @@ static void toad_message_faded(void) {
 }
 
 static void toad_message_opaque(void) {
-    if (!configTalkEasier && gCurrentObject->oDistanceToMario > 700.0f) {
+    if (!configTalkNPCs && gCurrentObject->oDistanceToMario > 700.0f) {
         gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADING;
     } else if (!gCurrentObject->oToadMessageRecentlyTalked) {
         gCurrentObject->oInteractionSubtype = INT_SUBTYPE_NPC;
@@ -128,7 +128,7 @@ static void toad_message_talking(void) {
     if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_DOWN, 
         DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, gCurrentObject->oToadMessageDialogId)) {
         gCurrentObject->oToadMessageRecentlyTalked = TRUE;
-        if (configTalkEasier) {
+        if (configTalkNPCs) {
             gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
             gCurrentObject->oOpacity = 249;
         }
@@ -216,7 +216,7 @@ void bhv_toad_message_init(void) {
     if (enoughStars) {
         gCurrentObject->oToadMessageDialogId = dialogId;
         gCurrentObject->oToadMessageRecentlyTalked = FALSE;
-        if (configTalkEasier) {
+        if (configTalkNPCs) {
             gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPAQUE;
             gCurrentObject->oOpacity = 255;
         }
@@ -360,7 +360,7 @@ Gfx *geo_switch_mario_stand_run(s32 callContext, struct GraphNode *node, UNUSED 
 
     if (callContext == GEO_CONTEXT_RENDER) {
         // assign result. 0 if moving, 1 if stationary.
-        switchCase->selectedCase = (configLevelOfDetail == 2) ? 1 : ((bodyState->action & ACT_FLAG_STATIONARY) == FALSE);
+        switchCase->selectedCase = (configLevelOfDetail == 1) ? 1 : ((bodyState->action & ACT_FLAG_STATIONARY) == FALSE);
     }
     return NULL;
 }

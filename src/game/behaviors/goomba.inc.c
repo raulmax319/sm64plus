@@ -221,7 +221,8 @@ static void goomba_act_walk(void) {
 static void goomba_act_attacked_mario(void) {
     if (o->oGoombaSize == GOOMBA_SIZE_TINY) {
         mark_goomba_as_dead();
-        o->oNumLootCoins = 0;
+        if (!configBetterEnemies)
+            o->oNumLootCoins = 0;
         obj_die_if_health_non_positive();
     } else {
         //! This can happen even when the goomba is already in the air. It's

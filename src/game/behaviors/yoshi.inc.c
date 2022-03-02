@@ -149,6 +149,7 @@ void yoshi_give_present_loop(void) {
         else {
             gMarioState->numLives++;
         }
+        save_file_set_num_lives(gMarioState->numLives);
     }
 }
 

@@ -1256,6 +1256,7 @@ s32 act_death_exit(struct MarioState *m) {
         }
         else if (m->numLives > 0) {
             m->numLives--;
+            save_file_set_num_lives(m->numLives);
         }
         // restore 7.75 units of health
         m->healCounter = 31;
@@ -1276,7 +1277,8 @@ s32 act_unused_death_exit(struct MarioState *m) {
             m->numLives++;
         }
         else if (m->numLives > 0) {
-            m->numLives--;
+            m->numLives--;  
+            save_file_set_num_lives(m->numLives);
         }
         // restore 7.75 units of health
         m->healCounter = 31;
@@ -1301,6 +1303,7 @@ s32 act_falling_death_exit(struct MarioState *m) {
         }
         else if (m->numLives > 0) {
             m->numLives--;
+            save_file_set_num_lives(m->numLives);
         }
         // restore 7.75 units of health
         m->healCounter = 31;
@@ -1353,6 +1356,7 @@ s32 act_special_death_exit(struct MarioState *m) {
         }
         else if (m->numLives > 0) {
             m->numLives--;
+            save_file_set_num_lives(m->numLives);
         }
         m->healCounter = 31;
     }

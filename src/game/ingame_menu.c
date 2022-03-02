@@ -2295,6 +2295,18 @@ void render_pause_red_coins(void) {
     }
 }
 
+void render_pause_exit_text() {
+    u8 textExitGameR[] = { TEXT_EXIT_GAME_ZR };
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+    print_generic_string(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(12), 8, textExitGameR);
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
+
+    if ((gPlayer1Controller->buttonDown & Z_TRIG) && (gPlayer1Controller->buttonDown & R_TRIG)) {
+        exit(0);
+    }
+}
+
 #ifdef VERSION_EU
 u8 gTextCourseArr[][7] = {
     { TEXT_COURSE },
@@ -2542,14 +2554,13 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     print_generic_string(x + 10, y - 2, textContinue);
     print_generic_string(x + 10, y - 17, textExitCourse);
 
-    if ((*index == MENU_OPT_QUIT) || (*index != MENU_OPT_CAMERA_ANGLE_R)) {
+    if ((!configQuitOption && *index == MENU_OPT_CAMERA_ANGLE_R) || (configQuitOption && *index != MENU_OPT_QUIT)) {
         if (configQuitOption) {
             print_generic_string(x + 10, y - 33, textExitGame);
             print_generic_string(x + 10, y - 49, textCameraAngleR);
         }
         else {
             print_generic_string(x + 10, y - 33, textCameraAngleR);
-
         }
         
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
@@ -2819,14 +2830,7 @@ s16 render_pause_courses_and_castle(void) {
             render_pause_castle_menu_box(160, 143);
             render_pause_castle_main_strings(104, 60);
             if (configQuitOption) {
-                u8 textExitGameR[] = { TEXT_EXIT_GAME_ZR };
-                gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-                gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-                print_generic_string(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(12), 8, textExitGameR);
-                gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
-                if ((gPlayer1Controller->buttonDown & Z_TRIG) && (gPlayer1Controller->buttonDown & R_TRIG)) {
-                    exit(0);
-                }
+                render_pause_exit_text();
             }
 
 #ifdef VERSION_EU
@@ -3167,6 +3171,7 @@ s16 render_course_complete_screen(void) {
         case DIALOG_STATE_OPENING:
             render_course_complete_lvl_info_and_hud_str();
             if (gCourseDoneMenuTimer > 100 && gCourseCompleteCoinsEqual == 1) {
+                save_file_set_num_lives(gMarioState->numLives);
                 gDialogBoxState = DIALOG_STATE_VERTICAL;
                 level_set_transition(-1, NULL);
                 gDialogTextAlpha = 0;

@@ -37,6 +37,7 @@
 
 #include "game/rumble_init.h"
 #include "game/settings.h"
+#include "colors.h"
 
 #include "compat.h"
 
@@ -134,7 +135,7 @@ void produce_one_frame(void) {
     gfx_end_frame();
     
     gfx_start_frame();
-    if (config60FPS) {
+    if (configFrameRate) {
         patch_interpolations();
     }
     else if (configStayInCourse) {
@@ -221,6 +222,10 @@ void main_func(const char* gfx_dir) {
 #endif
 
     configfile_load(CONFIG_FILE);
+
+    // Set the custom colors
+    set_colors();
+
     atexit(save_config);
 
 #ifdef TARGET_WEB

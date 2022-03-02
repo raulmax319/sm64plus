@@ -504,6 +504,14 @@ u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, 
 }
 
 s32 act_jump(struct MarioState *m) {
+
+    if (configImprovedControls && m->actionTimer < 1) {
+        m->actionTimer++;
+        if (m->input & INPUT_Z_PRESSED && m->forwardVel > 10.0f) {
+            return set_jumping_action(m, ACT_LONG_JUMP, 0);
+        }
+    }
+
     if (check_kick_or_dive_in_air(m)) {
         return TRUE;
     }
@@ -895,8 +903,8 @@ s32 act_air_throw(struct MarioState *m) {
 
 s32 act_water_jump(struct MarioState *m) {
     if (configImprovedSwimming) {
-        if (m->forwardVel < 25.0f) {
-            mario_set_forward_vel(m, 25.0f);
+        if (m->forwardVel < 18.0f) {
+            mario_set_forward_vel(m, 18.0f);
         }
     }
     else {
@@ -916,7 +924,7 @@ s32 act_water_jump(struct MarioState *m) {
 
         case AIR_STEP_HIT_WALL:
             if (configImprovedSwimming) {
-                mario_set_forward_vel(m, 25.0f);
+                mario_set_forward_vel(m, 18.0f);
             }
             else {
                 mario_set_forward_vel(m, 15.0f);
@@ -945,8 +953,8 @@ s32 act_hold_water_jump(struct MarioState *m) {
     }
 
     if (configImprovedSwimming) {
-        if (m->forwardVel < 22.0f) {
-            mario_set_forward_vel(m, 22.0f);
+        if (m->forwardVel < 18.0f) {
+            mario_set_forward_vel(m, 18.0f);
         }
     }
     else {
@@ -966,7 +974,7 @@ s32 act_hold_water_jump(struct MarioState *m) {
 
         case AIR_STEP_HIT_WALL:
             if (configImprovedSwimming) {
-                mario_set_forward_vel(m, 20.0f);
+                mario_set_forward_vel(m, 18.0f);
             }
             else {
                 mario_set_forward_vel(m, 15.0f);
@@ -1019,6 +1027,12 @@ s32 act_ground_pound(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
 
     if (m->actionState == 0) {
+
+        if (configFixExploits) {
+            m->vel[1]  = 0.0f;
+            stepResult = perform_air_step(m, 0);
+        }
+
         if (m->actionTimer < 10) {
             yOffset = 20 - 2 * m->actionTimer;
             if (m->pos[1] + yOffset + 160.0f < m->ceilHeight) {
@@ -1080,7 +1094,7 @@ s32 act_ground_pound(struct MarioState *m) {
                 }
             }
             set_camera_shake_from_hit(SHAKE_GROUND_POUND);
-        } else if (stepResult == AIR_STEP_HIT_WALL) {
+        } else if (!configImprovedControls && stepResult == AIR_STEP_HIT_WALL) {
             mario_set_forward_vel(m, -16.0f);
             if (m->vel[1] > 0.0f) {
                 m->vel[1] = 0.0f;

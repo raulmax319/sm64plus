@@ -1719,7 +1719,7 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
     }
 
     if ((m->action == ACT_WALKING)
-    || (configTalkEasier && ((m->action == ACT_DECELERATING) || (m->action == ACT_BRAKING) || m->action == ACT_BRAKING_STOP) )) {
+    || (configTalkNPCs && ((m->action == ACT_DECELERATING) || (m->action == ACT_BRAKING) || m->action == ACT_BRAKING_STOP) )) {
         if (arg) {
             return TRUE;
         }
@@ -1747,10 +1747,10 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
 #endif
 
 u32 check_read_sign(struct MarioState *m, struct Object *o) {
-    if (((m->input & READ_MASK && !configTalkEasier) || (configTalkEasier && m->input & INPUT_B_PRESSED)) 
+    if (((m->input & READ_MASK && !configTalkNPCs) || (configTalkNPCs && m->input & INPUT_B_PRESSED)) 
     && mario_can_talk(m, 0) && object_facing_mario(m, o, SIGN_RANGE)) {
         s16 facingDYaw = (s16)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1];
-        if ((facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) || (configTalkEasier)) {
+        if ((facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) || (configTalkNPCs)) {
             f32 targetX = o->oPosX + 105.0f * sins(o->oMoveAngleYaw);
             f32 targetZ = o->oPosZ + 105.0f * coss(o->oMoveAngleYaw);
 
@@ -1768,10 +1768,10 @@ u32 check_read_sign(struct MarioState *m, struct Object *o) {
 }
 
 u32 check_npc_talk(struct MarioState *m, struct Object *o) {
-    if (((m->input & READ_MASK && !configTalkEasier) || (configTalkEasier && m->input & INPUT_B_PRESSED))
+    if (((m->input & READ_MASK && !configTalkNPCs) || (configTalkNPCs && m->input & INPUT_B_PRESSED))
     && mario_can_talk(m, 1)) {
         s16 facingDYaw = mario_obj_angle_to_object(m, o) - m->faceAngle[1];
-        if ((facingDYaw >= -0x4000 && facingDYaw <= 0x4000) || (configTalkEasier)) {
+        if ((facingDYaw >= -0x4000 && facingDYaw <= 0x4000) || (configTalkNPCs)) {
             o->oInteractStatus = INT_STATUS_INTERACTED;
 
             m->interactObj = o;

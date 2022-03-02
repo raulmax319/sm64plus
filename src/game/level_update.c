@@ -718,6 +718,8 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
         m->invincTimer = -1;
         sDelayedWarpArg = 0;
         sDelayedWarpOp = warpOp;
+        
+        save_file_set_num_lives(m->numLives);
 
         switch (warpOp) {
             case WARP_OP_DEMO_NEXT:
@@ -961,6 +963,7 @@ void update_hud_values(void) {
 
         if (gMarioState->numLives > 100) {
             gMarioState->numLives = 100;
+            save_file_set_num_lives(100);
         }
 
 #if BUGFIX_MAX_LIVES
