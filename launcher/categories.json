@@ -406,6 +406,14 @@
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Skip Cutscenes"
+    }, {
+        "internal_name": "remain_mod",
+        "description": "Allows you to fully complete each level without leaving it.  Please set 'Stay in Course After Getting a Star' to ALWAYS.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Remain Mod"
     }],
     "hidden": false,
     "reload_with_preset": true,

@@ -92,6 +92,9 @@ s16 obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleI
 void obj_set_parent_relative_pos(struct Object *obj, s16 relX, s16 relY, s16 relZ);
 void obj_set_pos(struct Object *obj, s16 x, s16 y, s16 z);
 void obj_set_angle(struct Object *obj, s16 pitch, s16 yaw, s16 roll);
+struct Object *spawn_object_abs_with_rot_degrees(struct Object *parent, s16 uselessArg, u32 model,
+                                                 const BehaviorScript *behavior, s32 behPar, s16 x,
+                                                 s16 y, s16 z, s16 rx, s16 ry, s16 rz);
 struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, u32 model,
                                          const BehaviorScript *behavior,
                                          s16 x, s16 y, s16 z, s16 rx, s16 ry, s16 rz);
@@ -138,6 +141,7 @@ u32 get_object_list_from_behavior(const BehaviorScript *behavior);
 struct Object *cur_obj_nearest_object_with_behavior(const BehaviorScript *behavior);
 f32 cur_obj_dist_to_nearest_object_with_behavior(const BehaviorScript* behavior);
 struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript * behavior, f32 *dist);
+struct Object *find_nearest_object_with_behavior(const BehaviorScript *behavior, f32 x, f32 y, f32 z);
 struct Object *find_unimportant_object(void);
 s32 count_unimportant_objects(void);
 s32 count_objects_with_behavior(const BehaviorScript *behavior);

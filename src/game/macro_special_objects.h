@@ -11,6 +11,7 @@ void spawn_macro_abs_yrot_2params(s32 model, const BehaviorScript *behavior, s16
 void spawn_macro_abs_yrot_param1(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, s16 ry, s16 params);
 void spawn_macro_abs_special(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, s16 unkA, s16 unkB, s16 unkC);
 
+void despawn_macro_objects(s16 *macroObjList);
 void spawn_macro_objects(s16 areaIndex, s16 *macroObjList);
 void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList);
 void spawn_special_objects(s16 areaIndex, s16 **specialObjList);

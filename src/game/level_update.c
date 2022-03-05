@@ -30,6 +30,9 @@
 #include "level_table.h"
 #include "course_table.h"
 #include "rumble_init.h"
+#include "behavior_data.h"
+#include "object_helpers.h"
+#include "macro_special_objects.h"
 
 #include "settings.h"
 
@@ -474,6 +477,109 @@ void init_mario_after_warp(void) {
     }
 }
 
+void remain_mod_load_area()
+{
+    struct ObjectWarpNode *spawnNode = area_get_warp_node(sWarpDest.nodeId);
+
+    if ((gCurrCourseNum == COURSE_WF) && (spawnNode->object->oBehParams == 0x000D0000))
+    {
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_LEVEL_GEOMETRY_08, bhvTower, 0x00000000, 0, 3584, 0, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_NONE, bhvTowerPlatformGroup, 0x00000000, 0, 3483, 0, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_WF_TOWER_DOOR, bhvTowerDoor, 0x00000000, -511, 3584, 0, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_WF_KICKABLE_BOARD, bhvKickableBoard, 0x00000000, 13, 3584, -1407, 0, 315, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_1UP, bhv1Up, 0x00000000, -384, 3584, 6, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_BULLET_BILL, bhvBulletBill, 0x00000000, 1280, 3712, 968, 0, 180, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_LEVEL_GEOMETRY_09, bhvBulletBillCannon, 0x00000000, 1280, 3584, 896, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_STAR, bhvStar, 0x01000000, 300, 5550, 0, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_BOBOMB_BUDDY, bhvBobombBuddyOpensCannon, 0x00000000, -1700, 1140,  3500, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_HOOT, bhvHoot, 0x00000000, 2560,  700,  4608, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_JRB) && (spawnNode->object->oBehParams == 0x000B0000))
+    {
+        set_camera_mode(gMarioState->area->camera, CAMERA_MODE_FREE_ROAM, 1); // Fixes a bug where camera is set to CAMERA_MODE_BEHIND_MARIO for some reason
+
+        struct Object *objToDelete;
+
+        objToDelete = cur_obj_nearest_object_with_behavior(bhvUnagi);
+        if (objToDelete != NULL) 
+        {
+            obj_mark_for_deletion(objToDelete);
+        }
+
+        for (int i = 0; i < 2; i++) 
+        {
+            objToDelete = cur_obj_nearest_object_with_behavior(bhvSunkenShipPart);
+            if (objToDelete != NULL) {
+                obj_mark_for_deletion(objToDelete);
+            }
+        }
+
+        for (int i = 0; i < 2; i++) 
+        {
+            objToDelete = cur_obj_nearest_object_with_behavior(bhvSunkenShipPart2);
+            if (objToDelete != NULL) 
+            {
+                obj_mark_for_deletion(objToDelete);
+            }
+        }
+
+        objToDelete = cur_obj_nearest_object_with_behavior(bhvInSunkenShip);
+        if (objToDelete != NULL) 
+        {
+            obj_mark_for_deletion(objToDelete);
+        }
+
+        objToDelete = cur_obj_nearest_object_with_behavior(bhvInSunkenShip2);
+        if (objToDelete != NULL) 
+        {
+            obj_mark_for_deletion(objToDelete);
+        }
+
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_STAR, bhvStar, 0x05000000, 5000, -4800,  2500, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_JRB_SHIP_LEFT_HALF_PART, bhvShipPart3, 0x00000000, 4880,   820,  2375, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_JRB_SHIP_BACK_LEFT_PART, bhvShipPart3, 0x00000000, 4880,   820,  2375, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_JRB_SHIP_RIGHT_HALF_PART, bhvShipPart3, 0x00000000, 4880,   820,  2375, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_JRB_SHIP_BACK_RIGHT_PART, bhvShipPart3, 0x00000000, 4880,   820,  2375, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_NONE, bhvInSunkenShip3, 0x00000000, 4880,   820,  2375, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_JRB_SLIDING_BOX, bhvJrbSlidingBox, 0x00000000, 4668,  1434,  2916, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_NONE, bhvJetStream, 0x00000000, 4988, -5221,  2473, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_BOBOMB_BUDDY, bhvBobombBuddyOpensCannon, 0x00000000, -1956,  1331,  6500, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_UNAGI, bhvUnagi, 0x01010000, 8270, -3130,  1846, 0, 285, 0);
+    }
+    if ((gCurrCourseNum == COURSE_DDD) && (spawnNode->object->oBehParams == 0x000C0000))
+    {
+        struct Object *objToDelete;
+
+        objToDelete = cur_obj_nearest_object_with_behavior(bhvBowserSubDoor);
+        if (objToDelete != NULL)
+        {
+            obj_mark_for_deletion(objToDelete);
+        }
+
+        objToDelete = cur_obj_nearest_object_with_behavior(bhvBowsersSub);
+        if (objToDelete != NULL)
+        {
+            obj_mark_for_deletion(objToDelete);
+        }
+
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x001E0000, 5120, 1005,  3584, 0, 180, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x00150000, 5605, 1005,  3380, 0, 270, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x000B0000, 1800, 1005,  1275, 0,   0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x000B0000, 4000, 1005,  1075, 0, 180, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x00140000, 1830, 1005,   520, 0, 270, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x000B0000, 4000, 1005,  1275, 0,   0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x00170000, 5760, 1005,   360, 0, 270, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x00170000, 3310, 1005, -1945, 0,   0, 0);
+        spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x000D0000, 3550, 1005, -2250, 0,   0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_TTC) && (spawnNode->object->oBehParams == 0x000C0000))
+    {
+        gTTCSpeedSetting = (gTTCSpeedSetting + 1) % 4;
+        despawn_macro_objects(gCurrentArea->macroObjects);
+        spawn_macro_objects(1, gCurrentArea->macroObjects);
+    }
+}
+
 // used for warps inside one level
 void warp_area(void) {
     if (sWarpDest.type != WARP_TYPE_NOT_WARPING) {
@@ -484,6 +590,11 @@ void warp_area(void) {
         }
 
         init_mario_after_warp();
+
+        if (configRemainMod)
+        {
+            remain_mod_load_area();
+        }
     }
 }
 
