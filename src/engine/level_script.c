@@ -495,7 +495,7 @@ static void remain_mod_objects(struct SpawnInfo *spawnInfo)
     }
     if ((gCurrLevelNum == LEVEL_JRB) && (spawnInfo->behaviorScript == spinWarpAreaOne)) 
     {
-        remain_mod_place_objects(MODEL_NONE, 5300, 1650, 2500, 0, -90, 0, 0x000B0000, (void *)bhvFadingWarp);
+        remain_mod_place_objects(MODEL_NONE, 5250, 1650, 2500, 0, -90, 0, 0x000B0000, (void *)bhvFadingWarp);
     }
     if (gCurrLevelNum == LEVEL_CCM)
     {
@@ -586,6 +586,23 @@ static void remain_mod_objects(struct SpawnInfo *spawnInfo)
     }
 }
 
+static void remain_mod_create_whirlpool(u8 index, u8 id, s16 pX, s16 pY, s16 pZ, s16 strength) 
+{
+    struct Whirlpool *whirlpool;
+
+    if (sCurrAreaIndex != -1 && index < 2) 
+    {
+        if ((whirlpool = gAreas[sCurrAreaIndex].whirlpools[index]) == NULL) 
+        {
+            whirlpool = alloc_only_pool_alloc(sLevelPool, sizeof(struct Whirlpool));
+            gAreas[sCurrAreaIndex].whirlpools[index] = whirlpool;
+        }
+
+        vec3s_set(whirlpool->pos, pX, pY, pZ);
+        whirlpool->strength = strength;
+    }
+}
+
 static void remain_mod_create_warp_nodes(u8 id, u8 destLevel, u8 destArea, u8 destNode)
 {
     struct ObjectWarpNode *warpNode = alloc_only_pool_alloc(sLevelPool, sizeof(struct ObjectWarpNode));
@@ -615,6 +632,12 @@ static void remain_mod_warp_nodes(struct ObjectWarpNode *warpNode)
         if (sCurrAreaIndex == 1)
         {
             remain_mod_create_warp_nodes(0x0B, LEVEL_JRB, 0x01, 0x0B);
+
+            if (gCurrActNum == 1) 
+            {
+                // Create whirlpool with strength (-30) set to zero
+                remain_mod_create_whirlpool(0, 3, 4979, -5222, 2482, 0);
+            }
         } 
         else if (sCurrAreaIndex == 2)
         {
@@ -650,13 +673,25 @@ static void remain_mod_warp_nodes(struct ObjectWarpNode *warpNode)
     }
     if ((gCurrLevelNum == LEVEL_DDD) && (warpNode->node.id == lastWarpNodeInArea))
     {
-        remain_mod_create_warp_nodes(0x0B, LEVEL_DDD, 0x02, 0x0C);
-        remain_mod_create_warp_nodes(0x0C, LEVEL_DDD, 0x02, 0x0C);
+        if (sCurrAreaIndex == 2)
+        {
+            remain_mod_create_warp_nodes(0x0B, LEVEL_DDD, 0x02, 0x0C);
+            remain_mod_create_warp_nodes(0x0C, LEVEL_DDD, 0x02, 0x0C);
+
+            if ((gCurrActNum == 1) && (configBowsersSub))
+            {
+                // Create whirlpool with strength (50) set to zero
+                remain_mod_create_whirlpool(1, 2, 3917, -2040, -6041, 0);
+            }
+        }
     }
     if ((gCurrLevelNum == LEVEL_SL) && (warpNode->node.id == lastWarpNodeInArea))
     {
-        remain_mod_create_warp_nodes(0x0F, LEVEL_SL, 0x01, 0x20);
-        remain_mod_create_warp_nodes(0x20, LEVEL_SL, 0x01, 0x20);
+        if (sCurrAreaIndex == 1) 
+        {
+            remain_mod_create_warp_nodes(0x0F, LEVEL_SL, 0x01, 0x20);
+            remain_mod_create_warp_nodes(0x20, LEVEL_SL, 0x01, 0x20);
+        }
     }
     if ((gCurrLevelNum == LEVEL_THI) && (warpNode->node.id == lastWarpNodeInArea)) 
     {

@@ -545,6 +545,8 @@ void remain_mod_load_area()
         spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_NONE, bhvJetStream, 0x00000000, 4988, -5221,  2473, 0, 0, 0);
         spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_BOBOMB_BUDDY, bhvBobombBuddyOpensCannon, 0x00000000, -1956,  1331,  6500, 0, 0, 0);
         spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_UNAGI, bhvUnagi, 0x01010000, 8270, -3130,  1846, 0, 285, 0);
+
+        gCurrentArea->whirlpools[0]->strength = -30;
     }
     if ((gCurrCourseNum == COURSE_DDD) && (spawnNode->object->oBehParams == 0x000C0000))
     {
@@ -571,6 +573,8 @@ void remain_mod_load_area()
         spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x00170000, 5760, 1005,   360, 0, 270, 0);
         spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x00170000, 3310, 1005, -1945, 0,   0, 0);
         spawn_object_abs_with_rot_degrees(spawnNode->object, 0, MODEL_DDD_POLE, bhvDDDPole, 0x000D0000, 3550, 1005, -2250, 0,   0, 0);
+
+        gCurrentArea->whirlpools[1]->strength = 50;
     }
     if ((gCurrCourseNum == COURSE_TTC) && (spawnNode->object->oBehParams == 0x000C0000))
     {

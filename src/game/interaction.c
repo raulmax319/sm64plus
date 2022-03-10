@@ -855,7 +855,7 @@ void remain_mod_spawn_objects(struct Object *o)
     {
         spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x00230000, 0, -1176, -3700, 0, 0, 0);
     }
-    if ((gCurrCourseNum == COURSE_DDD) && (gLastCompletedStarNum == 1))
+    if ((gCurrCourseNum == COURSE_DDD) && (gLastCompletedStarNum == 1) && (configBowsersSub))
     {
         spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x000B0000, 3900, 571, -600, 0, 0, 0);
     }
