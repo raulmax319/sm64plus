@@ -772,6 +772,7 @@ static void koopa_the_quick_act_after_race(void) {
                 o->oSubAction = 2;
                 o->oMoveFlags = 0;
                 cur_obj_init_animation_with_sound(12);
+                cur_obj_play_sound_2(SOUND_GENERAL_BOING2_LOWPRIO); // Boing
             }
         }
     } else if (o->parentObj->oKoopaRaceEndpointRaceStatus != 0) {
