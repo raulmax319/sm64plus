@@ -48,6 +48,7 @@ extern s8 configFixExploits;
 
 extern s8 configBowsersSub;
 extern unsigned int configStayInCourse;
+extern unsigned int configRemainMod;
 extern s8 configSkipMissionSelect;
 extern s8 configSwitchToNextMission;
 extern s8 configSkipCutscenes;

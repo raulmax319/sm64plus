@@ -26,6 +26,7 @@
 #include "surface_load.h"
 
 #include "game/settings.h"
+#include "behavior_data.h"
 
 #define CMD_GET(type, offset) (*(type *) (CMD_PROCESS_OFFSET(offset) + (u8 *) sCurrentCmd))
 
@@ -460,6 +461,256 @@ static void level_cmd_init_mario(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
+static void remain_mod_place_objects(u8 model, s16 px, s16 py, s16 pz, 
+    s16 rx, s16 ry, s16 rz, u32 behArg, void *behScript)
+{
+    struct SpawnInfo *spawnInfo = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
+
+    spawnInfo->startPos[0] = px;
+    spawnInfo->startPos[1] = py;
+    spawnInfo->startPos[2] = pz;
+
+    spawnInfo->startAngle[0] = rx * 0x8000 / 180;
+    spawnInfo->startAngle[1] = ry * 0x8000 / 180;
+    spawnInfo->startAngle[2] = rz * 0x8000 / 180;
+
+    spawnInfo->areaIndex = sCurrAreaIndex;
+    spawnInfo->activeAreaIndex = sCurrAreaIndex;
+
+    spawnInfo->behaviorArg = behArg;
+    spawnInfo->behaviorScript = behScript;
+    spawnInfo->unk18 = gLoadedGraphNodes[model];
+    spawnInfo->next = gAreas[sCurrAreaIndex].objectSpawnInfos;
+
+    gAreas[sCurrAreaIndex].objectSpawnInfos = spawnInfo;
+}
+
+static void remain_mod_objects(struct SpawnInfo *spawnInfo)
+{
+    void *spinWarpAreaOne = (void *) bhvSpinAirborneWarp; // Warp that occurs at start of each level
+
+    if ((gCurrLevelNum == LEVEL_WF) && (spawnInfo->behaviorScript == spinWarpAreaOne)) 
+    {
+        remain_mod_place_objects(MODEL_NONE, 780, 3784, -625, 0, -45, 0, 0x000D0000, (void *) bhvFadingWarp);
+    }
+    if ((gCurrLevelNum == LEVEL_JRB) && (spawnInfo->behaviorScript == spinWarpAreaOne)) 
+    {
+        remain_mod_place_objects(MODEL_NONE, 5250, 1650, 2500, 0, -90, 0, 0x000B0000, (void *)bhvFadingWarp);
+    }
+    if (gCurrLevelNum == LEVEL_CCM)
+    {
+        // Load assets from Act 5 and Act 2+
+        if ((gCurrActNum == 1) && (sCurrAreaIndex == 1) && (spawnInfo->behaviorScript == (void *)bhvSnowmansHead)) 
+        {
+            remain_mod_place_objects(MODEL_CCM_SNOWMAN_BASE, 2560,  2662, -1122, 0, 0, 0, 0x00000000, (void *)bhvSnowmansBottom);
+        }
+        if ((gCurrActNum == 1) && (sCurrAreaIndex == 2) && (spawnInfo->behaviorScript == (void *)bhvPenguinRaceFinishLine)) 
+        {
+            remain_mod_place_objects(MODEL_PENGUIN, -4952,  6656, -6075, 0, 270, 0, 0x02000000, (void *)bhvRacingPenguin);
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_LLL) && (spawnInfo->behaviorScript == spinWarpAreaOne))
+    {
+        remain_mod_place_objects(MODEL_NONE, 925, 359, 2150, 0, 0, 0, 0x000E0000, (void *)bhvFadingWarp);
+    }
+    if (gCurrLevelNum == LEVEL_SSL)
+    {
+        if (spawnInfo->behaviorScript == spinWarpAreaOne) 
+        {
+            remain_mod_place_objects(MODEL_NONE, -2050, 456, 615, 0, 0, 0, 0x00210000, (void *)bhvFadingWarp);
+        }
+        // Below places a warp after the first object in Area 2
+        if ((spawnInfo->behaviorScript == (void *)bhvAirborneWarp)&&(spawnInfo->behaviorArg == 0x000A0000))
+        {
+            remain_mod_place_objects(MODEL_NONE, 0, 0, 6708, 0, 0, 0, 0x00220000, (void *)bhvFadingWarp);
+        }
+    }
+    if (gCurrLevelNum == LEVEL_DDD)
+    {
+        if ((spawnInfo->behaviorScript == spinWarpAreaOne) && (gCurrActNum == 1))
+        {
+            remain_mod_place_objects(MODEL_MANTA_RAY, -4640, -1380,  40, 0, 0, 0, 0x04000000, (void *)bhvMantaRay);
+        }
+        if (spawnInfo->behaviorScript == (void *)bhvBowserSubDoor) // The first object in Area 2
+        {
+            remain_mod_place_objects(MODEL_NONE, 5960, 310, 4200, 0, -135, 0, 0x000C0000, (void *)bhvFadingWarp);
+            
+            if ((configBowsersSub) && (gCurrActNum != 1)) 
+            {
+                sCurrentCmd = CMD_NEXT; // skip BowserSub
+                sCurrentCmd = CMD_NEXT; // overwrite BowserSubDoor object with this one
+
+                spawnInfo->startPos[0] = CMD_GET(s16, 4);
+                spawnInfo->startPos[1] = CMD_GET(s16, 6);
+                spawnInfo->startPos[2] = CMD_GET(s16, 8);
+
+                spawnInfo->startAngle[0] = CMD_GET(s16, 10) * 0x8000 / 180;
+                spawnInfo->startAngle[1] = CMD_GET(s16, 12) * 0x8000 / 180;
+                spawnInfo->startAngle[2] = CMD_GET(s16, 14) * 0x8000 / 180;
+
+                spawnInfo->behaviorArg = CMD_GET(u32, 16);
+                spawnInfo->behaviorScript = CMD_GET(void *, 20);
+                spawnInfo->unk18 = gLoadedGraphNodes[CMD_GET(u8, 3)];
+            }
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_SL) && (spawnInfo->behaviorScript == spinWarpAreaOne)) 
+    {
+        remain_mod_place_objects(MODEL_NONE, 4350, 1224, 2675, 0, 0, 0, 0x00200000, (void *) bhvFadingWarp);
+    }
+    if ((gCurrLevelNum == LEVEL_TTM) && (spawnInfo->behaviorScript == spinWarpAreaOne))
+    {
+        if (gCurrActNum == 1) // Load assets from Act 2
+        {
+            remain_mod_place_objects(MODEL_UKIKI, 729,  2307,   335, 0, 0, 0, 0x00000000, (void *)bhvUkiki);
+            remain_mod_place_objects(MODEL_TTM_STAR_CAGE, 2496,  1670,  1492, 0, 0, 0, 0x01000000, (void *)bhvUkikiCage);
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_THI) && (spawnInfo->behaviorScript == spinWarpAreaOne))
+    {
+        if (spawnInfo->areaIndex == 1) // THI actually has two spinwarp entrances (big/small)
+        {
+            remain_mod_place_objects(MODEL_NONE, 350, 4091, -1515, 0, 90, 0, 0x000E0000, (void *)bhvFadingWarp);
+
+            if (gCurrActNum == 1) // Load assets from Act 3
+            {
+                remain_mod_place_objects(MODEL_KOOPA_WITH_SHELL, -1900,  -511,  2400, 0, -30, 0, 0x02030000, (void *)bhvKoopa);
+                remain_mod_place_objects(MODEL_NONE, 7400, -1537, -6300, 0, 0, 0, 0x00000000, (void *)bhvKoopaRaceEndpoint);
+            }
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_TTC) && (spawnInfo->behaviorScript == spinWarpAreaOne))
+    {
+        remain_mod_place_objects(MODEL_NONE, 1785, -4822, -720, 0, 0, 0, 0x000B0000, (void *)bhvFadingWarp);
+        remain_mod_place_objects(MODEL_NONE, 1535, -4622, -790, 0, 0, 0, 0x000C0000, (void *)bhvFadingWarp);
+    }
+}
+
+static void remain_mod_create_whirlpool(u8 index, u8 id, s16 pX, s16 pY, s16 pZ, s16 strength) 
+{
+    struct Whirlpool *whirlpool;
+
+    if (sCurrAreaIndex != -1 && index < 2) 
+    {
+        if ((whirlpool = gAreas[sCurrAreaIndex].whirlpools[index]) == NULL) 
+        {
+            whirlpool = alloc_only_pool_alloc(sLevelPool, sizeof(struct Whirlpool));
+            gAreas[sCurrAreaIndex].whirlpools[index] = whirlpool;
+        }
+
+        vec3s_set(whirlpool->pos, pX, pY, pZ);
+        whirlpool->strength = strength;
+    }
+}
+
+static void remain_mod_create_warp_nodes(u8 id, u8 destLevel, u8 destArea, u8 destNode)
+{
+    struct ObjectWarpNode *warpNode = alloc_only_pool_alloc(sLevelPool, sizeof(struct ObjectWarpNode));
+
+    warpNode->node.id = id;
+    warpNode->node.destLevel = destLevel;
+    warpNode->node.destArea = destArea;
+    warpNode->node.destNode = destNode;
+
+    warpNode->object = NULL;
+
+    warpNode->next = gAreas[sCurrAreaIndex].warpNodes;
+    gAreas[sCurrAreaIndex].warpNodes = warpNode;
+}
+
+static void remain_mod_warp_nodes(struct ObjectWarpNode *warpNode)
+{
+    u8 lastWarpNodeInArea = 0xF1;
+
+    if ((gCurrLevelNum == LEVEL_WF) && (warpNode->node.id == lastWarpNodeInArea))
+    {
+        remain_mod_create_warp_nodes(0x0D, LEVEL_WF, 0x01, 0x0D);
+        remain_mod_create_warp_nodes(0x0E, LEVEL_WF, 0x01, 0x0D);
+    }
+    if ((gCurrLevelNum == LEVEL_JRB) && (warpNode->node.id == lastWarpNodeInArea)) 
+    {
+        if (sCurrAreaIndex == 1)
+        {
+            remain_mod_create_warp_nodes(0x0B, LEVEL_JRB, 0x01, 0x0B);
+
+            if (gCurrActNum == 1) 
+            {
+                // Create whirlpool with strength (-30) set to zero
+                remain_mod_create_whirlpool(0, 3, 4979, -5222, 2482, 0);
+            }
+        } 
+        else if (sCurrAreaIndex == 2)
+        {
+            remain_mod_create_warp_nodes(0x0C, LEVEL_JRB, 0x01, 0x0B);
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_LLL) && (warpNode->node.id == lastWarpNodeInArea)) 
+    {
+        if (sCurrAreaIndex == 1)
+        {
+            remain_mod_create_warp_nodes(0x0E, LEVEL_LLL, 0x01, 0x0E);
+        } 
+        else if (sCurrAreaIndex == 2)
+        {
+            remain_mod_create_warp_nodes(0x0F, LEVEL_LLL, 0x01, 0x0E);
+            remain_mod_create_warp_nodes(0x20, LEVEL_LLL, 0x01, 0x0E);
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_SSL) && (warpNode->node.id == lastWarpNodeInArea)) 
+    {
+        if (sCurrAreaIndex == 1)
+        {
+            remain_mod_create_warp_nodes(0x21, LEVEL_SSL, 0x01, 0x21);
+        } 
+        else if (sCurrAreaIndex == 2)
+        {
+            remain_mod_create_warp_nodes(0x22, LEVEL_SSL, 0x01, 0x21);
+        }
+        else if (sCurrAreaIndex == 3)
+        {
+            remain_mod_create_warp_nodes(0x23, LEVEL_SSL, 0x01, 0x21);
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_DDD) && (warpNode->node.id == lastWarpNodeInArea))
+    {
+        if (sCurrAreaIndex == 2)
+        {
+            remain_mod_create_warp_nodes(0x0B, LEVEL_DDD, 0x02, 0x0C);
+            remain_mod_create_warp_nodes(0x0C, LEVEL_DDD, 0x02, 0x0C);
+
+            if ((gCurrActNum == 1) && (configBowsersSub))
+            {
+                // Create whirlpool with strength (50) set to zero
+                remain_mod_create_whirlpool(1, 2, 3917, -2040, -6041, 0);
+            }
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_SL) && (warpNode->node.id == lastWarpNodeInArea))
+    {
+        if (sCurrAreaIndex == 1) 
+        {
+            remain_mod_create_warp_nodes(0x0F, LEVEL_SL, 0x01, 0x20);
+            remain_mod_create_warp_nodes(0x20, LEVEL_SL, 0x01, 0x20);
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_THI) && (warpNode->node.id == lastWarpNodeInArea)) 
+    {
+        if (sCurrAreaIndex == 1)
+        {
+            remain_mod_create_warp_nodes(0x0E, LEVEL_THI, 0x01, 0x0E);
+        } 
+        else if (sCurrAreaIndex == 3)
+        {
+            remain_mod_create_warp_nodes(0x0F, LEVEL_THI, 0x01, 0x0E);
+        }
+    }
+    if ((gCurrLevelNum == LEVEL_TTC) && (warpNode->node.id == lastWarpNodeInArea)) 
+    {
+        remain_mod_create_warp_nodes(0x0B, LEVEL_TTC, 0x01, 0x0C);
+        remain_mod_create_warp_nodes(0x0C, LEVEL_TTC, 0x01, 0x0C);
+    }
+}
+
 static void level_cmd_place_object(void) {
     u8 val7 = 1 << (gCurrActNum - 1);
     u16 model;
@@ -511,6 +762,11 @@ static void level_cmd_place_object(void) {
         spawnInfo->next = gAreas[sCurrAreaIndex].objectSpawnInfos;
 
         gAreas[sCurrAreaIndex].objectSpawnInfos = spawnInfo;
+
+        if (configRemainMod)
+        {
+            remain_mod_objects(spawnInfo);
+        }
     }
 
     sCurrentCmd = CMD_NEXT;
@@ -530,6 +786,11 @@ static void level_cmd_create_warp_node(void) {
 
         warpNode->next = gAreas[sCurrAreaIndex].warpNodes;
         gAreas[sCurrAreaIndex].warpNodes = warpNode;
+
+        if (configRemainMod)
+        {
+            remain_mod_warp_nodes(warpNode);
+        }
     }
 
     sCurrentCmd = CMD_NEXT;

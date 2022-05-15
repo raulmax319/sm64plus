@@ -771,6 +771,104 @@ u32 interact_water_ring(struct MarioState *m, UNUSED u32 interactType, struct Ob
     return FALSE;
 }
 
+void remain_mod_spawn_objects(struct Object *o)
+{
+    if ((gCurrCourseNum == COURSE_BOB) && (gLastCompletedStarNum == 1))
+    {
+        struct Object *objToDelete;
+
+        // Delete Cannon + Barrel at start of level
+        objToDelete = find_nearest_object_with_behavior(bhvCannonBarrelBubbles, -5694, 128, 5600);
+        if (objToDelete != NULL) 
+        {
+            obj_mark_for_deletion(objToDelete->parentObj); // bhvWaterBombCannon
+            obj_mark_for_deletion(objToDelete);
+        }
+
+        // Delete both Bob-Omb Buddies
+        for (int i = 0; i < 2; i++) 
+        {
+            objToDelete = cur_obj_nearest_object_with_behavior(bhvBobombBuddy);
+            if (objToDelete != NULL) 
+            {
+                obj_mark_for_deletion(objToDelete);
+            }
+        }
+
+        // Delete both Bowling Balls in Pit
+        for (int i = 0; i < 2; i++) 
+        {
+            objToDelete = cur_obj_nearest_object_with_behavior(bhvPitBowlingBall);
+            if (objToDelete != NULL) 
+            {
+                obj_mark_for_deletion(objToDelete);
+            }
+        }
+
+        // Delete existing BowlingBallSpawners - NOTE: This usually happens in Act 3
+        for (int i = 0; i < 2; i++) 
+        {
+            objToDelete = cur_obj_nearest_object_with_behavior(bhvBobBowlingBallSpawner);
+
+            if (objToDelete != NULL) 
+            {
+                obj_mark_for_deletion(objToDelete);
+            }
+        }
+        
+        // Spawn faster BowlingBallSpawners + small koopa - NOTE: This usually happens in Act 3
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvTtmBowlingBallSpawner, 0x00000000, 1535, 3840, -5561, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvTtmBowlingBallSpawner, 0x00020000, 524, 2825, -5400, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_KOOPA_WITH_SHELL, bhvKoopa, 0x00010000, 3400,  770,  6500, 0, 0, 0);
+
+        // Spawn Act 2 Objects
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_BOWLING_BALL, bhvPitBowlingBall, 0x00000000, -993,  886, -3565, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_BOWLING_BALL, bhvPitBowlingBall, 0x00000000, -785,  886, -4301, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_BOWLING_BALL, bhvPitBowlingBall, 0x00000000, -93, 886, -3414, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_DL_CANNON_LID, bhvCannonClosed, 0x00000000, -5694, 128, 5600, 0, 180, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_KOOPA_WITH_SHELL, bhvKoopa, 0x01020000, -4004, 0, 5221, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_BOBOMB_BUDDY, bhvBobombBuddyOpensCannon, 0x00000000, -5723,  140,  6017, 0, 0, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_BOBOMB_BUDDY, bhvBobombBuddy, DIALOG_003 << 16, -6250, 0, 6680, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_WF) && (gLastCompletedStarNum == 1))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x000E0000, 180, 3584, 340, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_JRB) && (gLastCompletedStarNum == 1))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x000C0000, 0, 1258, 3000, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_BBH) && (gLastCompletedStarNum == 1))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFlamethrower, 0x00030000, 990, -2146, -908, 0, -45, 0);
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvMerryGoRoundBooManager, 0x01000000, -1100, -2372, 1100, 0, 135, 0);
+    }
+    if ((gCurrCourseNum == COURSE_LLL) && (gLastCompletedStarNum == 5))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x000F0000, 2520, 3591, -910, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_LLL) && (gLastCompletedStarNum == 6))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x00200000, 1805, 3232, 1440, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_SSL) && (gLastCompletedStarNum == 4))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x00230000, 0, -1176, -3700, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_DDD) && (gLastCompletedStarNum == 1) && (configBowsersSub))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x000B0000, 3900, 571, -600, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_SL) && (gLastCompletedStarNum == 3))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x000F0000, 4350, 1229, 4350, 0, 0, 0);
+    }
+    if ((gCurrCourseNum == COURSE_THI) && (gLastCompletedStarNum == 6))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvFadingWarp, 0x000F0000, 0, 1843, 0, 0, 0, 0);
+    }
+}
+
 u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     u32 starIndex;
     u32 starGrabAction = ACT_STAR_DANCE_EXIT;
@@ -853,6 +951,11 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 #ifndef VERSION_JP
         update_mario_sound_and_camera(m);
 #endif
+
+        if (configRemainMod)
+        {
+            remain_mod_spawn_objects(o);
+        }
 
         if (grandStar) {
             return set_mario_action(m, ACT_JUMBO_STAR_CUTSCENE, 0);

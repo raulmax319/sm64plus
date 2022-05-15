@@ -448,6 +448,25 @@ void obj_set_angle(struct Object *obj, s16 pitch, s16 yaw, s16 roll) {
 }
 
 /*
+ * Spawns an object (with behParams) at an absolute location with a specified angle (in degrees)
+ */
+struct Object *spawn_object_abs_with_rot_degrees(struct Object *parent, s16 uselessArg, u32 model,
+                                                 const BehaviorScript *behavior, s32 behPar, s16 x,
+                                                 s16 y, s16 z, s16 rx, s16 ry, s16 rz) {
+    s16 rx_s16 = rx * (0x10000 / 360);
+    s16 ry_s16 = ry * (0x10000 / 360);
+    s16 rz_s16 = rz * (0x10000 / 360);
+
+    struct Object *newObj =
+        spawn_object_abs_with_rot(parent, uselessArg, model, behavior, x, y, z, rx_s16, ry_s16, rz_s16);
+
+    newObj->oBehParams = behPar;
+    newObj->oBehParams2ndByte = (behPar >> 16) & 0xFF;
+
+    return newObj;
+}
+
+/*
  * Spawns an object at an absolute location with a specified angle.
  */
 struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, u32 model,
@@ -867,6 +886,38 @@ struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript *b
     }
 
     *dist = minDist;
+    return closestObj;
+}
+
+struct Object *find_nearest_object_with_behavior(const BehaviorScript *behavior, f32 x, f32 y, f32 z)
+{
+    uintptr_t *behaviorAddr = segmented_to_virtual(behavior);
+    struct Object *closestObj = NULL;
+    struct Object *obj;
+    struct ObjectNode *listHead;
+    f32 minDist = 0x20000;
+    f32 dx, dy, dz, objDist;
+
+    listHead = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
+    obj = (struct Object *) listHead->next;
+
+    while (obj != (struct Object *) listHead) {
+        if (obj->behavior == behaviorAddr) {
+            if (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) {
+                dx = obj->oPosX - x;
+                dy = obj->oPosY - y;
+                dz = obj->oPosZ - z;
+                objDist = sqrtf(dx * dx + dy * dy + dz * dz);
+
+                if (objDist < minDist) {
+                    closestObj = obj;
+                    minDist = objDist;
+                }
+            }
+        }
+        obj = (struct Object *) obj->header.next;
+    }
+
     return closestObj;
 }
 

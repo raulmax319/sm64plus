@@ -199,6 +199,7 @@ s8 configFixExploits = 0;
 
 s8 configBowsersSub = 1;
 unsigned int configStayInCourse = 0;
+unsigned int configRemainMod = 0;
 s8 configSkipMissionSelect = 0;
 s8 configSwitchToNextMission = 0;
 s8 configSkipCutscenes = 0;

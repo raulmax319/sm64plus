@@ -6,6 +6,7 @@
  * which assists in determining the state of the race. It is positioned at the
  * flag.
  */
+#include "../settings.h"
 
 /**
  * Hitbox for koopa - this is used for every form except Koopa the Quick, which
@@ -521,6 +522,16 @@ static void koopa_the_quick_act_show_init_text(void) {
     s32 response = obj_update_race_proposition_dialog(
         sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].initText);
 
+    if ((configRemainMod) && (gCurrCourseNum == COURSE_BOB))
+    {
+        struct Object *checkForFlag = cur_obj_nearest_object_with_behavior(bhvKoopaRaceEndpoint);
+
+        if (checkForFlag == NULL) 
+        {
+            spawn_object_abs_with_rot_degrees(o, 0, MODEL_NONE, bhvKoopaRaceEndpoint, 0x00000000, 3304, 4242, -4603, 0, 0, 0);
+        }
+    }
+
     if (response == DIALOG_RESPONSE_YES) {
         UNUSED s32 unused;
 
@@ -751,6 +762,18 @@ static void koopa_the_quick_act_after_race(void) {
         if (dialogResponse != 0) {
             o->parentObj->oKoopaRaceEndpointDialog = DIALOG_NONE;
             o->oTimer = 0;
+
+            // Lost or cheated in Bob-Omb Race:
+            if ((configRemainMod) && (gCurrCourseNum == COURSE_BOB) && (o->parentObj->oKoopaRaceEndpointRaceStatus == 0))
+            {
+                // JUMP
+                o->oVelY = 140.0f;
+                o->oGravity = -6.0f;
+                o->oSubAction = 2;
+                o->oMoveFlags = 0;
+                cur_obj_init_animation_with_sound(12);
+                cur_obj_play_sound_2(SOUND_GENERAL_BOING2_LOWPRIO); // Boing
+            }
         }
     } else if (o->parentObj->oKoopaRaceEndpointRaceStatus != 0) {
         spawn_default_star(sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].starPos[0],
@@ -758,6 +781,18 @@ static void koopa_the_quick_act_after_race(void) {
                    sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].starPos[2]);
 
         o->parentObj->oKoopaRaceEndpointRaceStatus = 0;
+    }
+
+    if ((configRemainMod) && (gCurrCourseNum == COURSE_BOB) && (o->oPosY > 5500))
+    {
+        spawn_object_abs_with_rot_degrees(o, 0, MODEL_KOOPA_WITH_SHELL, bhvKoopa, 0x01020000, -4004, 0, 5221, 0, 0, 0);
+        o->parentObj->oKoopaRaceEndpointKoopaFinished = FALSE;
+        o->parentObj->oKoopaRaceEndpointRaceBegun = FALSE;
+        o->parentObj->oKoopaRaceEndpointRaceEnded = FALSE;
+        o->parentObj->oKoopaRaceEndpointRaceStatus = 0;
+        o->parentObj->oKoopaRaceEndpointDialog = 0;
+        o->parentObj = o;
+        obj_mark_for_deletion(o);
     }
 }
 

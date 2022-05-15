@@ -87,6 +87,7 @@ static const struct ConfigOption options[] = {
     { .name = "skip_mission_select", .type = CONFIG_TYPE_BOOL, .boolValue = &configSkipMissionSelect },
     { .name = "auto_switch_to_the_next_mission", .type = CONFIG_TYPE_BOOL, .boolValue = &configSwitchToNextMission },
     { .name = "skip_cutscenes", .type = CONFIG_TYPE_BOOL, .boolValue = &configSkipCutscenes },
+    { .name = "remain_mod", .type = CONFIG_TYPE_BOOL, .boolValue = &configRemainMod },
 
     { .name = "CAMERA", .type = CONFIG_TYPE_SECTION },
     { .name = "default_camera_mode", .type = CONFIG_TYPE_UINT, .uintValue = &configDefaultCameraMode },

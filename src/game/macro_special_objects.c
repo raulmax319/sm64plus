@@ -104,6 +104,53 @@ struct LoadedPreset {
 #define MACRO_OBJ_Z 3
 #define MACRO_OBJ_PARAMS 4
 
+void despawn_macro_objects(s16 *macroObjList)
+{
+    s32 presetID;
+
+    s16 macroObject[5]; // see the 5 #define statements above
+    struct Object *objToDelete;
+    struct LoadedPreset preset;
+
+    u16 *info16;
+
+    while (TRUE) {
+        if (*macroObjList == -1) { // An encountered value of -1 means the list has ended.
+            break;
+        }
+
+        presetID = (*macroObjList & 0x1FF) - 31; // Preset identifier for MacroObjectPresets array
+
+        if (presetID < 0) {
+            break;
+        }
+
+        // Set macro object properties from the list
+        macroObject[MACRO_OBJ_Y_ROT] = ((*macroObjList++ >> 9) & 0x7F) << 1; // Y-Rotation
+        macroObject[MACRO_OBJ_X] = *macroObjList++;                          // X position
+        macroObject[MACRO_OBJ_Y] = *macroObjList++;                          // Y position
+        macroObject[MACRO_OBJ_Z] = *macroObjList++;                          // Z position
+        macroObject[MACRO_OBJ_PARAMS] = *macroObjList++;                     // Behavior params
+
+        // Get the preset values from the MacroObjectPresets list.
+        preset.model = MacroObjectPresets[presetID].model;
+        preset.behavior = MacroObjectPresets[presetID].behavior;
+        preset.param = MacroObjectPresets[presetID].param;
+
+        if (preset.behavior != bhvYellowCoin) // Doesn't work for yellow coins - Not sure why
+        {
+            objToDelete = find_nearest_object_with_behavior(preset.behavior, macroObject[MACRO_OBJ_X],
+                                                  macroObject[MACRO_OBJ_Y], macroObject[MACRO_OBJ_Z]);
+
+            if (objToDelete != NULL) {
+                info16 = (u16 *) objToDelete->respawnInfo;
+                *info16 &= 0xFF; // ALLOW RESPAWN (cuts off first 8 bits, leaves last 8 bits)
+                obj_mark_for_deletion(objToDelete);
+            }
+        }
+    }
+}
+
 void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
     UNUSED u32 pad5C;
     s32 presetID;
