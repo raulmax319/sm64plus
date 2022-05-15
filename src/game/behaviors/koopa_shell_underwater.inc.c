@@ -26,7 +26,7 @@ void bhv_koopa_shell_underwater_loop(void) {
             break;
         case HELD_THROWN:
         case HELD_DROPPED:
-            if (configFixVariousBugs) {
+            if (configApplyBugFixes) {
                 spawn_mist_particles();
                 obj_mark_for_deletion(o);
             }
@@ -37,7 +37,7 @@ void bhv_koopa_shell_underwater_loop(void) {
             break;
     }
     if (o->oInteractStatus & INT_STATUS_STOP_RIDING) {
-        if (configFixVariousBugs) {
+        if (configApplyBugFixes) {
             spawn_mist_particles();
             obj_mark_for_deletion(o);
         }

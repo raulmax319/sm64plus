@@ -482,8 +482,10 @@ static void level_cmd_place_object(void) {
             )
         || ( 
             (gCurrLevelNum == LEVEL_JRB) 
-            && (((gCurrActNum == 1) 
-            && (CMD_GET(u8, 2) & (1 << 0))) || ((gCurrActNum >= 2) && (CMD_GET(u8, 2) & (1 << 1)))) 
+            && (
+                ((gCurrActNum == 1) && (CMD_GET(u8, 2) & (1 << 0)))
+                || ((gCurrActNum != 1) && (CMD_GET(u8, 2) & (1 << 1)))
+                )
             );
 
     if (sCurrAreaIndex != -1

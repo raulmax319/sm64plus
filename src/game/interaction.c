@@ -1573,7 +1573,7 @@ u32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Object *
 
             marioObj->oMarioPoleUnk108 = 0;
             marioObj->oMarioPoleYawVel = 0;
-            if ((configFixCollisionBugs) && ((m->pos[1] - o->oPosY) < 0)) {
+            if ((configApplyBugFixes > 1) && ((m->pos[1] - o->oPosY) < 0)) {
                 marioObj->oMarioPolePos = -o->hitboxDownOffset;
             }
             else {

@@ -15,7 +15,7 @@ void bhv_seaweed_bundle_init(void) {
     seaweed->header.gfx.scale[1] = 1.0;
     seaweed->header.gfx.scale[2] = 1.0;
     //! gfx.animFrame uninitialized
-    if (configFixVariousBugs) {
+    if (configApplyBugFixes) {
         seaweed->header.gfx.animInfo.animFrame = random_float() * 80.0f;
     }
 

@@ -1,14 +1,13 @@
 This is the changelog for the current development commit of the game. For the changelog for the public versions please check the Wiki!
 
-# v2.2.0 (??/01/2022):
+# v3.0.0 (??/01/2022):
 
 ### Additions:
 - Added the controller rumble feature from the Shindou version of the game. The strength of it can be adjusted from the "Input Mapping" page.
-- Added 11 (12?) new preset color palettes for Mario.
-- Added a way to give Mario's cap and shirt individual colors.
-- Added settings to change Mario's glove colors.
+- Completely overhauled the camera options with brand new camera modes.
+- Added 11 new preset color palettes for Mario, and increased the customization settings for custom Mario colors.
 - Added a setting to disable the "M" logo on Mario's cap.
-- Added the "Save Lives" setting, which allows you to save the number of lives you got to your save file.
+- Added the "Save the Lives Count" setting, which allows you to save the number of lives you got to your save file.
 - Added the "Better Enemies" setting, which makes some of the enemies (specifically  Boos, clams, and tiny Goombas) less annoying to deal with.
 - Added the "Fix Exploits" setting, which fixes several exploits in the game like the bomb clip, hands-free holding, and the Backwards Long Jump.
 

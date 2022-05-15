@@ -141,10 +141,10 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
         //! (Wall Overlaps) Because this doesn't update the x and z local variables,
         //  multiple walls can push mario more than is required.
         data->x += surf->normal.x * (radius - offset);
-        if (configFixCollisionBugs)
+        if (configApplyBugFixes > 1)
             x += surf->normal.x * (radius - offset);
         data->z += surf->normal.z * (radius - offset);
-        if (configFixCollisionBugs)
+        if (configApplyBugFixes > 1)
             z += surf->normal.z * (radius - offset);
 
         //! (Unreferenced Walls) Since this only returns the first four walls,
@@ -237,7 +237,7 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
 
     ceil = NULL;
 
-    if (configFixCollisionBugs)
+    if (configApplyBugFixes > 1)
         *pheight = CELL_HEIGHT_LIMIT;
 
     // Stay in this loop until out of ceilings.
@@ -290,7 +290,7 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
         // Find the ceil height at the specific point.
         height = -(x * nx + nz * z + oo) / ny;
 
-        if (configFixCollisionBugs) {
+        if (configApplyBugFixes > 1) {
             if (height > *pheight) {
                 continue;
             }
@@ -509,7 +509,7 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
         break;
 
         // floor cucking fix, shoutouts to kaze and whoever josh is
-        if (configFixCollisionBugs && peak < height) {
+        if (configApplyBugFixes > 1 && peak < height) {
             peak = height;
             *pheight = height;
             floor = surf;

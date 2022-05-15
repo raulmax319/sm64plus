@@ -147,7 +147,6 @@ extern s16 sModeOffsetYaw;
 extern s16 sSpiralStairsYawOffset;
 extern s16 s8DirModeBaseYaw;
 extern s16 s8DirModeYawOffset;
-extern s16 sManualModeYawOffset;
 extern f32 sPanDistance;
 extern f32 sCannonYOffset;
 extern struct ModeTransitionInfo sModeInfo;
@@ -340,11 +339,6 @@ s16 s8DirModeBaseYaw;
 s16 s8DirModeYawOffset;
 
 /**
- * Player-controlled yaw offset in manual mode, a multiple of 22.5 degrees.
- */
-s16 sManualModeYawOffset;
-
-/**
  * The distance that the camera will look ahead of Mario in the direction Mario is facing.
  */
 f32 sPanDistance;
@@ -502,6 +496,8 @@ extern u8 sZoomOutAreaMasks[];
 
 #define VERTICAL_MIN 6144.0f
 #define VERTICAL_MAX 12288.0f
+#define VERTICAL_MAX_LIMITED 4096.0f
+#define VERTICAL_MAX_PITCH 9216.0f
 
 static void skip_camera_interpolation(void) {
     gLakituState.skipCameraInterpolationTimestamp = gGlobalTimer;
@@ -974,20 +970,21 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 /**
  * Update the camera during custom camera mode
  */
-s32 update_custom_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff) {
-    s16 camYaw = sManualModeYawOffset;
-    s16 pitch = configCustomCameraTilt ? (look_down_slopes(camYaw) / 2.0f) : 0.0f;
+s32 update_custom_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff, f32 additionalDistance, s8 dynamic) {
+    s16 camYaw = sModeOffsetYaw;
+    s16 pitch = dynamic ? look_down_slopes(camYaw) : 0.0f;
     f32 posY;
     f32 focusY;
 
-    f32 dist = sLakituDist + (configCustomCameraDistanceDefault + gAdditionalCameraDistance) * 10.0f + (MIN(sLakituPitch, 9216.0f) - 2560.0f) / 12.0f;
+    f32 dist = (sLakituDist + (((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? configCustomCameraDistanceZoomedOut : configCustomCameraDistance) + gAdditionalCameraDistance) * 10.0f + additionalDistance)
+        * (((MIN(sLakituPitch, VERTICAL_MAX_PITCH) + VERTICAL_MIN) / (VERTICAL_MIN + VERTICAL_MAX_PITCH)) * 1.25f + 0.5f);
 
     sAreaYaw = camYaw;
 
     calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
     focus_on_mario(focus, pos, posY + yOff, focusY + yOff, dist, pitch, camYaw);
 
-    if (configCustomCameraPan) {
+    if (dynamic) {
         pan_ahead_of_player(c, TRUE);
     }
 
@@ -1293,60 +1290,64 @@ void mode_8_directions_camera(struct Camera *c) {
 /**
  * A custom mode that gives you more control with the camera
  */
-void mode_custom_camera(struct Camera *c, f32 yOff) {
+void mode_custom_camera(struct Camera *c, f32 yOff, f32 additionalDistance, s8 limitedAngle, s8 autoRotate, s8 dynamic) {
     Vec3f pos;
     s16 oldAreaYaw = sAreaYaw;
     s16 avoidYaw;
 
     radial_camera_input(c, 0.f);
-    
-    if (configCustomCameraCollisions && rotate_camera_around_walls(c, c->pos, &avoidYaw, 0x400) == 3) {
-
-        camera_approach_s16_symmetric_bool(&sManualModeYawOffset, avoidYaw, 0x200);
-        camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 0x200);
-    }
+    radial_camera_move(c);
 
     if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
-        sManualModeYawOffset += DEGREES(22.5);
+        sModeOffsetYaw += DEGREES(22.5);
         play_sound_cbutton_side();
     }
     if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
-        sManualModeYawOffset -= DEGREES(22.5);
+        sModeOffsetYaw -= DEGREES(22.5);
         play_sound_cbutton_side();
     }
 
     // Analog camera code
     if (gPlayer1Controller->stick2X != 0) {
-        sManualModeYawOffset -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
+        sModeOffsetYaw -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * gCameraSpeed;
     }
 
     if (configCenterCameraButton) {
         if (gPlayer1Controller->buttonPressed & L_TRIG) {
-            sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
+            sModeOffsetYaw = sMarioCamState->faceAngle[1] + DEGREES(180);
             play_sound_rbutton_changed();
         }
         if (gPlayer1Controller->buttonDown & L_TRIG) {
-            camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), LROTATE_SPEED);
+            camera_approach_s16_symmetric_bool(&sModeOffsetYaw, sMarioCamState->faceAngle[1] + DEGREES(180), LROTATE_SPEED);
         }
     }
 
-    if (configCustomCameraRotation) {
-        camera_approach_s16_symmetric_bool(&sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180), 
+    if (autoRotate) {
+        camera_approach_s16_symmetric_bool(&sModeOffsetYaw, sMarioCamState->faceAngle[1] + DEGREES(180), 
             ABS(gMarioState->forwardVel 
-                * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 12.0f : 16.0f)
+                * ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) ? 8.0f : 12.0f)
                 * (1.0f - MIN(MAX(sqrt((sLakituPitch + VERTICAL_MIN) / (VERTICAL_MAX+VERTICAL_MIN)), 0.0f), 0.75f))
-                * (MIN(MAX(sqr(abs_angle_diff(sManualModeYawOffset, sMarioCamState->faceAngle[1] + DEGREES(180)) / 180), 0.0f), 1.0f))
+                * (MIN(MAX(sqr(abs_angle_diff(sModeOffsetYaw, sMarioCamState->faceAngle[1] + DEGREES(180)) / 180), 0.0f), 1.0f))
                 ));
     }
 
-    lakitu_zoom(max(0, configCustomCameraDistanceZoomedOut-configCustomCameraDistanceDefault) * 10.0f, gVerticalCamera ? 0 : 0x900);
+    lakitu_zoom(0, gVerticalCamera ? 0 : 0x900);
+
+    if (limitedAngle) {
+        sLakituPitch = MIN(MAX(sLakituPitch, -VERTICAL_MIN), VERTICAL_MAX_LIMITED);
+    }
     
-    c->nextYaw = update_custom_camera(c, c->focus, pos, yOff);
+    c->nextYaw = update_custom_camera(c, c->focus, pos, yOff, additionalDistance, dynamic);
     c->pos[0] = pos[0];
     c->pos[1] = pos[1];
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
     set_camera_height(c, pos[1]);
+
+   if (dynamic && rotate_camera_around_walls(c, c->pos, &avoidYaw, 0x400) > 0) {
+
+        camera_approach_s16_symmetric_bool(&sModeOffsetYaw, avoidYaw, 0x400);
+    }
 }
 
 /**
@@ -3014,7 +3015,7 @@ void transition_to_camera_mode(struct Camera *c, s16 newMode, s16 numFrames) {
             sCUpCameraPitch = 0;
             sModeOffsetYaw = 0;
             sLakituDist = 0;
-            sLakituPitch = gVerticalCamera ? 1024 : 0;
+            sLakituPitch = 0;//gVerticalCamera ? 1024 : 0;
             sAreaYawChange = 0;
             sPanDistance = 0.f;
             sCannonYOffset = 0.f;
@@ -3048,7 +3049,7 @@ void set_camera_mode(struct Camera *c, s16 mode, s16 frames) {
         sCUpCameraPitch = 0;
         sModeOffsetYaw = 0;
         sLakituDist = 0;
-        sLakituPitch = gVerticalCamera ? 1024 : 0;
+        sLakituPitch = 0;//gVerticalCamera ? 1024 : 0;
         sAreaYawChange = 0;
 
         sModeInfo.newMode = (mode != -1) ? mode : sModeInfo.lastMode;
@@ -3201,14 +3202,8 @@ void update_camera(struct Camera *c) {
             if (gPlayer1Controller->buttonPressed & R_TRIG) {
                 if (set_cam_angle(0) == CAM_ANGLE_LAKITU) {
                     set_cam_angle(CAM_ANGLE_MARIO);
-                    if (configCustomCameraMode == 2) {
-                        sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
-                    }
                 } else {
                     set_cam_angle(CAM_ANGLE_LAKITU);
-                    if (configCustomCameraMode == 1) {
-                        sManualModeYawOffset = sMarioCamState->faceAngle[1] + DEGREES(180);
-                    }
                 }
             }
         }
@@ -3248,7 +3243,6 @@ void update_camera(struct Camera *c) {
 
     if (c->cutscene != 0) {
         sYawSpeed = 0;
-        sManualModeYawOffset = gLakituState.yaw;
         play_cutscene(c);
         sFramesSinceCutsceneEnded = 0;
     } else {
@@ -3266,133 +3260,48 @@ void update_camera(struct Camera *c) {
         sYawSpeed = 0x400;
 
         if (sSelectionFlags & CAM_MODE_MARIO_ACTIVE) {
-            if (configCustomCameraMode == 2) {
-                switch (c->mode) {
-                    case CAMERA_MODE_BEHIND_MARIO:
-                        mode_custom_camera(c, -75.0f);
-                        break;
+            switch (configAlternateCameraMode) {
+                // Manual Cam
+                case 3:
+                    manual_cam_modes(c);
+                    break;
 
-                    case CAMERA_MODE_C_UP:
-                        mode_c_up_camera(c);
-                        break;
-        
-                    case CAMERA_MODE_WATER_SURFACE:
-                        mode_custom_camera(c, 75.0f);
-                        break;
+                // Modern Cam
+                case 2:
+                    modern_cam_modes(c);
+                    break;
 
-                    case CAMERA_MODE_INSIDE_CANNON:
-                        mode_cannon_camera(c, 1);
-                        break;
+                // Mario Cam
+                case 1:
+                    mario_cam_modes(c);
+                    break;
 
-                    default:
-                        mode_custom_camera(c, 150.0f);
-                        break;
-                }
-            }
-            else {
-                switch (c->mode) {
-                    case CAMERA_MODE_BEHIND_MARIO:
-                        mode_behind_mario_camera(c);
-                        break;
-
-                    case CAMERA_MODE_C_UP:
-                        mode_c_up_camera(c);
-                        break;
-
-                    case CAMERA_MODE_WATER_SURFACE:
-                        mode_water_surface_camera(c);
-                        break;
-
-                    case CAMERA_MODE_INSIDE_CANNON:
-                        mode_cannon_camera(c, 0);
-                        break;
-
-                    default:
-                        mode_mario_camera(c);
-                        break;
-                }
+                // Lakitu Cam
+                default:
+                    lakitu_cam_modes(c);
+                    break;
             }
         } else {
-            if (configCustomCameraMode == 1) {
-                switch (c->mode) {
-                    case CAMERA_MODE_BEHIND_MARIO:
-                        mode_custom_camera(c, -75.0f);
-                        break;
+            switch (configDefaultCameraMode) {
+                // Manual Cam
+                case 3:
+                    manual_cam_modes(c);
+                    break;
 
-                    case CAMERA_MODE_C_UP:
-                        mode_c_up_camera(c);
-                        break;
+                // Modern Cam
+                case 2:
+                    modern_cam_modes(c);
+                    break;
 
-                    case CAMERA_MODE_WATER_SURFACE:
-                        mode_custom_camera(c, 75.0f);
-                        break;
+                // Mario Cam
+                case 1:
+                    mario_cam_modes(c);
+                    break;
 
-                    case CAMERA_MODE_INSIDE_CANNON:
-                        mode_cannon_camera(c, 1);
-                        break;
-
-                    default:
-                        mode_custom_camera(c, 150.0f);
-                }
-            }
-            else {
-                switch (c->mode) {
-                    case CAMERA_MODE_BEHIND_MARIO:
-                        mode_behind_mario_camera(c);
-                        break;
-
-                    case CAMERA_MODE_C_UP:
-                        mode_c_up_camera(c);
-                        break;
-
-                    case CAMERA_MODE_WATER_SURFACE:
-                        mode_water_surface_camera(c);
-                        break;
-
-                    case CAMERA_MODE_INSIDE_CANNON:
-                        mode_cannon_camera(c, 0);
-                        break;
-
-                    case CAMERA_MODE_8_DIRECTIONS:
-                        mode_8_directions_camera(c);
-                        break;
-
-                    case CAMERA_MODE_RADIAL:
-                        mode_radial_camera(c);
-                        break;
-
-                    case CAMERA_MODE_OUTWARD_RADIAL:
-                        mode_outward_radial_camera(c);
-                        break;
-
-                    case CAMERA_MODE_CLOSE:
-                        mode_lakitu_camera(c);
-                        break;
-
-                    case CAMERA_MODE_FREE_ROAM:
-                        mode_lakitu_camera(c);
-                        break;
-
-                    case CAMERA_MODE_BOSS_FIGHT:
-                        mode_boss_fight_camera(c);
-                        break;
-
-                    case CAMERA_MODE_PARALLEL_TRACKING:
-                        mode_parallel_tracking_camera(c);
-                        break;
-
-                    case CAMERA_MODE_SLIDE_HOOT:
-                        mode_slide_camera(c);
-                        break;
-
-                    case CAMERA_MODE_FIXED:
-                        mode_fixed_camera(c);
-                        break;
-
-                    case CAMERA_MODE_SPIRAL_STAIRS:
-                        mode_spiral_stairs_camera(c);
-                        break;
-                }
+                // Lakitu Cam
+                default:
+                    lakitu_cam_modes(c);
+                    break;
             }
         }
     }
@@ -3441,6 +3350,184 @@ void update_camera(struct Camera *c) {
     gLakituState.lastFrameAction = sMarioCamState->action;
 }
 
+void lakitu_cam_modes(struct Camera *c) {
+
+    switch (c->mode) {
+        case CAMERA_MODE_BEHIND_MARIO:
+            mode_behind_mario_camera(c);
+            break;
+
+        case CAMERA_MODE_C_UP:
+            mode_c_up_camera(c);
+            break;
+
+        case CAMERA_MODE_WATER_SURFACE:
+            mode_water_surface_camera(c);
+            break;
+
+        case CAMERA_MODE_INSIDE_CANNON:
+            mode_cannon_camera(c, 0);
+            break;
+
+        case CAMERA_MODE_8_DIRECTIONS:
+            mode_8_directions_camera(c);
+            break;
+
+        case CAMERA_MODE_RADIAL:
+            mode_radial_camera(c);
+            break;
+
+        case CAMERA_MODE_OUTWARD_RADIAL:
+            mode_outward_radial_camera(c);
+            break;
+
+        case CAMERA_MODE_CLOSE:
+            mode_lakitu_camera(c);
+            break;
+
+        case CAMERA_MODE_FREE_ROAM:
+            mode_lakitu_camera(c);
+            break;
+
+        case CAMERA_MODE_BOSS_FIGHT:
+            mode_boss_fight_camera(c);
+            break;
+
+        case CAMERA_MODE_PARALLEL_TRACKING:
+            mode_parallel_tracking_camera(c);
+            break;
+
+        case CAMERA_MODE_SLIDE_HOOT:
+            mode_slide_camera(c);
+            break;
+
+        case CAMERA_MODE_FIXED:
+            mode_fixed_camera(c);
+            break;
+
+        case CAMERA_MODE_SPIRAL_STAIRS:
+            mode_spiral_stairs_camera(c);
+            break;
+    }
+}
+
+void mario_cam_modes(struct Camera *c) {
+
+    switch (c->mode) {
+        case CAMERA_MODE_BEHIND_MARIO:
+            mode_behind_mario_camera(c);
+            break;
+
+        case CAMERA_MODE_C_UP:
+            mode_c_up_camera(c);
+            break;
+
+        case CAMERA_MODE_WATER_SURFACE:
+            mode_water_surface_camera(c);
+            break;
+
+        case CAMERA_MODE_INSIDE_CANNON:
+            mode_cannon_camera(c, 0);
+            break;
+
+        default:
+            mode_mario_camera(c);
+            break;
+    }
+}
+
+void manual_cam_modes(struct Camera *c) {
+
+    switch (c->mode) {
+        case CAMERA_MODE_BEHIND_MARIO:
+            mode_custom_camera(c, -75.0f, 0.0f, FALSE, FALSE, FALSE);
+            break;
+
+        case CAMERA_MODE_C_UP:
+            mode_c_up_camera(c);
+            break;
+
+        case CAMERA_MODE_WATER_SURFACE:
+            mode_custom_camera(c, 75.0f, 0.0f, FALSE, FALSE, FALSE);
+            break;
+
+        case CAMERA_MODE_INSIDE_CANNON:
+            mode_cannon_camera(c, 1);
+            break;
+
+        default:
+            mode_custom_camera(c, 150.0f, 0.0f, FALSE, FALSE, FALSE);
+            break;
+    }
+}
+
+void modern_cam_modes(struct Camera *c) {
+
+    switch (c->mode) {
+        case CAMERA_MODE_BEHIND_MARIO:
+            mode_behind_mario_camera(c);
+            break;
+
+        case CAMERA_MODE_C_UP:
+            mode_c_up_camera(c);
+            break;
+
+        case CAMERA_MODE_WATER_SURFACE:
+            mode_water_surface_camera(c);
+            break;
+
+        case CAMERA_MODE_INSIDE_CANNON:
+            mode_cannon_camera(c, 0);
+            break;
+
+        case CAMERA_MODE_8_DIRECTIONS:
+            mode_custom_camera(c, 150.0f, 256.0f, TRUE, FALSE, TRUE);
+            break;
+/*
+        case CAMERA_MODE_RADIAL:
+            mode_radial_camera(c);
+            break;
+
+        case CAMERA_MODE_OUTWARD_RADIAL:
+            mode_outward_radial_camera(c);
+            break;
+*/
+        case CAMERA_MODE_CLOSE:
+            mode_lakitu_camera(c);
+            //mode_custom_camera(c, 150.0f, -512.0f, TRUE, TRUE, TRUE);
+            break;
+            
+        case CAMERA_MODE_FREE_ROAM:
+            mode_custom_camera(c, 150.0f, -256.0f, FALSE, TRUE, TRUE);
+            break;
+
+        case CAMERA_MODE_BOSS_FIGHT:
+            mode_boss_fight_camera(c);
+            break;
+
+        case CAMERA_MODE_PARALLEL_TRACKING:
+            mode_parallel_tracking_camera(c);
+            break;
+
+        case CAMERA_MODE_SLIDE_HOOT:
+            mode_slide_camera(c);
+            break;
+
+        case CAMERA_MODE_FIXED:
+            mode_fixed_camera(c);
+            break;
+
+        case CAMERA_MODE_SPIRAL_STAIRS:
+            mode_spiral_stairs_camera(c);
+            break;
+
+        default:
+            mode_custom_camera(c, 150.0f, 0.0f, FALSE, TRUE, TRUE);
+            break;
+    }
+}
+
+
 /**
  * Reset all the camera variables to their arcane defaults
  */
@@ -3476,9 +3563,8 @@ void reset_camera(struct Camera *c) {
     sCUpCameraPitch = 0;
     sModeOffsetYaw = 0;
     sSpiralStairsYawOffset = 0;
-    sManualModeYawOffset = 0;
     sLakituDist = 0;
-    sLakituPitch = gVerticalCamera ? 1024 : 0;
+    sLakituPitch = 0;//gVerticalCamera ? 1024 : 0;
     sAreaYaw = 0;
     sAreaYawChange = 0.f;
     sPanDistance = 0.f;

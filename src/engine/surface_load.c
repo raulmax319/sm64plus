@@ -851,7 +851,7 @@ void load_object_collision_model(void) {
         }
     }
 
-    if (marioDist < gCurrentObject->oDrawingDistance * configDrawDistanceMultiplier || configDisableDrawDistance) {
+    if (marioDist < gCurrentObject->oDrawingDistance * configDrawDistanceMultiplier || configDrawDistanceMultiplier <= 0.0f) {
         gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     } else {
         gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;

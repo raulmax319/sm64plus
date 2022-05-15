@@ -136,13 +136,12 @@ static void create_render_target_views(bool is_resize) {
     DXGI_SWAP_CHAIN_DESC1 desc1;
 
     if (is_resize) {
+        
         // Release previous stuff (if any)
-
         d3d.backbuffer_view.Reset();
         d3d.depth_stencil_view.Reset();
 
         // Resize swap chain buffers
-
         ThrowIfFailed(d3d.swap_chain->GetDesc1(&desc1));
         if (configCustomInternalResolution) {
             ThrowIfFailed(d3d.swap_chain->ResizeBuffers(0, configInternalResolutionWidth, configInternalResolutionHeight, DXGI_FORMAT_UNKNOWN, desc1.Flags),
@@ -155,7 +154,6 @@ static void create_render_target_views(bool is_resize) {
     }
 
     // Get new size
-
     ThrowIfFailed(d3d.swap_chain->GetDesc1(&desc1));
 
     // Create back buffer

@@ -150,7 +150,7 @@
 #define DIK_MAIL            0xEC    /* Mail */
 #define DIK_MEDIASELECT     0xED    /* Media Select */
 
-char* gTitleString = "Super Mario 64 Plus v2.2.0";
+char* gTitleString = "Super Mario 64 Plus v3.0.0 DEV";
 
 s8 configFullscreen = 1;
 unsigned int configDefaultMonitor = 1;
@@ -171,7 +171,6 @@ float configSeqVolume[] = {1, 1, 1};
 
 // TODO (Mors): Rename these with a config prefix.
 unsigned int configFrameRate = 1;
-s8 configDisableDrawDistance = 1;
 float configDrawDistanceMultiplier = 1.0f;
 unsigned int configLevelOfDetail = 2;
 unsigned int configTextureFiltering = 2;
@@ -185,15 +184,14 @@ s8 configEnemyBouncing = 1;
 s8 configDpadControls = 1;
 s8 configFullAirControl = 0;
 
-s8 configFixVariousBugs = 1;
-s8 configFixCollisionBugs = 1;
+unsigned int configApplyBugFixes = 1;
 s8 configSaveLives = 1;
 s8 configRespawnCertainItems = 1;
 s8 configRemoveAnnoyingWarps = 1;
 s8 configBetterPowerups = 1;
 s8 configBetterEnemies = 1;
-s8 configBetterBlastAwayTheWall = 1;
 s8 configTalkNPCs = 1;
+s8 configBetterBlastAwayTheWall = 1;
 s8 configDisableFallDamage = 0;
 s8 configLeaveAnyTime = 0;
 s8 configVisibleSecrets = 0;
@@ -205,22 +203,16 @@ s8 configSkipMissionSelect = 0;
 s8 configSwitchToNextMission = 0;
 s8 configSkipCutscenes = 0;
 
-s8 configCenterCameraButton = 1;
+unsigned int configDefaultCameraMode = 0;
+unsigned int configAlternateCameraMode = 2;
 s8 gImprovedCamera = 1;
 s8 gVerticalCamera = 1;
+s8 configCenterCameraButton = 1;
 s8 gInvertedCamera = 0;
 s8 gInvertedVerticalCamera = 0;
 float gCameraSpeed = 32.0f;
 float gAdditionalCameraDistance = 0.0f;
 float gAdditionalFOV = 0.0f;
-
-unsigned int configCustomCameraMode = 0;
-s8 configCustomCameraPan = 0;
-s8 configCustomCameraTilt = 0;
-s8 configCustomCameraRotation = 0;
-s8 configCustomCameraCollisions = 0;
-float configCustomCameraDistanceDefault = 80.0f;
-float configCustomCameraDistanceZoomedOut = 160.0f;
 
 s8 configQuitOption = 1;
 unsigned int configHudLayout = 2;
@@ -293,6 +285,8 @@ unsigned int configColorHair[2][3];
 s8 configShowCapLogo = 1;
 
 unsigned int configFullscreenRefreshRate = 60;
+float configCustomCameraDistance = 100.0f;
+float configCustomCameraDistanceZoomedOut = 150.0f;
 
 unsigned int configButtonA = A_BUTTON;
 unsigned int configButtonB = D_CBUTTONS;

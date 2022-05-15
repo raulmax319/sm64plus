@@ -149,21 +149,13 @@
         "disabled_by": -1,
         "name": "Frame Rate"
     }, {
-        "internal_name": "disable_draw_distance",
-        "description": "Forces the game to always render distant objects. This may affect the gameplay slightly, and can lead to minor graphical issues.",
+        "internal_name": "draw_distance",
+        "description": "Allows you to increase or decrease the draw distance for certain objects. Setting this to 0 disables draw distance entirely and forces the game to always render distant objects. Changing this setting may affect the gameplay slightly, and can lead to minor graphical issues.",
         "os": OS_ANY,
-        "type": TYPE_BOOL,
+        "type": TYPE_DRAW_DISTANCE,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Disable Draw Distance"
-    }, {
-        "internal_name": "draw_distance_multiplier",
-        "description": "Allows you to increase or decrease the draw distance for certain objects. Has no effect when \"Disable Draw Distance\" is enabled",
-        "os": OS_ANY,
-        "type": TYPE_MULTIPLIER,
-        "enabled_by": -1,
-        "disabled_by": 1,
-        "name": "Draw Distance Multiplier"
+        "name": "Draw Distance"
     }, {
         "internal_name": "level_of_detail",
         "description": "Sets the level of detail for certain in-game models. \"High\" is recommended.",
@@ -257,77 +249,69 @@
 }, {
     "title": "GAMEPLAY",
     "items": [{
-        "internal_name": "fix_various_bugs",
-        "description": "Fixes various small issues present in the game.",
+        "internal_name": "apply_bug_fixes",
+        "description": "Fixes various small issues present in the original game. Applying collision fixes might make some speedrunning tricks impossible.",
         "os": OS_ANY,
-        "type": TYPE_BOOL,
+        "type": TYPE_FIXES,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Fix Various Bugs"
+        "name": "Apply Bug Fixes"
     }, {
-        "internal_name": "fix_collision_bugs",
-        "description": "Fixes several collision related issues in the game. Can make some speedrunning tricks impossible.",
-        "os": OS_ANY,
-        "type": TYPE_BOOL,
-        "enabled_by": -1,
-        "disabled_by": -1,
-        "name": "Fix Collision Bugs"
-    }, {
-        "internal_name": "save_lives",
+        "internal_name": "save_the_lives_count",
         "description": "Saves number of lives you have to the save file.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Save Lives"
+        "name": "Save the Lives Count"
     }, {
-        "internal_name": "make_some_items_respawn",
+        "internal_name": "make_items_respawn",
         "description": "Makes Koopa shells and blue coin switches respawn after use.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Make Some Items Respawn"
+        "name": "Make Items Respawn"
     }, {
-        "internal_name": "remove_annoying_warps",
+        "internal_name": "remove_inconvenient_warps",
         "description": "Disables warps that send you back to outside Peach's Castle. This setting also prevents you from getting game overs from those warps to prevent some levels from becoming unfair.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Remove Annoying Warps"
+        "name": "Remove Inconvenient Warps"
     }, {
-        "internal_name": "better_powerups",
+        "internal_name": "improve_powerups",
         "description": "Makes it so that underwater shells last longer, Metal Mario sinks faster, and his interactions with hazards become more consistent.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Better Powerups"
+        "name": "Improve Powerups"
     }, {
-        "internal_name": "better_enemies",
+        "internal_name": "improve_enemies",
         "description": "Makes the behavior some of the enemies (specifically Boos, clams, and tiny Goombas) less annoying.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Better Enemies"
+        "name": "Improve Enemies"
     }, {
-        "internal_name": "better_blast_away_the_wall",
-        "description": "Prevents you from taking damage after hitting the breakable wall required for the \"Blast Away the Wall\" mission. Recommended when playing with the \"Permadeath Mode\" enabled.",
-        "os": OS_ANY,
-        "type": TYPE_BOOL,
-        "enabled_by": -1,
-        "disabled_by": -1,
-        "name": "Better \"Blast Away the Wall\""
-    }, {
-        "internal_name": "better_npcs",
+        "internal_name": "improve_npcs",
         "description": "Makes talking with the NPCs more consistent.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Better NPCs"
+        "name": "Improve NPCs"
+    }, {
+        "internal_name": "improve_blast_away_the_wall",
+        "description": "Prevents you from taking damage after hitting the breakable wall required for the \"Blast Away the Wall\" mission. Recommended when playing with the \"Permadeath Mode\" enabled.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Improve \"Blast Away the Wall\""
     }, {
         "internal_name": "disable_fall_damage",
         "description": "Prevents you from taking a damage after falling from a distance.",
@@ -413,13 +397,21 @@
 }, {
     "title": "CAMERA",
     "items": [{
-        "internal_name": "center_camera_button",
-        "description": "Allows you to center the camera behind Mario by pressing L, similarly to the DS version. Doesn't work when the camera is locked.",
+        "internal_name": "default_camera_mode",
+        "description": "Changes the default camera mode.\n\nThe default (and recommended) value is \"Lakitu Cam\".",
         "os": OS_ANY,
-        "type": TYPE_BOOL,
+        "type": TYPE_CAMERA_MODE,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Center Camera Button"
+        "name": "Default Camera Mode"
+    }, {
+        "internal_name": "alternate_camera_mode",
+        "description": "Changes the alternate camera mode that you can switch to in-game.\n\nThe default value is \"Mario Cam\".",
+        "os": OS_ANY,
+        "type": TYPE_CAMERA_MODE,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Alternate Camera Mode"
     }, {
         "internal_name": "horizontal_analog_camera",
         "description": "Allows horizontal analog camera movement using the right analog stick, and removes most camera movement limits.",
@@ -437,11 +429,19 @@
         "disabled_by": -1,
         "name": "Vertical Analog Camera"
     }, {
+        "internal_name": "center_camera_button",
+        "description": "Allows you to center the camera behind Mario by pressing L, similarly to the DS version. Doesn't work when the camera is locked.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Center Camera Button"
+    }, {
         "internal_name": "invert_horizontal_camera_controls",
         "description": "Inverts the horizontal camera controls when the \"Horizontal Analog Camera\" setting is enabled.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
-        "enabled_by": 1,
+        "enabled_by": 2,
         "disabled_by": -1,
         "name": "Invert Horizontal Camera Controls"
     }, {
@@ -449,7 +449,7 @@
         "description": "Inverts the vertical camera controls when the \"Verical Analog Camera\" setting is enabled.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
-        "enabled_by": 2,
+        "enabled_by": 3,
         "disabled_by": -1,
         "name": "Invert Vertical Camera Controls"
     }, {
@@ -476,68 +476,6 @@
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Additional FoV"
-    }],
-    "hidden": false,
-    "reload_with_preset": true,
-    "os": OS_ANY
-}, {
-    "title": "CUSTOM CAMERA",
-    "items": [{
-        "internal_name": "custom_camera_mode",
-        "description": "Replaces one of the existing camera modes with a brand customizable camera mode. Take that, Lakitu!",
-        "os": OS_ANY,
-        "type": TYPE_CAMERA_MODE,
-        "enabled_by": -1,
-        "disabled_by": -1,
-        "name": "Custom Camera Mode"
-    }, {
-        "internal_name": "auto_pan_custom_camera",
-        "description": "Allows the custom camera to pan automatically to give you a better view of what's ahead.",
-        "os": OS_ANY,
-        "type": TYPE_BOOL,
-        "enabled_by": 0,
-        "disabled_by": -1,
-        "name": "Auto Pan Custom Camera"
-    }, {
-        "internal_name": "auto_tilt_custom_camera",
-        "description": "Makes the custom camera automatically tilt down on slopes.",
-        "os": OS_ANY,
-        "type": TYPE_BOOL,
-        "enabled_by": 0,
-        "disabled_by": -1,
-        "name": "Auto Tilt Custom Camera"
-    }, {
-        "internal_name": "auto_rotate_custom_camera",
-        "description": "Makes the custom camera automatically face towards Mario's direction.",
-        "os": OS_ANY,
-        "type": TYPE_BOOL,
-        "enabled_by": 0,
-        "disabled_by": -1,
-        "name": "Auto Rotate Custom Camera"
-    }, {
-        "internal_name": "custom_camera_collisions",
-        "description": "Tries to make the custom camera clip through the terrain less.",
-        "os": OS_ANY,
-        "type": TYPE_BOOL,
-        "enabled_by": 0,
-        "disabled_by": -1,
-        "name": "Custom Camera Collisions"
-    }, {
-        "internal_name": "default_custom_camera_distance",
-        "description": "Sets the default custom camera distance.\n\nThe default value is 100.",
-        "os": OS_ANY,
-        "type": TYPE_FLOAT,
-        "enabled_by": 0,
-        "disabled_by": -1,
-        "name": "Custom Camera Distance (Default)"
-    }, {
-        "internal_name": "zoomed_out_custom_camera_distance",
-        "description": "Sets the custom camera distance when zoomed out.\n\nThe default value is 180.",
-        "os": OS_ANY,
-        "type": TYPE_FLOAT,
-        "enabled_by": 0,
-        "disabled_by": -1,
-        "name": "Custom Camera Distance (Zoomed Out)"
     }],
     "hidden": false,
     "reload_with_preset": true,
@@ -1144,6 +1082,22 @@
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Fullscreen Refresh Rate"
+    }, {
+        "internal_name": "custom_camera_distance",
+        "description": "Sets the default camera distance when using the \"Modern\" and \"Custom\" camera settings.\n\nThe default value is 100.",
+        "os": OS_ANY,
+        "type": TYPE_FLOAT,
+        "enabled_by": 0,
+        "disabled_by": -1,
+        "name": "Custom Camera Distance"
+    }, {
+        "internal_name": "zoomed_out_custom_camera_distance",
+        "description": "Sets the zoomed out camera distance when using the \"Modern\" and \"Custom\" camera settings.\n\nThe default value is 180.",
+        "os": OS_ANY,
+        "type": TYPE_FLOAT,
+        "enabled_by": 0,
+        "disabled_by": -1,
+        "name": "Zoomed Out Custom Camera Distance"
     }],
     "hidden": true,
     "reload_with_preset": true,

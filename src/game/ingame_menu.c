@@ -2457,9 +2457,8 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     u8 textLakituMario[] = { TEXT_LAKITU_MARIO };
     u8 textLakituStop[] = { TEXT_LAKITU_STOP };
 
-    u8 textCustomMario[] = { TEXT_CUSTOM_MARIO };
-    u8 textCustomStop[] = { TEXT_CUSTOM_STOP };
-    u8 textLakituCustom[] = { TEXT_LAKITU_CUSTOM };
+    u8 textDefaultAlternate[] = { TEXT_DEFAULT_ALTERNATE };
+    u8 textDefaultStop[] = { TEXT_DEFAULT_STOP };
 #ifdef VERSION_EU
     u8 textNormalUpClose[][20] = {
         { TEXT_NORMAL_UPCLOSE },
@@ -2476,10 +2475,6 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 #else
     u8 textNormalUpClose[] = { TEXT_NORMAL_UPCLOSE };
     u8 textNormalFixed[] = { TEXT_NORMAL_FIXED };
-
-    u8 textCustomUpClose[] = { TEXT_CUSTOM_UPCLOSE };
-    u8 textCustomFixed[] = { TEXT_CUSTOM_FIXED };
-    u8 textNormalCustom[] = { TEXT_NORMAL_CUSTOM };
 #endif
 
     handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 2);
@@ -2487,10 +2482,14 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
-    print_generic_string(x + 14, y + 2, (configCustomCameraMode == 2) ? textLakituCustom : ((configCustomCameraMode == 1) ? textCustomMario : textLakituMario));
-    print_generic_string(x + TXT1_X, y - 13, (configCustomCameraMode == 2) ? textNormalCustom : ((configCustomCameraMode == 1) ? textCustomUpClose : textNormalUpClose));
-    print_generic_string(x + 124, y + 2, (configCustomCameraMode == 1) ? textCustomStop : textLakituStop);
-    print_generic_string(x + TXT2_X, y - 13, (configCustomCameraMode == 1) ? textCustomFixed : textNormalFixed);
+    s8 defaultConfig = configDefaultCameraMode == 0 && configDefaultCameraMode == 1;
+
+    print_generic_string(x + 14, y + 2, defaultConfig ? textLakituMario : textDefaultAlternate);
+    if (defaultConfig)
+        print_generic_string(x + TXT1_X, y - 13, textNormalUpClose);
+    print_generic_string(x + 124, y + 2, defaultConfig ? textLakituStop : textDefaultStop);
+    if (defaultConfig)
+        print_generic_string(x + TXT2_X, y - 13, textNormalFixed);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     create_dl_translation_matrix(MENU_MTX_PUSH, ((*index - 1) * xIndex) + x, y + Y_VAL7, 0);

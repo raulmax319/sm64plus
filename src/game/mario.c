@@ -552,7 +552,7 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
 f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
     UNUSED f32 unused;
 
-    if (configFixCollisionBugs)
+    if (configApplyBugFixes > 1)
         return find_ceil(pos[0], height + 4.0f, pos[2], ceil);
     else
         return find_ceil(pos[0], height + 80.0f, pos[2], ceil);
@@ -1372,7 +1372,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
         vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
         m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
     }
-    if (configFixCollisionBugs)
+    if (configApplyBugFixes > 1)
         m->ceilHeight = vec3f_find_ceil(m->pos, m->pos[1], &m->ceil);
     else
         m->ceilHeight = vec3f_find_ceil(&m->pos[0], m->floorHeight, &m->ceil);
@@ -1717,7 +1717,7 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
 
     // Short hitbox for crouching/crawling/etc.
     if (m->action & ACT_FLAG_SHORT_HITBOX
-    || (configFixCollisionBugs && m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)) {
+    || (configApplyBugFixes > 1 && m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)) {
         m->marioObj->hitboxHeight = 100.0f;
     } else {
         m->marioObj->hitboxHeight = 160.0f;

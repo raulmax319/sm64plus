@@ -1028,13 +1028,13 @@ static void gfx_sp_vertex(size_t n_vertices, size_t dest_index, const Vtx *verti
             int b = rsp.current_lights[rsp.current_num_lights - 1].col[2];
             
             // Detect if these are one of Mario's colors
-            bool mario_hat = (r == 0x02);
-            bool mario_shirt = (r == 0x03);
-            bool mario_overalls = (r == 0x04);
-            bool mario_gloves = (r == 0x05);
-            bool mario_shoes = (r == 0x06);
-            bool mario_skin = (r == 0x07);
-            bool mario_hair = (r == 0x08);
+            bool mario_hat = (r == 0x02 && g == 0x02 && b == 0x02);
+            bool mario_shirt = (r == 0x03 && g == 0x03 && b == 0x03);
+            bool mario_overalls = (r == 0x04 && g == 0x04 && b == 0x04);
+            bool mario_gloves = (r == 0x05 && g == 0x05 && b == 0x05);
+            bool mario_shoes = (r == 0x06 && g == 0x06 && b == 0x06);
+            bool mario_skin = (r == 0x07 && g == 0x07 && b == 0x07);
+            bool mario_hair = (r == 0x08 && g == 0x08 && b == 0x08);
 
             // Override them lazily
             if (mario_hat) {

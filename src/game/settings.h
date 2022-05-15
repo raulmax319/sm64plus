@@ -20,7 +20,6 @@ extern float configOverallVolume;
 extern float configSeqVolume[];
 
 extern unsigned int configFrameRate;
-extern s8 configDisableDrawDistance;
 extern float configDrawDistanceMultiplier;
 extern unsigned int configLevelOfDetail;
 extern unsigned int configTextureFiltering;
@@ -34,15 +33,14 @@ extern s8 configEnemyBouncing;
 extern s8 configDpadControls;
 extern s8 configFullAirControl;
 
-extern s8 configFixVariousBugs;
-extern s8 configFixCollisionBugs;
+extern unsigned int configApplyBugFixes;
 extern s8 configSaveLives;
 extern s8 configRespawnCertainItems;
 extern s8 configRemoveAnnoyingWarps;
 extern s8 configBetterPowerups;
 extern s8 configBetterEnemies;
-extern s8 configBetterBlastAwayTheWall;
 extern s8 configTalkNPCs;
+extern s8 configBetterBlastAwayTheWall;
 extern s8 configDisableFallDamage;
 extern s8 configLeaveAnyTime;
 extern s8 configVisibleSecrets;
@@ -54,22 +52,16 @@ extern s8 configSkipMissionSelect;
 extern s8 configSwitchToNextMission;
 extern s8 configSkipCutscenes;
 
-extern s8 configCenterCameraButton;
+extern unsigned int configDefaultCameraMode;
+extern unsigned int configAlternateCameraMode;
 extern s8 gImprovedCamera;
 extern s8 gVerticalCamera;
+extern s8 configCenterCameraButton;
 extern s8 gInvertedCamera;
 extern s8 gInvertedVerticalCamera;
 extern float gCameraSpeed;
 extern float gAdditionalCameraDistance;
 extern float gAdditionalFOV;
-
-extern unsigned int configCustomCameraMode;
-extern s8 configCustomCameraPan;
-extern s8 configCustomCameraTilt;
-extern s8 configCustomCameraRotation;
-extern s8 configCustomCameraCollisions;
-extern float configCustomCameraDistanceDefault;
-extern float configCustomCameraDistanceZoomedOut;
 
 extern s8 configQuitOption;
 extern unsigned int configHudLayout;
@@ -142,6 +134,8 @@ extern unsigned int configColorHair[2][3];
 extern s8 configShowCapLogo;
 
 extern unsigned int configFullscreenRefreshRate;
+extern float configCustomCameraDistance;
+extern float configCustomCameraDistanceZoomedOut;
 
 extern unsigned int configButtonA;
 extern unsigned int configButtonB;

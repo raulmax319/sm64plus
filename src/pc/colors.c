@@ -87,7 +87,7 @@ void set_colors() {
             break;
 
         case 3: // Fire Mario
-            DEF_COLOR_RED(configColorCap);
+            DEF_COLOR_WHITE(configColorCap);
 
             DEF_COLOR_WHITE(configColorShirt);
 
@@ -158,7 +158,7 @@ void set_colors() {
             break;
 
         case 7: // Fire Luigi
-            DEF_COLOR_GREEN(configColorCap);
+            DEF_COLOR_WHITE(configColorCap);
 
             DEF_COLOR_WHITE(configColorShirt);
 

@@ -40,7 +40,7 @@ static void fish_spawner_act_spawn(void) {
     // Spawn and animate the schoolQuantity of fish if Mario enters render distance
     // or the stage is Secret Aquarium.
     // Fish moves randomly within a range of 700.0f.
-    if (!configDisableDrawDistance)
+    if (configDrawDistanceMultiplier > 0.0f)
 	{
         if (o->oDistanceToMario < minDistToMario || gCurrLevelNum == LEVEL_SA) {
             for (i = 0; i < schoolQuantity; i++) {
