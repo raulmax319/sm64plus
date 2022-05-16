@@ -359,13 +359,13 @@
         "disabled_by": -1,
         "name": "Tie Bowser's Sub to Missions"
     }, {
-        "internal_name": "stay_in_course_after_getting_a_star",
-        "description": "Allows you to keep playing the course after a getting a Power Star, and makes minor level design changes to make it all work.",
+        "internal_name": "always_stay_in_course",
+        "description": "Allows you to continue playing the game after a getting a Power Star, and makes gameplay changes to make it all work depending on the option. When not sure, either go with \"Nah\" or \"Smart\".",
         "os": OS_ANY,
         "type": TYPE_STAR_MESSAGE,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Stay in Course After Getting a Star"
+        "name": "Always Stay in Course"
     }, {
         "internal_name": "skip_mission_select",
         "description": "Skips the mission select screen and always chooses the next available mission. Completing all 6 main missions in a course unlocks the mission select again.",
@@ -376,7 +376,7 @@
         "name": "Skip Mission Select"
     }, {
         "internal_name": "auto_switch_to_the_next_mission",
-        "description": "Makes it so that completing a course will automatically make it restart and choose the next available mission.",
+        "description": "Makes completing a course directly start the next available mission.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -390,14 +390,6 @@
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Skip Cutscenes"
-    }, {
-        "internal_name": "remain_mod",
-        "description": "Allows you to fully complete each level without leaving it.  Please set 'Stay in Course After Getting a Star' to ALWAYS.",
-        "os": OS_ANY,
-        "type": TYPE_BOOL,
-        "enabled_by": -1,
-        "disabled_by": -1,
-        "name": "Remain Mod"
     }],
     "hidden": false,
     "reload_with_preset": true,
@@ -1095,7 +1087,7 @@
         "description": "Sets the default camera distance when using the \"Modern\" and \"Custom\" camera settings.\n\nThe default value is 100.",
         "os": OS_ANY,
         "type": TYPE_FLOAT,
-        "enabled_by": 0,
+        "enabled_by": -1,
         "disabled_by": -1,
         "name": "Custom Camera Distance"
     }, {
@@ -1103,7 +1095,7 @@
         "description": "Sets the zoomed out camera distance when using the \"Modern\" and \"Custom\" camera settings.\n\nThe default value is 180.",
         "os": OS_ANY,
         "type": TYPE_FLOAT,
-        "enabled_by": 0,
+        "enabled_by": -1,
         "disabled_by": -1,
         "name": "Zoomed Out Custom Camera Distance"
     }],

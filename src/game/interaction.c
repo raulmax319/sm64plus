@@ -952,7 +952,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         update_mario_sound_and_camera(m);
 #endif
 
-        if (configRemainMod)
+        if (configStayInCourse == 3)
         {
             remain_mod_spawn_objects(o);
         }

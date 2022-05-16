@@ -522,7 +522,7 @@ static void koopa_the_quick_act_show_init_text(void) {
     s32 response = obj_update_race_proposition_dialog(
         sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].initText);
 
-    if ((configRemainMod) && (gCurrCourseNum == COURSE_BOB))
+    if ((configStayInCourse == 3) && (gCurrCourseNum == COURSE_BOB))
     {
         struct Object *checkForFlag = cur_obj_nearest_object_with_behavior(bhvKoopaRaceEndpoint);
 
@@ -764,7 +764,7 @@ static void koopa_the_quick_act_after_race(void) {
             o->oTimer = 0;
 
             // Lost or cheated in Bob-Omb Race:
-            if ((configRemainMod) && (gCurrCourseNum == COURSE_BOB) && (o->parentObj->oKoopaRaceEndpointRaceStatus == 0))
+            if ((configStayInCourse == 3) && (gCurrCourseNum == COURSE_BOB) && (o->parentObj->oKoopaRaceEndpointRaceStatus == 0))
             {
                 // JUMP
                 o->oVelY = 140.0f;
@@ -783,7 +783,7 @@ static void koopa_the_quick_act_after_race(void) {
         o->parentObj->oKoopaRaceEndpointRaceStatus = 0;
     }
 
-    if ((configRemainMod) && (gCurrCourseNum == COURSE_BOB) && (o->oPosY > 5500))
+    if ((configStayInCourse == 3) && (gCurrCourseNum == COURSE_BOB) && (o->oPosY > 5500))
     {
         spawn_object_abs_with_rot_degrees(o, 0, MODEL_KOOPA_WITH_SHELL, bhvKoopa, 0x01020000, -4004, 0, 5221, 0, 0, 0);
         o->parentObj->oKoopaRaceEndpointKoopaFinished = FALSE;
