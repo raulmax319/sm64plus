@@ -72,3 +72,14 @@ sm64config.txt
 !/sound/**/*custom*/**/*.aiff
 !/assets/**/*custom*.bin
 !/assets/**/*custom*/**/*.bin
+.idea/.idea.sm64-port.dir/.idea/discord.xml
+.idea/.idea.sm64-port.dir/.idea/encodings.xml
+.idea/.idea.sm64-port.dir/.idea/indexLayout.xml
+.idea/.idea.sm64-port.dir/.idea/vcs.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/codeStyles/Project.xml
+.idea/discord.xml
+.idea/git_toolbox_prj.xml
+.idea/modules.xml
+.idea/sm64-port.iml
+.idea/vcs.xml

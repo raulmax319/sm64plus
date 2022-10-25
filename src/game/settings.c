@@ -205,14 +205,14 @@ s8 configSkipCutscenes = 0;
 
 unsigned int configDefaultCameraMode = 0;
 unsigned int configAlternateCameraMode = 2;
-s8 gImprovedCamera = 1;
-s8 gVerticalCamera = 1;
+s8 configImprovedCamera = 1;
+s8 configVerticalCamera = 1;
 s8 configCenterCameraButton = 1;
-s8 gInvertedCamera = 0;
-s8 gInvertedVerticalCamera = 0;
-float gCameraSpeed = 32.0f;
-float gAdditionalCameraDistance = 0.0f;
-float gAdditionalFOV = 0.0f;
+s8 configInvertedCamera = 0;
+s8 configInvertedVerticalCamera = 0;
+float configCameraSpeed = 32.0f;
+float configAdditionalCameraDistance = 0.0f;
+float configAdditionalFOV = 0.0f;
 
 s8 configQuitOption = 1;
 unsigned int configHudLayout = 2;

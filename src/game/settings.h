@@ -54,14 +54,14 @@ extern s8 configSkipCutscenes;
 
 extern unsigned int configDefaultCameraMode;
 extern unsigned int configAlternateCameraMode;
-extern s8 gImprovedCamera;
-extern s8 gVerticalCamera;
+extern s8 configImprovedCamera;
+extern s8 configVerticalCamera;
 extern s8 configCenterCameraButton;
-extern s8 gInvertedCamera;
-extern s8 gInvertedVerticalCamera;
-extern float gCameraSpeed;
-extern float gAdditionalCameraDistance;
-extern float gAdditionalFOV;
+extern s8 configInvertedCamera;
+extern s8 configInvertedVerticalCamera;
+extern float configCameraSpeed;
+extern float configAdditionalCameraDistance;
+extern float configAdditionalFOV;
 
 extern s8 configQuitOption;
 extern unsigned int configHudLayout;

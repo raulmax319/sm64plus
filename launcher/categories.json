@@ -150,7 +150,7 @@
         "name": "Frame Rate"
     }, {
         "internal_name": "draw_distance",
-        "description": "Allows you to increase or decrease the draw distance for certain objects. Setting this to 0 disables draw distance entirely and forces the game to always render distant objects. Changing this setting may affect the gameplay slightly, and can lead to minor graphical issues.",
+        "description": "Allows you to increase or decrease the draw distance for certain objects. Disabling this setting forces the game to always render distant objects. Any changes to this setting may affect the gameplay slightly, and can lead to minor graphical issues.",
         "os": OS_ANY,
         "type": TYPE_DRAW_DISTANCE,
         "enabled_by": -1,
@@ -174,7 +174,7 @@
         "name": "Texture Filtering"
     }, {
         "internal_name": "noise_type",
-        "description": "Changes the type of noise used for transparency effects. \"Chunky\" gives the most accurate result.",
+        "description": "Changes the type of noise used for transparency effects. \"Chunky\" gives the most accurate results.",
         "os": OS_ANY,
         "type": TYPE_NOISE_TYPE,
         "enabled_by": -1,
@@ -228,7 +228,7 @@
         "name": "Enemy Bouncing"
     }, {
         "internal_name": "dpad_controls",
-        "description": "Allows you to control Mario and navigate the menus with the D-Pad. Can conflict with some debug settings.",
+        "description": "Allows you to control Mario and navigate the menus with the D-Pad.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -236,7 +236,7 @@
         "name": "D-Pad Controls"
     }, {
         "internal_name": "full_air_control",
-        "description": "Gives you near full control over Mario's direction when jumping. This setting significantly alters the way the controls feel and is not recommended for the first-time players.",
+        "description": "Gives you near full control over Mario's direction on air. This setting significantly alters the way the controls feel and is not recommended for the first-time players.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -258,7 +258,7 @@
         "name": "Apply Bug Fixes"
     }, {
         "internal_name": "save_the_lives_count",
-        "description": "Saves number of lives you have to the save file.",
+        "description": "Saves amount of lives you have to the currently selected save file. In the original game the number of lives resets each time you load a save file.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -274,7 +274,7 @@
         "name": "Make Items Respawn"
     }, {
         "internal_name": "remove_inconvenient_warps",
-        "description": "Disables warps that send you back to outside Peach's Castle. This setting also prevents you from getting game overs from those warps to prevent some levels from becoming unfair.",
+        "description": "Disables warps that send you back to outside Peach's Castle. This setting also prevents you from getting game overs from those warps to prevent them from becoming unfair.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -282,7 +282,7 @@
         "name": "Remove Inconvenient Warps"
     }, {
         "internal_name": "improve_powerups",
-        "description": "Makes it so that underwater shells last longer, Metal Mario sinks faster, and his interactions with hazards become more consistent.",
+        "description": "Makes it so that underwater shells last longer, Metal Mario sinks faster, and Metal Mario's interactions with hazards become more consistent.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -298,7 +298,7 @@
         "name": "Improve Enemies"
     }, {
         "internal_name": "improve_npcs",
-        "description": "Makes talking with the NPCs more consistent.",
+        "description": "Makes talking with the NPCs easier and more consistent.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -314,7 +314,7 @@
         "name": "Improve \"Blast Away the Wall\""
     }, {
         "internal_name": "disable_fall_damage",
-        "description": "Prevents you from taking a damage after falling from a distance.",
+        "description": "Prevents you from taking damage after falling from a distance.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -330,7 +330,7 @@
         "name": "Allow Leaving the Course at Any Time"
     }, {
         "internal_name": "make_secrets_visible",
-        "description": "Gives the secrets a sparkle effect to make them easier to notice. Useful if you're having trouble finding them, but it might also make those missions too easy.",
+        "description": "Gives all the secrets a sparkle effect to make them easier to find. Might make some missions too easy.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -338,7 +338,7 @@
         "name": "Make Secrets Visible"
     }, {
         "internal_name": "fix_exploits",
-        "description": "Fixes various exploits like the bomb clip, hands-free holding, and the Backwards Long Jump. Perfect for those who hate fun.",
+        "description": "Fixes various exploits like the bomb clip, hands-free holding, and Backwards Long Jump. Perfect for those who hate fun.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -352,7 +352,7 @@
     "title": "PROGRESSION",
     "items": [{
         "internal_name": "tie_bowsers_sub_to_missions",
-        "description": "Forces Bowser's sub to always appear in the first mission of Dire Dire Docks, and never in the later ones.",
+        "description": "Forces Bowser's submarine to always appear in the first mission of Dire Dire Docks, and never in the later ones. Recommended if you have no idea what this setting is all about.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -368,7 +368,7 @@
         "name": "Always Stay in Course"
     }, {
         "internal_name": "skip_mission_select",
-        "description": "Skips the mission select screen and always chooses the next available mission. Completing all 6 main missions in a course unlocks the mission select again.",
+        "description": "Skips the mission select screen and always chooses the next available mission. Completing all 6 main missions in a course enables the mission select screen again.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -376,7 +376,7 @@
         "name": "Skip Mission Select"
     }, {
         "internal_name": "auto_switch_to_the_next_mission",
-        "description": "Makes completing a course directly start the next available mission.",
+        "description": "Makes completing a course automatically start the next available mission.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -398,7 +398,7 @@
     "title": "CAMERA",
     "items": [{
         "internal_name": "default_camera_mode",
-        "description": "Changes the default camera mode.\n\nThe default (and recommended) value is \"Lakitu Cam\".",
+        "description": "Changes the default camera mode.\n\nThe default mode from the original game is \"Lakitu Cam\".",
         "os": OS_ANY,
         "type": TYPE_CAMERA_MODE,
         "enabled_by": -1,
@@ -406,7 +406,7 @@
         "name": "Default Camera Mode"
     }, {
         "internal_name": "alternate_camera_mode",
-        "description": "Changes the alternate camera mode that you can switch to in-game.\n\nThe default value is \"Mario Cam\".",
+        "description": "Changes the alternate camera mode that you can switch to in-game.\n\nThe default mode from the original game is \"Mario Cam\".",
         "os": OS_ANY,
         "type": TYPE_CAMERA_MODE,
         "enabled_by": -1,
@@ -422,7 +422,7 @@
         "name": "Horizontal Analog Camera"
     }, {
         "internal_name": "vertical_analog_camera",
-        "description": "Allows you to tilt the camera vertically using the right analog stick on some camera modes, including the custom camera mode.",
+        "description": "Allows you to tilt the camera vertically using the right analog stick on the new camera modes.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -484,7 +484,7 @@
     "title": "HUD AND UI",
     "items": [{
         "internal_name": "add_quit_option",
-        "description": "Adds an \"Exit to Desktop\" option to the pause menu.\nIt's the little things...",
+        "description": "Adds an \"Exit to Desktop\" option to the pause menu.\nIt's the little things that make a difference...",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -524,7 +524,7 @@
         "name": "Add Zeroes to Counters"
     }, {
         "internal_name": "always_show_the_100_coin_star",
-        "description": "Always shows the indicator for the 100 coin star in both the mission select menu, and the HUD while the \"Show the Collected Stars\" setting is enabled.",
+        "description": "Always shows the indicator for the 100 coin star in both the mission select screen, and the HUD while the \"Show the Collected Stars\" setting is enabled.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
