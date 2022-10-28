@@ -18,6 +18,11 @@
 #define DEADZONE_LEFT gControllerLeftDeadzone * 10
 #define DEADZONE_RIGHT gControllerRightDeadzone * 10
 
+// Checks if the button is pressed, and if so adds it to the pressedButtons variable
+#define SET_BUTTON(SDL_BUTTON) if (SDL_GameControllerGetButton(sdl_cntrl, SDL_BUTTON)) pressedButtons |= 1 << (SDL_BUTTON + 1)
+//Checks if the button is in the pressedButtons variable, and if so passes it to the emulated controls
+#define CHECK_BUTTON(CONFIG_BUTTON, GAME_BUTTON) if ((pressedButtons & CONFIG_BUTTON) != 0) pad->button |= GAME_BUTTON
+
 static bool init_ok;
 static SDL_GameController *sdl_cntrl;
 static bool haptics_enabled;
@@ -85,29 +90,52 @@ static void controller_sdl_read(OSContPad *pad) {
         }
     }
 
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_START)) pad->button |= configButtonStart;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_BACK)) pad->button |= configButtonSelect;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_LEFTSHOULDER)) pad->button |= configButtonL;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) pad->button |= configButtonR;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_A)) pad->button |= configButtonA;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_B)) pad->button |= configButtonB;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_X)) pad->button |= configButtonX;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_Y)) pad->button |= configButtonY;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_LEFTSTICK)) pad->button |= configButtonThumbLeft;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_RIGHTSTICK)) pad->button |= configButtonThumbRight;
+    int16_t ltrig = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+    int16_t rtrig = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_DPAD_UP)) pad->button |= U_JPAD;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_DPAD_DOWN)) pad->button |= D_JPAD;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_DPAD_LEFT)) pad->button |= L_JPAD;
-    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) pad->button |= R_JPAD;
+    int pressedButtons = 0;
+
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_START);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_BACK);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_A);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_B);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_X);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_Y);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_LEFTSTICK);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_RIGHTSTICK);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_DPAD_UP);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+    SET_BUTTON(SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+    if (ltrig > 30 * 256) pressedButtons |= 1 << 22;
+    if (rtrig > 30 * 256) pressedButtons |= 1 << 23;
+
+    CHECK_BUTTON(configButtonA, A_BUTTON);
+    CHECK_BUTTON(configButtonB, B_BUTTON);
+    CHECK_BUTTON(configButtonZ, Z_TRIG);
+    CHECK_BUTTON(configButtonStart, START_BUTTON);
+    CHECK_BUTTON(configButtonL, L_TRIG);
+    CHECK_BUTTON(configButtonR, R_TRIG);
+    CHECK_BUTTON(configButtonCUp, U_CBUTTONS);
+    CHECK_BUTTON(configButtonCDown, D_CBUTTONS);
+    CHECK_BUTTON(configButtonCLeft, L_CBUTTONS);
+    CHECK_BUTTON(configButtonCRight, R_CBUTTONS);
+
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_DPAD_UP))
+        pad->button |= U_JPAD;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+        pad->button |= D_JPAD;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+        pad->button |= L_JPAD;
+    if (SDL_GameControllerGetButton(sdl_cntrl, SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+        pad->button |= R_JPAD;
 
     int16_t leftx = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_LEFTX);
     int16_t lefty = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_LEFTY);
     int16_t rightx = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_RIGHTX);
     int16_t righty = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_RIGHTY);
-
-    int16_t ltrig = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
-    int16_t rtrig = SDL_GameControllerGetAxis(sdl_cntrl, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 
 #ifdef TARGET_WEB
     // Firefox has a bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1606562
@@ -145,8 +173,8 @@ static void controller_sdl_read(OSContPad *pad) {
         if (righty > 0x4000) pad->button |= D_CBUTTONS;
     }
 
-    if (ltrig > 30 * 256) pad->button |= configButtonZL;
-    if (rtrig > 30 * 256) pad->button |= configButtonZR;
+    //if (ltrig > 30 * 256) pad->button |= configButtonZL;
+    //if (rtrig > 30 * 256) pad->button |= configButtonZR;
 
     uint32_t magnitude_sq = (uint32_t)(leftx * leftx) + (uint32_t)(lefty * lefty);
     if (magnitude_sq > (uint32_t)(DEADZONE_LEFT * DEADZONE_LEFT)) {

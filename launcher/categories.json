@@ -1106,103 +1106,87 @@
     "title": "INPUT MAPPING",
     "items": [{
         "internal_name": "button_a",
-        "description": "The action assigned to the A button of your controller.\nIt might correspond to a different button on some controllers.",
+        "description": "The controller button assigned to the A button.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "A"
+        "name": "A (Jump)"
     }, {
         "internal_name": "button_b",
-        "description": "The action assigned to the B button of your controller.\nIt might correspond to a different button on some controllers.",
+        "description": "The controller button assigned to the B button.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "B"
-    }, {
-        "internal_name": "button_x",
-        "description": "The action assigned to the X button of your controller.\nIt might correspond to a different button on some controllers.",
-        "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
-        "enabled_by": -1,
-        "disabled_by": -1,
-        "name": "X"
-    }, {
-        "internal_name": "button_y",
-        "description": "The action assigned to the Y button of your controller.\nIt might correspond to a different button on some controllers.",
-        "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
-        "enabled_by": -1,
-        "disabled_by": -1,
-        "name": "Y"
+        "name": "B (Punch)"
     }, {
         "internal_name": "button_start",
-        "description": "The action assigned to the Start button of your controller.\nIt might correspond to a different button on some controllers.",
+        "description": "The controller button assigned to the Start button.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Start"
-    }, {
-        "internal_name": "button_select",
-        "description": "The action assigned to the Back button of your controller.\nIt might correspond to a different button on some controllers.",
-        "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
-        "enabled_by": -1,
-        "disabled_by": -1,
-        "name": "Back"
+        "name": "Start (Pause)"
     }, {
         "internal_name": "button_l",
-        "description": "The action assigned to the L button of your controller.\nIt might correspond to a different button on some controllers.",
+        "description": "The controller button assigned to the L trigger.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "L"
+        "name": "L (Center Camera)"
     }, {
         "internal_name": "button_r",
-        "description": "The action assigned to the R button of your controller.\nIt might correspond to a different button on some controllers.",
+        "description": "The controller button assigned to the R trigger.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "R"
+        "name": "R (Change Camera)"
     }, {
-        "internal_name": "button_zl",
-        "description": "The action assigned to the ZL trigger of your controller.\nIt might correspond to a different button on some controllers.",
+        "internal_name": "button_z",
+        "description": "The controller button assigned to the Z trigger.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "ZL"
+        "name": "Z (Crouch)"
     }, {
-        "internal_name": "button_zr",
-        "description": "The action assigned to the ZR trigger of your controller.\nIt might correspond to a different button on some controllers.",
+        "internal_name": "button_cup",
+        "description": "The controller button assigned to the C-Up button.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "ZR"
+        "name": "C-Up (Zoom In)"
     }, {
-        "internal_name": "button_thumbleft",
-        "description": "The action assigned to the press of left thumbstick. of your controller.\nIt might correspond to a different button on some controllers.",
+        "internal_name": "button_cdown",
+        "description": "The controller button assigned to the C-Down button.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Left Stick Press"
+        "name": "C-Down (Zoom Out)"
     }, {
-        "internal_name": "button_thumbright",
-        "description": "The action assigned to the press of right thumbstick. of your controller.\nIt might correspond to a different button on some controllers.",
+        "internal_name": "button_cleft",
+        "description": "The controller button assigned to the C-Left button.",
         "os": OS_ANY,
-        "type": TYPE_MOUSE_BUTTON,
+        "type": TYPE_CONTROLLER_BUTTON,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Right Stick Press"
+        "name": "C-Left (Rotate Left)"
+    }, {
+        "internal_name": "button_cright",
+        "description": "The controller button assigned to the C-Right button.",
+        "os": OS_ANY,
+        "type": TYPE_CONTROLLER_BUTTON,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "C-Right (Rotate Right)"
     }, {
         "internal_name": "left_analog_stick_deadzone",
-        "description": "Lets you adjust the left analog stick deadzone on your controller.\nThe default value is 512.",
+        "description": "Adjusts the left analog stick deadzone of your controller.\nThe default value is 512.",
         "os": OS_ANY,
         "type": TYPE_UINT,
         "enabled_by": -1,
@@ -1210,7 +1194,7 @@
         "name": "Left Analog Stick Deadzone"
     }, {
         "internal_name": "right_analog_stick_deadzone",
-        "description": "Lets you adjust the right analog stick deadzone on your controller.\nThe default value is 512.",
+        "description": "Adjusts the right analog stick deadzone of your controller.\nThe default value is 512.",
         "os": OS_ANY,
         "type": TYPE_UINT,
         "enabled_by": -1,
@@ -1218,7 +1202,7 @@
         "name": "Right Analog Stick Deadzone"
     }, {
         "internal_name": "rumble_strength",
-        "description": "Enables and sets the strenght of the controller rumble effect.\nWorks the same way as the Super Mario 3D All-Stars and the Shindou Edition.",
+        "description": "Enables and sets the strength of the controller rumble effect.\nWorks the same way as the Super Mario 3D All-Stars and the Shindou Edition.",
         "os": OS_ANY,
         "type": TYPE_PERCENTAGE,
         "enabled_by": -1,
@@ -1285,7 +1269,7 @@
         "type": TYPE_KEY,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "C-Up"
+        "name": "C-Up (Zoom In)"
     }, {
         "internal_name": "key_cdown",
         "description": "The keyboard key assigned to the C-Down button.\nThe value is a DirectInput scan code.",
@@ -1293,7 +1277,7 @@
         "type": TYPE_KEY,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "C-Down"
+        "name": "C-Down (Zoom Out)"
     }, {
         "internal_name": "key_cleft",
         "description": "The keyboard key assigned to the C-Left button.\nThe value is a DirectInput scan code.",
@@ -1301,7 +1285,7 @@
         "type": TYPE_KEY,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "C-Left"
+        "name": "C-Left (Rotate Left)"
     }, {
         "internal_name": "key_cright",
         "description": "The keyboard key assigned to the C-Right button.\nThe value is a DirectInput scan code.",
@@ -1309,7 +1293,7 @@
         "type": TYPE_KEY,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "C-Right"
+        "name": "C-Right (Rotate Right)"
     }, {
         "internal_name": "key_stickup",
         "description": "The keyboard key assigned to the stick up action.\n\nThe value is a DirectInput scan code.",
