@@ -496,7 +496,7 @@ extern u8 sZoomOutAreaMasks[];
 
 #define VERTICAL_MIN 6144.0f
 #define VERTICAL_MAX 12288.0f
-#define VERTICAL_MAX_LIMITED 4096.0f
+#define VERTICAL_MAX_LIMITED 8192.0f
 #define VERTICAL_MAX_PITCH 9216.0f
 
 static void skip_camera_interpolation(void) {
@@ -972,7 +972,8 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
  */
 s32 update_custom_camera(struct Camera *c, Vec3f focus, Vec3f pos, f32 yOff, f32 additionalDistance, s8 dynamic) {
     s16 camYaw = sModeOffsetYaw;
-    s16 pitch = dynamic ? look_down_slopes(camYaw) : 0.0f;
+    //s16 pitch = dynamic ? look_down_slopes(camYaw) : 0.0f;
+    s16 pitch = 0.0f;
     f32 posY;
     f32 focusY;
 
@@ -1294,9 +1295,6 @@ void mode_custom_camera(struct Camera *c, f32 yOff, f32 additionalDistance, s8 l
     Vec3f pos;
     s16 oldAreaYaw = sAreaYaw;
     s16 avoidYaw;
-
-    radial_camera_input(c, 0.f);
-    radial_camera_move(c);
 
     if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
         sModeOffsetYaw += DEGREES(22.5);
@@ -3262,13 +3260,8 @@ void update_camera(struct Camera *c) {
         if (sSelectionFlags & CAM_MODE_MARIO_ACTIVE) {
             switch (configAlternateCameraMode) {
                 // Manual Cam
-                case 3:
-                    manual_cam_modes(c);
-                    break;
-
-                // Modern Cam
                 case 2:
-                    modern_cam_modes(c);
+                    manual_cam_modes(c);
                     break;
 
                 // Mario Cam
@@ -3284,13 +3277,8 @@ void update_camera(struct Camera *c) {
         } else {
             switch (configDefaultCameraMode) {
                 // Manual Cam
-                case 3:
-                    manual_cam_modes(c);
-                    break;
-
-                // Modern Cam
                 case 2:
-                    modern_cam_modes(c);
+                    manual_cam_modes(c);
                     break;
 
                 // Mario Cam
@@ -3439,8 +3427,13 @@ void mario_cam_modes(struct Camera *c) {
 void manual_cam_modes(struct Camera *c) {
 
     switch (c->mode) {
+
+        case CAMERA_MODE_8_DIRECTIONS:
+            mode_custom_camera(c, 150.0f, 256.0f, TRUE, FALSE, TRUE);
+            break;
+
         case CAMERA_MODE_BEHIND_MARIO:
-            mode_custom_camera(c, -75.0f, 0.0f, FALSE, FALSE, FALSE);
+            mode_custom_camera(c, -75.0f, 0.0f, FALSE, TRUE, TRUE);
             break;
 
         case CAMERA_MODE_C_UP:
@@ -3448,7 +3441,7 @@ void manual_cam_modes(struct Camera *c) {
             break;
 
         case CAMERA_MODE_WATER_SURFACE:
-            mode_custom_camera(c, 75.0f, 0.0f, FALSE, FALSE, FALSE);
+            mode_custom_camera(c, 75.0f, 0.0f, FALSE, TRUE, TRUE);
             break;
 
         case CAMERA_MODE_INSIDE_CANNON:
@@ -3456,77 +3449,10 @@ void manual_cam_modes(struct Camera *c) {
             break;
 
         default:
-            mode_custom_camera(c, 150.0f, 0.0f, FALSE, FALSE, FALSE);
-            break;
-    }
-}
-
-void modern_cam_modes(struct Camera *c) {
-
-    switch (c->mode) {
-        case CAMERA_MODE_BEHIND_MARIO:
-            mode_behind_mario_camera(c);
-            break;
-
-        case CAMERA_MODE_C_UP:
-            mode_c_up_camera(c);
-            break;
-
-        case CAMERA_MODE_WATER_SURFACE:
-            mode_water_surface_camera(c);
-            break;
-
-        case CAMERA_MODE_INSIDE_CANNON:
-            mode_cannon_camera(c, 0);
-            break;
-
-        case CAMERA_MODE_8_DIRECTIONS:
-            mode_custom_camera(c, 150.0f, 256.0f, TRUE, FALSE, TRUE);
-            break;
-/*
-        case CAMERA_MODE_RADIAL:
-            mode_radial_camera(c);
-            break;
-
-        case CAMERA_MODE_OUTWARD_RADIAL:
-            mode_outward_radial_camera(c);
-            break;
-*/
-        case CAMERA_MODE_CLOSE:
-            mode_lakitu_camera(c);
-            //mode_custom_camera(c, 150.0f, -512.0f, TRUE, TRUE, TRUE);
-            break;
-            
-        case CAMERA_MODE_FREE_ROAM:
-            mode_custom_camera(c, 150.0f, -256.0f, FALSE, TRUE, TRUE);
-            break;
-
-        case CAMERA_MODE_BOSS_FIGHT:
-            mode_boss_fight_camera(c);
-            break;
-
-        case CAMERA_MODE_PARALLEL_TRACKING:
-            mode_parallel_tracking_camera(c);
-            break;
-
-        case CAMERA_MODE_SLIDE_HOOT:
-            mode_slide_camera(c);
-            break;
-
-        case CAMERA_MODE_FIXED:
-            mode_fixed_camera(c);
-            break;
-
-        case CAMERA_MODE_SPIRAL_STAIRS:
-            mode_spiral_stairs_camera(c);
-            break;
-
-        default:
             mode_custom_camera(c, 150.0f, 0.0f, FALSE, TRUE, TRUE);
             break;
     }
 }
-
 
 /**
  * Reset all the camera variables to their arcane defaults
