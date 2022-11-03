@@ -69,7 +69,7 @@ static const struct ConfigOption options[] = {
 
     { .name = "GAMEPLAY", .type = CONFIG_TYPE_SECTION },
     { .name = "apply_bug_fixes", .type = CONFIG_TYPE_UINT, .uintValue = &configApplyBugFixes },
-    { .name = "save_the_lives_count", .type = CONFIG_TYPE_BOOL, .boolValue = &configSaveLives },
+    { .name = "save_lives_to_save_file", .type = CONFIG_TYPE_BOOL, .boolValue = &configSaveLives },
     { .name = "make_items_respawn", .type = CONFIG_TYPE_BOOL, .boolValue = &configRespawnCertainItems },
     { .name = "remove_inconvenient_warps", .type = CONFIG_TYPE_BOOL, .boolValue = &configRemoveAnnoyingWarps },
     { .name = "improve_powerups", .type = CONFIG_TYPE_BOOL, .boolValue = &configBetterPowerups },

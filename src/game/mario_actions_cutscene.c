@@ -644,7 +644,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                         m->actionState = 1;
                     }
                     // If it's automatic
-                    else if (configStayInCourse == 2) {
+                    else if (configStayInCourse == 3) {
                         if ((gLastCompletedStarNum == 7) ||
                             (gCurrAreaIndex > 1 && (gCurrLevelNum == LEVEL_SSL || gCurrLevelNum == LEVEL_LLL || gCurrLevelNum == LEVEL_WDW))) {
                             enable_time_stop();
@@ -657,7 +657,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                         }
                     }
                     // If it's set to always
-                    else if (configStayInCourse == 3) {
+                    else if (configStayInCourse == 2) {
                         save_file_do_save(gCurrSaveFileNum - 1);
                         m->actionState = 2;
                     }

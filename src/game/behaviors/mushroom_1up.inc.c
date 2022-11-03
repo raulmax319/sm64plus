@@ -57,7 +57,7 @@ void one_up_loop_in_air(void) {
     }
 }
 
-void pole_1up_move_towards_mario(void) {
+void pole_1up_move_towards_mario(s16 speed) {
     f32 sp34 = gMarioObject->header.gfx.pos[0] - o->oPosX;
     f32 sp30 = gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY;
     f32 sp2C = gMarioObject->header.gfx.pos[2] - o->oPosZ;
@@ -65,8 +65,8 @@ void pole_1up_move_towards_mario(void) {
 
     obj_turn_toward_object(o, gMarioObject, 16, 0x1000);
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, sp2A, 0x1000);
-    o->oVelY = sins(o->oMoveAnglePitch) * 30.0f;
-    o->oForwardVel = coss(o->oMoveAnglePitch) * 30.0f;
+    o->oVelY = sins(o->oMoveAnglePitch) * speed;
+    o->oForwardVel = coss(o->oMoveAnglePitch) * speed;
     bhv_1up_interact();
 }
 
@@ -290,7 +290,7 @@ void bhv_1up_hidden_in_pole_loop(void) {
             break;
 
         case 1:
-            pole_1up_move_towards_mario();
+            pole_1up_move_towards_mario(30.0f);
             sp26 = object_step();
             break;
 
@@ -302,6 +302,40 @@ void bhv_1up_hidden_in_pole_loop(void) {
             one_up_loop_in_air();
 
             if (o->oTimer == 37) {
+                cur_obj_become_tangible();
+                o->oAction = 1;
+                o->oForwardVel = 10.0f;
+            }
+            break;
+    }
+}
+
+void bhv_1up_green_demon_loop(void) {
+    UNUSED s16 sp26;
+    switch (o->oAction) {
+        case 0:
+            o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
+            if (o->o1UpHiddenUnkF4 == o->oBehParams2ndByte) {
+                o->oVelY = 40.0f;
+                o->oAction = 3;
+                o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
+                play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
+            }
+            break;
+
+        case 1:
+            pole_1up_move_towards_mario((gGreenDemon > 2) ? 30.0f : 20.0f);
+            sp26 = object_step();
+            break;
+
+        case 3:
+            sp26 = object_step();
+            if (o->oTimer >= 18)
+                spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
+
+            one_up_loop_in_air();
+
+            if (o->oTimer == ((gGreenDemon > 2) ? 105 : 90)) {
                 cur_obj_become_tangible();
                 o->oAction = 1;
                 o->oForwardVel = 10.0f;

@@ -323,7 +323,7 @@ unsigned int configKeyWalk = DIK_LSHIFT;
 s16 gCollectedStar = 0;
 
 s8 stay_in_level() {
-    if (configStayInCourse == 2 && (
+    if (configStayInCourse == 3 && (
     // If we have collected the first star in the first act in these levels, kick us out.
     (gCurrActNum == 1 && gCollectedStar == 0 &&
     (gCurrLevelNum == LEVEL_BOB || gCurrLevelNum == LEVEL_WF || gCurrLevelNum == LEVEL_JRB || gCurrLevelNum == LEVEL_BBH || 

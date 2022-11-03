@@ -286,8 +286,8 @@ void load_mario_area(void) {
         spawn_objects_from_info(0, gMarioSpawnInfo);
     }
 
-    if (gGreenDemon > 1 && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS) {
-        spawn_object(gMarioObject, MODEL_1UP, bhvHidden1upInPole);
+    if (gGreenDemon > 1 && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD && gCurrLevelNum != LEVEL_CASTLE_GROUNDS && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3) {
+        spawn_object_relative(0, 0, 256, 0, gMarioObject, MODEL_1UP, bhvGreenDemon);
     }
 }
 

@@ -1274,6 +1274,10 @@ s32 bowser_dead_default_stage_ending(void) {
         bowser_spawn_collectable();
         set_mario_npc_dialog(MARIO_DIALOG_STOP);
         ret = TRUE;
+
+        if (gGreenDemon > 1) {
+            spawn_object_relative(0, 0, 256, 0, gMarioObject, MODEL_1UP, bhvHidden1upInPole);
+        }
     }
     return ret;
 }
@@ -1315,6 +1319,10 @@ s32 bowser_dead_final_stage_ending(void) {
         // And at last, hide him
         bowser_dead_hide();
         ret = TRUE;
+
+        if (gGreenDemon > 1) {
+            spawn_object_relative(0, 0, 256, 0, gMarioObject, MODEL_1UP, bhvGreenDemon);
+        }
     }
     return ret;
 }

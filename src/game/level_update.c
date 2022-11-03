@@ -595,7 +595,7 @@ void warp_area(void) {
 
         init_mario_after_warp();
 
-        if (configStayInCourse == 3)
+        if (configStayInCourse == 2)
         {
             remain_mod_load_area();
         }

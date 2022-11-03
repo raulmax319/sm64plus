@@ -4,7 +4,6 @@ This is the changelog for the current development commit of the game. For the ch
 
 ### Additions:
 - Added the controller rumble feature from the Shindou version of the game. The strength of it can be adjusted from the "Input Mapping" page.
-- Completely overhauled the camera options with brand new camera modes.
 - Added 11 new preset color palettes for Mario, and increased the customization settings for custom Mario colors.
 - Added a setting to disable the "M" logo on Mario's cap.
 - Added the "Save the Lives Count" setting, which allows you to save the number of lives you got to your save file.
@@ -12,7 +11,10 @@ This is the changelog for the current development commit of the game. For the ch
 - Added the "Fix Exploits" setting, which fixes several exploits in the game like the bomb clip, hands-free holding, and the Backwards Long Jump.
 
 ### Changes:
+- Completely overhauled the \"Stay in Course After Getting a Star\" setting. You no longer get kicked out of a level after defeating bosses or getting key stars. This should make the whole experience way more seamless.
 - Completely overhauled the custom camera mode. It should now feel much more natural to use and behave much closer to the cameras of more modern 3D platformers.
+- Changed how controller button mapping works. This unfortunately makes button mapping way harder without the use of the launcher.
+- Tweaked the difficulty of the "Constant Chase!" mode option for the Green Demon Mode and made it way more forgiving. For those who want an experience closer to how it was before, now there's an "Unfair Chase!!!" option as well.
 - Updated the codebase to include the latest commits to the sm64-port repository, and made countless technical changes and fixes in the process. This ideally shouldn't make any visible differences in gameplay.
 - Made Mario crouch faster with the \"Improved Controls\" setting enabled.
 - Made it easier to do long jumps with the \"Improved Controls\" setting.
@@ -27,15 +29,18 @@ This is the changelog for the current development commit of the game. For the ch
 - Altered the default presets slightly.
 
 ### Fixes:
-- Fixed a bug that would cause the level progression to break when "Tie Bowser's Sub to Missions" and "Stay in Course After Getting a Star" settings are both enabled.
+- Fixed a bug that would cause the level progression to break when \"Tie Bowser's Sub to Missions\" and \"Stay in Course After Getting a Star\" settings are both enabled.
 - Fixed custom player colors affecting other objects in the game.
 - Made fixes mouse movement in the Mario's face screen.
 - Made Mario's face not get affected by the custom player colors.
 - Fixed some inconsistencies with some internal setting names, which would result in with unpredictable behavior.
 
 ### Launcher:
+- Made various small improvements to the launcher.
+- Completely overhauled the way controller button mapping works. Now you have to assign buttons to actions, not the other way around. This should make it much easier to remap non-standard controllers for the game.
 - Made the launcher load the recommended preset value when a setting is missing from the settings file. This should fix many issues caused by upgrading the game from older versions.
 - Fixed incorrect preset loading behavior and reverted it back to how it functioned prior to v2.1.0.
 - Made the launcher reload settings after closing the game.
 - Fixed the menu position incorrectly moving around when you minimize the launcher window while it's in fullscreen.
-- Added all the new option types for the new settings fields.
+- Fixed the launched game appearing behind the launcher window.
+- Fixed many more minor bugs.

@@ -178,7 +178,7 @@ void bhv_snowmans_head_init(void) {
     o->oFriction = 0.999f;
     o->oBuoyancy = 2.0f;
 
-    if (configStayInCourse == 3)
+    if (configStayInCourse == 2)
     {
         return;
     }

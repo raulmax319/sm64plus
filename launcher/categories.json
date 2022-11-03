@@ -2,7 +2,7 @@
     "title": "DISPLAY",
     "items": [{
         "internal_name": "fullscreen",
-        "description": "Makes the game run at fullscreen. Can be toggled in-game via the \"Alt + Enter\" key combo.",
+        "description": "Makes the game run in fullscreen. Can be toggled in-game via the \"Alt + Enter\" key combo.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -10,7 +10,7 @@
         "name": "Fullscreen"
     }, {
         "internal_name": "default_monitor",
-        "description": "The monitor the game renders on in fullscreen.",
+        "description": "The monitor the game renders on in the fullscreen mode.",
         "os": OS_ANY,
         "type": TYPE_MONITOR,
         "enabled_by": -1,
@@ -150,7 +150,7 @@
         "name": "Frame Rate"
     }, {
         "internal_name": "draw_distance",
-        "description": "Allows you to increase or decrease the draw distance for certain objects. Disabling this setting forces the game to always render distant objects. Any changes to this setting may affect the gameplay slightly, and can lead to minor graphical issues.",
+        "description": "Allows you to change the draw distance for certain objects. Disabling this setting forces the game to always render distant objects. Changes to this setting may affect the gameplay and lead to minor graphical issues.",
         "os": OS_ANY,
         "type": TYPE_DRAW_DISTANCE,
         "enabled_by": -1,
@@ -166,7 +166,7 @@
         "name": "Level of Detail"
     }, {
         "internal_name": "texture_filtering",
-        "description": "Changes the way the textures are filtered. \"3 Point\" filtering is what's used in the original game, but it only works with the \"Direct3D 11\" backend.",
+        "description": "Changes the way the textures are filtered. \"3 Point\" filtering is what's used in the original game, but it only works with the \"Direct3D 11\" graphics backend.",
         "os": OS_ANY,
         "type": TYPE_TEXTURE_FILTERING,
         "enabled_by": -1,
@@ -182,7 +182,7 @@
         "name": "Noise Type"
     }, {
         "internal_name": "force_4by3",
-        "description": "Limits the game aspect ratio to be roughly the same as the original game on Nintendo 64, regardless of the resolution.",
+        "description": "Limits the game's aspect ratio to be roughly the same as the original game on Nintendo 64, regardless of the resolution.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -204,7 +204,7 @@
         "name": "Improved Controls"
     }, {
         "internal_name": "improved_swimming",
-        "description": "Makes tweaks to the swimming controls specifically, also making them more precise.",
+        "description": "Makes minor tweaks to the swimming controls, also making them more precise.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -236,7 +236,7 @@
         "name": "D-Pad Controls"
     }, {
         "internal_name": "full_air_control",
-        "description": "Gives you near full control over Mario's direction on air. This setting significantly alters the way the controls feel and is not recommended for the first-time players.",
+        "description": "Gives you near full control over Mario's direction in air. This setting significantly alters the way the controls feel and is not recommended for the first-time players.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -257,13 +257,13 @@
         "disabled_by": -1,
         "name": "Apply Bug Fixes"
     }, {
-        "internal_name": "save_the_lives_count",
+        "internal_name": "save_lives_to_save_file",
         "description": "Saves amount of lives you have to the currently selected save file. In the original game the number of lives resets each time you load a save file.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Save the Lives Count"
+        "name": "Save Lives to Save File"
     }, {
         "internal_name": "make_items_respawn",
         "description": "Makes Koopa shells and blue coin switches respawn after use.",
@@ -282,7 +282,7 @@
         "name": "Remove Inconvenient Warps"
     }, {
         "internal_name": "improve_powerups",
-        "description": "Makes it so that underwater shells last longer, Metal Mario sinks faster, and Metal Mario's interactions with hazards become more consistent.",
+        "description": "Makes it so that underwater shells last longer and Metal Mario sinks faster, and Metal Mario's interactions become more consistent.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -290,7 +290,7 @@
         "name": "Improve Powerups"
     }, {
         "internal_name": "improve_enemies",
-        "description": "Makes the behavior some of the enemies (specifically Boos, clams, and tiny Goombas) less annoying.",
+        "description": "Tweaks the behavior of some enemies, specifically Boos, Clams, and Tiny Goombas.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -322,7 +322,7 @@
         "name": "Disable Fall Damage"
     }, {
         "internal_name": "allow_leaving_the_course_at_any_time",
-        "description": "Makes it so that you don't have to be standing still to leave the course from the pause menu.",
+        "description": "Makes it so that you don't have to be standing still to leave the course from the pause menu. Do not use this to cheat, that wouldn't be very nice!",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -352,7 +352,7 @@
     "title": "PROGRESSION",
     "items": [{
         "internal_name": "tie_bowsers_sub_to_missions",
-        "description": "Forces Bowser's submarine to always appear in the first mission of Dire Dire Docks, and never in the later ones. Recommended if you have no idea what this setting is all about.",
+        "description": "Makes Bowser's submarine to always appear in the first mission of Dire Dire Docks, and never in the later ones. It's recommended to leave this enabled if you have no idea what any of this is about.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -360,7 +360,7 @@
         "name": "Tie Bowser's Sub to Missions"
     }, {
         "internal_name": "always_stay_in_course",
-        "description": "Allows you to continue playing the game after a getting a Power Star, and makes gameplay changes to make it all work depending on the option. When not sure, either go with \"Nah\" or \"Smart\".",
+        "description": "Allows you to continue playing the game after a getting a Power Star, and makes gameplay changes to make it all work.",
         "os": OS_ANY,
         "type": TYPE_STAR_MESSAGE,
         "enabled_by": -1,
@@ -376,7 +376,7 @@
         "name": "Skip Mission Select"
     }, {
         "internal_name": "auto_switch_to_the_next_mission",
-        "description": "Makes completing a course automatically start the next available mission.",
+        "description": "Makes completing a mission automatically start the next available one.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -398,7 +398,7 @@
     "title": "CAMERA",
     "items": [{
         "internal_name": "default_camera_mode",
-        "description": "Changes the default camera mode.\n\nThe default mode from the original game is \"Lakitu Cam\".",
+        "description": "Changes the default camera mode.\nThe default mode from the original game is \"Lakitu Cam\".",
         "os": OS_ANY,
         "type": TYPE_CAMERA_MODE,
         "enabled_by": -1,
@@ -406,7 +406,7 @@
         "name": "Default Camera Mode"
     }, {
         "internal_name": "alternate_camera_mode",
-        "description": "Changes the alternate camera mode that you can switch to in-game.\n\nThe default mode from the original game is \"Mario Cam\".",
+        "description": "Changes the alternate camera mode that you can switch to in-game.\nThe default mode from the original game is \"Mario Cam\".",
         "os": OS_ANY,
         "type": TYPE_CAMERA_MODE,
         "enabled_by": -1,
@@ -422,7 +422,7 @@
         "name": "Horizontal Analog Camera"
     }, {
         "internal_name": "vertical_analog_camera",
-        "description": "Allows you to tilt the camera vertically using the right analog stick on the new camera modes.",
+        "description": "Allows you to tilt the camera vertically using the right analog stick in the \"Custom\" camera mode.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -454,7 +454,7 @@
         "name": "Invert Vertical Camera Controls"
     }, {
         "internal_name": "analog_camera_speed",
-        "description": "Sets the movement speed of the analog camera.\n\nThe default value is 32.",
+        "description": "Sets the movement speed of the analog camera.\nThe default value is 32.",
         "os": OS_ANY,
         "type": TYPE_FLOAT,
         "enabled_by": -1,
@@ -462,7 +462,7 @@
         "name": "Analog Camera Speed"
     }, {
         "internal_name": "additional_camera_distance",
-        "description": "Pans the camera further away, regardless of the camera mode.\n\nThe default value is 0.",
+        "description": "Pans the camera further away, regardless of the camera mode.\nThe default value is 0.",
         "os": OS_ANY,
         "type": TYPE_FLOAT,
         "enabled_by": -1,
@@ -470,7 +470,7 @@
         "name": "Additional Camera Distance"
     }, {
         "internal_name": "additional_fov",
-        "description": "Adds additional field of view over the original.\n\nThe default value is 0.",
+        "description": "Adds additional field of view over the original.\nThe default value is 0.",
         "os": OS_ANY,
         "type": TYPE_FLOAT,
         "enabled_by": -1,
@@ -562,7 +562,7 @@
     "title": "MOUSE",
     "items": [{
         "internal_name": "mouse_support",
-        "description": "Lets you navigate the menus and control the camera with your mouse. Controlling the camera only works when the \"Analog Camera\" settings are on, and works best with the \"Custom Camera\" settings.",
+        "description": "Allows you to navigate the menus and control the camera with your mouse. Only fully works when the \"Analog Camera\" settings are enabled, and works best with the \"Custom\" camera mode.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
@@ -570,7 +570,7 @@
         "name": "Mouse Support"
     }, {
         "internal_name": "mouse_sensitivity",
-        "description": "Sets the mouse sensitivity when the \"Mouse Support\" setting is on.\n\nThe default value is 4.",
+        "description": "Sets the mouse sensitivity when the \"Mouse Support\" setting is on.\nThe default value is 4.",
         "os": OS_ANY,
         "type": TYPE_FLOAT,
         "enabled_by": 0,
@@ -810,7 +810,7 @@
     "title": "COLORS",
     "items": [{
         "internal_name": "color_palette",
-        "description": "Lets you to use a predefined color palette.\nSetting this to anything other than \"Custom\" will override your custom color values the next time the game is launched.",
+        "description": "Allows you to use a predefined color palette.\nSetting this to anything other than \"Custom\" will override your custom color values the next time the game is launched.",
         "os": OS_ANY,
         "type": TYPE_PALETTE,
         "enabled_by": -1,
@@ -1084,7 +1084,7 @@
         "name": "Fullscreen Refresh Rate"
     }, {
         "internal_name": "custom_camera_distance",
-        "description": "Sets the default camera distance when using the \"Modern\" and \"Custom\" camera settings.\n\nThe default value is 100.",
+        "description": "Sets the default camera distance when using the \"Modern\" and \"Custom\" camera settings.\nThe default value is 100.",
         "os": OS_ANY,
         "type": TYPE_FLOAT,
         "enabled_by": -1,
@@ -1092,7 +1092,7 @@
         "name": "Custom Camera Distance"
     }, {
         "internal_name": "zoomed_out_custom_camera_distance",
-        "description": "Sets the zoomed out camera distance when using the \"Modern\" and \"Custom\" camera settings.\n\nThe default value is 180.",
+        "description": "Sets the zoomed out camera distance when using the \"Modern\" and \"Custom\" camera settings.\nThe default value is 180.",
         "os": OS_ANY,
         "type": TYPE_FLOAT,
         "enabled_by": -1,
@@ -1216,7 +1216,7 @@
     "title": "KEY MAPPING",
     "items": [{
         "internal_name": "key_a",
-        "description": "The keyboard key assigned to the A button.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the A button.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,
@@ -1224,7 +1224,7 @@
         "name": "A (Jump)"
     }, {
         "internal_name": "key_b",
-        "description": "The keyboard key assigned to the B button.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the B button.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,
@@ -1240,7 +1240,7 @@
         "name": "Start (Pause)"
     }, {
         "internal_name": "key_l",
-        "description": "The keyboard key assigned to the L trigger.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the L trigger.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,
@@ -1248,7 +1248,7 @@
         "name": "L (Center Camera)"
     }, {
         "internal_name": "key_r",
-        "description": "The keyboard key assigned to the R trigger.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the R trigger.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,
@@ -1256,7 +1256,7 @@
         "name": "R (Change Camera)"
     }, {
         "internal_name": "key_z",
-        "description": "The keyboard key assigned to the Z trigger.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the Z trigger.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,
@@ -1296,7 +1296,7 @@
         "name": "C-Right (Rotate Right)"
     }, {
         "internal_name": "key_stickup",
-        "description": "The keyboard key assigned to the stick up action.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the stick up action.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,
@@ -1304,7 +1304,7 @@
         "name": "Stick Up"
     }, {
         "internal_name": "key_stickdown",
-        "description": "The keyboard key assigned to the stick down action.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the stick down action.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,
@@ -1312,7 +1312,7 @@
         "name": "Stick Down"
     }, {
         "internal_name": "key_stickleft",
-        "description": "The keyboard key assigned to the stick left action.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the stick left action.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,
@@ -1320,7 +1320,7 @@
         "name": "Stick Left"
     }, {
         "internal_name": "key_stickright",
-        "description": "The keyboard key assigned to the stick right action.\n\nThe value is a DirectInput scan code.",
+        "description": "The keyboard key assigned to the stick right action.\nThe value is a DirectInput scan code.",
         "os": OS_ANY,
         "type": TYPE_KEY,
         "enabled_by": -1,

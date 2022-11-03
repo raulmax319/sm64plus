@@ -427,6 +427,7 @@ extern const BehaviorScript bhv1upJumpOnApproach[];
 extern const BehaviorScript bhvHidden1up[];
 extern const BehaviorScript bhvHidden1upTrigger[];
 extern const BehaviorScript bhvHidden1upInPole[];
+extern const BehaviorScript bhvGreenDemon[];
 extern const BehaviorScript bhvHidden1upInPoleTrigger[];
 extern const BehaviorScript bhvHidden1upInPoleSpawner[];
 extern const BehaviorScript bhvControllablePlatform[];

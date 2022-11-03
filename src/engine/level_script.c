@@ -763,7 +763,7 @@ static void level_cmd_place_object(void) {
 
         gAreas[sCurrAreaIndex].objectSpawnInfos = spawnInfo;
 
-        if (configStayInCourse == 3)
+        if (configStayInCourse == 2)
         {
             remain_mod_objects(spawnInfo);
         }
@@ -787,7 +787,7 @@ static void level_cmd_create_warp_node(void) {
         warpNode->next = gAreas[sCurrAreaIndex].warpNodes;
         gAreas[sCurrAreaIndex].warpNodes = warpNode;
 
-        if (configStayInCourse == 3)
+        if (configStayInCourse == 2)
         {
             remain_mod_warp_nodes(warpNode);
         }
