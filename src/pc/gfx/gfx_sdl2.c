@@ -121,8 +121,7 @@ static void set_fullscreen(bool on, bool call_callback) {
         }
         window_width = mode.w;
         window_height = mode.h;
-        if (!gMouseCam)
-            SDL_ShowCursor(false);
+        SDL_ShowCursor(false);
     } else {
         if (configCustomFullscreenResolution) {
             SDL_DisplayMode mode;
@@ -131,8 +130,7 @@ static void set_fullscreen(bool on, bool call_callback) {
         }
         window_width = DESIRED_SCREEN_WIDTH;
         window_height = DESIRED_SCREEN_HEIGHT;
-        if (!gMouseCam)
-            SDL_ShowCursor(true);
+        SDL_ShowCursor(true);
     }
     SDL_SetWindowSize(wnd, window_width, window_height);
     if (configCustomFullscreenResolution) {
@@ -219,7 +217,6 @@ static void gfx_sdl_init(const char *game_name, bool start_in_fullscreen) {
     }
 
     if (gMouseCam) {
-        SDL_ShowCursor(false);
         SDL_SetRelativeMouseMode(true);
     }
 
@@ -263,6 +260,9 @@ static void gfx_sdl_set_keyboard_callbacks(bool (*on_key_down)(int scancode), bo
 static void gfx_sdl_main_loop(void (*run_one_game_iter)(void)) {
     while (1) {
         run_one_game_iter();
+        if (gMouseCam) {
+            SDL_SetRelativeMouseMode((SDL_GetWindowFlags(wnd) & SDL_WINDOW_INPUT_FOCUS) == SDL_WINDOW_INPUT_FOCUS);
+        }
     }
 }
 

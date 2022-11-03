@@ -46,6 +46,7 @@
 using namespace Microsoft::WRL; // For ComPtr
 
 static bool mouse_capture = true;
+static bool mouse_visible = false;
 
 static struct {
     HWND h_wnd;
@@ -224,8 +225,8 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
             SetWindowPos(dxgi.h_wnd, NULL, r.left, r.top, r.right - r.left, r.bottom - r.top, SWP_FRAMECHANGED);
             ShowWindow(dxgi.h_wnd, SW_RESTORE);
         }
-        if (!gMouseCam)
-            ShowCursor(TRUE);
+        ShowCursor(!mouse_capture || !gMouseCam);
+        mouse_visible = !mouse_capture || !gMouseCam;
 
         dxgi.is_full_screen = false;
     } else {
@@ -261,8 +262,8 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
         SetWindowLongPtr(dxgi.h_wnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
         SetWindowPos(dxgi.h_wnd, HWND_TOP, primary.left, primary.top, primary.right - primary.left, primary.bottom - primary.top, SWP_FRAMECHANGED);
 
-        if (!gMouseCam)
-            ShowCursor(FALSE);
+        ShowCursor(FALSE);
+        mouse_visible = false;
 
         dxgi.is_full_screen = true;
     }
@@ -398,8 +399,10 @@ static void gfx_dxgi_init(const char *game_name, bool start_in_fullscreen) {
 
     ATOM winclass = RegisterClassExW(&wcex);
 
-    if (gMouseCam)
+    if (gMouseCam) {
         ShowCursor(FALSE);
+        mouse_visible = false;
+    }
 
     run_as_dpi_aware([&] () {
         // We need to be dpi aware when calculating the size
@@ -475,6 +478,15 @@ static bool gfx_dxgi_start_frame(void) {
         ClientToScreen(dxgi.h_wnd, &screenPoint);
         dxgi.on_mouse_move(cursorPoint.x-screenPoint.x, cursorPoint.y-screenPoint.y);
         SetCursorPos(screenPoint.x, screenPoint.y);
+
+        if (mouse_visible) {
+            ShowCursor(FALSE);
+            mouse_visible = false;
+        }
+    }
+    else if (!mouse_visible) {
+        ShowCursor(TRUE);
+        mouse_visible = true;
     }
 
     DXGI_FRAME_STATISTICS stats;
