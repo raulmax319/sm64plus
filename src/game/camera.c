@@ -1106,7 +1106,9 @@ void radial_camera_move(struct Camera *c) {
         }
 
         // Analog camera code
-        if (gPlayer1Controller->stick2X != 0) {
+        if (gPlayer1Controller->stick2X != 0 &&
+            gCurrDemoInput == NULL)
+        {
             if (gPlayer1Controller->stick2X > 0) {
                 gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
             }
@@ -1265,7 +1267,9 @@ void mode_8_directions_camera(struct Camera *c) {
     }
 
     // Analog camera code
-    if (gPlayer1Controller->stick2X != 0) {
+    if (gPlayer1Controller->stick2X != 0 &&
+        gCurrDemoInput == NULL)
+    {
         s8DirModeYawOffset -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * configCameraSpeed;
     }
 
@@ -1296,6 +1300,8 @@ void mode_custom_camera(struct Camera *c, f32 yOff, f32 additionalDistance, s8 l
     s16 oldAreaYaw = sAreaYaw;
     s16 avoidYaw;
 
+    radial_camera_input(c, 0.f);
+
     if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
         sModeOffsetYaw += DEGREES(22.5);
         play_sound_cbutton_side();
@@ -1306,7 +1312,9 @@ void mode_custom_camera(struct Camera *c, f32 yOff, f32 additionalDistance, s8 l
     }
 
     // Analog camera code
-    if (gPlayer1Controller->stick2X != 0) {
+    if (gPlayer1Controller->stick2X != 0 &&
+        gCurrDemoInput == NULL)
+    {
         sModeOffsetYaw -= ANALOG_AMOUNT * (gPlayer1Controller->stick2X / 32.0f) * configCameraSpeed;
     }
 
@@ -2007,7 +2015,9 @@ s32 update_behind_mario_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
         yawSpeed = 2;
     }
     // Analog camera
-    if (gPlayer1Controller->stick2X != 0) {
+    if (gPlayer1Controller->stick2X != 0 &&
+        gCurrDemoInput == NULL)
+    {
         if (dist < maxDist) {
             camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
         }
@@ -3591,7 +3601,7 @@ void init_camera(struct Camera *c) {
             // Since Bowser 1 has a demo entry, check for it
             // If it is, then set CamAct to the end to directly activate Bowser
             // If it isn't, then start cutscene
-            if (gCurrDemoInput == NULL) {
+            if ((gCurrDemoInput == NULL)) {
                 start_cutscene(c, CUTSCENE_ENTER_BOWSER_ARENA);
             } else if (gSecondCameraFocus != NULL) {
                 gSecondCameraFocus->oBowserCamAct = BOWSER_CAM_ACT_END;
@@ -5291,7 +5301,9 @@ void handle_c_button_movement(struct Camera *c) {
         }
 
         // Analog camera code
-        if (gPlayer1Controller->stick2X != 0) {
+        if (gPlayer1Controller->stick2X != 0 &&
+            gCurrDemoInput == NULL)
+        {
             if (gPlayer1Controller->stick2X > 0) {
                 gCameraMovementFlags &= ~(CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ENTERED_ROTATE_SURFACE);
             }

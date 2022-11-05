@@ -109,7 +109,7 @@ void set_warp_transition_rgb(u8 red, u8 green, u8 blue) {
     gWarpTransBlue = blue;
 }
 
-void print_intro_text(void) {
+void print_intro_text(s8 in_game) {
 #ifdef VERSION_EU
     s32 language = eu_get_language();
 #endif
@@ -121,22 +121,14 @@ void print_intro_text(void) {
             print_text_centered(SCREEN_WIDTH / 2, 20, "NO CONTROLLER");
 #endif
         } else {
-            if (config4by3Hud || configForce4by3) {
 #ifdef VERSION_EU
                 print_text(20, 20, "START");
 #else
-                print_text_centered(60, 38, "PRESS");
-                print_text_centered(60, 20, "START");
+            s32 left = (config4by3Hud || configForce4by3) ? 60 : GFX_DIMENSIONS_FROM_LEFT_EDGE(60);
+
+            print_text_centered(left, 38, "PRESS");
+            print_text_centered(left, 20, "START");
 #endif
-            }
-            else {
-#ifdef VERSION_EU
-                print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(20), 20, "START");
-#else
-                print_text_centered(GFX_DIMENSIONS_FROM_LEFT_EDGE(60), 38, "PRESS");
-                print_text_centered(GFX_DIMENSIONS_FROM_LEFT_EDGE(60), 20, "START");
-#endif
-            }
         }
     }
 }

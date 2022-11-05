@@ -91,7 +91,7 @@ f32 get_power_meter_x() {
         return SCREEN_WIDTH/2;
     } else {
         if (get_mirror()) {
-           return SCREEN_WIDTH - (f32) sPowerMeterHUD.x;
+            return SCREEN_WIDTH - (f32) sPowerMeterHUD.x;
         } else {
             return sPowerMeterHUD.x;
         }
@@ -816,8 +816,10 @@ void render_hud(void) {
             render_hud_timer();
         }
 
-        if (gHudStars && gCurrLevelNum != LEVEL_CASTLE_GROUNDS && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD
-        && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3 && gCurrLevelNum != LEVEL_ENDING) {
+        if (gHudStars && gCurrDemoInput == NULL
+            && gCurrLevelNum != LEVEL_CASTLE_GROUNDS && gCurrLevelNum != LEVEL_CASTLE && gCurrLevelNum != LEVEL_CASTLE_COURTYARD
+            && gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3 && gCurrLevelNum != LEVEL_ENDING)
+        {
             if (gCurrLevelNum == LEVEL_BITDW || gCurrLevelNum == LEVEL_BITFS || gCurrLevelNum == LEVEL_BITS ||
             gCurrLevelNum == LEVEL_COTMC || gCurrLevelNum == LEVEL_TOTWC || gCurrLevelNum == LEVEL_VCUTM ||
             gCurrLevelNum == LEVEL_WMOTR || gCurrLevelNum == LEVEL_SA) {

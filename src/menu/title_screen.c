@@ -166,7 +166,7 @@ s32 intro_regular(void) {
         sPlayMarioGreeting = FALSE;
     }
 #endif
-    print_intro_text();
+    print_intro_text(0);
 
     if (gPlayer1Controller->buttonPressed & START_BUTTON) {
         play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
@@ -198,7 +198,7 @@ s32 intro_game_over(void) {
     }
 #endif
 
-    print_intro_text();
+    print_intro_text(0);
 
     if (gPlayer1Controller->buttonPressed & START_BUTTON) {
         play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
