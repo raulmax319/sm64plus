@@ -638,7 +638,14 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                     // This is the most readable I could make the code without overcomplicating it 
 
                     // If we set it to ask
-                    if (configStayInCourse == 1) {
+                    if (configStayInCourse > 0 &&
+                        (gCurrLevelNum == LEVEL_CASTLE_GROUNDS || gCurrLevelNum == LEVEL_CASTLE || gCurrLevelNum == LEVEL_CASTLE_COURTYARD))
+                    {
+                        enable_time_stop();
+                        create_dialog_box_with_response(DIALOG_014);
+                        m->actionState = 1;
+                    }
+                    else if (configStayInCourse == 1) {
                         enable_time_stop();
                         create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_171 : DIALOG_170);
                         m->actionState = 1;
@@ -664,7 +671,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                     // By default
                     else {
                         enable_time_stop();
-                        create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_013 : DIALOG_014);
+                        create_dialog_box_with_response((gLastCompletedStarNum == 7) ? DIALOG_013 : DIALOG_014);
                         m->actionState = 1;
                     }
                 }

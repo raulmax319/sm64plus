@@ -30,6 +30,7 @@ This is the changelog for the current development commit of the game. For the ch
 
 ### Fixes:
 - Fixed a bug that would cause the level progression to break when "Tie Bowser's Sub to Missions" and "Stay in Course After Getting a Star" settings are both enabled.
+- Fixed getting a star from a Toad and choosing "Not Now" while the "Stay in Course After Getting a Star" setting is enabled crashing the game.
 - Fixed custom player colors affecting other objects in the game.
 - Made fixes to mouse movement in the Mario's face screen.
 - Made Mario's face not get affected by the custom player colors.
