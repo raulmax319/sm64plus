@@ -1037,6 +1037,14 @@
 }, {
     "title": "FOR FUN",
     "items": [{
+        "internal_name": "mad_penguin",
+        "description": "What would YOU do if your child was murdered right in front of your eyes?",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Mad Penguin"
+    }, {
         "internal_name": "paper_mode",
         "description": "You guys like Paper Mario?",
         "os": OS_ANY,

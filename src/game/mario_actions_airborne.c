@@ -1441,7 +1441,7 @@ s32 act_getting_blown(struct MarioState *m) {
         }
     }
 
-    if (++(m->actionTimer) == 20) {
+    if (++(m->actionTimer) == 20 && (!configAngryPenguin || gCurrCourseNum != COURSE_CCM)) {
         mario_blow_off_cap(m, 50.0f);
     }
 

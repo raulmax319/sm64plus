@@ -207,6 +207,7 @@ static const struct ConfigOption options[] = {
     { .name = "coins_required_for_the_coin_stars", .type = CONFIG_TYPE_UINT, .uintValue = &configCoinStarCoins },
 
     { .name = "FOR FUN", .type = CONFIG_TYPE_SECTION },
+    { .name = "mad_penguin", .type = CONFIG_TYPE_BOOL, .boolValue = &configAngryPenguin },
     { .name = "paper_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gPaperMode },
     { .name = "fx_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode },
 #if defined(_WIN32) || defined(_WIN64)

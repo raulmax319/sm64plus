@@ -116,6 +116,7 @@ extern s8 configHyperspeedMode;
 extern s8 gFlexibleCannons;
 extern unsigned int configCoinStarCoins;
 
+extern s8 configAngryPenguin;
 extern s8 gPaperMode;
 extern s8 gFXMode;
 #if defined(_WIN32) || defined(_WIN64)
@@ -170,5 +171,7 @@ extern unsigned int configKeyStickRight;
 extern unsigned int configKeyWalk;
 
 extern s16 gCollectedStar;
+extern s8 gMarioWillDie;
+
 extern s8 stay_in_level();
 extern s8 restart_level_after_star();
