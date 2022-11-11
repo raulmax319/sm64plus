@@ -1905,11 +1905,8 @@ void handle_cheats() {
         }
     }
 
-    if (gPlayer1Controller->buttonDown & L_TRIG && configDebugObjectSpawner) {
-
-            try_do_mario_debug_object_spawn();
-        }
-    }
+    if (gPlayer1Controller->buttonDown & L_TRIG && configDebugObjectSpawner)
+        try_do_mario_debug_object_spawn();
 }
 
 u32 mario_has_improved_metal_cap(struct MarioState *m) {

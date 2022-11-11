@@ -281,37 +281,37 @@
         "disabled_by": -1,
         "name": "Remove Inconvenient Warps"
     }, {
-        "internal_name": "improve_powerups",
+        "internal_name": "improved_powerups",
         "description": "Makes it so that underwater shells last longer and Metal Mario sinks faster, and Metal Mario's interactions become more consistent.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Improve Powerups"
+        "name": "Improved Powerups"
     }, {
-        "internal_name": "improve_enemies",
+        "internal_name": "improved_enemies",
         "description": "Tweaks the behavior of some enemies, specifically Boos, Clams, and Tiny Goombas.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Improve Enemies"
+        "name": "Improved Enemies"
     }, {
-        "internal_name": "improve_npcs",
+        "internal_name": "improved_npcs",
         "description": "Makes talking with the NPCs easier and more consistent.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Improve NPCs"
+        "name": "Improved NPCs"
     }, {
-        "internal_name": "improve_blast_away_the_wall",
+        "internal_name": "improved_blast_away_the_wall",
         "description": "Prevents you from taking damage after hitting the breakable wall required for the \"Blast Away the Wall\" mission. Recommended when playing with the \"Permadeath Mode\" enabled.",
         "os": OS_ANY,
         "type": TYPE_BOOL,
         "enabled_by": -1,
         "disabled_by": -1,
-        "name": "Improve \"Blast Away the Wall\""
+        "name": "Improved \"Blast Away the Wall\""
     }, {
         "internal_name": "bring_mips_back",
         "description": "Makes MIPS return to the castle after you collect 120 Power Stars.",

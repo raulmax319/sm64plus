@@ -225,8 +225,11 @@ static void toggle_borderless_window_full_screen(bool enable, bool call_callback
             SetWindowPos(dxgi.h_wnd, NULL, r.left, r.top, r.right - r.left, r.bottom - r.top, SWP_FRAMECHANGED);
             ShowWindow(dxgi.h_wnd, SW_RESTORE);
         }
-        ShowCursor(!mouse_capture || !gMouseCam);
-        mouse_visible = !mouse_capture || !gMouseCam;
+
+        if (!gMouseCam) {
+            ShowCursor(TRUE);
+            mouse_visible = true;
+        }
 
         dxgi.is_full_screen = false;
     } else {
@@ -399,11 +402,6 @@ static void gfx_dxgi_init(const char *game_name, bool start_in_fullscreen) {
 
     ATOM winclass = RegisterClassExW(&wcex);
 
-    if (gMouseCam) {
-        ShowCursor(FALSE);
-        mouse_visible = false;
-    }
-
     run_as_dpi_aware([&] () {
         // We need to be dpi aware when calculating the size
         RECT wr = {0, 0, DESIRED_SCREEN_WIDTH, DESIRED_SCREEN_HEIGHT};
@@ -420,6 +418,10 @@ static void gfx_dxgi_init(const char *game_name, bool start_in_fullscreen) {
 
     if (start_in_fullscreen) {
         toggle_borderless_window_full_screen(true, false);
+    }
+    if (start_in_fullscreen || gMouseCam) {
+        ShowCursor(FALSE);
+        mouse_visible = false;
     }
 }
 
@@ -469,24 +471,26 @@ static uint64_t qpc_to_us(uint64_t qpc) {
 static bool gfx_dxgi_start_frame(void) {
 
     // Before rendering, center the mouse cursor and set the mouse movement variables.
-    if (gMouseCam && mouse_capture) {
-        POINT cursorPoint;
-        GetCursorPos(&cursorPoint);
-        POINT screenPoint;
-        screenPoint.x = dxgi.current_width/2;
-        screenPoint.y = dxgi.current_height/2;
-        ClientToScreen(dxgi.h_wnd, &screenPoint);
-        dxgi.on_mouse_move(cursorPoint.x-screenPoint.x, cursorPoint.y-screenPoint.y);
-        SetCursorPos(screenPoint.x, screenPoint.y);
+    if (gMouseCam) {
+        if (mouse_capture) {
+            POINT cursorPoint;
+            GetCursorPos(&cursorPoint);
+            POINT screenPoint;
+            screenPoint.x = dxgi.current_width/2;
+            screenPoint.y = dxgi.current_height/2;
+            ClientToScreen(dxgi.h_wnd, &screenPoint);
+            dxgi.on_mouse_move(cursorPoint.x-screenPoint.x, cursorPoint.y-screenPoint.y);
+            SetCursorPos(screenPoint.x, screenPoint.y);
 
-        if (mouse_visible) {
-            ShowCursor(FALSE);
-            mouse_visible = false;
+            if (mouse_visible) {
+                ShowCursor(FALSE);
+                mouse_visible = false;
+            }
         }
-    }
-    else if (!mouse_visible) {
-        ShowCursor(TRUE);
-        mouse_visible = true;
+        else if (!mouse_visible) {
+            ShowCursor(TRUE);
+            mouse_visible = true;
+        }
     }
 
     DXGI_FRAME_STATISTICS stats;
