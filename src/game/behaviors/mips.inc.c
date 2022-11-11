@@ -25,6 +25,12 @@ void bhv_mips_init(void) {
 #ifndef VERSION_JP
         o->oMipsForwardVelocity = 45.0f;
 #endif
+    // If the player has all the stars
+    } else if (configBringMipsBack && save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 120) {
+        o->oBehParams2ndByte = 2;
+#ifndef VERSION_JP
+        o->oMipsForwardVelocity = 60.0f;
+#endif
     } else {
         // No MIPS stars are available, hide MIPS.
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
@@ -129,7 +135,7 @@ void bhv_mips_act_follow_path(void) {
 #ifndef VERSION_JP
     o->oForwardVel = o->oMipsForwardVelocity;
 #else
-    o->oForwardVel = 45.0f;
+    o->oForwardVel = o->oBehParams2ndByte == 2 ? 60.0f : 45.0f;
 #endif
     o->oMoveAngleYaw = o->oPathedTargetYaw;
     collisionFlags = object_step();
@@ -190,7 +196,7 @@ void bhv_mips_act_idle(void) {
     collisionFlags = object_step();
 
     // Spawn a star if he was just picked up for the first time.
-    if (o->oMipsStarStatus == MIPS_STAR_STATUS_SHOULD_SPAWN_STAR) {
+    if (o->oBehParams2ndByte != 2 && o->oMipsStarStatus == MIPS_STAR_STATUS_SHOULD_SPAWN_STAR) {
         bhv_spawn_star_no_level_exit(o->oBehParams2ndByte + 3);
         o->oMipsStarStatus = MIPS_STAR_STATUS_ALREADY_SPAWNED_STAR;
     }
@@ -237,7 +243,9 @@ void bhv_mips_held(void) {
     // If MIPS hasn't spawned his star yet...
     if (o->oMipsStarStatus == MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR) {
         // Choose dialog based on which MIPS encounter this is.
-        if (o->oBehParams2ndByte == 0)
+        if (o->oBehParams2ndByte == 2)
+            dialogID = DIALOG_174;
+        else if (o->oBehParams2ndByte == 0)
             dialogID = DIALOG_084;
         else
             dialogID = DIALOG_162;

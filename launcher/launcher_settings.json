@@ -1,0 +1,39 @@
+{
+  "title": "LAUNCHER",
+  "items": [{
+    "internal_name": "fullscreen",
+    "description": "Makes the launcher start in fullscreen. Does not affect the game itself. Can be toggled via the \"Alt + Enter\" key combo.",
+    "os": OS_ANY,
+    "type": TYPE_BOOL,
+    "enabled_by": -1,
+    "disabled_by": -1,
+    "name": "Fullscreen"
+  }, {
+    "internal_name": "mute",
+    "description": "Mutes the launcher sounds. Can be toggled via the \"Alt + M\" key combo.",
+    "os": OS_ANY,
+    "type": TYPE_BOOL,
+    "enabled_by": -1,
+    "disabled_by": -1,
+    "name": "Mute Audio"
+  }, {
+    "internal_name": "quick_launch",
+    "description": "Makes the game boot automatically after opening the launcher. You can press the <Backspace> key or the (Select) button in the disclaimer screen to go to the launcher menu.",
+    "os": OS_ANY,
+    "type": TYPE_BOOL,
+    "enabled_by": -1,
+    "disabled_by": -1,
+    "name": "Quick Launch"
+  }, {
+    "internal_name": "close_on_launch",
+    "description": "Closes the launcher after launching the game.",
+    "os": OS_ANY,
+    "type": TYPE_BOOL,
+    "enabled_by": -1,
+    "disabled_by": -1,
+    "name": "Close on Launch"
+  }],
+  "hidden": false,
+  "reload_with_preset": false,
+  "os": OS_ANY
+}

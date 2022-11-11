@@ -313,6 +313,14 @@
         "disabled_by": -1,
         "name": "Improve \"Blast Away the Wall\""
     }, {
+        "internal_name": "bring_mips_back",
+        "description": "Makes MIPS return to the castle after you collect 120 Power Stars.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Bring MIPS Back"
+    }, {
         "internal_name": "disable_fall_damage",
         "description": "Prevents you from taking damage after falling from a distance.",
         "os": OS_ANY,
@@ -966,6 +974,14 @@
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Debug Cap Changer"
+    }, {
+        "internal_name": "debug_object_spawner",
+        "description": "Enables the unused debug object spawner. Hold L and press a D-Pad direction to spawn shells or blocks.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Debug Object Spawner"
     }, {
         "internal_name": "moon_jump",
         "description": "Allows you to hold L to float. \"Classic\" mimics how the old moon jump GameShark code worked back in the day, while \"Fixed\" fixes the issues with it.",

@@ -192,6 +192,7 @@ s8 configBetterPowerups = 1;
 s8 configBetterEnemies = 1;
 s8 configTalkNPCs = 1;
 s8 configBetterBlastAwayTheWall = 1;
+s8 configBringMipsBack = 1;
 s8 configDisableFallDamage = 0;
 s8 configLeaveAnyTime = 0;
 s8 configVisibleSecrets = 0;
@@ -258,6 +259,7 @@ s8 gCasualMode = 0;
 
 s8 gDebugMovementMode = 0;
 s8 gDebugCapChanger = 0;
+s8 configDebugObjectSpawner = 0;
 unsigned int configMoonJump = 0;
 unsigned int configBLJEverywhere = 0;
 s8 configGodMode = 0;

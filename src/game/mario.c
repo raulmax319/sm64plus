@@ -36,6 +36,7 @@
 #include "audio/external.h"
 #include "seq_ids.h"
 
+#include "debug.h"
 #include "settings.h"
 
 u32 unused80339F10;
@@ -1901,6 +1902,12 @@ void handle_cheats() {
         if (configBLJEverywhere == 3) {
             /* D033AFA0 00A0 */ if ((gControllers[0].buttonDown & 0xff00) == 0xa000)
             /* 8133AFA0 0000 */ gControllers[0].buttonDown = (gControllers[0].buttonDown & 0xffffffffffff0000) | 0x0;
+        }
+    }
+
+    if (gPlayer1Controller->buttonDown & L_TRIG && configDebugObjectSpawner) {
+
+            try_do_mario_debug_object_spawn();
         }
     }
 }

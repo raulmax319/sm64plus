@@ -2136,3 +2136,19 @@ How about a race?\n\
 Ready...set...\n\
 \n\
 //Go//// Don't Go"))
+
+DEFINE_DIALOG(DIALOG_174, 1, 4, 30, 200, _("\
+Arghh! I thought I could\n\
+escape from you this time!\n\
+I am in a hurry, is this\n\
+too hard to understand?\n\
+I ran out of stars to\n\
+give, so how about I tell\n\
+you a secret? If you head\n\
+to the castle courtyard\n\
+and run circles around\n\
+the fountain exactly\n\
+640 times Luigi will come\n\
+to visit you!\n\
+Now could please leave me\n\
+alone?"))

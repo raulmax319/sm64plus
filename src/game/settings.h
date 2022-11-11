@@ -41,6 +41,7 @@ extern s8 configBetterPowerups;
 extern s8 configBetterEnemies;
 extern s8 configTalkNPCs;
 extern s8 configBetterBlastAwayTheWall;
+extern s8 configBringMipsBack;
 extern s8 configDisableFallDamage;
 extern s8 configLeaveAnyTime;
 extern s8 configVisibleSecrets;
@@ -107,6 +108,7 @@ extern s8 gCasualMode;
 
 extern s8 gDebugMovementMode;
 extern s8 gDebugCapChanger;
+extern s8 configDebugObjectSpawner;
 extern unsigned int configMoonJump;
 extern unsigned int configBLJEverywhere;
 extern s8 configGodMode;
