@@ -2148,7 +2148,7 @@ you a secret? If you head\n\
 to the castle courtyard\n\
 and run circles around\n\
 the fountain exactly\n\
-640 times Luigi will come\n\
-to visit you!\n\
+2401 times Luigi will\n\
+come to visit you!\n\
 Now could please leave me\n\
 alone?"))

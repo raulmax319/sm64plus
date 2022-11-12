@@ -2553,7 +2553,7 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     print_generic_string(x + 10, y - 2, textContinue);
     print_generic_string(x + 10, y - 17, textExitCourse);
 
-    if ((!configQuitOption && *index == MENU_OPT_CAMERA_ANGLE_R) || (configQuitOption && *index != MENU_OPT_QUIT)) {
+    if (((!configQuitOption) && (*index != MENU_OPT_CAMERA_ANGLE_R)) || (configQuitOption && (*index != MENU_OPT_QUIT))) {
         if (configQuitOption) {
             print_generic_string(x + 10, y - 33, textExitGame);
             print_generic_string(x + 10, y - 49, textCameraAngleR);
@@ -2571,10 +2571,10 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
         gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
     }
 
-    if (!configQuitOption && *index == MENU_OPT_CAMERA_ANGLE_R) {
+    if ((!configQuitOption) && (*index == MENU_OPT_CAMERA_ANGLE_R)) {
         render_pause_camera_options(x - 42, y - 42, &gDialogCameraAngleIndex, 110);
     }
-    if (configQuitOption && *index == MENU_OPT_QUIT) {
+    if (configQuitOption && (*index == MENU_OPT_QUIT)) {
         print_generic_string(x + 10, y - 33, textExitGame);
         render_pause_camera_options(x - 42, y - 50, &gDialogCameraAngleIndex, 110);
     }
@@ -2814,7 +2814,7 @@ s16 render_pause_courses_and_castle(void) {
                 gDialogBoxState = DIALOG_STATE_OPENING;
                 gMenuMode = MENU_MODE_NONE;
 
-                if ((configQuitOption && gDialogLineNum == MENU_OPT_CAMERA_ANGLE_R) || (gDialogLineNum == MENU_OPT_EXIT_COURSE)) {
+                if ((configQuitOption && (gDialogLineNum == MENU_OPT_CAMERA_ANGLE_R)) || (gDialogLineNum == MENU_OPT_EXIT_COURSE)) {
                     index = gDialogLineNum;
                 } else { // MENU_OPT_CONTINUE or MENU_OPT_CAMERA_ANGLE_R
                     index = MENU_OPT_DEFAULT;
