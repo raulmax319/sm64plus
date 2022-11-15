@@ -9,13 +9,37 @@
     "disabled_by": -1,
     "name": "Fullscreen"
   }, {
-    "internal_name": "mute",
-    "description": "Mutes the launcher sounds. Can be toggled via the \"Alt + M\" key combo.",
+    "internal_name": "window_width",
+    "description": "Default width of the launcher window in pixels.",
+    "os": OS_ANY,
+    "type": TYPE_LAUNCHER_WIDTH,
+    "enabled_by": -1,
+    "disabled_by": -1,
+    "name": "Default Window Width"
+  }, {
+    "internal_name": "window_height",
+    "description": "Default height of the launcher window in pixels.",
+    "os": OS_ANY,
+    "type": TYPE_LAUNCHER_HEIGHT,
+    "enabled_by": -1,
+    "disabled_by": -1,
+    "name": "Default Window Height"
+  }, {
+    "internal_name": "mute_sounds",
+    "description": "Mutes the launcher sounds. Can be toggled via the \"Alt + S\" key combo.",
     "os": OS_ANY,
     "type": TYPE_BOOL,
     "enabled_by": -1,
     "disabled_by": -1,
-    "name": "Mute Audio"
+    "name": "Mute Sounds"
+  }, {
+    "internal_name": "mute_music",
+    "description": "Mutes the launcher music. Can be toggled via the \"Alt + M\" key combo.",
+    "os": OS_ANY,
+    "type": TYPE_BOOL,
+    "enabled_by": -1,
+    "disabled_by": -1,
+    "name": "Mute Music"
   }, {
     "internal_name": "quick_launch",
     "description": "Makes the game boot automatically after opening the launcher. You can press the <Backspace> key or the (Select) button in the disclaimer screen to go to the launcher menu.",

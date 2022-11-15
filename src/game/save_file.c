@@ -650,6 +650,11 @@ void check_if_should_set_warp_checkpoint(struct WarpNode *warpNode) {
         gWarpCheckpoint.areaNum = warpNode->destArea;
         gWarpCheckpoint.warpNode = warpNode->destNode;
     }
+    // Completely untested fix for a potential issue
+    else if (configStayInCourse > 1) {
+        // Disable the warp checkpoint
+        gWarpCheckpoint.courseNum = COURSE_NONE;
+    }
 }
 
 /**

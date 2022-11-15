@@ -20,7 +20,7 @@
         "internal_name": "window_width",
         "description": "Default width of the game window in pixels.",
         "os": OS_ANY,
-        "type": TYPE_UINT,
+        "type": TYPE_WINDOW_SIZE,
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Default Window Width"
@@ -28,7 +28,7 @@
         "internal_name": "window_height",
         "description": "Default height of the game window in pixels.",
         "os": OS_ANY,
-        "type": TYPE_UINT,
+        "type": TYPE_WINDOW_SIZE,
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Default Window Height"

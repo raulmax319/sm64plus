@@ -50,6 +50,7 @@ This is the changelog for the current development commit of the game. For the ch
 - Completely overhauled the way controller button mapping works. Now you have to assign buttons to actions, not the other way around. This should make it much easier to remap non-standard controllers for the game.
 - Made the launcher update and rebuild the game automatically whenever a launcher update is detected.
 - Made the launcher load the recommended preset value when a setting is missing from the settings file. This should fix many issues caused by upgrading the game from older versions.
+- Optimized the launcher, making it run better on lower-end systems.
 - Made various other small improvements to the launcher, mainly having to do with general visual polish.
 - Fixed incorrect preset loading behavior and reverted it back to how it functioned prior to v2.1.0.
 - Made the launcher properly reload settings after closing the game.
