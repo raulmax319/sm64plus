@@ -207,6 +207,17 @@ void main_func(const char* gfx_dir) {
     strcat(workingdir, "\\SM64Plus\\");
     chdir(workingdir);
 #endif
+#ifdef TARGET_LINUX
+    // Set the working directory
+    char *workingdir = malloc(128);
+    const char *homedir;
+    if ((homedir = getenv("HOME")) == NULL) {
+        homedir = getpwuid(getuid())->pw_dir;
+    }
+    strcpy(workingdir, homedir);
+    strcat(workingdir, "/.config/SM64Plus/");
+    chdir(workingdir);
+#endif
 
     // Check if the textures exist
 #if defined(CUSTOM_TEXTURES) && (defined(_WIN32) || defined(_WIN64))
