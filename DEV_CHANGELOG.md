@@ -1,6 +1,6 @@
 This is the changelog for the current development commit of the game. For the changelog for the public versions please check the Wiki!
 
-# v3.0.0 (??/01/2022):
+# v3.0.0 (17/11/2022):
 
 ### Additions:
 - Added the controller rumble feature from the Shindou version of the game. The strength of it can be adjusted from the "Input Mapping" page.
@@ -30,6 +30,8 @@ This is the changelog for the current development commit of the game. For the ch
   - And more...
 - Rewrote the descriptions of a majority of the settings.
 - Altered the default presets slightly.
+- Removed the game version from the window title.
+- Changed the default working directory to `~/.config/SM64Plus` on Linux.
 - Updated the codebase to include the latest commits to the sm64-port repository, and made countless technical changes and fixes in the process. This ideally shouldn't make any visible differences in gameplay.
 
 ### Fixes:
