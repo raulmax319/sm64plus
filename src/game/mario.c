@@ -1905,7 +1905,7 @@ void handle_cheats() {
         }
     }
 
-    if (gPlayer1Controller->buttonDown & L_TRIG && configDebugObjectSpawner)
+    if ((gPlayer1Controller->buttonDown & L_TRIG) && configDebugObjectSpawner)
         try_do_mario_debug_object_spawn();
 }
 
