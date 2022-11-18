@@ -1904,9 +1904,6 @@ void handle_cheats() {
             /* 8133AFA0 0000 */ gControllers[0].buttonDown = (gControllers[0].buttonDown & 0xffffffffffff0000) | 0x0;
         }
     }
-
-    if ((gPlayer1Controller->buttonDown & L_TRIG) && configDebugObjectSpawner)
-        try_do_mario_debug_object_spawn();
 }
 
 u32 mario_has_improved_metal_cap(struct MarioState *m) {
