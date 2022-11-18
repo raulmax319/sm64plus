@@ -13,7 +13,7 @@ These features include (but not limited to):
 
 ## [Download the launcher from MFGG!](https://www.mfgg.net/?act=resdb&param=02&c=2&id=38190)
 
-### [Head to our Discord server for more discussion or troubleshooting.](http://discord.mors-games.com/)
+### [Head to our Discord server for more discussion, troubleshooting, and Linux launcher builds.](http://discord.mors-games.com/)
 
 </br>
 
