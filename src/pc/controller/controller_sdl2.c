@@ -45,7 +45,7 @@ static SDL_Haptic *controller_sdl_init_haptics(const int joy) {
     if (!haptics_enabled) return NULL;
 
     SDL_Haptic *hap = SDL_HapticOpen(joy);
-    if (!hap) return NULL;
+    if (hap == NULL) return NULL;
 
     if (SDL_HapticRumbleSupported(hap) != SDL_TRUE) {
         SDL_HapticClose(hap);

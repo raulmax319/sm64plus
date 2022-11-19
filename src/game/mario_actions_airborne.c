@@ -92,7 +92,7 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
                 if (!configDisableFallDamage) {
                     m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 16 : 24;
                 }
-#ifdef ENABLE_RUMBLE
+#if ENABLE_RUMBLE
                 queue_rumble_data(5, 80);
 #endif
                 set_camera_shake_from_hit(SHAKE_FALL_DAMAGE);

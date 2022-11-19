@@ -2150,5 +2150,12 @@ and run circles around\n\
 the fountain exactly\n\
 2401 times Luigi will\n\
 come to visit you!\n\
-Now could please leave me\n\
-alone?"))
+Now could you please\n\
+leave me alone?"))
+
+DEFINE_DIALOG(DIALOG_175, 1, 5, 30, 200, _("\
+Wow! That's all 7 Power\n\
+Stars! Do you want to\n\
+keep playing this level?\n\
+\n\
+//You Bet//Not Now"))

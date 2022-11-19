@@ -303,7 +303,7 @@ unsigned int configButtonCLeft = 0;
 unsigned int configButtonCRight = 0;
 unsigned int gControllerLeftDeadzone = 512;
 unsigned int gControllerRightDeadzone = 512;
-float configRumbleStrength = 0.5f;
+float configRumbleStrength = 0.25f;
 
 unsigned int configKeyA = DIK_L;
 unsigned int configKeyB = DIK_COMMA;

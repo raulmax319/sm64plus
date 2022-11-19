@@ -1567,7 +1567,7 @@ void update_mario_health(struct MarioState *m) {
         // Play a noise to alert the player when Mario is close to drowning.
         if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && (!(save_file_get_flags() & SAVE_FLAG_DAREDEVIL_MODE)) && (!mario_has_improved_metal_cap(m))) {
             play_sound(SOUND_MOVING_ALMOST_DROWNING, gGlobalSoundSource);
-#ifdef ENABLE_RUMBLE
+#if ENABLE_RUMBLE
             if (!gRumblePakTimer) {
                 gRumblePakTimer = 36;
                 if (is_rumble_finished_and_queue_empty()) {

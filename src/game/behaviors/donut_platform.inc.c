@@ -28,7 +28,7 @@ void bhv_donut_platform_spawner_update(void) {
             marioSqDist = dx * dx + dy * dy + dz * dz;
 
             // dist > 1000 and dist < 2000
-            if (marioSqDist > 1000000.0f && marioSqDist < 4000000.0f) {
+            if (marioSqDist > 1000000.0f && ((marioSqDist < 4000000.0f * configDrawDistanceMultiplier) || configDrawDistanceMultiplier <= 0.0)) {
                 if (spawn_object_relative(i, sDonutPlatformPositions[i][0],
                                           sDonutPlatformPositions[i][1], sDonutPlatformPositions[i][2],
                                           o, MODEL_RR_DONUT_PLATFORM, bhvDonutPlatform)
@@ -41,12 +41,14 @@ void bhv_donut_platform_spawner_update(void) {
 }
 
 void bhv_donut_platform_update(void) {
-    if (o->oTimer != 0 && ((o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) || o->oDistanceToMario > 2500.0f)) {
+    f32 dist = 2500.0f * configDrawDistanceMultiplier;
+
+    if (o->oTimer != 0 && ((o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) || (o->oDistanceToMario > dist && configDrawDistanceMultiplier > 0.0))) {
         o->parentObj->oDonutPlatformSpawnerSpawnedPlatforms =
             o->parentObj->oDonutPlatformSpawnerSpawnedPlatforms
             & ((1 << o->oBehParams2ndByte) ^ 0xFFFFFFFF);
 
-        if (o->oDistanceToMario > 2500.0f) {
+        if (o->oDistanceToMario > dist && configDrawDistanceMultiplier > 0.0) {
             obj_mark_for_deletion(o);
         } else {
             obj_explode_and_spawn_coins(150.0f, 1);

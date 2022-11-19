@@ -615,8 +615,13 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 }
                 // We will be extending the cap timer artificially for this star.
                 if (configStayInCourse && gCollectedStar == 5 && gCurrLevelNum == LEVEL_DDD) {
-                    m->flags |= MARIO_VANISH_CAP | MARIO_METAL_CAP | MARIO_CAP_ON_HEAD;
-                    m->capTimer = 300;
+
+                    if (m->flags & MARIO_CAP_ON_HEAD) {
+                        m->flags |= MARIO_VANISH_CAP;
+                    }
+                    if (m->capTimer < 300) {
+                        m->capTimer = 300;
+                    }
                 }
                 break;
 
@@ -635,7 +640,18 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 } else {
 
                     // Ugly code ahead!
-                    // This is the most readable I could make the code without overcomplicating it 
+                    // This is the most readable I could make the code without overcomplicating it
+
+                    // First let's get if we have all the stars
+                    s32 i;
+                    u8 starCount = 0;
+                    u8 flag = 1;
+                    u8 starFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
+                    for (i = 0; i < 7; i++, flag <<= 1) {
+                        if (!(starFlags & flag)) {
+                            starCount++;
+                        }
+                    }
 
                     // If we set it to ask
                     if (configStayInCourse > 0 &&
@@ -648,6 +664,11 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                     else if (configStayInCourse == 1) {
                         enable_time_stop();
                         create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_171 : DIALOG_170);
+                        m->actionState = 1;
+                    }
+                    else if (configStayInCourse == 2 && starCount >= 7) {
+                        enable_time_stop();
+                        create_dialog_box_with_response(gLastCompletedStarNum == 7 ? DIALOG_171 : DIALOG_175);
                         m->actionState = 1;
                     }
                     // If it's automatic

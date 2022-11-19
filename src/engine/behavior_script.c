@@ -991,11 +991,11 @@ void cur_obj_update(void) {
     } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && gCurrentObject->collisionData == NULL) {
         if (!(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)) {
             if (configDrawDistanceMultiplier <= 0.0f) {
-				if (distanceFromMario <= gCurrentObject->oDrawingDistance && gCurrentObject->oHeldState == HELD_FREE)
-				{
-					gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
-					gCurrentObject->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
-				}
+                if (distanceFromMario <= gCurrentObject->oDrawingDistance && gCurrentObject->oHeldState == HELD_FREE)
+                {
+                        gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+                        gCurrentObject->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
+                }
             }
             else {
                 // If the object has a render distance, check if it should be shown.
