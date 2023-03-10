@@ -171,7 +171,7 @@ float configSeqVolume[] = {1, 1, 1};
 
 // TODO (Mors): Rename these with a config prefix.
 unsigned int configFrameRate = 1;
-float configDrawDistanceMultiplier = 1.0f;
+float configDrawDistanceMultiplier = 0.0f;
 unsigned int configLevelOfDetail = 2;
 unsigned int configTextureFiltering = 2;
 unsigned int configNoiseType = 0;
@@ -256,6 +256,7 @@ s8 gHardSave = 0;
 s8 gDaredevilSave = 0;
 s8 gHardcoreSave = 0;
 s8 gCasualMode = 0;
+s8 configInvisibleMode = 0;
 
 s8 gDebugMovementMode = 0;
 s8 gDebugCapChanger = 0;
@@ -267,6 +268,7 @@ s8 configHyperspeedMode = 0;
 s8 gFlexibleCannons = 0;
 unsigned int configCoinStarCoins = 100;
 
+s8 configRockPaperScissors = 0;
 s8 configAngryPenguin = 0;
 s8 gPaperMode = 0;
 s8 gFXMode = 0;

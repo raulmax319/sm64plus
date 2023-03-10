@@ -147,6 +147,7 @@ static const struct ConfigOption options[] = {
     { .name = "daredevil_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gDaredevilSave },
     { .name = "permadeath_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gHardcoreSave },
     { .name = "casual_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gCasualMode },
+    { .name = "invisible_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &configInvisibleMode },
 
     { .name = "COLORS", .type = CONFIG_TYPE_SECTION },
     { .name = "color_palette", .type = CONFIG_TYPE_UINT, .uintValue = &configColorPalette },
@@ -207,6 +208,7 @@ static const struct ConfigOption options[] = {
     { .name = "coins_required_for_the_coin_stars", .type = CONFIG_TYPE_UINT, .uintValue = &configCoinStarCoins },
 
     { .name = "FOR FUN", .type = CONFIG_TYPE_SECTION },
+    { .name = "rock_paper_scissors", .type = CONFIG_TYPE_BOOL, .boolValue = &configRockPaperScissors },
     { .name = "mad_penguin", .type = CONFIG_TYPE_BOOL, .boolValue = &configAngryPenguin },
     { .name = "paper_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gPaperMode },
     { .name = "fx_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &gFXMode },

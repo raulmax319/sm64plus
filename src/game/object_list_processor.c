@@ -20,6 +20,8 @@
 #include "profiler.h"
 #include "spawn_object.h"
 
+#include "settings.h"
+
 
 /**
  * Flags controlling what debug info is displayed.
@@ -279,7 +281,7 @@ void bhv_mario_update(void) {
 
     i = 0;
     while (sParticleTypes[i].particleFlag != 0) {
-        if (particleFlags & sParticleTypes[i].particleFlag) {
+        if (!configInvisibleMode && particleFlags & sParticleTypes[i].particleFlag) {
             spawn_particle(sParticleTypes[i].activeParticleFlag, sParticleTypes[i].model,
                            sParticleTypes[i].behavior);
         }

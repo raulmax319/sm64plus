@@ -141,6 +141,11 @@ static void camera_lakitu_intro_act_show_dialog(void) {
  * Update function for camera lakitu.
  */
 void bhv_camera_lakitu_update(void) {
+    if (configSkipCutscenes) {
+        obj_mark_for_deletion(o);
+        return;
+    }
+
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         obj_update_blinking(&o->oCameraLakituBlinkTimer, 20, 40, 4);
 

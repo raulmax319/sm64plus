@@ -105,6 +105,7 @@ extern s8 gHardSave;
 extern s8 gDaredevilSave;
 extern s8 gHardcoreSave;
 extern s8 gCasualMode;
+extern s8 configInvisibleMode;
 
 extern s8 gDebugMovementMode;
 extern s8 gDebugCapChanger;
@@ -116,6 +117,7 @@ extern s8 configHyperspeedMode;
 extern s8 gFlexibleCannons;
 extern unsigned int configCoinStarCoins;
 
+extern s8 configRockPaperScissors;
 extern s8 configAngryPenguin;
 extern s8 gPaperMode;
 extern s8 gFXMode;

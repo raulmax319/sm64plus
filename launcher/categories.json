@@ -810,6 +810,15 @@
         "enabled_by": -1,
         "disabled_by": -1,
         "name": "Casual Mode"
+    },
+    {
+        "internal_name": "invisible_mode",
+        "description": "Makes Mario completely invisible, making it impossible to exactly tell where he is.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Invisible Mode"
     }],
     "hidden": false,
     "reload_with_preset": true,
@@ -1037,6 +1046,14 @@
 }, {
     "title": "FOR FUN",
     "items": [{
+        "internal_name": "rock_paper_scissors",
+        "description": "Changes Mario's victory pose randomly to rock, paper or scissors, just like Super Mario Odyssey.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Rock Paper Scissors"
+    }, {
         "internal_name": "mad_penguin",
         "description": "What would YOU do if your child was murdered right in front of your eyes?",
         "os": OS_ANY,
