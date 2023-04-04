@@ -121,7 +121,7 @@ else ifeq ($(GRUCODE), f3dex2) # Fast3DEX2
   DEFINES += F3DEX_GBI_2=1 F3DEX_GBI_SHARED=1
 else ifeq ($(GRUCODE), f3dex2e) # Fast3DEX2 Extended (for PC)
   DEFINES += F3DEX_GBI_2E=1
-else ifeq ($(GRUCODE),f3dzex) # Fast3DZEX (2.0J / Animal Forest - D??butsu no Mori)
+else ifeq ($(GRUCODE),f3dzex) # Fast3DZEX (2.0J / Animal Forest - Dōbutsu no Mori)
   $(warning Fast3DZEX is experimental. Try at your own risk.)
   DEFINES += F3DZEX_GBI_2=1 F3DEX_GBI_2=1 F3DEX_GBI_SHARED=1
 endif
