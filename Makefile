@@ -44,6 +44,17 @@ ifeq ($(TARGET_N64),0)
   ifeq ($(TARGET_WEB),0)
     ifeq ($(shell uname -s),Darwin)
       TARGET_MACOS := 1
+      # Using Homebrew?
+      ifeq ($(shell which brew >/dev/null 2>&1 && echo y),y)
+        OSX_GCC_VER = $(shell find `brew --prefix`/bin/gcc* | grep -oE '[[:digit:]]+' | sort -n | uniq | tail -1)
+        CC := gcc-$(OSX_GCC_VER)
+	CXX := g++-$(OSX_GCC_VER)
+      # Using MacPorts?
+      else ifeq ($(shell test -d /opt/local/lib && echo y),y)
+        OSX_GCC_VER = $(shell find /opt/local/bin/gcc* | grep -oE '[[:digit:]]+' | sort -n | uniq | tail -1)
+	CC := gcc-mp-$(OSX_GCC_VER)
+	CXX := g++-mp-$(OSX_GCC_VER)
+      endif
     else
       ifeq ($(OS),Windows_NT)
         TARGET_WINDOWS := 1
@@ -110,7 +121,7 @@ else ifeq ($(GRUCODE), f3dex2) # Fast3DEX2
   DEFINES += F3DEX_GBI_2=1 F3DEX_GBI_SHARED=1
 else ifeq ($(GRUCODE), f3dex2e) # Fast3DEX2 Extended (for PC)
   DEFINES += F3DEX_GBI_2E=1
-else ifeq ($(GRUCODE),f3dzex) # Fast3DZEX (2.0J / Animal Forest - Dōbutsu no Mori)
+else ifeq ($(GRUCODE),f3dzex) # Fast3DZEX (2.0J / Animal Forest - D??butsu no Mori)
   $(warning Fast3DZEX is experimental. Try at your own risk.)
   DEFINES += F3DZEX_GBI_2=1 F3DEX_GBI_2=1 F3DEX_GBI_SHARED=1
 endif
@@ -431,8 +442,8 @@ else # TARGET_N64
 
 AS := as
 ifneq ($(TARGET_WEB),1)
-  CC := gcc
-  CXX := g++
+  CC ?= gcc
+  CXX ?= g++
 else
   CC := emcc
 endif
@@ -491,7 +502,7 @@ ifeq ($(TARGET_LINUX),1)
 endif
 ifeq ($(TARGET_MACOS),1)
   GFX_CFLAGS  +=
-  GFX_LDFLAGS += -framework OpenGL -lX11 -lSDL2
+  GFX_LDFLAGS += -framework OpenGL -lSDL2
 endif
 ifeq ($(TARGET_WEB),1)
   GFX_CFLAGS  += -s
