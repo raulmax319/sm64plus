@@ -1634,7 +1634,7 @@ void bowser_thrown_dropped_update(void) {
     // Set throw action and vel values
     cur_obj_get_thrown_or_placed(1.0f, 1.0f, BOWSER_ACT_THROWN);
     // Set swing speed based of angle
-    swingSpd = o->oBowserHeldAngleVelYaw / 3000.0 * 70.0f;
+    swingSpd = o->oBowserHeldAngleVelYaw / 3000.0 * (configEasyBowserThrows ? 140.0f : 70.0f);
     // If less than 0, reduce speed
     if (swingSpd < 0.0f) {
         swingSpd = -swingSpd;

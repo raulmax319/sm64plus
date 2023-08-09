@@ -111,6 +111,7 @@ extern s8 gDebugMovementMode;
 extern s8 gDebugCapChanger;
 extern s8 configDebugObjectSpawner;
 extern unsigned int configMoonJump;
+extern s8 configEasyBowserThrows;
 extern unsigned int configBLJEverywhere;
 extern s8 configGodMode;
 extern s8 configHyperspeedMode;

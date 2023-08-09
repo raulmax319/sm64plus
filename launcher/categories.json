@@ -1000,6 +1000,14 @@
         "disabled_by": -1,
         "name": "Moon Jump"
     }, {
+        "internal_name": "easy_bowser_throws",
+        "description": "Makes throwing Bowser easier. For babies.",
+        "os": OS_ANY,
+        "type": TYPE_BOOL,
+        "enabled_by": -1,
+        "disabled_by": -1,
+        "name": "Easy Bowser Throws"
+    },{
         "internal_name": "blj_everywhere",
         "description": "Allows you to perform a BLJ out of thin air. Shoutouts to Kaze.",
         "os": OS_ANY,

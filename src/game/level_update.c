@@ -131,7 +131,7 @@ const char *credits16[] = { "4SCREEN TEXT WRITER", "GERMAN TRANSLATION", "THOMAS
                             "THOMAS SPINDLER" };
 #endif
 const char *credits17[] = { "4MARIO VOICE", "PEACH VOICE", "CHARLES MARTINET", "LESLIE SWAN" };
-const char *credits18[] = { "3SM64 PLUS BY", "MORS" };
+const char *credits18[] = { "3SM64 PLUS BY", "MORS", "SM64 PORT TEAM", "SM64 DECOMP TEAM" };
 /*const char *credits18[] = { "3SPECIAL THANKS TO", "EAD STAFF", "ALL NINTENDO PERSONNEL",
 #ifdef VERSION_US
                            "MARIO CLUB STAFF" };

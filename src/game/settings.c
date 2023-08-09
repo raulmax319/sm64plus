@@ -262,6 +262,7 @@ s8 gDebugMovementMode = 0;
 s8 gDebugCapChanger = 0;
 s8 configDebugObjectSpawner = 0;
 unsigned int configMoonJump = 0;
+s8 configEasyBowserThrows = 0;
 unsigned int configBLJEverywhere = 0;
 s8 configGodMode = 0;
 s8 configHyperspeedMode = 0;

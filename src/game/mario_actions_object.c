@@ -384,11 +384,23 @@ s32 act_holding_bowser(struct MarioState *m) {
             m->twirlYaw = m->intendedYaw;
             m->angleVel[1] += spin;
 
-            if (m->angleVel[1] > 0x1000) {
-                m->angleVel[1] = 0x1000;
+            if (configEasyBowserThrows)
+            {
+                if (m->angleVel[1] > 0x900) {
+                    m->angleVel[1] = 0x900;
+                }
+                if (m->angleVel[1] < -0x900) {
+                    m->angleVel[1] = -0x900;
+                }
             }
-            if (m->angleVel[1] < -0x1000) {
-                m->angleVel[1] = -0x1000;
+            else
+            {
+                if (m->angleVel[1] > 0x1000) {
+                    m->angleVel[1] = 0x1000;
+                }
+                if (m->angleVel[1] < -0x1000) {
+                    m->angleVel[1] = -0x1000;
+                }
             }
         }
     } else {

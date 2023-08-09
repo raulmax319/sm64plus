@@ -201,6 +201,7 @@ static const struct ConfigOption options[] = {
     { .name = "debug_cap_changer", .type = CONFIG_TYPE_BOOL, .boolValue = &gDebugCapChanger },
     { .name = "debug_object_spawner", .type = CONFIG_TYPE_BOOL, .boolValue = &configDebugObjectSpawner },
     { .name = "moon_jump", .type = CONFIG_TYPE_UINT, .uintValue = &configMoonJump },
+    { .name = "easy_bowser_throws", .type = CONFIG_TYPE_BOOL, .boolValue = &configEasyBowserThrows },
     { .name = "blj_everywhere", .type = CONFIG_TYPE_UINT, .uintValue = &configBLJEverywhere },
     { .name = "god_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &configGodMode },
     { .name = "hyperspeed_mode", .type = CONFIG_TYPE_BOOL, .boolValue = &configHyperspeedMode },

@@ -257,7 +257,7 @@ void update_air_without_turn(struct MarioState *m, u32 canTurn) {
             intendedDYaw = m->intendedYaw - m->faceAngle[1];
             intendedMag = m->intendedMag / 32.0f;
 
-            if (configImprovedControls) {
+            if (configImprovedControls && m->action != ACT_LONG_JUMP) {
                 if ((m->forwardVel > 0 && intendedMag * coss(intendedDYaw) > 0) || (m->forwardVel < 0 && intendedMag * coss(intendedDYaw) < 0)) {
                     if (m->action != ACT_WALL_KICK_AIR)
                         m->forwardVel += intendedMag * coss(intendedDYaw) * 1.5f;
